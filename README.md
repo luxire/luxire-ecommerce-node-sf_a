@@ -1,2 +1,2 @@
 # luxire-ecommerce
-Luxire.com Project Repository
+Luxire.com NodeJS Storefront Project Repository
