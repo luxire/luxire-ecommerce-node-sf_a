@@ -1,0 +1,213 @@
+<header>
+      <div class="header-logo">
+        <ul class="header-links">
+          <li>Cart</li>
+          <li>Register</li>
+        </ul>
+      </div>
+    </header>
+    <nav>
+      <ul class="nav-items">
+        <li class="shirts open">Shirts</li>
+        <li class="pants">Pants</li>
+        <li class="jackets">Jackets</li>
+        <li class="suits">Suits</li>
+        <li class="shiraccts">Accessories</li>
+        <li class="meas">Measurements</li>
+        <li class="rev">Reviews</li>
+        <li class="how">How It's made</li>
+        <li class="gal">Gallery</li>
+      </ul>
+    </nav>
+    <nav>
+      <ul class="breadcrumbs">
+        <li ng-repeat="x in prod.breadcrumbs">&nbsp;&nbsp;&nbsp;{{x}}&nbsp;&nbsp;&nbsp;<span>/</span></li>
+      </ul>
+    </nav>
+    <section class="product-image">
+      <img src="http://54.169.41.36:3000{{jsonresponse.products[0].master.images[0].large_url}}">
+    </section>
+    <section class="product-details">
+      <p class="product-name">{{jsonresponse.products[0].name}}</p>
+      <p class="product-price">${{jsonresponse.products[0].price}}</p>
+      <button  data-toggle="modal" data-target="#customizeShirt" style="border: none; background-color: white;float: right;margin-right:174px;font-weight: bold;">View all</button>
+      <p class="heading">Select a style</p>
+      <div class="product-styles">
+        <div ng-repeat="y in jsonresponse.products[0].product_properties[0].value.split(',')" ng-click="isActive = !isActive">
+          <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
+          <br>
+          <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="customizeShirt" role="dialog">
+        <div class="modal-dialog" style="width: 693px;">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close new" data-dismiss="modal">&times;</button>
+              <h2 class="modal-title" style="text-align: center;">All Shirt Styles</h2>
+            </div>
+            <div class="modal-body" style="padding: 20px 52px;">
+              <b>Recommended Styles</b>
+              <div class="product-styles" style="border-top: 1px solid #E0E0E0; padding-top: 30px; padding-left: 15px">
+                <div ng-repeat="y in jsonresponse.products[0].product_properties[0].value.split(',')" ng-click="isActive = !isActive">
+                  <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
+                  <br>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
+                </div>
+              </div>
+
+              <br>
+
+              <b>From the Community</b>
+              <div class="product-styles" style="border-top: 1px solid #E0E0E0; padding-top: 30px; padding-left: 15px">
+                <div ng-click="isActive = !isActive">
+                  <div class="style" ng-class="isActive ? 'active' : 'inactive'"></div>
+                  <br>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">Custom #1</span>
+                </div>
+                <div ng-click="isActive = !isActive">
+                  <div class="style" ng-class="isActive ? 'active' : 'inactive'"></div>
+                  <br>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">Custom #2</span>
+                </div>
+                <div ng-click="isActive = !isActive">
+                  <div class="style" ng-class="isActive ? 'active' : 'inactive'"></div>
+                  <br>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">Custom #3</span>
+                </div>
+                <div ng-click="isActive = !isActive">
+                  <div class="style" ng-class="isActive ? 'active' : 'inactive'"></div>
+                  <br>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">Custom #4</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <p class="heading">Select a fit</p>
+      <select class="fit-select">
+        <option ng-repeat="z in jsonresponse.products[0].product_properties[1].value.split(',')" value="{{z}}">{{z}}</option>
+      </select>
+      <div class="header2">
+        <p>{{jsonresponse.products[0].product_properties[2].property_name}}</p>
+        <select class="fit-select2">
+          <option ng-repeat="b in jsonresponse.products[0].product_properties[2].value.split(',')" value="{{b}}">{{b}}</option>
+        </select>
+      </div>
+      <div class="header2">
+        <p>{{jsonresponse.products[0].product_properties[3].property_name}}</p>
+        <select class="fit-select2">
+          <option ng-repeat="b in jsonresponse.products[0].product_properties[3].value.split(',')" value="{{b}}">{{b}}</option>
+        </select>
+      </div>
+      <button class="customize" ng-click="go('customize')">Customize Shirt</button>
+      <button class="addtocart">Add to Cart</button>
+    </section>
+    <section class="features">
+      <div class="features2" ng-repeat="c in jsonresponse.products[0].product_properties[4].value.split(',')">
+        <svg height="110" width="110">
+          <circle cx="55" cy="55" r="55" stroke="#14003D" stroke-width="0" fill="#14003D" />
+        </svg>
+        <p>{{c}}</p>
+      </div>
+    </section>
+    <br>
+    <br>
+    <div>
+    <section class="details-header">
+      Shirt Details
+    </section>
+    <section class="details">
+      <div class="individual-detail" ng-repeat="w in jsonresponse.products[0].master.description.split(';')">{{w}}</div>
+    </section>
+    </div>
+    <br>
+    <div class="suggestions">
+      <p>Top Rated Suggestions</p>
+      <div class="sug-prod">
+        Blue Stripes Oxford
+        <br>
+        <span style="color: #8D8D8D;">$59.99</span>
+        <br>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span style="color: #8D8D8D;font-size: 17px;">23</span>
+        <br>
+        <br>
+        <img src="lib/assets/rel_prod_1.png">
+      </div>
+      <div class="sug-prod">
+        Gray Patterned Oxford
+        <br>
+        <span style="color: #8D8D8D;">$49.99</span>
+        <br>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span style="color: #8D8D8D;font-size: 17px;">12</span>
+        <br>
+        <br>
+        <img src="lib/assets/rel_prod_2.png">
+      </div>
+      <div class="sug-prod">
+        Classic Blue Oxford
+        <br>
+        <span style="color: #8D8D8D;">$69.99</span>
+        <br>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span class="glyphicon glyphicon-star" style="color: font-size: 13px;"></span>
+        <span style="color: #8D8D8D;font-size: 17px;">9</span>
+        <br>
+        <br>
+        <img src="lib/assets/rel_prod_3.png">
+      </div>
+    </div>
+    <footer>
+      <ul>
+        <li><b>Information</b></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+        <li><a href="#">Body Measurements</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+      </ul>
+      <ul>
+        <li><b>Customer Service</b></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Site Map</a></li>
+      </ul>
+      <ul>
+        <li><b>Extras</b></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Gift Vouchers</a></li>
+        <li><a href="#">Affiliates</a></li>
+        <li><a href="#">Specials</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+      <ul>
+        <li><b>Extras</b></li>
+        <li><a href="#">My Account</a></li>
+        <li><a href="#">Order History</a></li>
+        <li><a href="#">Wish List</a></li>
+        <li><a href="#">Newsletter</a></li>
+      </ul>
+    </footer>

@@ -1,0 +1,125 @@
+<div class="container-fluid" style="background-color:#F7F7F7;">
+	<div class="row header" style="padding-top:25px; padding-bottom: 7px;">
+		<div class="col-md-1 col-lg-1">
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<b>Luxire</b>
+		</div>
+		<div class="col-md-5 col-lg-5">
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+			</button>
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart
+			</button>
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Register or Login
+			</button>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 0px 45px !important;box-shadow: 1px 1px 1px 1px #B9B9B9;">
+		<div class="row">
+			<div class="col-md-12 col-lg-12">
+				<ul class="nav nav-pills nav-justified navlist">
+					<li role="presentation"><a href="#">Shirts</a></li>
+					<li role="presentation"><a href="#">Pants</a></li>
+					<li role="presentation"><a href="#">Jackets</a></li>
+					<li role="presentation"><a href="#">Suits</a></li>
+					<li role="presentation"><a href="#">Accessories</a></li>
+					<li role="presentation"><a href="#">Measurements</a></li>
+					<li role="presentation"><a href="#">Reviews</a></li>
+					<li role="presentation"><a href="#">How it's made</a></li>
+					<li role="presentation"><a href="#">Galleries</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 15px 85px  !important;">
+		<div class="row">
+			<div class="col-md-12 col-lg-12">
+				<ul class="nav nav-pills nav-justified customize-page" style="background-color: transparent;">
+  					<li style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;"><span style="text-decoration: line-through;">1. Customize</span></li>
+  					<li class="active" style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;">2. Personalize</li>
+  					<li style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;">3. Measurements</li>
+  					<li style="border: 1px solid #AEAEAE;">4. Summary</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div  class="container-fluid" style="padding: 15px 85px  !important;">
+		<div class="col-md-8 col-lg-8">
+			<div class="container-fluid">
+				<div ng-controller="AccordionDemoCtrl" class="customize-acc">
+				  	<accordion close-others="false">
+					    <accordion-group is-open="true" ng-repeat="prop in customizeJson.properties[1].desc">
+					        <accordion-heading>
+					            {{prop.type}} {{prop.cost}}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.open, 'glyphicon-chevron-down': !status.open}" style="padding-left:25px;"></i><i class="pull-right glyphicon glyphicon-eye-open"></i>
+					        </accordion-heading>
+					        <div ng-if="prop.type == 'Add a Monogram'" style="padding: 10px;">
+						        <div class="row">
+						        	<div class="col-lg-6 col-md-6">Initials</div>
+						        	<div class="col-lg-6 col-md-6">Locations</div>
+						        </div>
+						        <div class="row">
+						        	<div class="col-lg-5 col-md-5"><input class="fit-input" type="text"></div>
+						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Enter the initials that you want as a monogram on your garment.">?</div></div>
+						        	<div class="col-lg-5 col-md-5">
+						        		<select class="fit-select3">
+						        			<option ng-repeat="loc in prop.properties[1].options" value="{{loc}}">{{loc}}</option>
+						        		</select>
+						        	</div>
+						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Select the location on your garment where you want your mongram.">?</div>
+						        	</div>
+						        </div>
+						        <br>
+						        <div class="row">
+						        	<div class="col-lg-6 col-md-6">Color</div>
+						        	<div class="col-lg-6 col-md-6">Font</div>
+						        </div>
+						        <div class="row">
+						        	<div class="col-lg-5 col-md-5">
+						        		<select class="fit-select3">
+						        			<option ng-repeat="loc in prop.properties[2].options" value="{{loc}}">{{loc}}</option>
+						        		</select>
+						        	</div>
+						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Select the color of the mongram.">?</div></div>
+						        	<div class="col-lg-5 col-md-5">
+						        		<select class="fit-select3">
+						        			<option ng-repeat="loc in prop.properties[3].options" value="{{loc}}">{{loc}}</option>
+						        		</select>
+						        	</div>
+						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Select the font of the mongram.">?</div>
+						        	</div>
+						        </div>
+						    </div>
+						    <div ng-if="prop.type == 'Additional Options'" style="padding: 10px;">
+						    	<div ng-repeat="loc in prop.properties"><input type="checkbox" value="{{loc.name}}"> {{loc.name}}</div>
+						    </div>
+						    <div ng-if="prop.type == 'Contrast'" style="padding: 10px;">
+						    	<div>
+					        		<div class="cards" ng-class="{activecard:customizeJson.properties[1].desc[$parent.$index].selectedStyle=={{$parent.$index}}{{$index}}}" ng-click="activate(1,$parent.$index,$index)" ng-repeat="details in prop.properties" style=""><img src="{{details.image_url}}" style="width: 75px; height: 75px;">
+					        			<br>
+					        			{{details.name}}
+					        		</div>
+					        	</div>
+						    </div>
+					        <div ng-if="prop.type == 'Custom Instruction'" style="padding: 10px;">
+					        	<div>
+					        		<div>Enter intructions for customization:</div>
+					        		<textarea rows="5" cols="90"></textarea>
+					        	</div>
+					        </div>
+					    </accordion-group>
+				  	</accordion>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-lg-4">
+			<div class="container-fluid">
+				<button class="luxire-solid-button" ng-click="go('measurement')">Continue</button>
+				<br>
+				<br>
+				<button class="luxire-hollow-button" ng-click>Save for later</button>
+			</div>
+		</div>
+</div>

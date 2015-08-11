@@ -1,0 +1,16 @@
+<div>
+	ID: <input type="text" ng-model="prodID">
+	<br>
+	Name: <input type="text" ng-model="prodName">
+	<br>
+	Price: <input type="text" ng-model="prodPrice">
+	<br>
+	Shipping Category: <input type="text" ng-model="prodShipCat">
+	<br>
+	<button ng-click="getProductByID(prodID)">GET Product By ID</button>
+	<button ng-click="createProduct(prodName, prodPrice, prodShipCat)">POST Product</button>
+	<button ng-click="getProducts()">GET Products</button>
+	<button ng-click="updateProduct(prodID,{name: prodName, price:prodPrice, shipping_category:prodShipCat})">PUT Product</button>
+	<button ng-click="deleteProduct(prodID)">DELETE Product</button>
+	<div>{{jsonresponse}}</div>
+</div>

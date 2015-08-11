@@ -1,0 +1,144 @@
+<div class="container-fluid" style="background-color:#F7F7F7;">
+	<div class="row header" style="padding-top:25px; padding-bottom: 7px;">
+		<div class="col-md-1 col-lg-1">
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<b>Luxire</b>
+		</div>
+		<div class="col-md-5 col-lg-5">
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+			</button>
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart
+			</button>
+			<button type="button" class="btn btn-default btn-lg header-buttons">
+  				<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Register or Login
+			</button>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 0px 45px !important;box-shadow: 1px 1px 1px 1px #B9B9B9;">
+		<div class="row">
+			<div class="col-md-12 col-lg-12">
+				<ul class="nav nav-pills nav-justified navlist">
+					<li role="presentation"><a href="#">Shirts</a></li>
+					<li role="presentation"><a href="#">Pants</a></li>
+					<li role="presentation"><a href="#">Jackets</a></li>
+					<li role="presentation"><a href="#">Suits</a></li>
+					<li role="presentation"><a href="#">Accessories</a></li>
+					<li role="presentation"><a href="#">Measurements</a></li>
+					<li role="presentation"><a href="#">Reviews</a></li>
+					<li role="presentation"><a href="#">How it's made</a></li>
+					<li role="presentation"><a href="#">Galleries</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 15px 85px  !important;">
+		<div class="row">
+			<div class="col-md-12 col-lg-12">
+				<ul class="nav nav-pills nav-justified customize-page" style="background-color: transparent;">
+  					<li style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;"><span style="text-decoration: line-through;">1. Customize</span></li>
+  					<li style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;"><span style="text-decoration: line-through;">2. Personalize</span></li>
+  					<li class="active" style="border-left: 1px solid #AEAEAE;border-top: 1px solid #AEAEAE;border-bottom: 1px solid #AEAEAE;">3. Measurements</li>
+  					<li style="border: 1px solid #AEAEAE;">4. Summary</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 0px 85px  !important;">
+		<div class="row">
+			<div class="col-md-9 col-lg-9">
+				<div>
+					<div class="option-cards selected-option">
+						<img src="">
+						<br>
+					    Standard Sizes
+					</div>
+					<div class="option-cards">
+						<img src="">
+						<br>
+					    Body Measurements
+					</div>
+					<div class="option-cards">
+						<img src="">
+						<br>
+					    Custom Sizes
+					</div>
+					<div class="option-cards">
+						<img src="">
+						<br>
+					    Send us a sample
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-lg-3">
+				<button class="luxire-solid-button" ng-click="go('measurement')" style="height: 63px;">Continue &nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right"></i></button>
+				<br>
+				<br>
+				<button class="luxire-hollow-button" ng-click style="height: 63px;">Save for later</button>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding: 40px 92px  !important;" ng-controller="AccordionDemoCtrl">
+		<div class="row">
+			<div class="col-md-8 col-lg-8">
+				<b style="font-size: 16px;">Standard</b>
+			</div>
+			<div class="col-md-4 col-lg-4">
+				<button style="float: right;border: 0px; background-color: transparent; font-size: 16px;"><i class="fa fa-pencil"></i> &nbsp;&nbsp;Change Measurement Unit (CM)</button>
+			</div>
+		</div>
+		<div class="row" style="padding-top: 20px;">
+			<div class="col-md-4 col-lg-4" ng-repeat="prop in customizeJson.properties[2].desc[0].standard" style="font-size:16px;">
+				{{prop.property}}
+			</div>
+		</div>
+		<div class="row" style="padding: 15px; border-bottom: 1px solid #D4D5D6">
+			<div class="col-md-4 col-lg-4" ng-repeat="prop in customizeJson.properties[2].desc[0].standard" style="font-size:16px; padding-left: 0px;">
+				<div class="display: inline-block;">
+					<select class="fit-select4">
+						<option value="">Select a size</option>
+						<option ng-repeat="x in prop.Measurements" value="{{x}}">{{x}}</option>
+					</select>
+					<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="padding: 20px 0px; border-bottom: 1px solid #D4D5D6;">
+			<div class="col-lg-4 col-lg-4" ng-repeat="x in customizeJson.properties[2].desc[0].sub_properties" style="font-size: 16px;">
+				<div style="margin-bottom: 10px;">
+					<b>{{x.name}}</b>
+				</div>
+				<div ng-repeat="y in x.properties" style="margin-bottom: 10px;">{{y.name}}
+					<br>
+					<select class="fit-select4">
+						<option ng-repeat="z in y.measurements" value="{{z}}">{{z}}</option>
+					</select>
+					<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="padding: 20px 0px;">
+			<div class="col-lg-6 col-lg-6"style="font-size: 20px;">
+				<b>Custom Directions</b>
+				<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
+			</div>
+			<div class="col-lg-6 col-lg-6"style="font-size: 20px;">
+				<b>Attach Photos</b>
+				<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-lg-6">
+				<textarea rows="7" cols="80" placeholder="Write us any custom instructions here..."></textarea>
+			</div>
+			<div class="col-lg-6 col-lg-6">
+				<div style="width: 100%; height: 40px; line-height:40px; border-bottom: 1px solid #D4D5D6;">Front side <input class="upload" type="file" style="float: right;"></div>
+				<div style="width: 100%; height: 40px; line-height:40px; border-bottom: 1px solid #D4D5D6;">Back side <input class="upload" type="file" style="float: right;"></div>
+				<div style="width: 100%; height: 40px; line-height:40px; border-bottom: 1px solid #D4D5D6;">Left side <input class="upload" type="file" style="float: right;"></div>
+				<div style="width: 100%; height: 40px; line-height:40px;">Right side <input class="upload" type="file" style="float: right;"></div>
+			</div>
+		</div>
+	</div>
+</div>
