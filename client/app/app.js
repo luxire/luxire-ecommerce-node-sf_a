@@ -29,5 +29,9 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap'])
 	when('/measurement',{
 		templateUrl: 'app/measurementGarments/measurementGarments.html',
 		controller: 'measurementGarmentsController'
+	}).
+	when('/admin',{
+		templateUrl: 'app/admin/admin.html',
+		controller: 'adminController'
 	})
 }])
