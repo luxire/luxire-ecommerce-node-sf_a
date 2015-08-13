@@ -1,4 +1,10 @@
-/* Empty. Add your own CSS if you like */
+html {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
 
 body, ul {
 	font-family: 'Roboto', sans-serif;
@@ -126,7 +132,7 @@ header {
 	cursor: pointer;
 }
 
-.style:hover {	
+.style:hover {
 	box-shadow: 2px 2px 19px #D3D3D3;
 }
 
@@ -491,7 +497,7 @@ a.accordion-toggle:hover {
 .option-cards img {
 	width: 110px;
 	height: 110px;
-	margin: 7px 0px;	
+	margin: 7px 0px;
 }
 
 .selected-option {
@@ -543,4 +549,47 @@ a.accordion-toggle:hover {
 }
 .upload:active::before {
   	background: transparent;
+}
+
+.admin-sidebar-header {
+	background-color: #272C30;
+	color: white;
+}
+
+.admin-sidebar-tab {
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	color: #c3cfd8;
+}
+
+.admin-sidebar-header2 {
+	color: #c3cfd8;
+	height: 3.3em;
+	line-height:3.3em;
+	background-color: #31373D;
+}
+
+.hover-sidebar {
+	color: white;
+}
+
+.active-sidebar1 {
+	color: white;
+	background-color: #454E57;
+}
+
+.active-sidebar2 {
+	color: white;
+}
+
+.sublinkActive {
+	background-color: #272C30 !important;
+}
+
+.admin-console-content {
+	height: 100%;
+	background-color: #EBEEF0;
+	overflow-y: scroll;
+	padding: 20px !important;
 }
