@@ -1,18 +1,40 @@
 angular.module('luxire')
-
+.service('restApiService', function($http, $q){
+		this.get = function(url){
+			var deferred = $q.defer();
+			$http.get(url).success(function(data){
+						deferred.resolve(data);
+			}).error(function(errData, errStatus, errHeaders, errConfig){
+						deferred.reject({data: errData , status: errStatus ,headers: errHeaders ,Config: errConfig});
+			});
+			return deferred.promise;
+		}
+})
 .service('products', function($http, $q){
 	var authToken = "99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
 	var baseURL = "http://54.169.41.36:3000";
-	this.getProducts = function() {
+	// this.getProducts = function() {
+	// 	var deferred = $q.defer();
+	// 	$http.get(baseURL + "/api/products.json?token=" + authToken).success(function(data) {
+	// 		deferred.resolve(data);
+  // 		})
+  // 		.error(function(data, status, headers, config) {
+  // 			deferred.reject("Data: " + data + "Status: " + " " + status + "Headers: " + headers + "Config: " + config);
+  // 		});
+  // 		return deferred.promise;
+	// }
+	this.getProducts = function(){
+		console.log('Calling api'+Date.now())
 		var deferred = $q.defer();
-		$http.get(baseURL + "/api/products.json?token=" + authToken).success(function(data) {
+		$http.get('/api/products').then(function(data){
+			console.log('Object received at'+Date.now())
 			deferred.resolve(data);
-  		})
-  		.error(function(data, status, headers, config) {
-  			deferred.reject("Data: " + data + "Status: " + " " + status + "Headers: " + headers + "Config: " + config);
-  		});
-  		return deferred.promise;
+		},function(data, status, headers, config){
+			deferred.reject({data: errData , status: errStatus ,headers: errHeaders ,config: errConfig});
+		});
+		return deferred.promise;
 	}
+
 
 	this.getProductByID = function(id) {
 		var deferred = $q.defer();
