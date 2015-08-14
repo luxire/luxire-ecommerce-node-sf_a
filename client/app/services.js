@@ -35,11 +35,11 @@ angular.module('luxire')
 			}
 		}
 		$http.post("/api/products", angular.toJson(parameters)).success(function(data) {
+			console.log(data);
 			deferred.resolve(data);
   		})
-  		.error(function(data, status, headers, config) {
-  			console.log(data);
-  			deferred.reject("Data: " + data + " Status: " + " " + status + " Headers: " + headers + " Config: " + config);
+  		.error(function(errData, errStatus, errHeaders, errConfig) {
+  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
 	}

@@ -7,9 +7,19 @@
    $scope.activeButton = function(element) {
     $scope.isActive = !$scope.isActive;
     $scope.navbar = element;
+
+    products.getProducts().then(function(data) {
+  		console.log('admin');
+      console.log(data);
+  		$scope.jsonresponse = data;
+      console.log($scope.jsonresponse);
+  	}, function(info){
+  		console.log(info);
+  	})
   }
 
-	products.getProducts().then(function(data) {
+$scope.getAllProducts = function (data) {
+  products.getProducts().then(function(data) {
 		console.log('admin');
     console.log(data);
 		$scope.jsonresponse = data;
@@ -17,6 +27,8 @@
 	}, function(info){
 		console.log(info);
 	})
+}
+
 
   //controller function for file reader
 $scope.uploadSponsorLogo = function(files) {
@@ -26,6 +38,16 @@ $scope.uploadSponsorLogo = function(files) {
         $scope.productImage = result
       })
     }
+  }
+
+  $scope.createProduct = function(prodName, prodPrice, prodShippingCategory, prodImage) {
+    products.createProduct(prodName, prodPrice, prodShippingCategory, prodImage).then(function(data){
+      // $("#products").click();
+      alert('Product Successfully Added');
+      $scope.activeButton('products')
+    }, function(info) {
+      console.log(info);
+    })
   }
 
 })

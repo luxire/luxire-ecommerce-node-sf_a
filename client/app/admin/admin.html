@@ -16,7 +16,7 @@
             <div class="orders admin-sidebar-tab" id="orders" ng-click="activeButton('orders')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-check-square" style="font-size:20px;"></i>
             </div>
-            <div class="products admin-sidebar-tab" id="products" ng-click="activeButton('products')">
+            <div class="products admin-sidebar-tab" ng-click="activeButton('products')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-tag" style="font-size:20px;"></i>
             </div>
             <div class="customers admin-sidebar-tab" id="customers">
@@ -36,7 +36,7 @@
 	              <div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
 	              <div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
 	              <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ng-click="navbar = 'orders'">Orders</div>
-	              <div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ng-click="navbar = 'products'">Products</div>
+	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">Products</div>
 	              <div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers">Customers</div>
 	              <div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
 	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts">Discounts</div>
@@ -46,7 +46,7 @@
 	              <div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
 	              <div class="home admin-sidebar-tab" style="font-size:13px;" id="home"></div>
 	              <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ng-click="navbar = 'orders'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-	              <div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ng-click="navbar = 'products'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+	              <div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
 	              <div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers"></div>
 	              <div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
 	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts"></div>
@@ -181,7 +181,7 @@
 							</div>
 							<div class="col-lg-3 col-md-3" style="text-align: right;">
   							<button type="button" class="btn btn-default">Cancel</button>
-  							<button type="button" class="btn btn-default" disabled>Save product</button>
+  							<button type="button" class="btn btn-default" ng-click="createProduct(name, price, 1, productImage)">Save product</button>
 							</div>
 						</div>
 
@@ -284,10 +284,10 @@
 											</div>
 											<div class="row">
 												<div class="col-lg-6 col-md-6">
-													<input type="text" class="form-control" ng-model="price">
+													<input type="text" class="form-control">
 												</div>
 												<div class="col-lg-6 col-md-6">
-													<input type="text" class="form-control" ng-model="compare_at_price">
+													<input type="text" class="form-control">
 												</div>
 											</div>
 											<br>
