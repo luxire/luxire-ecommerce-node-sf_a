@@ -10,31 +10,39 @@ angular.module('luxire')
 			return deferred.promise;
 		}
 })
-.service('products', function($http, $q){
+.service('products', function($http, $q, restApiService){
 	var authToken = "99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
 	var baseURL = "http://54.169.41.36:3000";
-	// this.getProducts = function() {
-	// 	var deferred = $q.defer();
-	// 	$http.get(baseURL + "/api/products.json?token=" + authToken).success(function(data) {
-	// 		deferred.resolve(data);
-  // 		})
-  // 		.error(function(data, status, headers, config) {
-  // 			deferred.reject("Data: " + data + "Status: " + " " + status + "Headers: " + headers + "Config: " + config);
-  // 		});
-  // 		return deferred.promise;
-	// }
+
+	//Get all products
 	this.getProducts = function(){
-		console.log('Calling api'+Date.now())
 		var deferred = $q.defer();
 		$http.get('/api/products').then(function(data){
-			console.log('Object received at'+Date.now())
-			deferred.resolve(data);
-		},function(data, status, headers, config){
-			deferred.reject({data: errData , status: errStatus ,headers: errHeaders ,config: errConfig});
+			deferred.resolve(data)
+		},function(errData, errStatus, errHeaders, errConfig){
+			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
 		});
 		return deferred.promise;
 	}
-
+	this.createProduct = function(prodName, prodPrice, prodShippingCategory, prodImage) {
+		var deferred = $q.defer();
+		var parameters = {
+			product: {
+				name: prodName,
+				price: prodPrice || 10,
+				shipping_category_id: prodShippingCategory,
+				image: prodImage || ''
+			}
+		}
+		$http.post("/api/products", angular.toJson(parameters)).success(function(data) {
+			deferred.resolve(data);
+  		})
+  		.error(function(data, status, headers, config) {
+  			console.log(data);
+  			deferred.reject("Data: " + data + " Status: " + " " + status + " Headers: " + headers + " Config: " + config);
+  		});
+  		return deferred.promise;
+	}
 
 	this.getProductByID = function(id) {
 		var deferred = $q.defer();
@@ -47,25 +55,7 @@ angular.module('luxire')
   		return deferred.promise;
 	}
 
-	this.createProduct = function(prodName, prodPrice, prodShippingCategory) {
-		var deferred = $q.defer();
-		var parameters = {
-			token: authToken,
-			product: {
-				name: prodName,
-				price: prodPrice,
-				shipping_category: prodShippingCategory
-			}
-		}
-		$http.post(baseURL + "/api/products", angular.toJson(parameters)).success(function(data) {
-			deferred.resolve(data);
-  		})
-  		.error(function(data, status, headers, config) {
-  			console.log(data);
-  			deferred.reject("Data: " + data + " Status: " + " " + status + " Headers: " + headers + " Config: " + config);
-  		});
-  		return deferred.promise;
-	}
+
 
 	this.updateProduct = function(id, prod_parameters) {
 		var deferred = $q.defer();

@@ -2,13 +2,12 @@ angular.module('luxire')
 
 .controller('testController', function($scope, products, $location) {
 	$scope.getProducts =  function() {
-		console.log('Calling getProducts'+Date.now())
-		products.getProducts().then(function(data) {
-			console.log(data);
-			$scope.jsonresponse = data;
-		}, function(info){
-			console.log(info);
-		})
+		products.getProducts().then(function(data){
+				console.log(data);
+				$scope.jsonresponse = data;
+		},function(info){
+				console.log(info);
+		});
 	}
 
 	$scope.getProductByID = function(id) {
