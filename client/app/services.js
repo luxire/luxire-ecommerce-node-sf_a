@@ -11,9 +11,6 @@ angular.module('luxire')
 		}
 })
 .service('products', function($http, $q, restApiService){
-	var authToken = "99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
-	var baseURL = "http://54.169.41.36:3000";
-
 	//Get all products
 	this.getProducts = function(){
 		var deferred = $q.defer();
@@ -31,14 +28,39 @@ angular.module('luxire')
 				name: prodName,
 				price: prodPrice || 10,
 				shipping_category_id: prodShippingCategory,
-				image: prodImage || ''
+				image: prodImage || '',
+				variants: [
+					{
+					id: 85,
+					name: "Ruby on Rails Baseball Jersey",
+					sku: "ROR-000023",
+					price: "19.99",
+					weight: "0.0",
+					height: null,
+					width: null,
+					depth: null,
+					is_master: false,
+					slug: "ruby-on-rails-baseball-jersey",
+					description: "Magni iure laudantium saepe rerum expedita. Est veritatis iusto voluptate quasi voluptatem. Unde quasi aperiam sit omnis reiciendis. Et ea corrupti quia natus dignissimos perspiciatis fuga ut. Optio adipisci labore inventore hic.",
+					track_inventory: true,
+					cost_price: "17.0",
+					display_price: "$19.99",
+					options_text: "Size: S, Color: Red",
+					in_stock: true,
+					is_backorderable: true,
+					total_on_hand: 10,
+					is_destroyed: false
+
+					}
+				]
 			}
 		}
-		$http.post("/api/products", angular.toJson(parameters)).success(function(data) {
-			console.log(data);
-			deferred.resolve(data);
+		$http.post("/api/products", angular.toJson(parameters)).success(function(res) {
+			console.log(res);
+			deferred.resolve(res.data);
   		})
   		.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
@@ -46,11 +68,13 @@ angular.module('luxire')
 
 	this.getProductByID = function(id) {
 		var deferred = $q.defer();
-		$http.get(baseURL + "/api/products?token=" + authToken + "&q[id_eq]=" + id).success(function(data) {
+		$http.get("/api/products/"+id).success(function(data) {
+			console.log(data)
 			deferred.resolve(data);
   		})
-  		.error(function(data, status, headers, config) {
-  			deferred.reject("Data: " + data + "Status: " + " " + status + "Headers: " + headers + "Config: " + config);
+			.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
 	}
@@ -60,27 +84,27 @@ angular.module('luxire')
 	this.updateProduct = function(id, prod_parameters) {
 		var deferred = $q.defer();
 		var parameters = {
-			token: authToken,
 			product: prod_parameters
 		}
-		$http.put(baseURL + "/api/products/" + id, angular.toJson(parameters)).success(function(data) {
+		$http.put("/api/products/"+ id, angular.toJson(parameters)).success(function(data) {
 			deferred.resolve(data);
   		})
-  		.error(function(data, status, headers, config) {
-  			console.log(data);
-  			deferred.reject("Data: " + data + " Status: " + " " + status + " Headers: " + headers + " Config: " + config);
+			.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
 	}
 
 	this.deleteProduct = function(id) {
 		var deferred = $q.defer();
-		console.log(baseURL + "/api/products/" + id + "?token=" + authToken);
-		$http.delete(baseURL + "/api/products/" + id + "?token=" + authToken).success(function(data) {
+		$http.delete("/api/products/"+id).success(function(data) {
+			console.log(data);
 			deferred.resolve(data);
   		})
-  		.error(function(data, status, headers, config) {
-  			deferred.reject("Data: " + data + "Status: " + " " + status + "Headers: " + headers + "Config: " + config);
+			.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
 	}
