@@ -7,6 +7,7 @@
    $scope.activeButton = function(element) {
     $scope.isActive = !$scope.isActive;
     $scope.navbar = element;
+    console.log($scope.navbar);
 
     products.getProducts().then(function(data) {
   		console.log('admin');
@@ -50,4 +51,16 @@ $scope.uploadSponsorLogo = function(files) {
     })
   }
 
+})
+
+.directive('productHome', function() {
+  return {
+    templateUrl: 'app/admin/partial_templates/productsHome.html'
+  };
+})
+
+.directive('addProduct', function() {
+  return {
+    templateUrl: 'app/admin/partial_templates/addProducts.html'
+  };
 })
