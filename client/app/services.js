@@ -27,32 +27,7 @@ angular.module('luxire')
 			product: {
 				name: prodName,
 				price: prodPrice || 10,
-				shipping_category_id: prodShippingCategory,
-				image: prodImage || '',
-				variants: [
-					{
-					id: 85,
-					name: "Ruby on Rails Baseball Jersey",
-					sku: "ROR-000023",
-					price: "19.99",
-					weight: "0.0",
-					height: null,
-					width: null,
-					depth: null,
-					is_master: false,
-					slug: "ruby-on-rails-baseball-jersey",
-					description: "Magni iure laudantium saepe rerum expedita. Est veritatis iusto voluptate quasi voluptatem. Unde quasi aperiam sit omnis reiciendis. Et ea corrupti quia natus dignissimos perspiciatis fuga ut. Optio adipisci labore inventore hic.",
-					track_inventory: true,
-					cost_price: "17.0",
-					display_price: "$19.99",
-					options_text: "Size: S, Color: Red",
-					in_stock: true,
-					is_backorderable: true,
-					total_on_hand: 10,
-					is_destroyed: false
-
-					}
-				]
+				shipping_category_id: prodShippingCategory
 			}
 		}
 		$http.post("/api/products", angular.toJson(parameters)).success(function(res) {
