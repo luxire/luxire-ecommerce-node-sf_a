@@ -3,7 +3,7 @@ angular.module('luxire')
 .controller('productDetailsController',function($scope,products,$location) {
 
   products.getProductByID(17).then(function(data) {
-			console.log(data);
+			console.log(data.name);
 			$scope.jsonresponse = data;
 		}, function(info) {
 			console.log(info);
