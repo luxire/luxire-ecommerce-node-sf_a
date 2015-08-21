@@ -25,15 +25,15 @@
       </ul>
     </nav>
     <section class="product-image">
-      <img src="http://54.169.41.36:3000{{jsonresponse.products[0].master.images[0].large_url}}">
+      <img src="http://54.169.41.36:3000{{jsonresponse.master.images[0].large_url}}">
     </section>
     <section class="product-details">
-      <p class="product-name">{{jsonresponse.products[0].name}}</p>
-      <p class="product-price">${{jsonresponse.products[0].price}}</p>
+      <p class="product-name">{{jsonresponse.name}}</p>
+      <p class="product-price">${{jsonresponse.price}}</p>
       <button  data-toggle="modal" data-target="#customizeShirt" style="border: none; background-color: white;float: right;margin-right:174px;font-weight: bold;">View all</button>
       <p class="heading">Select a style</p>
       <div class="product-styles">
-        <div ng-repeat="y in jsonresponse.products[0].product_properties[0].value.split(',')" ng-click="isActive = !isActive">
+        <div ng-repeat="y in jsonresponse.product_properties[0].value.split(',')" ng-click="isActive = !isActive">
           <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
           <br>
           <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
@@ -53,7 +53,7 @@
             <div class="modal-body" style="padding: 20px 52px;">
               <b>Recommended Styles</b>
               <div class="product-styles" style="border-top: 1px solid #E0E0E0; padding-top: 30px; padding-left: 15px">
-                <div ng-repeat="y in jsonresponse.products[0].product_properties[0].value.split(',')" ng-click="isActive = !isActive">
+                <div ng-repeat="y in jsonresponse.product_properties[0].value.split(',')" ng-click="isActive = !isActive">
                   <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
                   <br>
                   <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
@@ -96,25 +96,25 @@
 
       <p class="heading">Select a fit</p>
       <select class="fit-select">
-        <option ng-repeat="z in jsonresponse.products[0].product_properties[1].value.split(',')" value="{{z}}">{{z}}</option>
+        <option ng-repeat="z in jsonresponse.product_properties[1].value.split(',')" value="{{z}}">{{z}}</option>
       </select>
       <div class="header2">
-        <p>{{jsonresponse.products[0].product_properties[2].property_name}}</p>
+        <p>{{jsonresponse.product_properties[2].property_name}}</p>
         <select class="fit-select2">
-          <option ng-repeat="b in jsonresponse.products[0].product_properties[2].value.split(',')" value="{{b}}">{{b}}</option>
+          <option ng-repeat="b in jsonresponse.product_properties[2].value.split(',')" value="{{b}}">{{b}}</option>
         </select>
       </div>
       <div class="header2">
-        <p>{{jsonresponse.products[0].product_properties[3].property_name}}</p>
+        <p>{{jsonresponse.product_properties[3].property_name}}</p>
         <select class="fit-select2">
-          <option ng-repeat="b in jsonresponse.products[0].product_properties[3].value.split(',')" value="{{b}}">{{b}}</option>
+          <option ng-repeat="b in jsonresponse.product_properties[3].value.split(',')" value="{{b}}">{{b}}</option>
         </select>
       </div>
       <button class="customize" ng-click="go('customize')">Customize Shirt</button>
       <button class="addtocart">Add to Cart</button>
     </section>
     <section class="features">
-      <div class="features2" ng-repeat="c in jsonresponse.products[0].product_properties[4].value.split(',')">
+      <div class="features2" ng-repeat="c in jsonresponse.product_properties[4].value.split(',')">
         <svg height="110" width="110">
           <circle cx="55" cy="55" r="55" stroke="#14003D" stroke-width="0" fill="#14003D" />
         </svg>
@@ -128,7 +128,7 @@
       Shirt Details
     </section>
     <section class="details">
-      <div class="individual-detail" ng-repeat="w in jsonresponse.products[0].master.description.split(';')">{{w}}</div>
+      <div class="individual-detail" ng-repeat="w in jsonresponse.master.description.split(';')">{{w}}</div>
     </section>
     </div>
     <br>
