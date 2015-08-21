@@ -30,7 +30,6 @@ exports.index = function(req, res) {
 //Add a product
 exports.create = function(req, res){
   console.log(req.body)
-  console.log(req.body.product.master.images[0])
   http.post({
     uri: env.store.host+env.store.products+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
