@@ -27,8 +27,14 @@ var server = require('http').createServer(app);
 require('./config/express')(app);
 require('./routes')(app);
 
+var cfg = {
+	port: "0.0.0.0",
+	ip: "9000"
+}
+
+server.listen(cfg.port, cfg.ip, function () {
 // Start server
-server.listen(config.port, config.ip, function () {
+// server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
 });
 

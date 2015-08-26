@@ -3,10 +3,20 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker'])
+angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput'])
 
-.run(function($location){
-	$location.path('/productdetails');
+.run(function($location,$rootScope){
+	$location.path('/productdetails/17');
+
+	$rootScope.page = {
+        setTitle: function(title) {
+            this.title = 'Luxire - ' + title;
+        }
+    }
+
+    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+        $rootScope.page.setTitle(current.$$route.title || 'Home');
+    });
 })
 .config(['$routeProvider', function($routeProvider){
 	$routeProvider.
@@ -14,7 +24,7 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 		templateUrl: 'app/test/test.html',
 		controller: 'testController'
 	}).
-	when('/productdetails',{
+	when('/productdetails/:id',{
 		templateUrl: 'app/productDetails/productDetails.html',
 		controller: 'productDetailsController'
 	}).

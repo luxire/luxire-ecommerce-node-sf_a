@@ -10,6 +10,36 @@ angular.module('luxire')
 			return deferred.promise;
 		}
 })
+.service('prototypeObject',function(){
+	this.product = function(){
+		this.name = ''
+		this.description = ''
+		this.price = ''
+		this.display_price = ''
+		this.available_on = '' //
+		this.meta_description = ''
+		this.meta_keywords = ''
+		this.shipping_category_id = 1
+		this.total_on_hand = 10
+		this.taxFlag = ''
+		this.sku = ''
+		this.barcode = ''
+		this.weight = ''
+		this.onlineStore = ''
+		this.prodType = ''
+		this.vendor = ''
+		this.collections = ''
+		this.tags = ''
+		this.colorTags = ''
+		this.weaveType = ''
+		this.threadCount = ''
+		this.material = ''
+		this.composition = ''
+		this.pattern = ''
+		this.transparency = ''
+		this.wrinkleResistant = ''
+	}
+})
 .service('products', function($http, $q, restApiService){
 	//Get all products
 	this.getProducts = function(){
@@ -21,16 +51,10 @@ angular.module('luxire')
 		});
 		return deferred.promise;
 	}
-	this.createProduct = function(prodName, prodPrice, prodShippingCategory, prodImage) {
+	this.createProduct = function(product) {
 		var deferred = $q.defer();
-		var parameters = {
-			product: {
-				name: prodName,
-				price: prodPrice || 10,
-				shipping_category_id: prodShippingCategory
-			}
-		}
-		$http.post("/api/products", angular.toJson(parameters)).success(function(res) {
+
+		$http.post("/api/products", angular.toJson(product)).success(function(res) {
 			console.log(res);
 			deferred.resolve(res.data);
   		})
