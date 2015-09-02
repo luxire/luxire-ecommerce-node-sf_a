@@ -124,7 +124,21 @@ angular.module('luxire')
         };
     }])
 
-
+.service('userManager',function($http, $q){
+	this.login = function(user){
+		console.log('user login..');
+		var deferred = $q.defer();
+		$http.post("/api/userManager/login", angular.toJson(user)).success(function(data){
+			console.log(data)
+			deferred.resolve(data);
+		})
+		.error(function(errData, errStatus, errHeaders, errConfig) {
+			console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+		});
+		return deferred.promise;
+	}
+})
 //For demo
 .run(function(products) {
 	products.getProductByID(17);
