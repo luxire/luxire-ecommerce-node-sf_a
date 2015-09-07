@@ -111,6 +111,12 @@ $scope.uploadSponsorLogo = function(files) {
 
 })
 
+.directive('adminHome', function() {
+  return {
+    templateUrl: 'app/admin/partial_templates/adminHome.html'
+  };
+})
+
 .directive('productHome', function() {
   return {
     templateUrl: 'app/admin/partial_templates/productsHome.html'
@@ -121,4 +127,16 @@ $scope.uploadSponsorLogo = function(files) {
   return {
     templateUrl: 'app/admin/partial_templates/addProducts.html'
   };
+})
+
+.directive('customerHome', function() {
+  return {
+    templateUrl: 'app/admin/partial_templates/customerHome.html'
+  };
+})
+
+.directive('addCustomer', function() {
+  return {
+    templateUrl: 'app/admin/partial_templates/addCustomer.html'
+  }
 })

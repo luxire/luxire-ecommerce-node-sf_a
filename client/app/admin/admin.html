@@ -7,25 +7,25 @@
             <div class="admin-sidebar-header">
               <h3 style="margin: 0px; padding: 10px 0px;">&nbsp;&nbsp;&nbsp;</h3>
             </div>
-            <div class="search admin-sidebar-tab" id="search">
+            <div class="search admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-search" style="font-size:20px;"></i>
             </div>
-            <div class="home admin-sidebar-tab" id="home">
+            <div class="home admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-home" style="font-size:20px;"></i>
             </div>
-            <div class="orders admin-sidebar-tab" id="orders" ng-click="activeButton('orders')">
+            <div class="orders admin-sidebar-tab" ng-click="activeButton('orders')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-check-square" style="font-size:20px;"></i>
             </div>
             <div class="products admin-sidebar-tab" ng-click="activeButton('products')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-tag" style="font-size:20px;"></i>
             </div>
-            <div class="customers admin-sidebar-tab" id="customers">
+            <div class="customers admin-sidebar-tab" ng-click="activeButton('customerHome')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-users" style="font-size:20px;"></i>
             </div>
-            <div class="reports admin-sidebar-tab" id="reports">
+            <div class="reports admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-bar-chart" style="font-size:20px;"></i>
             </div>
-            <div class="discounts admin-sidebar-tab" id="discounts">
+            <div class="discounts admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-scissors" style="font-size:20px;"></i>
             </div>
           </div>
@@ -33,23 +33,23 @@
 						<div ng-switch-default>
 							<div class="col-lg-11 col-md-11" style="padding: 0px;">
 	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
-	              <div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
-	              <div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
-	              <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ng-click="navbar = 'orders'">Orders</div>
+	              <div class="search admin-sidebar-tab" style="font-size:13px;">Search</div>
+	              <div class="home admin-sidebar-tab" style="font-size:13px;">Home</div>
+	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="navbar = 'orders'">Orders</div>
 	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">Products</div>
-	              <div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers">Customers</div>
-	              <div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts">Discounts</div>
+	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')">Customers</div>
+	              <div class="reports admin-sidebar-tab" style="font-size:13px;">Reports</div>
+	              <div class="discounts admin-sidebar-tab" style="font-size:13px;">Discounts</div>
 	            </div>
 	            <div class="col-lg-1 col-md-1" style="padding: 0px;">
 	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
-	              <div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
-	              <div class="home admin-sidebar-tab" style="font-size:13px;" id="home"></div>
-	              <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ng-click="navbar = 'orders'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-	              <div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-	              <div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers"></div>
-	              <div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts"></div>
+	              <div class="search admin-sidebar-tab" style="font-size:13px;"></div>
+	              <div class="home admin-sidebar-tab" style="font-size:13px;"></div>
+	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="navbar = 'orders'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')"></div>
+	              <div class="reports admin-sidebar-tab" style="font-size:13px;"></div>
+	              <div class="discounts admin-sidebar-tab" style="font-size:13px;"></div>
 	            </div>
 						</div>
 
@@ -76,6 +76,11 @@
 
       <div ng-switch on="navbar" style="height:100%">
 
+				<div ng-switch-default>
+					<div admin-home>
+
+					</div>
+				</div>
 				<!-- Products Home Page -->
 				<div ng-switch-when="products" style="height:100%">
 					<div product-home>
@@ -92,6 +97,21 @@
 				</div>
 				<!-- End of Add Products Page -->
 
+				<!-- Customer Home -->
+				<div ng-switch-when="customerHome" style="height: 100%">
+					<div customer-home>
+
+					</div>
+				</div>
+				<!-- End of Customer Home -->
+
+				<!-- Add Customer -->
+				<div ng-switch-when="addCustomer" style="height: 100%">
+					<div add-customer>
+
+					</div>
+				</div>
+				<!-- End of Add Customer -->
 			</div>
 		</div>
 	</div>
