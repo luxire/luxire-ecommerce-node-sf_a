@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="luxire">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>Luxire</title>
+    <title ng-bind="page.title"></title>
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -28,6 +28,10 @@
     <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <!-- script type="text/javascript" src="bower_components/angular/angular.js"></script -->
     <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+
+    <!-- Tag Input -->
+    <script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css">
 
     <!--File upload for non-html5 browsers-->
     <script src="lib/js/angular-file-upload-shim.min.js"></script>
@@ -60,7 +64,7 @@
     <script src="app/controller.js"></script>
     <script src="app/services.js"></script>
   </head>
-  <body ng-app="luxire" style="width: 100%; height:100%">
+  <body style="width: 100%; height:100%">
     <div ng-view style="width: 100%; height:100%"></div>
   </body>
 </html>

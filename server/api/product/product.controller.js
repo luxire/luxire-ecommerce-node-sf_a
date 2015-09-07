@@ -36,6 +36,7 @@ exports.create = function(req, res){
     body:JSON.stringify(req.body)
   },function(error,response,body){
     if(response.statusCode == 201){
+      console.log(body)
       res.send({data: body,status: 201});
     }
     else{
