@@ -49,9 +49,17 @@ angular.module('luxire')
 	/**
 		User Management
 	*/
-	$scope.user = {};
-	$scope.login = function(usr){
-		userManager.login(usr);
+	$scope.luxire_user = {
+		user:{
+
+		}
+	};
+	$scope.login = function(user){
+		userManager.login(user).then(function(response){
+			console.log('Login successfull with user id '+response.data.id)
+		},function(error){
+			console.log('Invalid user id or password')
+		});
 	}
 
 })
