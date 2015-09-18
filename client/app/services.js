@@ -39,7 +39,38 @@ angular.module('luxire')
 		this.transparency = ''
 		this.wrinkleResistant = ''
 	}
+
+	this.customer = function() {
+		this.firstName = ''
+		this.lastName = ''
+		this.email = ''
+		this.marketingFlag = ''
+		this.taxExemptFlag = ''
+		this.firstName1 = ''
+		this.lastName1 = ''
+		this.company = ''
+		this.phone = ''
+		this.address1 = ''
+		this.address2 = ''
+		this.city = ''
+		this.zip = ''
+		this.country = ''
+		this.state = ''
+	}
+
+	this.giftCard = function () {
+		this.name = ''
+		this.description = ''
+		this.imageURL = ''
+		this.denomination = ''
+		this.available_on = '' //
+		this.prodType = ''
+		this.vendor = ''
+		this.collection = ''
+		this.tags = ''
+	}
 })
+
 .service('products', function($http, $q, restApiService){
 	//Get all products
 	this.getProducts = function(){
@@ -107,6 +138,10 @@ angular.module('luxire')
   		});
   		return deferred.promise;
 	}
+})
+
+.service('customer', function($http, $q, restApiService) {
+
 })
 
 //fileReader service
