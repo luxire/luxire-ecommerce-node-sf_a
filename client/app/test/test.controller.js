@@ -1,6 +1,6 @@
 angular.module('luxire')
 
-.controller('testController', function($scope, products, $location) {
+.controller('testController', function($scope, products, $location, userManager) {
 	$scope.getProducts =  function() {
 		products.getProducts().then(function(data){
 				console.log(data);
@@ -44,6 +44,22 @@ angular.module('luxire')
 		}, function(info) {
 			console.log(info);
 		})
+	}
+
+	/**
+		User Management
+	*/
+	$scope.luxire_user = {
+		user:{
+
+		}
+	};
+	$scope.login = function(user){
+		userManager.login(user).then(function(response){
+			console.log('Login successfull with user id '+response.data.id)
+		},function(error){
+			console.log('Invalid user id or password')
+		});
 	}
 
 })
