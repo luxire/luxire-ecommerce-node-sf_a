@@ -56,9 +56,10 @@ angular.module('luxire')
 	};
 	$scope.login = function(user){
 		userManager.login(user).then(function(response){
-			console.log('Login successfull with user id '+response.data.id)
+			console.log(response);
+			alert('Login successfull with user id '+response);
 		},function(error){
-			console.log('Invalid user id or password')
+			alert('Invalid user id or password');
 		});
 	}
 
