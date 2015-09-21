@@ -25,7 +25,7 @@
             <div class="reports admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-bar-chart" style="font-size:20px;"></i>
             </div>
-            <div class="discounts admin-sidebar-tab">
+            <div class="discounts admin-sidebar-tab" ng-click="activeButton('discountsHome')">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-scissors" style="font-size:20px;"></i>
             </div>
           </div>
@@ -35,11 +35,11 @@
 	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
 	              <div class="search admin-sidebar-tab" style="font-size:13px;">Search</div>
 	              <div class="home admin-sidebar-tab" style="font-size:13px;">Home</div>
-	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="navbar = 'orders'">Orders</div>
+	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('orders')">Orders</div>
 	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">Products</div>
 	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')">Customers</div>
 	              <div class="reports admin-sidebar-tab" style="font-size:13px;">Reports</div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;">Discounts</div>
+	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')">Discounts</div>
 	            </div>
 	            <div class="col-lg-1 col-md-1" style="padding: 0px;">
 	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
@@ -49,7 +49,7 @@
 	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
 	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')"></div>
 	              <div class="reports admin-sidebar-tab" style="font-size:13px;"></div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;"></div>
+	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')"></div>
 	            </div>
 						</div>
 
@@ -62,10 +62,10 @@
 
 						<div ng-switch-when="products">
 							<div class="admin-sidebar-header2">&nbsp;&nbsp;&nbsp;&nbsp;PRODUCTS</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Products</div>
+							<div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">&nbsp;&nbsp;&nbsp;&nbsp;Products</div>
 							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Inventory</div>
 							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Collections</div>
-						<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Gift Card</div>
+							<div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('giftCardHome')">&nbsp;&nbsp;&nbsp;&nbsp;Gift Card</div>
 						</div>
 
           </div>
@@ -112,6 +112,62 @@
 					</div>
 				</div>
 				<!-- End of Add Customer -->
+
+				<!-- Discounts Home -->
+				<div ng-switch-when="discountsHome" style="height: 100%">
+					<div discounts-home>
+
+					</div>
+				</div>
+				<!-- End of Discounts Home -->
+
+				<!-- Add Discounts -->
+				<div ng-switch-when="addDiscounts" style="height: 100%">
+					<div add-discounts>
+
+					</div>
+				</div>
+				<!-- End of Add Discounts -->
+
+				<!-- Gift Card Home -->
+				<div ng-switch-when="giftCardHome" style="height: 100%">
+					<div gift-card-home>
+
+					</div>
+				</div>
+				<!-- End of Gift Card home -->
+
+				<!-- Manage Gift Card -->
+				<div ng-switch-when="manageGiftCard" style="height: 100%">
+					<div manage-gift-card>
+
+					</div>
+				</div>
+				<!-- End of manage gift card -->
+
+				<!-- Add a gift card -->
+				<div ng-switch-when="addGiftProducts">
+					<div add-gift-products>
+
+					</div>
+				</div>
+				<!-- End of add gift card -->
+
+				<!-- Order Home -->
+				<div ng-switch-when="orders">
+					<div order-home>
+
+					</div>
+				</div>
+				<!-- End of order home -->
+
+				<!-- Add order -->
+				<div ng-switch-when="addOrder">
+					<div add-order>
+
+					</div>
+				</div>
+				<!-- End of add order -->
 			</div>
 		</div>
 	</div>

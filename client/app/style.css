@@ -661,3 +661,18 @@ tags-input .tags {
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
 }
+
+.infinite {
+	background-image: url(../lib/assets/infinity.png) !important;
+	background-size: 35%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.denominations {
+	border-bottom: 1px solid lightgray;
+	height: 45px;
+	line-height: 33px;
+	padding: 5px;
+	margin: 0px 10px !important;
+}
