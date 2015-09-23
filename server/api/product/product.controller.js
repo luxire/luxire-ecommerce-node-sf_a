@@ -52,12 +52,19 @@ exports.show = function(req, res){
   var params = querystring.stringify(req.params);
   http
     .get(env.store.host+env.store.products+'/'+req.params.id+'?'+params, function(error, response, body){
-      if(response.statusCode == 200){
-        res.send(body);
+      if(response && response !== undefined){
+        if(response.statusCode == 200){
+          res.send(body);
+        }
+        else{
+          res.status(response.statusCode).send(response.body.error);
+        }
       }
       else{
-        res.status(response.statusCode).send(response.body.error);
+        res.status(500).send("rails server not responding")
+        console.log("rails server not responding")
       }
+
   });
 };
 

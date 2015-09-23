@@ -62,5 +62,13 @@ angular.module('luxire')
 			alert('Invalid user id or password');
 		});
 	}
+	$scope.signup = function(user){
+		userManager.signup(user).then(function(response){
+			console.log(response);
+			alert('User created succesfully '+response);
+		},function(error){
+			alert('User creation failed');
+		});
+	}
 
 })

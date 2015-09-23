@@ -197,6 +197,19 @@ angular.module('luxire')
 		});
 		return deferred.promise;
 	}
+	this.signup = function(user){
+		console.log('user signup..');
+		var deferred = $q.defer();
+		$http.post("/api/userManager/signup", angular.toJson(user)).success(function(data){
+			console.log(data)
+			deferred.resolve(data);
+		})
+		.error(function(errData, errStatus, errHeaders, errConfig) {
+			console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+		});
+		return deferred.promise;
+	}
 })
 //For demo
 .run(function(products) {
