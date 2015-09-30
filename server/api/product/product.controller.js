@@ -11,13 +11,13 @@
 var _ = require('lodash');
 var http = require('request');
 var querystring = require('querystring');
-var env = require('../../config/env');
+var env = require('../../config/constants');
 // Get list of all products
 exports.index = function(req, res) {
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http
-    .get(env.store.host+env.store.products+'?'+params, function(error, response, body){
+    .get(env.spree.host+env.spree.products+'?'+params, function(error, response, body){
       if(response.statusCode == 200){
         res.send(body);
       }
@@ -31,7 +31,7 @@ exports.index = function(req, res) {
 exports.create = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.store.host+env.store.products+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.products+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -51,7 +51,7 @@ exports.show = function(req, res){
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http
-    .get(env.store.host+env.store.products+'/'+req.params.id+'?'+params, function(error, response, body){
+    .get(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
       if(response && response !== undefined){
         if(response.statusCode == 200){
           res.send(body);
@@ -72,7 +72,7 @@ exports.show = function(req, res){
 exports.update = function(req, res){
   console.log(req.body);
   http.put({
-    uri: env.store.host+env.store.products+'/'+req.params.id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.products+'/'+req.params.id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -93,7 +93,7 @@ exports.destroy = function(req, res){
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http
-    .del(env.store.host+env.store.products+'/'+req.params.id+'?'+params, function(error, response, body){
+    .del(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
       if(response.statusCode == 204){
         res.status(response.statusCode).send('Deleted');
       }

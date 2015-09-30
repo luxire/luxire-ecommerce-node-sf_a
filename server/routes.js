@@ -13,7 +13,18 @@ module.exports = function(app) {
   app.use('/api/userManager', require('./api/userManager'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/things', require('./api/thing'));
-  
+  /*start of common services routes*/
+  app.use('/api/country', require('./api/commonServices/country'));
+  /*end*/
+
+  /*start of Back-Office services routes*/
+
+  /*end of Admin services*/
+
+  /*start of Store-front services routes*/
+
+  /*end*/
+
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
