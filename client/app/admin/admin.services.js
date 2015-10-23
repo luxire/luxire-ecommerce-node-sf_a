@@ -1,15 +1,5 @@
 angular.module('luxire')
-.service('restApiService', function($http, $q){
-		this.get = function(url){
-			var deferred = $q.defer();
-			$http.get(url).success(function(data){
-						deferred.resolve(data);
-			}).error(function(errData, errStatus, errHeaders, errConfig){
-						deferred.reject({data: errData , status: errStatus ,headers: errHeaders ,Config: errConfig});
-			});
-			return deferred.promise;
-		}
-})
+
 .service('prototypeObject',function(){
 	this.product = function(){
 		this.name = ''
@@ -70,78 +60,6 @@ angular.module('luxire')
 		this.tags = ''
 	}
 })
-
-.service('products', function($http, $q, restApiService){
-	//Get all products
-	this.getProducts = function(){
-		var deferred = $q.defer();
-		$http.get('/api/products').then(function(data){
-			deferred.resolve(data)
-		},function(errData, errStatus, errHeaders, errConfig){
-			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
-		});
-		return deferred.promise;
-	}
-	this.createProduct = function(product) {
-		var deferred = $q.defer();
-
-		$http.post("/api/products", angular.toJson(product)).success(function(res) {
-			console.log(res);
-			deferred.resolve(res.data);
-  		})
-  		.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-	this.getProductByID = function(id) {
-		var deferred = $q.defer();
-		$http.get("/api/products/"+id).success(function(data) {
-			console.log(data)
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-
-
-	this.updateProduct = function(id, prod_parameters) {
-		var deferred = $q.defer();
-		var parameters = {
-			product: prod_parameters
-		}
-		$http.put("/api/products/"+ id, angular.toJson(parameters)).success(function(data) {
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-	this.deleteProduct = function(id) {
-		var deferred = $q.defer();
-		$http.delete("/api/products/"+id).success(function(data) {
-			console.log(data);
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-})
-
-
-
 //fileReader service
 .factory('fileReader',["$q", "$log", function ($q, $log) {
         var onLoad = function(reader, deferred, scope) {

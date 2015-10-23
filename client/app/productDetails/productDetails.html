@@ -1,7 +1,7 @@
 <header>
       <div class="header-logo">
         <ul class="header-links">
-          <li>Cart</li>
+          <li ui-sref="cart">Cart ({{cart.length}})</li>
           <li>Register</li>
         </ul>
       </div>
@@ -21,7 +21,7 @@
     </nav>
     <nav>
       <ul class="breadcrumbs">
-        <li ng-repeat="x in prod.breadcrumbs">&nbsp;&nbsp;&nbsp;{{x}}&nbsp;&nbsp;&nbsp;<span>/</span></li>
+        <li ng-repeat="breadcrumb in prod.breadcrumbs">&nbsp;&nbsp;&nbsp;{{breadcrumb}}&nbsp;&nbsp;&nbsp;<span>/</span></li>
       </ul>
     </nav>
     <section class="product-image">
@@ -32,11 +32,14 @@
       <p class="product-price">${{jsonresponse.price}}</p>
       <button  data-toggle="modal" data-target="#customizeShirt" style="border: none; background-color: white;float: right;margin-right:174px;font-weight: bold;">View all</button>
       <p class="heading">Select a style</p>
+      <!--Styles like Tuxedo,standard, detachable collar-->
       <div class="product-styles">
-        <div ng-repeat="y in jsonresponse.product_properties[0].value.split(',')" ng-click="isActive = !isActive">
-          <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
+        <div ng-repeat="product_property in jsonresponse.product_properties[0].value.split(',')" ng-click="activateStyle($index,product_property,jsonresponse.product_properties[0].property_name)">
+          <div class="style" ng-class={active:selectedStyleId=={{$index}}}></div>
+
+          <!-- <div class="style" id="{{product_property}}" ng-class="isActive ? 'active' : 'inactive'"></div> -->
           <br>
-          <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
+          <span class="label" ng-class={active1:selectedStyleId=={{$index}}}>{{product_property}}</span>
         </div>
       </div>
 
@@ -53,10 +56,10 @@
             <div class="modal-body" style="padding: 20px 52px;">
               <b>Recommended Styles</b>
               <div class="product-styles" style="border-top: 1px solid #E0E0E0; padding-top: 30px; padding-left: 15px">
-                <div ng-repeat="y in jsonresponse.product_properties[0].value.split(',')" ng-click="isActive = !isActive">
-                  <div class="style" id="{{y}}" ng-class="isActive ? 'active' : 'inactive'"></div>
+                <div ng-repeat="product_property in jsonresponse.product_properties[0].value.split(',')" ng-click="isActive = !isActive">
+                  <div class="style" id="{{product_property}}" ng-class="isActive ? 'active' : 'inactive'"></div>
                   <br>
-                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{y}}</span>
+                  <span class="label" ng-class="isActive ? 'active1' : 'inactive'">{{product_property}}</span>
                 </div>
               </div>
 
@@ -95,23 +98,41 @@
 
 
       <p class="heading">Select a fit</p>
-      <select class="fit-select">
-        <option ng-repeat="z in jsonresponse.product_properties[1].value.split(',')" value="{{z}}">{{z}}</option>
+      <select class="fit-select"  ng-model="cartObject[jsonresponse.product_properties[1].property_name]">
+        <option ng-repeat="z in jsonresponse.product_properties[1].value.split(',')" value="{{z}}" >{{z}}</option>
       </select>
       <div class="header2">
         <p>{{jsonresponse.product_properties[2].property_name}}</p>
-        <select class="fit-select2">
+        <select class="fit-select2" ng-model="cartObject[jsonresponse.product_properties[2].property_name]">
           <option ng-repeat="b in jsonresponse.product_properties[2].value.split(',')" value="{{b}}">{{b}}</option>
         </select>
       </div>
       <div class="header2">
         <p>{{jsonresponse.product_properties[3].property_name}}</p>
-        <select class="fit-select2">
+        <select class="fit-select2" ng-model="cartObject[jsonresponse.product_properties[3].property_name]">
           <option ng-repeat="b in jsonresponse.product_properties[3].value.split(',')" value="{{b}}">{{b}}</option>
         </select>
       </div>
-      <button class="customize" ng-click="go('customize')">Customize Shirt</button>
-      <button class="addtocart">Add to Cart</button>
+      <!-- <p class="heading">Select a fit</p>
+      <select class="fit-select"  ng-model="cartObject[jsonresponse.product_properties[1].property_name]">
+        <option ng-repeat="z in jsonresponse.product_properties[1].value.split(',')" value="{id: {{$index}} ,name: {{z}}}" >{{z}}</option>
+      </select>
+      <div class="header2">
+        <p>{{jsonresponse.product_properties[2].property_name}}</p>
+        <select class="fit-select2" ng-model="cartObject[jsonresponse.product_properties[2].property_name]">
+          <option ng-repeat="b in jsonresponse.product_properties[2].value.split(',')" value="{id: {{$index}} ,name: {{b}}}">{{b}}</option>
+        </select>
+      </div>
+      <div class="header2">
+        <p>{{jsonresponse.product_properties[3].property_name}}</p>
+        <select class="fit-select2" ng-model="cartObject[jsonresponse.product_properties[3].property_name]">
+          <option ng-repeat="b in jsonresponse.product_properties[3].value.split(',')" value="{id: {{$index}} ,name: {{b}}}">{{b}}</option>
+        </select>
+      </div> -->
+      <button class="customize" ng-click="gotoCustomization()">Customize Shirt</button>
+
+      <!-- <button class="customize" ng-click="go('customize')">Customize Shirt</button> -->
+      <button class="addtocart" ng-click="addItemToCart()">Add to Cart</button>
     </section>
     <section class="features">
       <div class="features2" ng-repeat="c in jsonresponse.product_properties[4].value.split(',')">

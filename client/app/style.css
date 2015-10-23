@@ -148,6 +148,11 @@ header {
 	color: #14003D;
 }
 
+.style.active {
+	border: 1px solid #14003D;
+	color: #14003D;
+}
+
 .active1 {
 	color: #14003D;
 }
@@ -160,6 +165,13 @@ header {
 	color: black !important;
 	font-size: 14px !important;
 	font-weight: 600;
+}
+
+.label.active1 {
+	color: #14003D !important;
+	font-size: 14px !important;
+	font-weight: 600;
+	z-index: 99;
 }
 
 .fit-select {
@@ -564,6 +576,7 @@ a.accordion-toggle:hover {
 }
 
 .admin-sidebar-header2 {
+	margin-top: 1%;
 	color: #c3cfd8;
 	height: 3.3em;
 	line-height:3.3em;

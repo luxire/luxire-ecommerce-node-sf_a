@@ -59,14 +59,46 @@
     <!-- Measurement Garments Controller-->
     <script src="app/measurementGarments/measurementGarments.controller.js"></script>
 
+    <!-- Collection-->
+    <link rel="stylesheet" href="app/collection/collection.css">
+    <script src="app/collection/collection.controller.js"></script>
+
+    <!-- Cart-->
+    <link rel="stylesheet" href="app/cart/cart.css">
+    <script src="app/cart/cart.controller.js"></script>
+
+    <!--Back-office Controllers-->
+
     <!-- Admin Controller-->
     <script src="app/admin/admin.controller.js"></script>
+    <!--Other Controllers-->
+    <script src="app/admin/customer/customer.controller.js"></script>
+    <script src="app/admin/default/default.controller.js"></script>
+    <script src="app/admin/discount/discount.controller.js"></script>
+    <script src="app/admin/giftcard/giftcard.controller.js"></script>
+    <script src="app/admin/order/order.controller.js"></script>
+    <script src="app/admin/product/product.controller.js"></script>
+
+    <!--Back-office services-->
+    <!--Admin services[Common Services]-->
+    <script src="app/admin/admin.services.js"></script>
+
+    <script src="app/admin/product/product.services.js"></script>
+
+    <!-- <script src="app/admin/services/customer.service.js"></script> -->
+
+    <!--Back-office routing -->
+    <script src="app/admin/admin.route.js"></script>
+
+
+
 
     <!-- <script src="app/dummy.js"></script> -->
     <script src="app/controller.js"></script>
     <script src="app/services.js"></script>
   </head>
   <body style="width: 100%; height:100%">
-    <div ng-view style="width: 100%; height:100%"></div>
+    <div ui-view style="width: 100%; height:100%"></div>
+    <!-- <div ng-view style="width: 100%; height:100%"></div> -->
   </body>
 </html>

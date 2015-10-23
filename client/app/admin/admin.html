@@ -1,9 +1,9 @@
-<div class="container-fluid" style="width: 100%; height:100%">
+  <div class="container-fluid" style="width: 100%; height:100%" >
 	<div class="row" style="width: 100%; height:100%; margin: 0px;">
 		<div class="col-lg-2 col-md-2" style="height:100%;background-color: #31373D;">
       <div class="container-fluid" style="height:100%;">
         <div class="row" style="height:100%;">
-          <div class="col-lg-3 col-md-3" style="padding: 0px;text-align: center;font-size: 20px;height:100%;" ng-class="{'sublinkActive': isActive}">
+          <div class="col-lg-3 col-md-3" style="padding: 0px;text-align: center;font-size: 20px;height:100%;" ng-class="{'sublinkActive': isActive}" ng-mouseover="mouseoverNav()">
             <div class="admin-sidebar-header">
               <h3 style="margin: 0px; padding: 10px 0px;">&nbsp;&nbsp;&nbsp;</h3>
             </div>
@@ -13,24 +13,49 @@
             <div class="home admin-sidebar-tab">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-home" style="font-size:20px;"></i>
             </div>
-            <div class="orders admin-sidebar-tab" ng-click="activeButton('orders')">
+            <div class="orders admin-sidebar-tab" ui-sref="admin.order">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-check-square" style="font-size:20px;"></i>
             </div>
-            <div class="products admin-sidebar-tab" ng-click="activeButton('products')">
+            <div class="products admin-sidebar-tab" ui-sref="admin.product">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-tag" style="font-size:20px;"></i>
             </div>
-            <div class="customers admin-sidebar-tab" ng-click="activeButton('customerHome')">
+            <div class="customers admin-sidebar-tab" ui-sref="admin.customer">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-users" style="font-size:20px;"></i>
             </div>
-            <div class="reports admin-sidebar-tab">
+            <div class="reports admin-sidebar-tab" >
               &nbsp;&nbsp;&nbsp;<i class="fa fa-bar-chart" style="font-size:20px;"></i>
             </div>
-            <div class="discounts admin-sidebar-tab" ng-click="activeButton('discountsHome')">
+            <div class="discounts admin-sidebar-tab" ui-sref="admin.discount">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-scissors" style="font-size:20px;"></i>
             </div>
           </div>
-          <div class="col-lg-9 col-md-9" style="padding: 0px;" ng-switch on="navbar">
-						<div ng-switch-default>
+          <div class="col-lg-9 col-md-9" style="padding: 0px;" >
+						<div ng-hide = "showDefaultNav" ui-view="sideContent" style="width: 100%; height:100%"></div>
+						<div ng-show = "showDefaultNav" ng-mouseleave="mouseleaveNav()">
+							<div class="col-lg-11 col-md-11" style="padding: 0px;">
+								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
+								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
+								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
+								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order">Orders</div>
+								<div class="products admin-sidebar-tab" style="font-size:13px;" ui-sref="admin.product">Products</div>
+								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer">Customers</div>
+								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
+								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
+							</div>
+							<div class="col-lg-1 col-md-1" style="padding: 0px;">
+								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
+								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
+								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home"></div>
+								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+								<div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ui-sref="admin.product"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer"></div>
+								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
+								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount"></div>
+							</div>
+						</div>
+
+
+						<!-- <div ng-switch-default>
 							<div class="col-lg-11 col-md-11" style="padding: 0px;">
 	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
 	              <div class="search admin-sidebar-tab" style="font-size:13px;">Search</div>
@@ -66,109 +91,110 @@
 							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Inventory</div>
 							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Collections</div>
 							<div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('giftCardHome')">&nbsp;&nbsp;&nbsp;&nbsp;Gift Card</div>
-						</div>
+						</div> -->
 
           </div>
         </div>
       </div>
 		</div>
 		<div class="col-lg-10 col-md-10" style="height:100%">
+			<div ui-view="mainContent" style="width: 100%; height:100%"></div>
 
-      <div ng-switch on="navbar" style="height:100%">
+      <!-- <div ng-switch on="navbar" style="height:100%">
 
 				<div ng-switch-default>
 					<div admin-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- Products Home Page -->
-				<div ng-switch-when="products" style="height:100%">
+				<!-- <div ng-switch-when="products" style="height:100%">
 					<div product-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Products Home Page -->
 
 				<!-- Add Products Page -->
-				<div ng-switch-when="addProducts" style="height:100%">
+				<!-- <div ng-switch-when="addProducts" style="height:100%">
 					<div add-product>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Add Products Page -->
 
 				<!-- Customer Home -->
-				<div ng-switch-when="customerHome" style="height: 100%">
+				<!-- <div ng-switch-when="customerHome" style="height: 100%">
 					<div customer-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Customer Home -->
 
 				<!-- Add Customer -->
-				<div ng-switch-when="addCustomer" style="height: 100%">
+				<!-- <div ng-switch-when="addCustomer" style="height: 100%">
 					<div add-customer>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Add Customer -->
 
 				<!-- Discounts Home -->
-				<div ng-switch-when="discountsHome" style="height: 100%">
+				<!-- <div ng-switch-when="discountsHome" style="height: 100%">
 					<div discounts-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Discounts Home -->
 
 				<!-- Add Discounts -->
-				<div ng-switch-when="addDiscounts" style="height: 100%">
+				<!-- <div ng-switch-when="addDiscounts" style="height: 100%">
 					<div add-discounts>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Add Discounts -->
 
 				<!-- Gift Card Home -->
-				<div ng-switch-when="giftCardHome" style="height: 100%">
+				<!-- <div ng-switch-when="giftCardHome" style="height: 100%">
 					<div gift-card-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of Gift Card home -->
 
 				<!-- Manage Gift Card -->
-				<div ng-switch-when="manageGiftCard" style="height: 100%">
+				<!-- <div ng-switch-when="manageGiftCard" style="height: 100%">
 					<div manage-gift-card>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of manage gift card -->
 
 				<!-- Add a gift card -->
-				<div ng-switch-when="addGiftProducts">
+				<!-- <div ng-switch-when="addGiftProducts">
 					<div add-gift-products>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of add gift card -->
 
 				<!-- Order Home -->
-				<div ng-switch-when="orders">
+				<!-- <div ng-switch-when="orders">
 					<div order-home>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of order home -->
 
 				<!-- Add order -->
-				<div ng-switch-when="addOrder">
+				<!-- <div ng-switch-when="addOrder">
 					<div add-order>
 
 					</div>
-				</div>
+				</div> -->
 				<!-- End of add order -->
-			</div>
+			<!-- </div> -->
 		</div>
 	</div>
 </div>

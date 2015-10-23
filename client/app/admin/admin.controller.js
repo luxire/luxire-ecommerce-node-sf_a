@@ -5,17 +5,22 @@
    $scope.adminConsole = "default";
    $scope.isActive = false;
    $scope.infinityFlag = true;
+   $scope.showDefaultNav = false
 
    $scope.page.setTitle("Admin Console")
 
    $scope.loading = false;
 
-   $scope.productData  = new prototypeObject.product();
    $scope.customerData = new prototypeObject.customer();
 
-   $scope.colorTags = []
-   $scope.seasonTags = []
 
+   $scope.mouseoverNav = function(){
+     $scope.showDefaultNav = true
+   }
+   $scope.mouseleaveNav = function(){
+     $scope.showDefaultNav = false
+   }
+   /* Moved to discount controller
   $scope.today = function() {
     $scope.discountStart = new Date();
   };
@@ -24,6 +29,23 @@
   $scope.clear = function () {
     $scope.discountStart = null;
   };
+
+  $scope.discountCodeGen = function() {
+    var length = 12;
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   var result = '';
+   for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+   $scope.discountCode = result;
+}
+  */
+
+  /* Moved to product controller
+
+  $scope.productData  = new prototypeObject.product();
+
+
+  $scope.colorTags = []
+  $scope.seasonTags = []
 
   $scope.disabled = function(date, mode) {
     return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
@@ -83,6 +105,34 @@
     return '';
   };
 
+  $scope.dummyColors = [
+    {"text": "Red"},
+    {"text": "White"},
+     {"text": "Black"},
+     {"text": "Gray"},
+     {"text": "Powder Blue"},
+     {"text": "Navy Blue"},
+     {"text": "Royal Blue"},
+     {"text": "Green"},
+     {"text": "Light Green"},
+     {"text": "Yellow"},
+     {"text": "Orange"},
+     {"text": "Crimson"},
+     {"text": "Vermilion"},
+     {"text": "Dark Red"},
+     {"text": "Light Gray"},
+     {"text": "Light Blue"}
+  ]
+
+  $scope.dummySeasons = [
+    {"text": "Summer"},
+    {"text": "Winter"},
+    {"text": "Spring"},
+    {"text": "Autumn"},
+    {"text": "Monsoon"}
+  ]
+*/
+/*Moved Giftcard controller
   $scope.giftCardObj = [
     {
       title: "Rs. 10",
@@ -105,66 +155,14 @@
       value: "1500"
     }
   ]
-   $scope.dummyColors = [
-     {"text": "Red"},
-     {"text": "White"},
-      {"text": "Black"},
-      {"text": "Gray"},
-      {"text": "Powder Blue"},
-      {"text": "Navy Blue"},
-      {"text": "Royal Blue"},
-      {"text": "Green"},
-      {"text": "Light Green"},
-      {"text": "Yellow"},
-      {"text": "Orange"},
-      {"text": "Crimson"},
-      {"text": "Vermilion"},
-      {"text": "Dark Red"},
-      {"text": "Light Gray"},
-      {"text": "Light Blue"}
-   ]
-
-   $scope.dummySeasons = [
-     {"text": "Summer"},
-     {"text": "Winter"},
-     {"text": "Spring"},
-     {"text": "Autumn"},
-     {"text": "Monsoon"}
-   ]
-
-   $scope.discountCodeGen = function() {
-     var length = 12;
-     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var result = '';
-    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
-    $scope.discountCode = result;
-}
-
-   $scope.loadTags = function(query) {
-     if (query == 'color') {
-       return $scope.dummyColors;
-     } else if (query == 'season') {
-       return $scope.dummySeasons;
-     }
-    return {};
-  }
-
-   $scope.activeButton = function(element) {
-    $scope.isActive = !$scope.isActive;
-    $scope.navbar = element;
-    console.log($scope.navbar);
-
-    $scope.loading = true;
-    products.getProducts().then(function(data) {
-  		console.log('admin');
-      console.log(data);
-  		$scope.jsonresponse = data;
-      $scope.loading = false;
-      console.log($scope.jsonresponse);
-  	}, function(info){
-  		console.log(info);
-  	})
-  }
+  $scope.loadTags = function(query) {
+    if (query == 'color') {
+      return $scope.dummyColors;
+    } else if (query == 'season') {
+      return $scope.dummySeasons;
+    }
+   return {};
+ }
 
 $scope.getAllProducts = function (data) {
   $scope.loading = true;
@@ -208,6 +206,34 @@ $scope.uploadSponsorLogo = function(files) {
       console.log(info);
     })
   }
+  */
+
+
+
+
+
+
+   $scope.activeButton = function(element) {
+    $scope.isActive = !$scope.isActive;
+    $scope.navbar = element;
+    console.log($scope.navbar);
+
+    $scope.loading = true;
+    products.getProducts().then(function(data) {
+  		console.log('admin');
+      console.log(data);
+  		$scope.jsonresponse = data;
+      $scope.loading = false;
+      console.log($scope.jsonresponse);
+  	}, function(info){
+  		console.log(info);
+  	})
+  }
+
+
+
+  /*To be moved to customer controller*/
+
 
 })
 

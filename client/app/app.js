@@ -6,7 +6,7 @@
 angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput'])
 
 .run(function($location,$rootScope){
-	// $location.path('/productdetails/17');
+	$location.path('/collections');
 
 	$rootScope.page = {
         setTitle: function(title) {
@@ -18,30 +18,77 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
         $rootScope.page.setTitle(current.$$route.title || 'Home');
     });
 })
-.config(['$routeProvider', function($routeProvider){
-	$routeProvider.
-	when('/test',{
+.config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
+	$urlRouterProvider.otherwise('/collections');
+	$stateProvider
+	.state('test',{
+		url:'/test',
 		templateUrl: 'app/test/test.html',
 		controller: 'testController'
-	}).
-	when('/productdetails/:id',{
+	})
+	.state('productDetails',{
+		url: '/productdetails/:id',
 		templateUrl: 'app/productDetails/productDetails.html',
 		controller: 'productDetailsController'
-	}).
-	when('/customize',{
+	})
+	.state('customize',{
+		url: '/customize',
+		params: {cartObject: {}},
 		templateUrl: 'app/customizeGarments/customizeGarments.html',
 		controller: 'customizeGarmentsController'
-	}).
-	when('/personalize',{
+	})
+	.state('personalize',{
+		url: '/personalize',
+		params: {cartObject: {}},
 		templateUrl: 'app/personaliseGarments/personaliseGarments.html',
 		controller: 'personaliseGarmentsController'
-	}).
-	when('/measurement',{
+	})
+	.state('measurement',{
+		url: '/measurement',
 		templateUrl: 'app/measurementGarments/measurementGarments.html',
 		controller: 'measurementGarmentsController'
-	}).
-	when('/admin',{
-		templateUrl: 'app/admin/admin.html',
-		controller: 'adminController'
 	})
+	.state('collection',{
+		url: '/collections',
+		templateUrl: 'app/collection/collection.html',
+		controller: 'collectionController'
+	})
+	.state('cart',{
+		url: '/cart',
+		templateUrl: 'app/cart/partials/cart.html',
+		controller: 'CartController'
+	})
+
+
+
+	// $routeProvider.
+	// when('/test',{
+	// 	templateUrl: 'app/test/test.html',
+	// 	controller: 'testController'
+	// }).
+	// when('/productdetails/:id',{
+	// 	templateUrl: 'app/productDetails/productDetails.html',
+	// 	controller: 'productDetailsController'
+	// }).
+	// when('/customize',{
+	// 	templateUrl: 'app/customizeGarments/customizeGarments.html',
+	// 	controller: 'customizeGarmentsController'
+	// }).
+	// when('/personalize',{
+	// 	templateUrl: 'app/personaliseGarments/personaliseGarments.html',
+	// 	controller: 'personaliseGarmentsController'
+	// }).
+	// when('/measurement',{
+	// 	templateUrl: 'app/measurementGarments/measurementGarments.html',
+	// 	controller: 'measurementGarmentsController'
+	// }).
+	// when('/admin',{
+	// 	templateUrl: 'app/admin/admin.html',
+	// 	controller: 'adminController'
+	// }).
+	// when('/collections',{
+	// 	templateUrl: 'app/collection/collection.html',
+	// 	controller: 'collectionController'
+	// })
+
 }])

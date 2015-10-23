@@ -589,3 +589,6 @@ angular.module('luxire')
   };
 
 })
+.controller('CollectionController',function($scope){
+
+})
