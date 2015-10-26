@@ -471,6 +471,7 @@ a.accordion-toggle:hover {
 	box-shadow: none;
 	margin-top: -1px;
 	height: 50px;
+	margin-top: 2%;
 }
 
 .fit-select3 {

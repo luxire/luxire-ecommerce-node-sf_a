@@ -49,7 +49,7 @@
 	<div  class="container-fluid" style="padding: 15px 85px  !important;">
 		<div class="col-md-8 col-lg-8">
 			<div class="container-fluid">
-				<div ng-controller="AccordionDemoCtrl" class="customize-acc">
+				<div class="customize-acc">
 				  	<accordion close-others="false">
 					    <accordion-group is-open="true" ng-repeat="prop in customizeJson.properties[1].desc">
 					        <accordion-heading>
@@ -61,7 +61,7 @@
 						        	<div class="col-lg-6 col-md-6">Locations</div>
 						        </div>
 						        <div class="row">
-						        	<div class="col-lg-5 col-md-5"><input class="fit-input" type="text"></div>
+						        	<div class="col-lg-5 col-md-5"><input class="fit-input" ng-model="monogramInitials" ng-change="monogramInitialChange(monogramInitials, prop.type, prop.cost)" type="text"></div>
 						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Enter the initials that you want as a monogram on your garment.">?</div></div>
 						        	<div class="col-lg-5 col-md-5">
 						        		<select class="fit-select3">
@@ -114,12 +114,37 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-lg-4">
+		<div class="col-md-4 col-lg-4" style="position: fixed;right: 0">
+			<div class="container-fluid">
+				<div class="summary-card" >
+					<div style="text-align: center; font-size: 20px; padding: 20px 0px;">{{cartObject.product_name}}</div>
+					<div class="summary-details">
+						<div class="row"style="border-bottom: 1px solid #DDDDDD;font-size: 16px;padding:5px;display: block;">
+							<div class="col-md-9 col-lg-9 col-sm-9 col-xs-9 left"><b>Product Price:</b></div>
+							<div class="col-md-3 col-lg-3 col-sm-4 col-xs-3 right">${{cartObject.product_price_after_personalisation}}</div>
+						</div>
+						<!-- <div ng-repeat = "personalizationItem in personalizationItems" class="row"style="border-bottom: 1px solid #DDDDDD;font-size: 16px;padding:5px;display: block;">
+							<div class="col-md-9 col-lg-9 col-sm-9 col-xs-9 left"><b>{{personalizationItem.type}}</b></div>
+							<div class="col-md-3 col-lg-3 col-sm-4 col-xs-3 right">${{personalizationItem.cost}}</div>
+							<!-- <div class="col-md-9 col-lg-9 col-sm-9 col-xs-9 left"><b>Product Price:</b></div>
+							<div class="col-md-3 col-lg-3 col-sm-4 col-xs-3 right">${{cartObject.product_price}}</div></div -->
+						<!-- <div ng-repeat = "personalizationItem in personalizationItems" style="border-bottom: 1px solid #DDDDDD; font-size: 16px;padding:5px;display: block">
+							<div style="display: inline-block;height: 17px"><b>{{prop.type}}:</b>  {{cartObject['Customize'][prop.type]}}<div>
+						</div> -->
+					</div>
+				</div>
+			</div>
+			<button class="luxire-solid-button" ng-click="go('measurement')">Continue</button>
+			<br>
+			<button class="luxire-hollow-button" ng-click>Save for later</button>
+		</div>
+
+		<!-- <div class="col-md-4 col-lg-4">
 			<div class="container-fluid">
 				<button class="luxire-solid-button" ng-click="go('measurement')">Continue</button>
 				<br>
 				<br>
 				<button class="luxire-hollow-button" ng-click>Save for later</button>
 			</div>
-		</div>
+		</div> -->
 </div>
