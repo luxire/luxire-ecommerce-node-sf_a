@@ -58,33 +58,35 @@
 					        <div ng-if="prop.type == 'Add a Monogram'" style="padding: 10px;">
 						        <div class="row">
 						        	<div class="col-lg-6 col-md-6">Initials</div>
-						        	<div class="col-lg-6 col-md-6">Locations</div>
+						        	<div class="col-lg-6 col-md-6">Location</div>
 						        </div>
 						        <div class="row">
-						        	<div class="col-lg-5 col-md-5"><input class="fit-input" ng-model="monogramInitials" ng-change="monogramInitialChange(monogramInitials, prop.type, prop.cost)" type="text"></div>
+						        	<div class="col-lg-5 col-md-5"><input class="fit-input" ng-model="cartObject['Personalize']['Monogram'][prop.properties[0].name]" ng-change="monogramInitialChange(cartObject['Personalize']['Monogram'][prop.properties[0].name], prop.type, prop.cost)" type="text"></div>
 						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Enter the initials that you want as a monogram on your garment.">?</div></div>
 						        	<div class="col-lg-5 col-md-5">
-						        		<select class="fit-select3">
-						        			<option ng-repeat="loc in prop.properties[1].options" value="{{loc}}">{{loc}}</option>
+						        		<select class="fit-select3" ng-model="cartObject['Personalize']['Monogram'][prop.properties[1].name]">
+						        			<option ng-repeat="loc in prop.properties[1].options"  value="{{loc}}">{{loc}}</option>
 						        		</select>
 						        	</div>
 						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Select the location on your garment where you want your mongram.">?</div>
 						        	</div>
 						        </div>
 						        <br>
+										<!-- Hello
+										{{cartObject['Personalize']['Monogram']}} -->
 						        <div class="row">
 						        	<div class="col-lg-6 col-md-6">Color</div>
 						        	<div class="col-lg-6 col-md-6">Font</div>
 						        </div>
 						        <div class="row">
 						        	<div class="col-lg-5 col-md-5">
-						        		<select class="fit-select3">
+						        		<select class="fit-select3" ng-model="cartObject['Personalize']['Monogram'][prop.properties[2].name]">
 						        			<option ng-repeat="loc in prop.properties[2].options" value="{{loc}}">{{loc}}</option>
 						        		</select>
 						        	</div>
 						        	<div class="col-lg-1 col-md-1"><div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;" tooltip="Select the color of the mongram.">?</div></div>
 						        	<div class="col-lg-5 col-md-5">
-						        		<select class="fit-select3">
+						        		<select class="fit-select3" ng-model="cartObject['Personalize']['Monogram'][prop.properties[3].name]">
 						        			<option ng-repeat="loc in prop.properties[3].options" value="{{loc}}">{{loc}}</option>
 						        		</select>
 						        	</div>
@@ -93,20 +95,20 @@
 						        </div>
 						    </div>
 						    <div ng-if="prop.type == 'Additional Options'" style="padding: 10px;">
-						    	<div ng-repeat="loc in prop.properties"><input type="checkbox" value="{{loc.name}}"> {{loc.name}}</div>
+						    	<div ng-repeat="loc in prop.properties"><input type="checkbox" ng-model="cartObject['Personalize']['Additional Options'][$index].selected" ng-change="selectAdditionalOption(cartObject['Personalize']['Additional Options'][$index].selected,cartObject['Personalize']['Additional Options'][$index].cost)" value="{{loc.name}}" > {{loc.name}} <i ng-show="loc.cost != ''">+</i> {{loc.cost}}</div>
 						    </div>
 						    <div ng-if="prop.type == 'Contrast'" style="padding: 10px;">
 						    	<div>
-					        		<div class="cards" ng-class="{activecard:customizeJson.properties[1].desc[$parent.$index].selectedStyle=={{$parent.$index}}{{$index}}}" ng-click="activate(1,$parent.$index,$index)" ng-repeat="details in prop.properties" style=""><img src="{{details.image_url}}" style="width: 75px; height: 75px;">
+					        		<div class="cards" ng-class="{activecard:cartObject['Personalize']['Contrast'][$index].selected == true}" ng-repeat="details in prop.properties" ng-click="activate(1,$parent.$index,$index)"style=""><img src="{{details.image_url}}" style="width: 75px; height: 75px;">
 					        			<br>
-					        			{{details.name}}
+					        			{{details.name}} + {{details.cost}}
 					        		</div>
 					        	</div>
 						    </div>
 					        <div ng-if="prop.type == 'Custom Instruction'" style="padding: 10px;">
 					        	<div>
 					        		<div>Enter intructions for customization:</div>
-					        		<textarea rows="5" cols="90"></textarea>
+					        		<textarea rows="5" cols="90" ng-model="cartObject['Personalize']['Custom Instruction']"></textarea>
 					        	</div>
 					        </div>
 					    </accordion-group>
@@ -134,7 +136,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="luxire-solid-button" ng-click="go('measurement')">Continue</button>
+			<button class="luxire-solid-button" ng-click="gotoMeasurement()">Continue</button>
 			<br>
 			<button class="luxire-hollow-button" ng-click>Save for later</button>
 		</div>

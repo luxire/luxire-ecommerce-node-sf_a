@@ -1,9 +1,16 @@
 angular.module('luxire')
-.controller('personaliseGarmentsController', function($scope, products, $location, $stateParams) {
+.controller('personaliseGarmentsController', function($scope, products, $location, $state, $stateParams) {
 	console.log($stateParams.cartObject);
 	$scope.cartObject = $stateParams.cartObject;
+	$scope.cartObject["Personalize"] = {};
 	$scope.cartObject.product_price_after_personalisation = $scope.cartObject.product_price;
 	$scope.personalizationItems = [{type: 'Product Price',cost: $scope.cartObject.product_price}];
+
+	/*previous length of monogram*/
+	var previousLength = 0;
+
+	/**/
+	var val,cost;
 
 	$scope.customizeJson = {
     product_name: "Diamond Textured White",
@@ -307,47 +314,55 @@ angular.module('luxire')
               {
                 name: "Locker loop",
                 type: "Checkbox",
-
+								cost: "",
                 options: ""
               },
               {
-                name: "Hand attached collar + $30",
+                name: "Hand attached collar",
                 type: "Checkbox",
+								cost: "$30",
                 options: ""
               },
               {
-                name: "Crowfeet Button Stitching + $20",
+                name: "Crowfeet Button Stitching",
                 type: "Checkbox",
+								cost: "$20",
                 options: ""
               },
               {
-                name: "Hand finish on yoke and shoulder + $30",
+                name: "Hand finish on yoke and shoulder",
                 type: "Checkbox",
+								cost: "$30",
                 options: ""
               },
               {
-                name: "Handmade Buttonholes + $20",
+                name: "Handmade Buttonholes",
                 type: "Checkbox",
+								cost: "$20",
                 options: ""
               },
               {
-                name: "Hand-attached Gussets + $20",
+                name: "Hand-attached Gussets",
                 type: "Checkbox",
+								cost: "$20",
                 options: ""
               },
               {
                 name: "Triple stict seams",
                 type: "Checkbox",
+								cost: "",
                 options: ""
               },
               {
                 name: "Front marcella bib",
                 type: "Checkbox",
+								cost: "",
                 options: ""
               },
               {
                 name: "Formal shirt side vent",
                 type: "Checkbox",
+								cost: "",
                 options: ""
               }
             ]
@@ -358,23 +373,27 @@ angular.module('luxire')
             field_type: "misc",
             properties:[
               {
-                name: "Collar + $13",
+                name: "Collar",
                 type: "Card",
+								cost: "$13",
                 image_url: "lib/assets/collar.jpg"
               },
               {
-                name: "Cuff + $10",
+                name: "Cuff",
                 type: "Card",
+								cost: "$10",
                 image_url: "lib/assets/cuff.jpg"
               },
               {
-                name: "Inside Placket + $5",
+                name: "Inside Placket",
                 type: "Card",
+								cost: "$5",
                 image_url: "lib/assets/inside-placket.jpg"
               },
               {
-                name: "Gussets + $5",
+                name: "Gussets",
                 type: "Card",
+								cost: "$5",
                 image_url: "lib/assets/gusset.jpg"
               }
             ]
@@ -579,6 +598,32 @@ angular.module('luxire')
       }
     ]
   }
+	angular.forEach($scope.customizeJson.properties[1].desc,function(value, key){
+		if(value.type == "Add a Monogram"){
+			$scope.cartObject["Personalize"]["Monogram"] = {};
+			angular.forEach(value.properties, function(value, key){
+				$scope.cartObject["Personalize"]['Monogram'][value.name] = angular.isArray(value.options) ? value.options[0] : "";
+			});
+			$scope.cartObject["Personalize"]['Monogram'].selected = false;
+		}
+		else if(value.type == "Additional Options"){
+			$scope.cartObject["Personalize"]["Additional Options"] = [];
+			angular.forEach(value.properties, function(value, key){
+				$scope.cartObject["Personalize"]["Additional Options"].push({name: value.name,cost: value.cost,selected: false});
+			});
+		}
+		else if(value.type == "Contrast"){
+			$scope.cartObject["Personalize"]["Contrast"] = [];
+			angular.forEach(value.properties, function(value, key){
+				$scope.cartObject["Personalize"]["Contrast"].push({name: value.name,cost: value.cost,selected: false});
+			});
+		}
+		else if(value.type == "Custom Instruction"){
+			$scope.cartObject["Personalize"]["Custom Instruction"] = "";
+		}
+	});
+
+
 
 
 	$scope.page.setTitle('Personalize');
@@ -587,19 +632,64 @@ angular.module('luxire')
 	}
 
 	$scope.monogramInitialChange = function(monogram,type,cost){
+		console.log(monogram);
+		console.log($scope.cartObject);
 		if(angular.equals(monogram.trim(),"")){
 			if(!(angular.equals($scope.cartObject.product_price,$scope.cartObject.product_price_after_personalisation))){
-				$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) - parseFloat(cost.split('$')[1])).toFixed(2); 
+				$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) - parseFloat(cost.split('$')[1])).toFixed(2);
+				$scope.cartObject['Personalize']['Monogram'].selected = false;
 			}
 		}
 		else{
-			if(angular.equals(monogram.trim().length,1)){
-
+			if(angular.equals(monogram.trim().length,1) && previousLength < 2){
 				$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) + parseFloat(cost.split('$')[1])).toFixed(2);
+				$scope.cartObject['Personalize']['Monogram'].selected = true;
 				// console.log($scope.product_price_after_personalisation);
 			};
 		};
+		previousLength = monogram.trim().length;
 	};
+
+	$scope.selectAdditionalOption = function(val, cost){
+		if(cost.indexOf('$') !== -1){
+			if(angular.equals(val,true)){
+				$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) + parseFloat(cost.split('$')[1])).toFixed(2);
+			}
+			else{
+				$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) - parseFloat(cost.split('$')[1])).toFixed(2);
+			}
+		}
+	};
+
+	$scope.activate= function(cusIndex, parentIndex, index){
+		$scope.cartObject["Personalize"]["Contrast"][index].selected = !$scope.cartObject["Personalize"]["Contrast"][index].selected;
+		val = $scope.cartObject["Personalize"]["Contrast"][index].selected;
+		cost = $scope.cartObject["Personalize"]["Contrast"][index].cost;
+		if(angular.equals(val,true)){
+			$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) + parseFloat(cost.split('$')[1])).toFixed(2);
+		}
+		else{
+			$scope.cartObject.product_price_after_personalisation = (parseFloat($scope.cartObject.product_price_after_personalisation) - parseFloat(cost.split('$')[1])).toFixed(2);
+		}
+	 };
+
+	 $scope.gotoMeasurement = function(){
+		 console.log($scope.cartObject);
+	   $state.go('measurement',{cartObject: $scope.cartObject});
+	 };
+
+	 var defer = $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+		 event.preventDefault();
+		 defer();
+		//  $state.transitionTo(toState.name);
+		 $state.go(toState.name,{cartObject: $scope.cartObject});
+		// 	 console.log(event);
+		// 	 console.log(toState.name);
+		// 	 console.log(toParams);
+		// 	 console.log(fromState.name);
+		// 	 console.log(fromParams);
+	 })
+
 
 
 })

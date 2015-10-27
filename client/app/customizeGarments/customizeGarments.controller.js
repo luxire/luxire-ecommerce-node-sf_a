@@ -596,8 +596,6 @@ $scope.activate= function(cusIndex, parentIndex, index, propert_type, property_v
  };
 
  $scope.gotoPersonalize = function(){
-
-   $rootScope.cart.push($scope.cartObject);
   //  alert('Product with customisation data is added to cart,Binding of Personalize & Measurement data to cart is in progress')
   //  $state.go('productDetails',{cartObject: $scope.cartObject})
    $state.go('personalize',{cartObject: $scope.cartObject})
