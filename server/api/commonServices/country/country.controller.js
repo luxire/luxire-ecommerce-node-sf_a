@@ -13,12 +13,13 @@ exports.index = function(req, res){
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
-    if(body !== undefined){
-      var resp = JSON.parse(body);
-      res.status(201).send(resp);
-    }
-    else{
-      res.status(500).send("rails server not responding");
-    }
+    console.log(response);  
+    // if(body !== undefined){
+    //   var resp = JSON.parse(body);
+    //   res.status(201).send(resp);
+    // }
+    // else{
+    //   res.status(500).send("rails server not responding");
+    // }
   })
 };

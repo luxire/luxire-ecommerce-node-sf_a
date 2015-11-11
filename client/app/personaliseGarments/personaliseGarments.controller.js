@@ -2,8 +2,6 @@ angular.module('luxire')
 .controller('personaliseGarmentsController', function($scope, products, $location, $state, $stateParams) {
 	console.log($stateParams.cartObject);
 	$scope.cartObject = $stateParams.cartObject;
-	$scope.cartObject["Personalize"] = {};
-	$scope.cartObject.product_price_after_personalisation = $scope.cartObject.product_price;
 	$scope.personalizationItems = [{type: 'Product Price',cost: $scope.cartObject.product_price}];
 
 	/*previous length of monogram*/
@@ -598,30 +596,35 @@ angular.module('luxire')
       }
     ]
   }
-	angular.forEach($scope.customizeJson.properties[1].desc,function(value, key){
-		if(value.type == "Add a Monogram"){
-			$scope.cartObject["Personalize"]["Monogram"] = {};
-			angular.forEach(value.properties, function(value, key){
-				$scope.cartObject["Personalize"]['Monogram'][value.name] = angular.isArray(value.options) ? value.options[0] : "";
-			});
-			$scope.cartObject["Personalize"]['Monogram'].selected = false;
-		}
-		else if(value.type == "Additional Options"){
-			$scope.cartObject["Personalize"]["Additional Options"] = [];
-			angular.forEach(value.properties, function(value, key){
-				$scope.cartObject["Personalize"]["Additional Options"].push({name: value.name,cost: value.cost,selected: false});
-			});
-		}
-		else if(value.type == "Contrast"){
-			$scope.cartObject["Personalize"]["Contrast"] = [];
-			angular.forEach(value.properties, function(value, key){
-				$scope.cartObject["Personalize"]["Contrast"].push({name: value.name,cost: value.cost,selected: false});
-			});
-		}
-		else if(value.type == "Custom Instruction"){
-			$scope.cartObject["Personalize"]["Custom Instruction"] = "";
-		}
-	});
+	if(angular.isUndefined($scope.cartObject["Personalize"])){
+		$scope.cartObject["Personalize"] = {};
+		$scope.cartObject.product_price_after_personalisation = $scope.cartObject.product_price;
+		angular.forEach($scope.customizeJson.properties[1].desc,function(value, key){
+			if(value.type == "Add a Monogram"){
+				$scope.cartObject["Personalize"]["Monogram"] = {};
+				angular.forEach(value.properties, function(value, key){
+					$scope.cartObject["Personalize"]['Monogram'][value.name] = angular.isArray(value.options) ? value.options[0] : "";
+				});
+				$scope.cartObject["Personalize"]['Monogram'].selected = false;
+			}
+			else if(value.type == "Additional Options"){
+				$scope.cartObject["Personalize"]["Additional Options"] = [];
+				angular.forEach(value.properties, function(value, key){
+					$scope.cartObject["Personalize"]["Additional Options"].push({name: value.name,cost: value.cost,selected: false});
+				});
+			}
+			else if(value.type == "Contrast"){
+				$scope.cartObject["Personalize"]["Contrast"] = [];
+				angular.forEach(value.properties, function(value, key){
+					$scope.cartObject["Personalize"]["Contrast"].push({name: value.name,cost: value.cost,selected: false});
+				});
+			}
+			else if(value.type == "Custom Instruction"){
+				$scope.cartObject["Personalize"]["Custom Instruction"] = "";
+			}
+		});
+
+	}
 
 
 
@@ -681,14 +684,8 @@ angular.module('luxire')
 	 var defer = $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 		 event.preventDefault();
 		 defer();
-		//  $state.transitionTo(toState.name);
 		 $state.go(toState.name,{cartObject: $scope.cartObject});
-		// 	 console.log(event);
-		// 	 console.log(toState.name);
-		// 	 console.log(toParams);
-		// 	 console.log(fromState.name);
-		// 	 console.log(fromParams);
-	 })
+	 });
 
 
 

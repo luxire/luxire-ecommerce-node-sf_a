@@ -82,7 +82,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid" style="padding: 40px 92px  !important;" ng-controller="AccordionDemoCtrl">
+	<div class="container-fluid" style="padding: 40px 92px  !important;" >
 		<div class="row">
 			<div class="col-md-8 col-lg-8">
 				<b style="font-size: 16px;">Standard</b>
@@ -99,8 +99,8 @@
 		<div class="row" style="padding: 15px; border-bottom: 1px solid #D4D5D6">
 			<div class="col-md-4 col-lg-4" ng-repeat="prop in customizeJson.properties[2].desc[0].standard" style="font-size:16px; padding-left: 0px;">
 				<div class="display: inline-block;">
-					<select class="fit-select4">
-						<option value="">Select a size</option>
+					<select class="fit-select4" ng-model = "cartObject['Measurement']['standard'][prop.property]">
+						<option value="">Select</option>
 						<option ng-repeat="x in prop.Measurements" value="{{x}}">{{x}}</option>
 					</select>
 					<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
@@ -114,7 +114,8 @@
 				</div>
 				<div ng-repeat="y in x.properties" style="margin-bottom: 10px;">{{y.name}}
 					<br>
-					<select class="fit-select4">
+					<select class="fit-select4" ng-model="cartObject['Measurement'][x.name][y.name]">
+						<option value="">Select</option>
 						<option ng-repeat="z in y.measurements" value="{{z}}">{{z}}</option>
 					</select>
 					<div style="height:40px; width:40px;border:1px solid #E0E0E0;box-shadow: 2px 2px 19px #EDEDED;text-align:center;line-height:40px;display: inline-block;cursor:pointer;">?</div>
@@ -133,7 +134,7 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-6 col-lg-6">
-				<textarea rows="7" cols="80" placeholder="Write us any custom instructions here..."></textarea>
+				<textarea ng-model="cartObject['Personalize']['Custom Instruction']" rows="7" cols="80" placeholder="Write us any custom instructions here..."></textarea>
 			</div>
 			<div class="col-lg-6 col-lg-6">
 				<div style="width: 100%; height: 40px; line-height:40px; border-bottom: 1px solid #D4D5D6;">Front side <input class="upload" type="file" style="float: right;"></div>

@@ -581,10 +581,13 @@ angular.module('luxire')
    ]
  }
 
- $scope.cartObject["Customize"] = {};
- angular.forEach($scope.customizeJson.properties[0].desc,function(value, key){
-   $scope.cartObject["Customize"][value.type] = '';
- });
+if(angular.isUndefined($scope.cartObject["Customize"])){
+  $scope.cartObject["Customize"] = {};
+  angular.forEach($scope.customizeJson.properties[0].desc,function(value, key){
+    $scope.cartObject["Customize"][value.type] = '';
+  });
+}
+
 
 
 $scope.activate= function(cusIndex, parentIndex, index, propert_type, property_value){
@@ -600,6 +603,13 @@ $scope.activate= function(cusIndex, parentIndex, index, propert_type, property_v
   //  $state.go('productDetails',{cartObject: $scope.cartObject})
    $state.go('personalize',{cartObject: $scope.cartObject})
  };
+
+ var defer = $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+   event.preventDefault();
+   defer();
+   $state.go(toState.name,{cartObject: $scope.cartObject});
+ });
+
 
 
 

@@ -18,13 +18,6 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
         $rootScope.page.setTitle(current.$$route.title || 'Home');
     });
 
-		// $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-		// 		console.log(event);
-		//     console.log(toState);
-		// 		console.log(toParams);
-		// 		console.log(fromState);
-		// 		console.log(fromParams);
-		// })
 })
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
 	$urlRouterProvider.otherwise('/collections');
