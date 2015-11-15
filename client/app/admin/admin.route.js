@@ -96,6 +96,14 @@ angular.module('luxire')
 			"mainContent": { templateUrl: 'app/admin/order/partials/addOrder.html',controller: 'OrderController' }
 		}
 	})
+	/*Setting*/
+	.state('admin.shipping_setting',{
+		url:'/settings/shipping',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
+			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shippingHome.html' }
+		}
+	})
 
 
 	// .state('admin',{

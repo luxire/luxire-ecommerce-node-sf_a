@@ -28,6 +28,10 @@
             <div class="discounts admin-sidebar-tab" ui-sref="admin.discount">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-scissors" style="font-size:20px;"></i>
             </div>
+            <div class="settings admin-sidebar-tab" ui-sref="admin.shipping_setting">
+              &nbsp;&nbsp;&nbsp;<i class="fa fa-cog" style="font-size:20px;"></i>
+            </div>
+
           </div>
           <div class="col-lg-9 col-md-9" style="padding: 0px;" >
 						<div ng-hide = "showDefaultNav" ui-view="sideContent" style="width: 100%; height:100%"></div>
@@ -41,6 +45,7 @@
 								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer">Customers</div>
 								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
 								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
+                <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
 							</div>
 							<div class="col-lg-1 col-md-1" style="padding: 0px;">
 								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
@@ -51,6 +56,7 @@
 								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer"></div>
 								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
 								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount"></div>
+              	<div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
 							</div>
 						</div>
 
@@ -97,7 +103,7 @@
         </div>
       </div>
 		</div>
-		<div class="col-lg-10 col-md-10" style="height:100%">
+		<div class="col-sm-10 col-xs-10 col-lg-10 col-md-10" style="height:100%">
 			<div ui-view="mainContent" style="width: 100%; height:100%"></div>
 
       <!-- <div ng-switch on="navbar" style="height:100%">
@@ -240,5 +246,11 @@
     });
 		$(".discounts").click(function(){
       $(".discounts").toggleClass("active-sidebar1");
+    });
+    $(".settings").hover(function(){
+      $(".settings").toggleClass("hover-sidebar");
+    });
+		$(".settings").click(function(){
+      $(".settings").toggleClass("active-sidebar1");
     });
 </script>
