@@ -13,6 +13,7 @@ module.exports = function(app) {
   app.use('/api/userManager', require('./api/userManager'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/things', require('./api/thing'));
+  // app.use('/api/address', require('./api/address'));
   /*start of common services routes*/
   app.use('/api/country', require('./api/commonServices/country'));
   /*end*/
