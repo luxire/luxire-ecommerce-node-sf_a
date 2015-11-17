@@ -1,0 +1,43 @@
+<header><h2>Address</h2></header>
+<div class="row" style="margin-left: 5%" >
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h3>billinging Address</h3>
+    <input placeholder="firstname" ng-model="billing.firstname"><br><br>
+    <input placeholder="lastname" ng-model="billing.lastname"><br><br>
+    <input placeholder="address1" ng-model="billing.address1"><br><br>
+    <input placeholder="address2" ng-model="billing.address2"><br><br>
+    <input placeholder="city" ng-model="billing.city"><br><br>
+    <input placeholder="country" ng-model="billing.country"><br><br>
+    <input placeholder="state" ng-model="billing.state"><br><br>
+    <input placeholder="zipcode" ng-model="billing.zipcode"><br><br>
+    <input placeholder="phone" ng-model="billing.phone"><br><br>
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h3>Shipping Address</h3>
+    <input placeholder="firstname" ng-model="shipping.firstname"><br><br>
+    <input placeholder="lastname" ng-model="shipping.lastname"><br><br>
+    <input placeholder="address1" ng-model="shipping.address1"><br><br>
+    <input placeholder="address2" ng-model="shipping.address2"><br><br>
+    <input placeholder="city" ng-model="shipping.city"><br><br>
+    <input placeholder="country" ng-model="shipping.country"><br><br>
+    <input placeholder="state" ng-model="shipping.state"><br><br>
+    <input placeholder="zipcode" ng-model="shipping.zipcode"><br><br>
+    <input placeholder="phone" ng-model="shipping.phone"><br><br>
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h2>Order summary</h2>
+    <!-- <h3>Product price: ${{cartItem.product_price}}</h3> -->
+    <!-- <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
+
+    <hr>
+    <h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3>
+
+    <br><br> -->
+    <button class="btn btn-success" ui-sref="checkout_delivery">save & continue</button>
+  </div>
+
+
+
+</div>

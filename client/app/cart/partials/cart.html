@@ -1,3 +1,42 @@
-<div ng-repeat="cartItem in cartItems">
-  {{$index+1}}.  {{cartItem}}
+<header><h2>CART</h2></header>
+<div class="row" style="margin-left: 5%" ng-repeat="cartItem in cartItems">
+  <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+    <h3>{{cartItem.product_name}}</br></h3>
+    <h5 ng-if="cartItem.style != ''">&nbsp;&nbsp;&nbsp;style: {{cartItem.style}}</br></h5>
+    <h5 ng-if="cartItem.fits != ''">&nbsp;&nbsp;&nbsp;fits: {{cartItem.fits}}</br></h5>
+    <h5 ng-if="cartItem.Collar != ''">&nbsp;&nbsp;&nbsp;collar: {{cartItem.Collar}}</br></h5>
+    <h5 ng-if="cartItem.Sleeves != ''">&nbsp;&nbsp;&nbsp;Sleeves: {{cartItem.Sleeves}}</br></h5>
+    <h4>Customize</h4>
+    <div ng-repeat="(key,value) in cartItem.Customize"><h5 ng-if="value != ''">&nbsp;&nbsp;&nbsp;{{key}}:{{value}}</br></h5></div>
+    <h4>Personalize</h4>
+    <h5 ng-if="cartItem.Personalize.Monogram">Monogram</h5>
+    <div ng-repeat="(key,value) in cartItem.Personalize.Monogram"><h6 ng-if="value != ''">{{key}}:{{value}}</br></h6></div>
+    <h5>Additional Optional</h5>
+    <div ng-repeat="addOption in cartItem['Personalize']['Additional Options']"><h6 ng-if="addOption.selected == true">{{addOption.name}}</br></h6></div>
+    <h5>Contrast</h5>
+    <div ng-repeat="contrast in cartItem['Personalize']['Contrast']"><h6 ng-if="contrast.selected == true">{{contrast.name}}</br></h6></div>
+    <!-- <h4>Measurement</h4>
+    <h5 ng-repeat="(key,value) in cartItem.Measurement">{{key}}</h5>
+    <div ><h6 >{{value}}</br></h6></div> -->
+  </div>
+  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+    <h3>Quantity</h3>
+    <input ng-init="product_quantity=1" ng-model="product_quantity" style="width: 50px">
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h2>Order summary</h2>
+    <h3>Product price: ${{cartItem.product_price}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
+
+    <hr>
+    <h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3>
+
+    <br><br>
+    <button class="btn btn-primary" ui-sref="checkout_address">Checkout</button>
+  </div>
+
+
+
 </div>

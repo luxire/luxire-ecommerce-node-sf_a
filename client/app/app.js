@@ -60,7 +60,21 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 		templateUrl: 'app/cart/partials/cart.html',
 		controller: 'CartController'
 	})
-
+	.state('checkout_address',{
+		url: '/checkout/address',
+		templateUrl: 'app/checkout/partials/checkoutAddress.html',
+		controller: 'CheckoutController'
+	})
+	.state('checkout_delivery',{
+		url: '/checkout/delivery',
+		templateUrl: 'app/checkout/partials/checkoutDelivery.html',
+		controller: 'CheckoutController'
+	})
+	.state('checkout_payment',{
+		url: '/checkout/payment',
+		templateUrl: 'app/checkout/partials/checkoutPayment.html',
+		controller: 'CheckoutController'
+	})
 
 
 	// $routeProvider.
