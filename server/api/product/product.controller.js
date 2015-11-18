@@ -12,18 +12,35 @@ var _ = require('lodash');
 var http = require('request');
 var querystring = require('querystring');
 var env = require('../../config/constants');
+
+exports.productVariants = function(req, res) {
+  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  var params = querystring.stringify(req.params);
+  http
+    .get(env.spree.host+env.spree.products+'/'+req.params.id+'/variants?'+params, function(error, response, body){
+      if(response){
+        res.status(response.statusCode).send(body);
+      }
+      else{
+        res.status(500).send("Rails server not responding");
+      }
+  });
+};
+
+
+
 // Get list of all products
 exports.index = function(req, res) {
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http
     .get(env.spree.host+env.spree.products+'?'+params, function(error, response, body){
-      if(response.statusCode == 200){
-        res.send(body);
+      if(response){
+        res.status(response.statusCode).send(body);
       }
       else{
-        res.status(response.statusCode).send(response.body.error);
-      }
+        res.status(500).send("Rails server not responding");
+      };
   });
 };
 
@@ -52,18 +69,12 @@ exports.show = function(req, res){
   var params = querystring.stringify(req.params);
   http
     .get(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
-      if(response && response !== undefined){
-        if(response.statusCode == 200){
-          res.send(body);
-        }
-        else{
-          res.status(response.statusCode).send(response.body.error);
-        }
+      if(response){
+        res.status(response.statusCode).send(body);
       }
       else{
-        res.status(500).send("rails server not responding")
-        console.log("rails server not responding")
-      }
+        res.status(500).send("Rails server not responding");
+      };
 
   });
 };
@@ -94,13 +105,20 @@ exports.destroy = function(req, res){
   var params = querystring.stringify(req.params);
   http
     .del(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
-      if(response.statusCode == 204){
-        res.status(response.statusCode).send('Deleted');
+      if(response){
+        res.status(response.statusCode).send(body);
       }
       else{
-        res.status(response.statusCode).send(response.body.error);
-      }
+        res.status(500).send("Rails server not responding");
+      };
   });
+
+
+
+
+
+
+
 
 
 };

@@ -1,6 +1,6 @@
 angular.module('luxire')
 
-.controller('productDetailsController',function($scope, $rootScope, products,$location,$routeParams,$rootScope, $stateParams, $state) {
+.controller('productDetailsController',function($scope, $rootScope, products, orders, $location,$routeParams,$rootScope, $stateParams, $state) {
 
   /*Accesing route params*/
   var productID = $stateParams.id;
@@ -18,6 +18,7 @@ angular.module('luxire')
 			$scope.jsonresponse = data;
       $scope.cartObject['product_name'] = data.name;
       $scope.cartObject['product_price'] = data.price;
+      $scope.cartObject['variant_id'] = data.master.id;
       angular.forEach(data.product_properties, function(value,key){
         var property_name = value['property_name'];
         $scope.cartObject[property_name] = '';
@@ -58,7 +59,15 @@ angular.module('luxire')
   }
 
   $scope.addItemToCart = function(){
-    $rootScope.cart.push($scope.cartObject);
+    orders.addTocart($scope.cartObject).then(function(data){
+      console.log('data',data);
+      $scope.cartObject.checkoutObject = data.data;
+      $rootScope.cart.push($scope.cartObject);
+      $state.go('cart',{cartObject: $scope.cartObject});
+    },function(error){
+      console.error(error);
+    });
+
   }
 
 })

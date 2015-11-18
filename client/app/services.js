@@ -140,8 +140,37 @@ angular.module('luxire')
 	}
 })
 
+.service('variants', function($http){
 
+	this.get_variants_by_product_id = function(id){
+		return $http.get('/api/products/'+id+'/variants');
+	};
+})
 
+.service('orders', function($http){
+	this.addTocart = function(cartObject){
+		var cart = {
+		  order: {
+		    line_items: [
+		      { variant_id: cartObject.variant_id, quantity: 1 }
+		    ]
+		  }
+		}
+		return $http.post("/api/orders", angular.toJson(cart));
+	};
+	this.update_cart_by_quantity = function(order_number,line_item_id,variant_id,quantity){
+		var updated_cart = {
+			order_number: order_number,
+			line_item_id: line_item_id,
+			variant_id: variant_id,
+			quantity: quantity
+		}
+		return $http.put("/api/orders", angular.toJson(updated_cart));
+	};
+	this.proceed_to_checkout = function(order_number){
+		return $http.post("/api/checkouts/"+order_number+"/next", '');
+	};
+})
 //fileReader service
 .factory('fileReader',["$q", "$log", function ($q, $log) {
         var onLoad = function(reader, deferred, scope) {
@@ -210,6 +239,6 @@ angular.module('luxire')
 	}
 })
 //For demo
-.run(function(products) {
-	products.getProductByID(17);
-})
+// .run(function(products) {
+// 	products.getProductByID(17);
+// })

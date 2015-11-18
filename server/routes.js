@@ -15,16 +15,12 @@ module.exports = function(app) {
   app.use('/api/things', require('./api/thing'));
   // app.use('/api/address', require('./api/address'));
   /*start of common services routes*/
+
   app.use('/api/country', require('./api/commonServices/country'));
-  /*end*/
+  app.use('/api/orders', require('./api/order'));
+  app.use('/api/checkouts', require('./api/checkout'));
 
-  /*start of Back-Office services routes*/
-
-  /*end of Admin services*/
-
-  /*start of Store-front services routes*/
-
-  /*end*/
+  // app.use('/api/variants', require('./api/variants'));
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

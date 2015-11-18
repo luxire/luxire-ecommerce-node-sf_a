@@ -57,6 +57,7 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 	})
 	.state('cart',{
 		url: '/cart',
+		params: {cartObject: {}},
 		templateUrl: 'app/cart/partials/cart.html',
 		controller: 'CartController'
 	})

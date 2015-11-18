@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('measurementGarmentsController', function($scope, $rootScope, products, $location, $state, $stateParams) {
+.controller('measurementGarmentsController', function($scope, $rootScope, products, orders, $location, $state, $stateParams) {
 	$scope.cartObject = $stateParams.cartObject;
 	console.log($scope.cartObject);
 	$scope.page.setTitle('Measurement')
@@ -582,9 +582,15 @@ angular.module('luxire')
     ]
   }
 	$scope.go = function(path){
-		console.log($scope.cartObject);
-		$rootScope.cart.push($scope.cartObject);
-		$state.go('cart')
+		orders.addTocart($scope.cartObject).then(function(data){
+      console.log('data',data);
+      $scope.cartObject.checkoutObject = data.data;
+      $rootScope.cart.push($scope.cartObject);
+      $state.go('cart',{cartObject: $scope.cartObject});
+    },function(error){
+      console.error(error);
+    });
+
 		// $location.path('/' + path)
 	}
 	if(angular.isUndefined($scope.cartObject["Measurement"])){
