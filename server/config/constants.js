@@ -8,7 +8,7 @@ module.exports = {
     users: '/luxire-users',
     countries: '/api/countries',
     orders: '/api/orders',
-    checkout: '/api/checkouts'
+    checkouts: '/api/checkouts'
   }
   /*client requests*/
 

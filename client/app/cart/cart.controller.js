@@ -49,7 +49,7 @@ angular.module('luxire')
   };
   var proceed_to_checkout = function(order_number){
     orders.proceed_to_checkout(order_number).then(function(data){
-      $state.go('checkout_address');
+      $state.go('checkout_address',{checkoutObject: $rootScope.cart[0].checkoutObject});
       console.log(data);
     },function(error){
       console.error(error);
@@ -62,6 +62,7 @@ angular.module('luxire')
 
     if($rootScope.cart[0].checkoutObject.line_items[0].quantity != quantity){
       orders.update_cart_by_quantity(order_number,line_item_id,variant_id,quantity).then(function(data){
+          $rootScope.cart[0].checkoutObject.line_items[0] = data.data;
           proceed_to_checkout(order_number);
           console.log(data);
       },function(error){

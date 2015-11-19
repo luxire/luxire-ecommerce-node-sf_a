@@ -63,6 +63,7 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 	})
 	.state('checkout_address',{
 		url: '/checkout/address',
+		params: {checkoutObject: {}},
 		templateUrl: 'app/checkout/partials/checkoutAddress.html',
 		controller: 'CheckoutController'
 	})
