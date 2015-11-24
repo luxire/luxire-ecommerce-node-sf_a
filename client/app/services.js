@@ -185,8 +185,12 @@ angular.module('luxire')
 		    }
 		  }
 		}
-
 		return $http.post("/api/checkouts/"+order_number+"/payment", shipment);
+	};
+	this.proceed_to_checkout_gateway = function(order_number, payment_object){
+		console.log('order_number',order_number);
+		console.log('payment_object', payment_object);
+		return $http.post('/api/checkouts/'+order_number+'/gateway', angular.toJson(payment_object));
 	};
 })
 

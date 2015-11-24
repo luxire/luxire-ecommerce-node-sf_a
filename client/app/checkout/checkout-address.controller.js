@@ -1,6 +1,6 @@
 angular.module('luxire')
 .controller('CheckoutAddressController',function($scope, $state, orders, countries, $rootScope, $stateParams){
-  console.log($stateParams.checkoutObject.ship_address);
+  console.log($stateParams.checkoutObject);
   var shipping_address = $stateParams.checkoutObject.ship_address;
   $scope.shipping = {
     firstname: '',
@@ -12,10 +12,24 @@ angular.module('luxire')
     state_id: 0,
     country_id: 0
   };
+  if(shipping_address != null){
+    angular.forEach($scope.shipping, function(value, key){
+        $scope.shipping[key] = shipping_address[key]
+     });
+  }
+  else{
+    $scope.shipping = {
+      firstname: 'John',
+      lastname: 'Doe',
+      address1: '74',
+      city: 'Boston',
+      phone: '653233456',
+      zipcode: '02108',
+      state_id: 3545,
+      country_id: 232
+    };
+  };
 
-  angular.forEach($scope.shipping, function(value, key){
-      $scope.shipping[key] = shipping_address[key]
-   });
 
   $scope.countries = [];
   $scope.states = [];

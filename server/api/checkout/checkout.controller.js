@@ -55,3 +55,44 @@ exports.checkout_address = function(req, res){
     });
 
   };
+
+  /*proceed to checkout payment */
+  exports.checkout_gateway  = function(req, res){
+    // var ebs = {"vpc_ReferenceNo":"R987886379","vpc_Amount":39.95,"vpc_Mode":"TEST","vpc_Description":"luxire","vpc_Name":"Mudassir H","vpc_Address":"74","vpc_City":"Boston","vpc_State":"Massachusetts","vpc_PostalCode":"02108","vpc_Country":"USA","vpc_Email":"","vpc_Phone":"","vpc_ShipName":"Mudassir H","vpc_ShipAddress":"74","vpc_ShipCity":"Boston","vpc_ShipState":"Massachusetts","vpc_ShipPostalCode":"02108","vpc_ShipCountry":"USA","vpc_PaymentOption":"credit","vpc_CardNo":"4111111111111111","vpc_ExpiryDate":"07/16","vpc_Cvv":"123","vpc_Issuingbank":"EBS","vpc_ReturnUrl":"","vpc_GoBackUrl":""}
+    http.post({
+      uri: 'http://test.luxire.com:3000/send_request_pg/send',
+      headers:{'content-type': 'application/json'},
+      body: JSON.stringify(req.body)
+    },function(error,response,body){
+      console.log(body);
+      if(error == null){
+        res.status(response.statusCode).send(body);
+      }
+      else{
+        res.status(500).send("Internal Server Error");
+      }
+    });
+
+  };
+
+
+
+
+
+  /*proceed to checkout payment*/
+  exports.check  = function(req, res){
+    console.log(req);
+    http.get({
+      uri: 'http://test.luxire.com:3000/test/check',
+      body: ''
+    },function(error,response,body){
+      console.log(response);
+      if(error == null){
+        res.status(response.statusCode).send(body);
+      }
+      else{
+        res.status(500).send("Internal Server Error");
+      }
+    });
+
+  };

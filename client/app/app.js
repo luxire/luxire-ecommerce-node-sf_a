@@ -79,6 +79,12 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 		templateUrl: 'app/checkout/partials/checkoutPayment.html',
 		controller: 'checkoutPaymentController'
 	})
+	.state('checkout_gateway',{
+		url: '/checkout/gateway',
+		params: {gatewayObject: {}},
+		templateUrl: 'app/checkout/partials/checkoutGateway.html',
+		controller: 'checkoutGatewayController'
+	})
 
 
 	// $routeProvider.
