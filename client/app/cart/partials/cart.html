@@ -21,11 +21,11 @@
   </div>
   <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
     <h3>Quantity</h3>
-    <input ng-model="product_quantity" style="width: 50px">
+    <input ng-model="product_quantity" ng-disabled="true" style="width: 50px">
   </div>
   <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
     <h2>Order summary</h2>
-    <h3>Product price: ${{cartItem.product_price}}</h3>
+    <h3>Item price: ${{cartItem.product_price}}</h3>
     <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
     <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
 

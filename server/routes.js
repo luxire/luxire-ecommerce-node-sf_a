@@ -16,7 +16,7 @@ module.exports = function(app) {
   // app.use('/api/address', require('./api/address'));
   /*start of common services routes*/
 
-  app.use('/api/country', require('./api/commonServices/country'));
+  app.use('/api/countries', require('./api/country'));
   app.use('/api/orders', require('./api/order'));
   app.use('/api/checkouts', require('./api/checkout'));
 

@@ -8,18 +8,19 @@ var env = require('../../../config/constants');
 curl -X GET http://127.0.0.1:9000/api/addresses/countries
 */
 exports.index = function(req, res){
-  http.get({
-    uri: env.spree.host+env.spree.countries+'/all',
-    headers:{'content-type': 'application/json'},
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
-    console.log(response);
-    if(body !== undefined){
-      var resp = JSON.parse(body);
-      res.status(201).send(resp);
-    }
-    else{
-      res.status(500).send("rails server not responding");
-    }
-  })
+  console.log("H");
+  // res.send("OK");
+  // http.get({
+  //   uri: env.spree.host+env.spree.countries+'/all',
+  //   body:''
+  // },function(error,response,body){
+  //   console.log(response);
+  //   // if(body !== undefined){
+  //   //   var resp = JSON.parse(body);
+  //   //   res.status(201).send(resp);
+  //   // }
+  //   // else{
+  //   //   res.status(500).send("rails server not responding");
+  //   // }
+  // })
 };

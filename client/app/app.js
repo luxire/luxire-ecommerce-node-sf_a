@@ -65,17 +65,19 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 		url: '/checkout/address',
 		params: {checkoutObject: {}},
 		templateUrl: 'app/checkout/partials/checkoutAddress.html',
-		controller: 'CheckoutController'
+		controller: 'CheckoutAddressController'
 	})
 	.state('checkout_delivery',{
 		url: '/checkout/delivery',
+		params: {checkoutObject: {}},
 		templateUrl: 'app/checkout/partials/checkoutDelivery.html',
-		controller: 'CheckoutController'
+		controller: 'CheckoutDeliveryController'
 	})
 	.state('checkout_payment',{
 		url: '/checkout/payment',
+		params: {checkoutObject: {}},
 		templateUrl: 'app/checkout/partials/checkoutPayment.html',
-		controller: 'CheckoutController'
+		controller: 'checkoutPaymentController'
 	})
 
 

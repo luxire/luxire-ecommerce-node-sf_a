@@ -170,6 +170,30 @@ angular.module('luxire')
 	this.proceed_to_checkout = function(order_number){
 		return $http.post("/api/checkouts/"+order_number+"/next", '');
 	};
+	this.proceed_to_checkout_delivery = function(order_number,order_address){
+		console.log(order_number,order_address);
+		return $http.post("/api/checkouts/"+order_number+"/delivery", angular.toJson(order_address));
+	};
+	this.proceed_to_checkout_payment = function(order_number, shipment_id, shipping_rate_id){
+		var shipment = {
+		  "order": {
+		    "shipments_attributes": {
+		      "0": {
+		        "selected_shipping_rate_id": shipping_rate_id,
+		        "id": shipment_id
+		      }
+		    }
+		  }
+		}
+
+		return $http.post("/api/checkouts/"+order_number+"/payment", shipment);
+	};
+})
+
+.service('countries',function($http){
+	this.all = function(){
+		return $http.get('/api/countries');
+	}
 })
 //fileReader service
 .factory('fileReader',["$q", "$log", function ($q, $log) {
