@@ -19,6 +19,7 @@ angular.module('luxire')
       $scope.cartObject['product_name'] = data.name;
       $scope.cartObject['product_price'] = data.price;
       $scope.cartObject['variant_id'] = data.master.id;
+      $scope.cartObject['product_img'] = 'http://54.169.41.36:3000'+data.master.images[0].large_url;
       angular.forEach(data.product_properties, function(value,key){
         var property_name = value['property_name'];
         $scope.cartObject[property_name] = '';

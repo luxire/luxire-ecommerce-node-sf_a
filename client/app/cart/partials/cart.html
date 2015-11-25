@@ -1,6 +1,9 @@
 <header><h2>CART</h2></header>
 <div class="row" style="margin-left: 5%" ng-repeat="cartItem in cartItems">
-  <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+    <img style="max-width: 100%" src="{{cartItem.product_img}}">
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
     <h3>{{cartItem.product_name}}</br></h3>
     <h5 ng-if="cartItem.style != ''">&nbsp;&nbsp;&nbsp;style: {{cartItem.style}}</br></h5>
     <h5 ng-if="cartItem.fits != ''">&nbsp;&nbsp;&nbsp;fits: {{cartItem.fits}}</br></h5>

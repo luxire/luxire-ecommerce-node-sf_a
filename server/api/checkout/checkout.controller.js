@@ -58,6 +58,7 @@ exports.checkout_address = function(req, res){
 
   /*proceed to checkout payment */
   exports.checkout_gateway  = function(req, res){
+    console.log(req.body);
     // var ebs = {"vpc_ReferenceNo":"R987886379","vpc_Amount":39.95,"vpc_Mode":"TEST","vpc_Description":"luxire","vpc_Name":"Mudassir H","vpc_Address":"74","vpc_City":"Boston","vpc_State":"Massachusetts","vpc_PostalCode":"02108","vpc_Country":"USA","vpc_Email":"","vpc_Phone":"","vpc_ShipName":"Mudassir H","vpc_ShipAddress":"74","vpc_ShipCity":"Boston","vpc_ShipState":"Massachusetts","vpc_ShipPostalCode":"02108","vpc_ShipCountry":"USA","vpc_PaymentOption":"credit","vpc_CardNo":"4111111111111111","vpc_ExpiryDate":"07/16","vpc_Cvv":"123","vpc_Issuingbank":"EBS","vpc_ReturnUrl":"","vpc_GoBackUrl":""}
     http.post({
       uri: 'http://test.luxire.com:3000/send_request_pg/send',
@@ -73,6 +74,10 @@ exports.checkout_address = function(req, res){
       }
     });
 
+  };
+
+  exports.checkout_gateway_response = function (req, res){
+    console.log(req);
   };
 
 
