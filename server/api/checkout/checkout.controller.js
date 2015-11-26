@@ -80,6 +80,22 @@ exports.checkout_address = function(req, res){
     console.log(req);
   };
 
+  exports.checkout_apply_coupon_code = function (req, res){
+    console.log(req.params);
+    http
+      .put({
+        uri: env.spree.host+env.spree.orders+'/'+req.params.number+'/apply_coupon_code?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+        headers:{'content-type': 'application/x-www-form-urlencoded'},
+        body: 'coupon_code='+req.params.code
+      }, function(error, response, body){
+          if(error == null){
+            res.status(response.statusCode).send(body);
+          }else{
+            res.status(500).send("Rails Server Not Responding");
+          }
+      });
+  };
+
 
 
 

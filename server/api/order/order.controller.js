@@ -8,6 +8,21 @@ var env = require('../../config/constants');
 exports.index = function(req, res){
 
 };
+exports.show = function(req, res){
+  console.log(req.params);
+  console.log(req.body);
+  http.get({
+    uri: env.spree.host+env.spree.orders+'/'+req.params.number+'?order_token='+req.params.token,
+    body: ''
+  },function(error, response, body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+    }
+    else{
+      res.status(500).send("Rails server not responding")
+    };
+  });
+};
 
 /*Create a blank order*/
 exports.create_blank_order = function(req, res){

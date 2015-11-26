@@ -148,6 +148,13 @@ angular.module('luxire')
 })
 
 .service('orders', function($http){
+	this.get_order_by_id = function(order_number, order_token){
+		var order = {
+			token: order_token
+		};
+		return $http.get('/api/orders/'+order_number+'/'+order_token);
+	};
+
 	this.addTocart = function(cartObject){
 		var cart = {
 		  order: {
@@ -192,6 +199,9 @@ angular.module('luxire')
 		console.log('payment_object', payment_object);
 		return $http.post('/api/checkouts/'+order_number+'/gateway', angular.toJson(payment_object));
 	};
+	this.apply_coupon_code = function(order_number,coupon_code){
+		return $http.post('/api/checkouts/'+order_number+'/apply_coupon_code/'+coupon_code, '');
+	}
 })
 
 .service('countries',function($http){

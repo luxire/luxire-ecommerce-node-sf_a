@@ -6,7 +6,7 @@
 angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput'])
 
 .run(function($location,$rootScope){
-	$location.path('/collections');
+	// $location.path('/collections');
 
 	$rootScope.page = {
         setTitle: function(title) {

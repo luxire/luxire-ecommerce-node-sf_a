@@ -18,7 +18,7 @@ angular.module('luxire')
     $scope.slides[index].active = true;
   };
   $scope.gotoProduct = function(){
-    location.href = "#/productdetails/17"
+    location.href = "#/productdetails/19"
   }
 
 })

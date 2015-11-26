@@ -23,6 +23,12 @@ angular.module('luxire')
     },function(error){
       console.error(error);
     });
-  }
+  };
+  function genhash(secret_key,account_id,amount,reference_no,return_url,mode)
+  {
+  	var genStr = secret_key + "|" + account_id + "|" + amount + "|" + reference_no + "|" +return_url + "|" + mode
+  	var generatedhash = calcMD5(genStr)
+  	return generatedhash
+  }  
   // $scope.selected_shipping_rate = 'UPS One Day (USD)';
 });

@@ -65,6 +65,23 @@ angular.module('luxire')
       console.log(error);
     });
   };
+
+  $scope.apply_coupon_code = function(){
+    orders.apply_coupon_code($stateParams.checkoutObject.number, $scope.coupon_code).then(
+      function(data){
+        console.log(data);
+        if(data.data.successful == true){
+          orders.get_order_by_id($stateParams.checkoutObject.number,$stateParams.checkoutObject.token).then(function(data){
+            console.log(data);
+          },function(error){
+            console.error(data);}
+          );
+        }
+      },function(error){
+        console.error(error);
+      }
+    );
+  };
   // var shipping_address = $stateParams.checkoutObject.ship_address
   // console.log(shipping_address);
   // console.log($stateParams.checkoutObject.number);

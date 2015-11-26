@@ -48,6 +48,17 @@
     <h2>Order summary</h2>
 
     <h3>Item Price: {{order_total}}</h3>
+    <hr>
+    <div class="row">
+      <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
+        <input type="text" placeholder="Gift card or Coupon code" class="form-control" ng-model="coupon_code">
+      </div>
+      <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+        <button class="btn-primary" ng-click="apply_coupon_code()">Apply</button>
+      </div>
+    </div>
+
+    <hr>
     <!-- <h3>Product price: ${{cartItem.product_price}}</h3> -->
     <!-- <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
     <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
