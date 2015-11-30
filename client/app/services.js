@@ -149,9 +149,7 @@ angular.module('luxire')
 
 .service('orders', function($http){
 	this.get_order_by_id = function(order_number, order_token){
-		var order = {
-			token: order_token
-		};
+
 		return $http.get('/api/orders/'+order_number+'/'+order_token);
 	};
 
@@ -165,23 +163,24 @@ angular.module('luxire')
 		}
 		return $http.post("/api/orders", angular.toJson(cart));
 	};
-	this.update_cart_by_quantity = function(order_number,line_item_id,variant_id,quantity){
+	this.update_cart_by_quantity = function(order_number, order_token, line_item_id,variant_id,quantity){
 		var updated_cart = {
 			order_number: order_number,
+			order_token: order_token,
 			line_item_id: line_item_id,
 			variant_id: variant_id,
 			quantity: quantity
 		}
 		return $http.put("/api/orders", angular.toJson(updated_cart));
 	};
-	this.proceed_to_checkout = function(order_number){
-		return $http.post("/api/checkouts/"+order_number+"/next", '');
+	this.proceed_to_checkout = function(order_number, order_token){
+		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/next", '');
 	};
-	this.proceed_to_checkout_delivery = function(order_number,order_address){
+	this.proceed_to_checkout_delivery = function(order_number, order_token, order_address){
 		console.log(order_number,order_address);
-		return $http.post("/api/checkouts/"+order_number+"/delivery", angular.toJson(order_address));
+		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/delivery", angular.toJson(order_address));
 	};
-	this.proceed_to_checkout_payment = function(order_number, shipment_id, shipping_rate_id){
+	this.proceed_to_checkout_payment = function(order_number,order_token, shipment_id, shipping_rate_id){
 		var shipment = {
 		  "order": {
 		    "shipments_attributes": {
@@ -192,16 +191,30 @@ angular.module('luxire')
 		    }
 		  }
 		}
-		return $http.post("/api/checkouts/"+order_number+"/payment", shipment);
+		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/payment", shipment);
 	};
 	this.proceed_to_checkout_gateway = function(order_number, payment_object){
 		console.log('order_number',order_number);
 		console.log('payment_object', payment_object);
 		return $http.post('/api/checkouts/'+order_number+'/gateway', angular.toJson(payment_object));
 	};
-	this.apply_coupon_code = function(order_number,coupon_code){
-		return $http.post('/api/checkouts/'+order_number+'/apply_coupon_code/'+coupon_code, '');
-	}
+	this.apply_coupon_code = function(order_number,order_token, coupon_code){
+		return $http.post('/api/checkouts/'+order_number+"/"+order_token+'/apply_coupon_code/'+coupon_code, '');
+	};
+	this.request_ebs = function(ebs_object){
+		console.log(ebs_object);
+		var enc_ebs_object = $.param(ebs_object);
+		console.log(enc_ebs_object);
+		return $http({
+          method  : 'POST',
+          url     : 'https://secure.ebs.in/pg/ma/payment/request',
+          data    : enc_ebs_object,
+          headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+				});
+		// return $http.post('https://secure.ebs.in/pg/ma/payment/request', angular.toJson(ebs_object));
+
+	};
+
 })
 
 .service('countries',function($http){

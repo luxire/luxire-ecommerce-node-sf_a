@@ -7,12 +7,13 @@ var env = require('../../config/constants');
 
 /*Proceed to checkout address*/
 exports.checkout_address = function(req, res){
+  console.log(req.params);
   http.put({
-    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'/next.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'/next.json?order_token='+req.params.token,
     body:''
   },function(error,response,body){
-    console.error(error);
-    console.log(response);
+    console.error('error',error);
+    console.log('res',response);
     if(error == null){
       res.status(response.statusCode).send(body);
     }
@@ -25,7 +26,7 @@ exports.checkout_address = function(req, res){
   /*Proceed to checkout delivery*/
   exports.checkout_delivery  = function(req, res){
     http.put({
-      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
       headers:{'content-type': 'application/json'},
       body:JSON.stringify(req.body)
     },function(error,response,body){
@@ -42,7 +43,7 @@ exports.checkout_address = function(req, res){
   exports.checkout_payment  = function(req, res){
     console.log(req);
     http.put({
-      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
       headers:{'content-type': 'application/json'},
       body:JSON.stringify(req.body)
     },function(error,response,body){
@@ -84,7 +85,7 @@ exports.checkout_address = function(req, res){
     console.log(req.params);
     http
       .put({
-        uri: env.spree.host+env.spree.orders+'/'+req.params.number+'/apply_coupon_code?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+        uri: env.spree.host+env.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.params.token,
         headers:{'content-type': 'application/x-www-form-urlencoded'},
         body: 'coupon_code='+req.params.code
       }, function(error, response, body){

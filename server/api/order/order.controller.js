@@ -27,7 +27,7 @@ exports.show = function(req, res){
 /*Create a blank order*/
 exports.create_blank_order = function(req, res){
   http.post({
-    uri: env.spree.host+env.spree.orders+'.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.orders+'.json',
     body: '{}'
   }, function(error,response,body){
     if(error == null){
@@ -37,16 +37,19 @@ exports.create_blank_order = function(req, res){
       res.status(500).send("Rails server not responding")
     };
   })
+  // uri: env.spree.host+env.spree.orders+'.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+
 };
 
 /*Create a new order, with existing details about the customer*/
 exports.create = function(req, res){
   http.post({
-    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.orders,
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
     if(error == null){
+      console.log(body);
       res.status(response.statusCode).send(body);
     }
     else{
@@ -60,8 +63,10 @@ exports.create = function(req, res){
 /*Todo change order_number to params*/
 exports.update = function(req, res){
   console.log(req.body);
+  console.log(env.spree.host+env.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token);
+  //localhost:3000/api/orders/R187211063/line_items/114?line_item[variant_id]=29&line_item[quantity]=4&order_token=EBCe8QS2YnLBnVUYZk37Ug
   http.put({
-    uri: env.spree.host+env.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token,
     headers:{'content-type': 'application/json'},
     body:''
   },function(error,response,body){

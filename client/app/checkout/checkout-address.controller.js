@@ -1,6 +1,12 @@
 angular.module('luxire')
 .controller('CheckoutAddressController',function($scope, $state, orders, countries, $rootScope, $stateParams){
   console.log($stateParams.checkoutObject);
+  $scope.line_items = $stateParams.checkoutObject.line_items;
+  $scope.display_item_total = $stateParams.checkoutObject.display_item_total;
+  $scope.display_total = $stateParams.checkoutObject.display_total;
+  $scope.adjustment_total = '$'+$stateParams.checkoutObject.adjustment_total;
+  $scope.shipping_total = $stateParams.checkoutObject.display_ship_total;
+
   var shipping_address = $stateParams.checkoutObject.ship_address;
   $scope.shipping = {
     firstname: '',
@@ -19,12 +25,12 @@ angular.module('luxire')
   }
   else{
     $scope.shipping = {
-      firstname: 'John',
-      lastname: 'Doe',
-      address1: '74',
-      city: 'Boston',
-      phone: '653233456',
-      zipcode: '02108',
+      firstname: '',
+      lastname: '',
+      address1: '',
+      city: '',
+      phone: '',
+      zipcode: '',
       state_id: 3545,
       country_id: 232
     };
@@ -50,34 +56,54 @@ angular.module('luxire')
   };
 
   $scope.proceed_to_checkout_delivery = function(){
-    order_address = {
-      order: {
-        bill_address_attributes: $scope.shipping,
-        ship_address_attributes: $scope.shipping
-      }
-    };
-    console.log(order_address);
-    orders.proceed_to_checkout_delivery($stateParams.checkoutObject.number,order_address)
-    .then(function(data){
-      console.log(data);
-      $state.go('checkout_delivery',{checkoutObject: data.data});
-    },function(error){
-      console.log(error);
-    });
-  };
+    if($scope.customer_email != null && $scope.customer_email != undefined){
+      order_address = {
+        order: {
+          email: $scope.customer_email,
+          bill_address_attributes: $scope.shipping,
+          ship_address_attributes: $scope.shipping
+        }
+      };
+      console.log(order_address);
+      order_number = $stateParams.checkoutObject.number;
+      order_token = $stateParams.checkoutObject.token;
+      orders.proceed_to_checkout_delivery(order_number, order_token, order_address)
+      .then(function(data){
+        console.log(data);
+        $state.go('checkout_delivery',{checkoutObject: data.data});
+      },function(error){
+        console.log(error);
+      });
+    }
+    else{
+      alert('Please enter customer email address');
+    }
 
+  };
+  var coupon_status = ''
   $scope.apply_coupon_code = function(){
-    orders.apply_coupon_code($stateParams.checkoutObject.number, $scope.coupon_code).then(
+    orders.apply_coupon_code($stateParams.checkoutObject.number, $stateParams.checkoutObject.token, $scope.coupon_code).then(
       function(data){
         console.log(data);
+        coupon_status = data.data;
         if(data.data.successful == true){
           orders.get_order_by_id($stateParams.checkoutObject.number,$stateParams.checkoutObject.token).then(function(data){
+            $scope.line_items = data.data.line_items;
+            $scope.display_item_total = data.data.display_item_total;
+            $scope.display_total = data.data.display_total;
+            $scope.adjustment_total = '-$'+data.data.adjustment_total.split('-')[1];
+            $scope.shipping_total = data.data.display_ship_total;
+            alert(coupon_status.success);
             console.log(data);
           },function(error){
             console.error(data);}
           );
         }
+        else{
+          alert(data.data.success);
+        };
       },function(error){
+        alert(error.data.error);
         console.error(error);
       }
     );
