@@ -1,20 +1,25 @@
 <div class="container-fluid" style="height:100%">
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;font-size: 20px;">
       <i class="fa fa-cog" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Settings / Shipping</span>
     </div>
   </div>
-  <div  class="row container admin-console-content" >
+  <div  style="margin-left: 0px;margin-right: 0px;" class="row admin-console-content" >
     <div class="row" style="padding-left: 2%;padding-right: 2%;border-bottom: solid 1px #D3DBE2">
       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: left;padding-right: 0px !important">
-        <h4 style="color: #000000;margin-top: 10%">Shipping Origin</h4>
-        <h6 style="color: #798C9C">The address used to calculate shipping rates.</h6>
+        <p style="color: #000000;margin-top: 10%;font-size: 20px">Shipping Origin</p>
+        <p style="color: #798C9C">The address used to calculate shipping rates.</p>
       </div>
       <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
         <div class="placard">
           <div class="row">
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align: left"><h4>Shipping from</h4></div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right"><h6>Edit address</h6></div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align: left;font-size: 20px">
+              Shipping from
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right;color: #4293C3;">
+              <p ng-style="edit_addr_style" style="cursor: pointer" ng-mouseover="edit_addr_style={'text-decoration':'underline'}"
+                ng-mouseleave="edit_addr_style={'text-decoration':'none'}" ng-click="edit_address()">Edit address</p>
+            </div>
           </div>
           <div class="row">
             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align: left">

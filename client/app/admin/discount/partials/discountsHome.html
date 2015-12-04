@@ -1,18 +1,30 @@
 <div class="container-fluid" style="height:100%">
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-2 col-md-2" style="text-align: center;font-size: 20px;">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-2 col-md-2" style="text-align: left;font-size: 20px;">
       <i class="fa fa-scissors" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Discounts</span>
     </div>
     <div class="col-lg-6 col-md-6">
-
     </div>
     <div class="col-lg-4 col-md-4" style="text-align: right;">
-      <button type="button" class="btn btn-primary" ui-sref="admin.new_discount">Add discount code</button>
+      <button type="button" style="margin-right: 2%" class="btn btn-primary" ui-sref="admin.new_discount">Add discount code</button>
+    </div>
+  </div>
+  <div class="container-fluid admin-console-content" style="text-align: center">
+    <div class="row" style="color: #31373D;font-size: 30px;margin-top: 5%">
+      Create a discount code
+    </div>
+    <div class="row" style="color: #798C9C;font-size: 18px;margin-top: 1%">
+      Increase sales by offering discounts to your customers.
+    </div>
+    <div class="row" style="margin-top: 2%">
+      <img src="lib/assets/discount_landing_page.png">
+    </div>
+    <div class="row" style="margin-top: 2%">
+      <button type="button" style="margin-right: 2%" class="btn btn-primary" ui-sref="admin.new_discount">Add discount code</button>
     </div>
   </div>
 
-  <div class="row" style="height: 93vh;">
-    <div class="container-fluid admin-console-content">
+  <div ng-hide = "true" class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
           <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">

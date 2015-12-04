@@ -16,9 +16,12 @@ exports.checkout_address = function(req, res){
     console.log('res',response);
     if(error == null){
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating address, responded with'+response.statusCode);
     }
     else{
       res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating address, responded with'+error);
+
     }
   });
 };
@@ -32,9 +35,12 @@ exports.checkout_address = function(req, res){
     },function(error,response,body){
       if(error == null){
         res.status(response.statusCode).send(body);
+        console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+response.statusCode);
       }
       else{
         res.status(500).send("Internal Server Error");
+        console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+error);
+
       }
     });
   };
@@ -49,9 +55,13 @@ exports.checkout_address = function(req, res){
     },function(error,response,body){
       if(error == null){
         res.status(response.statusCode).send(body);
+        console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+
       }
       else{
         res.status(500).send("Internal Server Error");
+        console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+
       }
     });
 
@@ -69,9 +79,13 @@ exports.checkout_address = function(req, res){
       console.log(body);
       if(error == null){
         res.status(response.statusCode).send(body);
+        console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+response.statusCode);
+
       }
       else{
         res.status(500).send("Internal Server Error");
+        console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+error);
+
       }
     });
 
@@ -91,8 +105,12 @@ exports.checkout_address = function(req, res){
       }, function(error, response, body){
           if(error == null){
             res.status(response.statusCode).send(body);
+            console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+response.statusCode);
+
           }else{
             res.status(500).send("Rails Server Not Responding");
+            console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+error);
+
           }
       });
   };

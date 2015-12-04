@@ -1,0 +1,90 @@
+<div class="row" >
+  <div id="address_modal_header" class="row">
+    <div class="col-md-9 col-sm-9 col-xs-9 col-lg-9" style="text-align: left;font-size: 18px;margin-bottom: 1%">
+      <p>Update shipping address</p>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3" style="text-align: right;font-size: 16px;color: #808080">
+      <i class="fa fa-close"></i>
+    </div>
+  </div>
+  <div class="row" style="text-align: left;padding-top: 4%;padding-bottom: 4%">
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+      <p>Enter the address from which you ship orders to customers. This address will be used to calculate shipping costs.</p>
+    </div>
+  </div>
+  <div class="row" style="text-align: left;">
+    <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+      <label for="addr1">Address</label>
+      <input class="form-control" ng-model="address.address1" id="addr1">
+    </div>
+  </div>
+  <div class="row" style="text-align: left;">
+    <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+      <label for="addr2">Apt,suite,etc.(optional)</label>
+      <input class="form-control" ng-model="address.address2" id="addr2">
+    </div>
+  </div>
+  <div class="row" style="text-align: left;">
+    <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="city">City</label>
+      <input class="form-control" ng-model="address.city" id="city">
+    </div>
+    <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="zipcode">Postal/Zipcode</label>
+      <input class="form-control" ng-model="address.zipcode" id="zipcode">
+    </div>
+  </div>
+  <div class="row" style="text-align: left;padding-bottom: 2%">
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="country">Country</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="country">
+        <span class="input-group-btn">
+          <button class="btn btn-default" style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;">
+            <i class="fa fa-sort"></i>
+          </button>
+        </span>
+        <!-- <div style="position: absolute;left: 0;top: 100%;z-index: 10;background-color: white;width: 100%;height: 150px">
+          1<br>
+          2<br>
+          3<br>
+        </div> -->
+      </div>
+    </div>
+    <!-- <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="city">Country</label>
+      <input class="form-control" ng-model="address.country" id="city">
+    </div> -->
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="country">State/Province</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="country">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;">
+            <i class="fa fa-sort"></i>
+          </button>
+        </span>
+        <!-- <div style="position: absolute;left: 0;top: 100%;z-index: 10;background-color: white;width: 100%;height: 150px">
+          1<br>
+          2<br>
+          3<br>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="row" style="text-align: left;padding-bottom: 3%">
+    <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+      <label for="phone">Phone</label>
+      <input class="form-control" ng-model="address.phone" id="phone">
+    </div>
+  </div>
+  <div id="address_modal_footer" class="row">
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="">
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 " style="display: block;">
+      <button class="btn btn-default" style="color: #4293C3;display: inline-block;margin-left: 15%">Cancel</button>
+      <button class="btn btn-primary pull-right" style="display: inline-block">Update shipping address</button>
+    </div>
+  </div>
+
+</div>

@@ -1,6 +1,6 @@
 <div class="container-fluid" style="height:100%">
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
       <i class="fa fa-scissors" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Discounts / Add a discount</span>
     </div>
     <div class="col-lg-4 col-md-4">
@@ -12,9 +12,67 @@
     </div>
   </div>
 
-  <div class="row" style="height: 93vh;">
+  <div class="row" style="margin-left: 0px;height: 93vh;">
     <div class="container-fluid admin-console-content" style="padding-top: 25px !important;">
-      <div class="row" style="border-bottom: 1px solid #C7C7C7;">
+      <div class="row" style="margin-top: 2%;display: block">
+        <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: left">
+              Code name
+            </div>
+            <div ng-style="gen_code_style" class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: right;color: #4293C3;cursor: pointer"
+                    ng-mouseover="gen_code_style={'text-decoration':'underline'}" ng-mouseleave="gen_code_style={'text-decoration':'none'}"
+                    ng-click="discountCodeGen()">
+              Generate code
+            </div>
+          </div>
+          <div class="row" style="margin-top: 1%">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+              <input type="text" class="form-control" ng-model="discountCode">
+              <p style="color: #A5B0B7;font-style: italic">Your customers will enter this code at checkout to use the discount (e.g. SPRINGBLOWOUT).​</p>
+              <p style="margin-top: 1%">Number of times this discount can be used</p>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 1%;margin-bottom: 4%">
+            <div class="col-lg-2 col-md-2">
+              <input type="number" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usageLimit" style="width: 100%;" ng-disabled="infinityFlag==true">
+            </div>
+            <div class="col-lg-10 col-md-10" style="padding-top: 1%">
+              <input type="checkbox" ng-model="infinityFlag">
+              <span style="font-size: 13px;">&nbsp;&nbsp;No limit</span>
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
+          <p style="font-size: 18px">Date range</p>
+          <p style="margin-bottom: 5px">Start date</p>
+          <p style="padding-bottom: 2%" class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+          <p style="margin-bottom: 5px">End date(end of day)</p>
+          <p class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+          <input type="checkbox" ng-model="expiryFlag">
+          <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;Never expires</span>
+        </div>
+      </div>
+      <div class="row" style="">
+        <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
+          <p style="font-size: 18px">Rules</p>
+        </div>
+        <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
+
+        </div>
+      </div>
+      <!-- <div class="row" style="border-bottom: 1px solid #C7C7C7;">
         <div class="col-lg-4 col-md-4">
           <span style="font-size: 20px;">Discount details</span>
           <br>
@@ -96,7 +154,7 @@
           <div class="row">
             <div class="col-lg-4 col-md-4">
               <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
@@ -104,7 +162,7 @@
             </div>
             <div class="col-lg-4 col-md-4">
               <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
@@ -118,6 +176,15 @@
           </div>
         </div>
       </div>
+
+      <div class="row" style="margin-top: 1%">
+        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7" style="margin-left: 3%;margin-right: 1%;border: solid 1px grey;border-radius: 2px;background-color: white">
+          Rules
+        </div>
+        <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4" style="margin-left: 1%;margin-right: 3%;border: solid 1px grey;border-radius: 2px;background-color: white">
+          Actions
+        </div>
+      </div> -->
 
       <!-- footer -->
       <div class="row" style="height: 5em; line-height: 5em;">

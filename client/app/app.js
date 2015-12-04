@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput'])
+angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput', 'ngAnimate'])
 
 .run(function($location,$rootScope){
 	// $location.path('/collections');
@@ -19,7 +19,7 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
     });
 
 })
-.config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
+.config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider',function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider){
 	$urlRouterProvider.otherwise('/collections');
 	$stateProvider
 	.state('test',{
@@ -85,6 +85,11 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
 		templateUrl: 'app/checkout/partials/checkoutGateway.html',
 		controller: 'checkoutGatewayController'
 	})
+
+	// $locationProvider.html5Mode({
+  //      enabled: true,
+  //      requireBase: false
+  // });
 
 
 	// $routeProvider.

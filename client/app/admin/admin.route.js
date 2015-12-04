@@ -101,7 +101,7 @@ angular.module('luxire')
 		url:'/settings/shipping',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
-			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shippingHome.html' }
+			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shippingHome.html', controller: 'ShippingController' }
 		}
 	})
 

@@ -9,6 +9,7 @@ exports.index = function(req, res){
 
 };
 exports.show = function(req, res){
+  console.log('req from'+req.connection.remoteAddress);
   console.log(req.params);
   console.log(req.body);
   http.get({
@@ -17,9 +18,12 @@ exports.show = function(req, res){
   },function(error, response, body){
     if(error == null){
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for reading order, responded with'+response.statusCode);
     }
     else{
       res.status(500).send("Rails server not responding")
+      console.log('req from'+req.connection.remoteAddress+'for reading order, responded with'+error);
+
     };
   });
 };
@@ -32,9 +36,13 @@ exports.create_blank_order = function(req, res){
   }, function(error,response,body){
     if(error == null){
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for creating blank order, responded with'+response.statusCode);
+
     }
     else{
-      res.status(500).send("Rails server not responding")
+      res.status(500).send("Rails server not responding");
+      console.log('req from'+req.connection.remoteAddress+'for creating  blank order, responded with'+error);
+
     };
   })
   // uri: env.spree.host+env.spree.orders+'.json?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
@@ -51,9 +59,13 @@ exports.create = function(req, res){
     if(error == null){
       console.log(body);
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for creating blank order, responded with'+response.statusCode);
+
     }
     else{
-      res.status(500).send("Rails server not responding")
+      res.status(500).send("Rails server not responding");
+      console.log('req from'+req.connection.remoteAddress+'for creating  order, responded with'+error);
+
     };
   });
 
@@ -73,9 +85,13 @@ exports.update = function(req, res){
     console.log(body);
     if(response){
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating order, responded with'+response.statusCode);
+
     }
     else{
-      res.status(500).send("Rails server not responding")
+      res.status(500).send("Rails server not responding");
+      console.log('req from'+req.connection.remoteAddress+'for updating  order, responded with'+error);
+
     }
   })
 };
@@ -89,9 +105,13 @@ exports.add_line_item = function(req, res){
   }, function(error,response,body){
     if(error == null){
       res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for adding lineitem, responded with'+response.statusCode);
+
     }
     else{
       res.status(500).send("Rails server not responding")
+      console.log('req from'+req.connection.remoteAddress+'for adding lineitem, responded with'+error);
+
     };
   })
 };
