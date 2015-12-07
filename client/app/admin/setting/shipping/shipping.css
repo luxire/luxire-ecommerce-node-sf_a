@@ -13,5 +13,14 @@
   padding-top: 3%;
   padding-bottom: 2%;
   border-top: solid 1px grey;
-
+}
+.row.row1{
+  margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+.error-message{
+  background-color: #F2DEDE;
+  color: #B44842;
+  padding: 2% 2%;
+  border-radius: 10px;
 }
