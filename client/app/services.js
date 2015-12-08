@@ -69,6 +69,8 @@ angular.module('luxire')
 		this.collection = ''
 		this.tags = ''
 	}
+
+
 })
 
 .service('products', function($http, $q, restApiService){

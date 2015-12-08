@@ -66,125 +66,127 @@
       </div>
       <div class="row" style="">
         <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
-          <p style="font-size: 18px">Rules</p>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Rules</h3>
+            </div>
+            <div class="panel-body">
+              <div style="margin: 2% 2%">
+                <p style="font-size: 13px">ADD RULE OF TYPE</p>
+                <select class="form-control" ng-options="rule as rule.title for rule in rules" ng-model="selected_rule" ng-change="select_rule(selected_rule)"></select>
+                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-click="add_selected_rule()">+ Add</button>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Order total meets these criteria</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Order includes specified product(s)</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Available only to the specified users</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Must be the customer's first order</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Available only to logged in users</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Order includes products with specified taxon(s)</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
 
         </div>
       </div>
-      <!-- <div class="row" style="border-bottom: 1px solid #C7C7C7;">
-        <div class="col-lg-4 col-md-4">
-          <span style="font-size: 20px;">Discount details</span>
-          <br>
-          <span style="font-size: 13px;color: #798c9c;">Create your discount code, and specify the usage limit.</span>
-          <br>
-          <br>
-          <button type="button" class="btn btn-default" ng-click="discountCodeGen()">Genarate code</button>
-        </div>
-        <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
+      <div class="row" style="">
+        <div class="placard" style="margin-left: 15%; width: 66%; display: block">
           <div class="row">
-            <div class="col-lg-12 col-md-12">
-              <span style="font-size: 13px;">Discount code</span>
-            </div>
+              <h4 style="display: inline-block;margin-left: 2%">Details</h4>
+              <a href="#" ng-click="add_rule($event)" style="display: inline-block;margin-left: 40%">Add another rule</a>
+
+
           </div>
-          <div class="row">
-            <div class="col-lg-12 col-md-12">
-              <input type="text" class="form-control" ng-model="discountCode">
+
+          <form class="form-inline" ng-repeat="discount in discounts" style="padding-bottom: 1.5%">
+            <select class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in discount.redeem_types track by redeem_type.id" ng-model="discount.selected_redeem_type" ng-change="redeem_option_change($index,discount)"></select>
+            <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" style="display: inline-block">&nbsp;&nbsp;Take&nbsp;&nbsp;</p>
+
+            <!--Rs-->
+            <div ng-if="discount.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 13%">
+              <div class="input-group">
+                <span class="input-group-addon">Rs.</span>
+                <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value">
+              </div>
             </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-lg-12 col-md-12">
-              <span style="font-size: 13px;">Discount code</span>
+
+
+            <!--Discount-->
+            <div ng-if="discount.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 13%">
+              <div class="input-group">
+                <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value">
+                <span class="input-group-addon">%</span>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-2 col-md-2">
-              <input type="text" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usageLimit" style="width: 100%;" ng-disabled="infinityFlag==true">
+
+            <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'"style="display: inline-block">&nbsp;off for&nbsp;</p>
+            <select ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" class="form-control" ng-options="discount_category as discount_category.title for discount_category in discount.discount_categories track by discount_category.id" ng-model="discount.selected_discount_category" ></select>
+
+            <!--Free shipping-->
+            <p ng-if="discount.selected_redeem_type.title=='Free Shipping'"style="display: inline-block">&nbsp;for any shipping rate that is less than or equal to&nbsp;</p>
+            <div ng-if="discount.selected_redeem_type.title=='Free Shipping'" class="form-group" style="width: 13%">
+              <div class="input-group">
+                <span class="input-group-addon">Rs.</span>
+                <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value_le">
+              </div>
             </div>
-            <div class="col-lg-10 col-md-10">
-              <input type="checkbox" ng-model="infinityFlag">
-              <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;No limit</span>
-            </div>
-          </div>
+
+            <p ng-if="discount.selected_redeem_type.title=='Free Shipping'" style="display: inline-block">&nbsp;and applies to&nbsp;</p>
+            <select ng-if="discount.selected_redeem_type.title=='Free Shipping'" class="form-control" ng-options="zone as zone.title for zone in discount.redeem_types[2].zones track by zone.id" ng-model="discount.redeem_types[2].selected_zone"></select>
+
+          </form>
+
         </div>
       </div>
 
-      <div class="row" style="border-bottom: 1px solid #C7C7C7; padding-top: 25px;">
-        <div class="col-lg-4 col-md-4">
-          <span style="font-size: 20px;">Discount type</span>
-          <br>
-          <span style="font-size: 13px;color: #798c9c;">Select the type of discount, and set any extra conditions.</span>
-        </div>
-        <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
-          <select class="form-control" ng-model="discountType" style="width: 150px; display: inline;">
-            <option value="PERC" selected>% Discount</option>
-            <option value="CASH">Rs.</option>
-          </select>
-          <span>&nbsp;&nbsp;&nbsp;Take </span>
-          <span>INR&nbsp;&nbsp;&nbsp;</span>
-          <input type="text" ng-model="discountValue" class="form-control" style="width: 150px; display: inline;">
-          <span>%</span>
-          <span>off for&nbsp;&nbsp;&nbsp;</span>
-          <select class="form-control" ng-model="discountScope" style="width: 150px; display: inline;">
-            <option value="ALL">All orders</option>
-            <option value="OVR">Orders over</option>
-            <option value="COL">Collection</option>
-            <option value="SPEC">Specific product</option>
-            <option value="CUST">Customer in group</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row"  style="border-bottom: 1px solid #C7C7C7; padding-top: 25px;">
-        <div class="col-lg-4 col-md-4">
-          <span style="font-size: 20px;">Date range</span>
-          <br>
-          <span style="font-size: 13px;color: #798c9c;">Specify when this discount begins and ends.</span>
-        </div>
-        <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
-          <div class="row">
-            <div class="col-lg-4 col-md-4">
-              <span style="font-size: 13px;">Discount Begins</span>
-            </div>
-            <div class="col-lg-8 col-md-8">
-              <span style="font-size: 13px;">Discount Expires</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-4 col-md-4">
-              <p class="input-group">
-              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </p>
-            </div>
-            <div class="col-lg-4 col-md-4">
-              <p class="input-group">
-              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </p>
-            </div>
-            <div class="col-lg-4 col-md-4">
-              <input type="checkbox" ng-model="expiryFlag">
-              <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;Never expires</span>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="row" style="margin-top: 1%">
-        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7" style="margin-left: 3%;margin-right: 1%;border: solid 1px grey;border-radius: 2px;background-color: white">
-          Rules
-        </div>
-        <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4" style="margin-left: 1%;margin-right: 3%;border: solid 1px grey;border-radius: 2px;background-color: white">
-          Actions
-        </div>
-      </div> -->
 
       <!-- footer -->
       <div class="row" style="height: 5em; line-height: 5em;">
@@ -203,3 +205,149 @@
     </div>
   </div>
 </div>
+<!-- <select style="width: 15%; display: inline-block" class="form-control">
+  <option ng-repeat="discount_type in discount_types">
+    {{discount_type.title}}
+  </option>
+</select>&nbsp;&nbsp;
+<p style="display: inline-block">Take</p>&nbsp;&nbsp;
+<div style="display: inline-block;width: 15%;">
+  <div class="input-group">
+    <span class="input-group-addon">Rs.</span>
+    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+  </div>
+</div> -->
+<!-- <select style="width: 15%;" ng-model="discount.selected_redeem_type_id" class="form-control" ng-change="redeem_option_change($index,discount)">
+  <option ng-selected="true">Select</option>
+  <option ng-repeat="redeem_type in discount.redeem_types" ng-value="redeem_type.id">
+    {{redeem_type.title}}
+  </option>
+</select> -->
+<!-- <div class="row" style="">
+  <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Rules</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+  <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
+
+  </div>
+</div> -->
+<!-- <div class="row" style="border-bottom: 1px solid #C7C7C7;">
+  <div class="col-lg-4 col-md-4">
+    <span style="font-size: 20px;">Discount details</span>
+    <br>
+    <span style="font-size: 13px;color: #798c9c;">Create your discount code, and specify the usage limit.</span>
+    <br>
+    <br>
+    <button type="button" class="btn btn-default" ng-click="discountCodeGen()">Genarate code</button>
+  </div>
+  <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <span style="font-size: 13px;">Discount code</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <input type="text" class="form-control" ng-model="discountCode">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <span style="font-size: 13px;">Discount code</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2 col-md-2">
+        <input type="text" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usageLimit" style="width: 100%;" ng-disabled="infinityFlag==true">
+      </div>
+      <div class="col-lg-10 col-md-10">
+        <input type="checkbox" ng-model="infinityFlag">
+        <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;No limit</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="border-bottom: 1px solid #C7C7C7; padding-top: 25px;">
+  <div class="col-lg-4 col-md-4">
+    <span style="font-size: 20px;">Discount type</span>
+    <br>
+    <span style="font-size: 13px;color: #798c9c;">Select the type of discount, and set any extra conditions.</span>
+  </div>
+  <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
+    <select class="form-control" ng-model="discountType" style="width: 150px; display: inline;">
+      <option value="PERC" selected>% Discount</option>
+      <option value="CASH">Rs.</option>
+    </select>
+    <span>&nbsp;&nbsp;&nbsp;Take </span>
+    <span>INR&nbsp;&nbsp;&nbsp;</span>
+    <input type="text" ng-model="discountValue" class="form-control" style="width: 150px; display: inline;">
+    <span>%</span>
+    <span>off for&nbsp;&nbsp;&nbsp;</span>
+    <select class="form-control" ng-model="discountScope" style="width: 150px; display: inline;">
+      <option value="ALL">All orders</option>
+      <option value="OVR">Orders over</option>
+      <option value="COL">Collection</option>
+      <option value="SPEC">Specific product</option>
+      <option value="CUST">Customer in group</option>
+    </select>
+  </div>
+</div>
+
+<div class="row"  style="border-bottom: 1px solid #C7C7C7; padding-top: 25px;">
+  <div class="col-lg-4 col-md-4">
+    <span style="font-size: 20px;">Date range</span>
+    <br>
+    <span style="font-size: 13px;color: #798c9c;">Specify when this discount begins and ends.</span>
+  </div>
+  <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
+    <div class="row">
+      <div class="col-lg-4 col-md-4">
+        <span style="font-size: 13px;">Discount Begins</span>
+      </div>
+      <div class="col-lg-8 col-md-8">
+        <span style="font-size: 13px;">Discount Expires</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-4">
+        <p class="input-group">
+        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <p class="input-group">
+        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <input type="checkbox" ng-model="expiryFlag">
+        <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;Never expires</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+  <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7" style="margin-left: 3%;margin-right: 1%;border: solid 1px grey;border-radius: 2px;background-color: white">
+    Rules
+  </div>
+  <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4" style="margin-left: 1%;margin-right: 3%;border: solid 1px grey;border-radius: 2px;background-color: white">
+    Actions
+  </div>
+</div> -->
