@@ -74,67 +74,99 @@
               <div style="margin: 2% 2%">
                 <p style="font-size: 13px">ADD RULE OF TYPE</p>
                 <select class="form-control" ng-options="rule as rule.title for rule in rules" ng-model="selected_rule" ng-change="select_rule(selected_rule)"></select>
-                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-click="add_selected_rule()">+ Add</button>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Order total meets these criteria</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
+                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="rules.length==0" ng-click="add_selected_rule()">+ Add</button>
+                <div ng-repeat="rule in added_rules">
+                  <div ng-if="rule.label=='Item total'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Order total meets these criteria</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                    <div class="panel-body">
+                      <div style="margin: 2% 2%">
+                        <form>
+                          <div class="form-inline" style="padding-bottom: 2%">
+                            <select class="form-control" style="width: 48%" ng-options="base_option as base_option.title for base_option in rule.criteria.base_cutoff_options track by base_option.id" ng-model="rule.criteria.base_cutoff_selected_option" ></select>
+                            <input class="form-control" style="width: 48%" ng-model="rule.criteria.base_cutoff_selected_option.value">
+                          </div>
+                          <div class="form-inline">
+                            <select class="form-control" style="width: 48%" ng-options="higher_option as higher_option.title for higher_option in rule.criteria.higher_cutoff_options track by higher_option.id" ng-model="rule.criteria.higher_cutoff_selected_option" ></select>
+                            <input class="form-control" style="width: 48%" ng-model="rule.criteria.higher_cutoff_selected_option.value">
+                          </div>
+                        </form>
+
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Order includes specified product(s)</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
+                  <div ng-if="rule.label=='Product(s)'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Order includes specified product(s)</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                    <div class="panel-body">
+                      <div style="margin: 2% 2%">
+                        <p style="font-size: 12px">CHOOSE PRODUCTS</p>
+                        <tags-input ng-model="rule.criteria.selected_products" display-property="name" key-property="id" add-from-autocomplete-only="true" on-tag-added="add_product_tag()">
+                          <auto-complete  source="loadItems($query)"></auto-complete>
+                        </tags-input>
+                        <select class="form-control" style="padding-top: 2%" ng-options="product_quantity as product_quantity.title for product_quantity in rule.criteria.product_quantity track by product_quantity.id" ng-model="rule.criteria.selected_product_quantity" ></select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Available only to the specified users</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
+                  <div ng-if="rule.label=='User'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Available only to the specified users</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                    <div class="panel-body">
+                      <div style="margin: 2% 2%">
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Must be the customer's first order</h3>
+                  <div ng-if="rule.label=='First order'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Must be the customer's first order</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+
                   </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
+                  <div ng-if="rule.label=='User Logged In'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Available only to logged in users</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+
+                  </div>
+                  <div ng-if="rule.label=='One Use Per User'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Only One Use Per User</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+
+                  </div>
+                  <div ng-if="rule.label=='Taxon(s)'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 style="display: inline-block" class="panel-title">Order includes products with specified taxon(s)</h3>
+                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                    <div class="panel-body">
+                      <div style="margin: 2% 2%">
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Available only to logged in users</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
-                    </div>
-                  </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Order includes products with specified taxon(s)</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%">
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
-
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Actions</h3>
+            </div>
+            <div class="panel-body">
+            </div>
+          </div>
         </div>
       </div>
       <div class="row" style="">

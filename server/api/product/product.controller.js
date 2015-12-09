@@ -11,6 +11,7 @@
 var _ = require('lodash');
 var http = require('request');
 var querystring = require('querystring');
+// var qs = require('qs');
 var env = require('../../config/constants');
 
 exports.productVariants = function(req, res) {
@@ -31,10 +32,22 @@ exports.productVariants = function(req, res) {
 
 // Get list of all products
 exports.index = function(req, res) {
-  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-  var params = querystring.stringify(req.params);
+  req.query.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  console.log(req.query);
+  var qstr = ''
+  for(var x in req.query){
+    if(typeof req.query[x]=='object'){
+      for(var y in req.query[x]){
+        qstr=qstr+x+'['+y+']='+req.query[x][y]+'&'
+      }
+    }
+    else{
+      qstr=qstr+x+'='+req.query[x]+'&'
+    }
+  }
+  console.log(qstr);
   http
-    .get(env.spree.host+env.spree.products+'?'+params, function(error, response, body){
+    .get(env.spree.host+env.spree.products+'?'+qstr, function(error, response, body){
       if(response){
         res.status(response.statusCode).send(body);
       }
@@ -78,6 +91,7 @@ exports.show = function(req, res){
 
   });
 };
+
 
 //Update product details of a product
 exports.update = function(req, res){

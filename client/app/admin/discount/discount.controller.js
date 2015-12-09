@@ -1,5 +1,11 @@
 angular.module('luxire')
-.controller('DiscountController',function($scope){
+.controller('DiscountController',function($scope, products){
+
+  products.searchProducts('spr').then(function(data){
+    console.log(data);
+  }, function(error){
+    console.error(error);
+  });
 
   $scope.today = function() {
     $scope.discountStart = new Date();
@@ -117,16 +123,30 @@ $scope.add_rule = function(event){
 
 /*spree based approach*/
 $scope.rules = [{id: 0,title: 'Item total', label: 'Item total', criteria: {
-                base_cutoff_options: [],base_cutoff_selected_option: {},higher_cutoff_options: [],higher_cutoff_selected_option: {},
+                base_cutoff_options: [{id:0,title: 'greater than',value: 100},{id:1,title: 'greater than or equal to',value: 1000}],
+                base_cutoff_selected_option: {id:0,title: 'greater than',value: 100},
+                higher_cutoff_options: [{id:0,title: 'less than',value: 100},{id:1,title: 'less than or equal to',value: 1000}],
+                higher_cutoff_selected_option: {id:0,title: 'less than',value: 100}
               }},
-                {id: 1,title: 'Product(s)', label: 'Product(s)'},
+                {id: 1,title: 'Product(s)', label: 'Product(s)', criteria: {
+                  product_quantity: [{id: 0, title: 'atleast one', label: 'atleast one'},
+                                    {id: 1, title: 'all', label: 'all'},
+                                    {id: 2, title: 'none', label: 'none'}],
+                  selected_product_quantity: {id: 0, title: 'atleast one', label: 'atleast one'},
+                  selected_products: []
+                }},
                 {id: 2,title: 'User', label: 'User'},
                 {id: 3,title: 'First order', label: 'First order'},
                 {id: 4,title: 'User Logged In', label: 'User Logged In'},//to avoid using certain discount codes for guest checkout
                 {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
                 {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}];
 
+$scope.added_rules = [];
+
+$scope.added_products_to_rule = [];
+
 var rules_indexes_map =[0,1,2,3,4,5,6];
+var added_rules_indexes_map = [];
 
 $scope.selected_rule = $scope.rules[0];
 
@@ -136,9 +156,31 @@ $scope.select_rule = function(selected_rule){
 
 $scope.add_selected_rule = function(){
   var index = rules_indexes_map.indexOf($scope.selected_rule.id);
+  $scope.added_rules.push($scope.rules[index]);
+  added_rules_indexes_map.push($scope.rules[index].id);
   $scope.rules.splice(index, 1);
   rules_indexes_map.splice(index, 1);
   $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+};
+
+$scope.remove_selected_rule = function(event, rule){
+  event.preventDefault();
+  var index = added_rules_indexes_map.indexOf(rule.id);
+  rules_indexes_map.push(rule.id);
+  $scope.rules.push(rule);
+  $scope.added_rules.splice(index, 1);
+  added_rules_indexes_map.splice(index, 1);
+  $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+
+
+};
+
+$scope.loadItems = function(query){
+  return products.searchProducts(query);
+};
+
+$scope.add_product_tag = function () {
+  console.log($scope.added_products_to_rule);
 };
 
 });

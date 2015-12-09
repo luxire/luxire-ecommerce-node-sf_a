@@ -84,6 +84,18 @@ angular.module('luxire')
 		});
 		return deferred.promise;
 	}
+
+	/*search product by name*/
+	this.searchProducts = function(search_phrase){
+		var deferred = $q.defer();
+		$http.get('/api/products?q[name_cont]='+search_phrase).then(function(data){
+			deferred.resolve(data.data.products)
+		},function(errData, errStatus, errHeaders, errConfig){
+			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+		});
+		return deferred.promise;
+	}
+
 	this.createProduct = function(product) {
 		var deferred = $q.defer();
 
