@@ -43,10 +43,11 @@ angular.module('luxire')
   };
 })
 .controller('AddressModalInstance',function($scope, $uibModalInstance, current_address, countries, shipping_service){
+  console.log(current_address);
   $scope.countries = countries;
   $scope.populate_states = function(country_id){
-    console.log(country_id);
     $scope.states = $scope.countries[country_id -1].states;
+    console.log($scope.states);
   };
 
   $scope.country_select = function(country){

@@ -1,11 +1,6 @@
 angular.module('luxire')
 .controller('DiscountController',function($scope, products){
 
-  products.searchProducts('spr').then(function(data){
-    console.log(data);
-  }, function(error){
-    console.error(error);
-  });
 
   $scope.today = function() {
     $scope.discountStart = new Date();
@@ -141,6 +136,17 @@ $scope.rules = [{id: 0,title: 'Item total', label: 'Item total', criteria: {
                 {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
                 {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}];
 
+$scope.actions = [{id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
+                    redeem_types: [{id: 0, title: 'Rs.', value: 100},{id: 1, title: '% Discount', value: 100}],
+                    selected_redeem_type: {id: 0, title: 'Rs.', value: 100}},
+                  {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
+                  redeem_types: [{id: 0, title: 'Rs.', value: 100},{id: 1, title: '% Discount', value: 100}]},
+                  {id: 2, title: 'Free shipping',label: 'Free shipping'}];
+
+
+
+$scope.selected_action = $scope.actions[0];
+
 $scope.added_rules = [];
 
 $scope.added_products_to_rule = [];
@@ -154,13 +160,16 @@ $scope.select_rule = function(selected_rule){
   console.log('selected_rule', selected_rule);
 };
 
+$scope.redeem_types = [{id: 0, title: 'Rs.', value: 100},{id: 1, title: '% Discount', value: 100}];
+
 $scope.add_selected_rule = function(){
   var index = rules_indexes_map.indexOf($scope.selected_rule.id);
   $scope.added_rules.push($scope.rules[index]);
   added_rules_indexes_map.push($scope.rules[index].id);
   $scope.rules.splice(index, 1);
   rules_indexes_map.splice(index, 1);
-  $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+  $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {};
+  console.log($scope.added_rules);
 };
 
 $scope.remove_selected_rule = function(event, rule){
@@ -179,8 +188,14 @@ $scope.loadItems = function(query){
   return products.searchProducts(query);
 };
 
-$scope.add_product_tag = function () {
-  console.log($scope.added_products_to_rule);
+$scope.active_product_tags = {};
+$scope.add_product_tag = function (tag) {
+  $scope.active_product_tags[tag.id] = {product_name: tag.name,selected_redeem_type: {id: 0, title: 'Rs.', value: 100}}
 };
+
+$scope.remove_product_tag = function (tag) {
+  delete $scope.active_product_tags[tag.id];
+};
+
 
 });

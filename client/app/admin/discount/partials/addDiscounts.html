@@ -105,7 +105,8 @@
                     <div class="panel-body">
                       <div style="margin: 2% 2%">
                         <p style="font-size: 12px">CHOOSE PRODUCTS</p>
-                        <tags-input ng-model="rule.criteria.selected_products" display-property="name" key-property="id" add-from-autocomplete-only="true" on-tag-added="add_product_tag()">
+                        <tags-input ng-model="rule.criteria.selected_products" display-property="name" key-property="id" add-from-autocomplete-only="true"
+                        on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                           <auto-complete  source="loadItems($query)"></auto-complete>
                         </tags-input>
                         <select class="form-control" style="padding-top: 2%" ng-options="product_quantity as product_quantity.title for product_quantity in rule.criteria.product_quantity track by product_quantity.id" ng-model="rule.criteria.selected_product_quantity" ></select>
@@ -165,11 +166,88 @@
               <h3 class="panel-title">Actions</h3>
             </div>
             <div class="panel-body">
+              <div style="margin: 2% 2%">
+                <select class="form-control" style="margin-bottom: 2%" ng-options="action as action.title for action in actions track by action.id" ng-model="selected_action" ></select>
+                <div ng-if="selected_action.label=='Create whole order adjustment'" class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Adjustment on the order</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div class="form-inline"style="margin: 2% 2%">
+                      <select class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in selected_action.redeem_types track by redeem_type.id" ng-model="selected_action.selected_redeem_type" ></select>
+                      <!--Rs-->
+                      <div ng-if="selected_action.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 48%">
+                        <div class="input-group">
+                          <span class="input-group-addon">Rs.</span>
+                          <input type="text" class="form-control" ng-model="selected_action.selected_redeem_type.value" >
+                        </div>
+                      </div>
+                      <div ng-if="selected_action.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 48%">
+                        <div class="input-group">
+                          <input type="text" class="form-control" ng-model="selected_action.selected_redeem_type.value">
+                          <span class="input-group-addon">%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="selected_action.label=='Create line item adjustment'" class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Adjustment on the line item</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div style="margin: 2% 2%" ng-repeat="(key, value) in active_product_tags" class="panel panel-default">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">{{value.product_name}}</h3>
+                      </div>
+                      <div class="panel-body">
+                        <div style="margin: 2% 2%" class="form-inline">
+                          <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in redeem_types track by redeem_type.id" ng-model="value.selected_redeem_type"></select>
+
+                          <!--Rs-->
+                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 13%">
+                            <div class="input-group">
+                              <span class="input-group-addon">Rs.</span>
+                              <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
+                            </div>
+                          </div>
+
+
+                          <!--Discount-->
+                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 13%">
+                            <div class="input-group">
+                              <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
+                              <span class="input-group-addon">%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="selected_action.label=='Free shipping'" class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Free shipping</h3>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row" style="">
+      <div class="row" style="height: 5em; line-height: 5em;">
+        <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
+
+        </div>
+        <div class="col-lg-2 col-md-2">
+
+        </div>
+        <div class="col-lg-4 col-md-4" style="text-align: right;">
+          <button type="button" class="btn btn-default" style="color: #3276b1;">Cancel</button>
+          <button type="button" class="btn btn-primary">Save discount</button>
+        </div>
+      </div>
+      <!-- <div class="row" style="">
         <div class="placard" style="margin-left: 15%; width: 66%; display: block">
           <div class="row">
               <h4 style="display: inline-block;margin-left: 2%">Details</h4>
@@ -182,7 +260,6 @@
             <select class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in discount.redeem_types track by redeem_type.id" ng-model="discount.selected_redeem_type" ng-change="redeem_option_change($index,discount)"></select>
             <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" style="display: inline-block">&nbsp;&nbsp;Take&nbsp;&nbsp;</p>
 
-            <!--Rs-->
             <div ng-if="discount.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 13%">
               <div class="input-group">
                 <span class="input-group-addon">Rs.</span>
@@ -191,7 +268,6 @@
             </div>
 
 
-            <!--Discount-->
             <div ng-if="discount.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 13%">
               <div class="input-group">
                 <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value">
@@ -202,7 +278,6 @@
             <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'"style="display: inline-block">&nbsp;off for&nbsp;</p>
             <select ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" class="form-control" ng-options="discount_category as discount_category.title for discount_category in discount.discount_categories track by discount_category.id" ng-model="discount.selected_discount_category" ></select>
 
-            <!--Free shipping-->
             <p ng-if="discount.selected_redeem_type.title=='Free Shipping'"style="display: inline-block">&nbsp;for any shipping rate that is less than or equal to&nbsp;</p>
             <div ng-if="discount.selected_redeem_type.title=='Free Shipping'" class="form-group" style="width: 13%">
               <div class="input-group">
@@ -217,22 +292,11 @@
           </form>
 
         </div>
-      </div>
+      </div> -->
 
 
       <!-- footer -->
-      <div class="row" style="height: 5em; line-height: 5em;">
-        <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
 
-        </div>
-        <div class="col-lg-4 col-md-4">
-
-        </div>
-        <div class="col-lg-4 col-md-4" style="text-align: right;">
-          <button type="button" class="btn btn-default" style="color: #3276b1;">Cancel</button>
-          <button type="button" class="btn btn-primary">Save discount</button>
-        </div>
-      </div>
       <!-- End of footer -->
     </div>
   </div>

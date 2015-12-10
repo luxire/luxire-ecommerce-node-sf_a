@@ -69,6 +69,10 @@
         <select style="" class="form-control" ng-model="address.country_id" ng-change="populate_states(address.country_id)">
           <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id=='232'">{{country.name}}</option>
         </select>
+        <!-- <select class="form-control" ng-options="country.id as country.name for country in countries track by country.id"
+        ng-model="address.country_id" ng-change="populate_states(address.country_id)" >
+        </select> -->
+
       </div>
         <!-- <div class="input-group">
           <input type="text" name="country" ng-model="address.country" class="form-control" id="country" required/>
@@ -91,6 +95,9 @@
         <select style="" class="form-control" ng-model="address.state_id">
           <option ng-repeat="state in states | orderBy: 'name'" ng-value="state .id" ng-selected="state.id==address.state_id">{{state.name}}</option>
         </select>
+        <!-- <select class="form-control" ng-options="state.id as state.name for state in states"
+        ng-model="address.state_id" ng-selected="state.id==address.state_id">
+        </select> -->
 
         <!-- <div class="input-group"> -->
           <!-- <input type="text" name="state" ng-model="address.state" class="form-control" id="state" required/>
@@ -117,7 +124,7 @@
       <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="">
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 " style="display: block;">
-        <button class="btn btn-default" style="color: #4293C3;display: inline-block;margin-left: 15%" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-default" style="color: #4293C3;display: inline-block;margin-left: 10%" ng-click="cancel()">Cancel</button>
         <button class="btn btn-primary pull-right" style="display: inline-block" ng-click="update_address()">Update shipping address</button>
       </div>
     </div>
