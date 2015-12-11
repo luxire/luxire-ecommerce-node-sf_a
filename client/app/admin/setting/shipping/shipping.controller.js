@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('ShippingController',function($scope, $uibModal, shipping_service){
+.controller('ShippingController',function($scope, $uibModal, shipping_service, $state){
   $scope.address = {};
   shipping_service.get_stock_location().then(function(data){
     $scope.address = data.data;
@@ -40,6 +40,11 @@ angular.module('luxire')
     },function(){
       console.log('Modal dismissed at: '+ new Date());
     });
+  };
+
+  /*Navigate to carrier services state*/
+  $scope.go_to_carrier_services = function(){
+    $state.go('admin.shipping_setting_realtime_carriers');
   };
 })
 .controller('AddressModalInstance',function($scope, $uibModalInstance, current_address, countries, shipping_service){
@@ -84,5 +89,8 @@ angular.module('luxire')
         $uibModalInstance.close($scope.address);
     }
   };
+
+})
+.controller('ShippingCarrierController',function($scope){
 
 });

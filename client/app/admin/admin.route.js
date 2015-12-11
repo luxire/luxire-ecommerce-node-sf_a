@@ -104,6 +104,14 @@ angular.module('luxire')
 			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shippingHome.html', controller: 'ShippingController' }
 		}
 	})
+	/*shipping carriers*/
+	.state('admin.shipping_setting_realtime_carriers',{
+		url:'/settings/shipping/carrier_services',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
+			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shipping_carriers.html', controller: 'ShippingCarrierController' }
+		}
+	})
 
 
 	// .state('admin',{
