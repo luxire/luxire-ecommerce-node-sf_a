@@ -51,15 +51,25 @@ angular.module('luxire')
 		url:'/discounts',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/discount/partials/discountsHome.html',controller: 'DiscountController' }
+			"mainContent": { templateUrl: 'app/admin/discount/partials/discountsHome.html',controller: 'DiscountHomeController' }
 		}
 	})
 	.state('admin.new_discount',{
 		url:'/discounts/new',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/discount/partials/addDiscounts.html',controller: 'DiscountController' }
+			"mainContent": { templateUrl: 'app/admin/discount/partials/addDiscounts.html',controller: 'AddDiscountController' }
 		}
+	})
+	.state('admin.edit_discount',{
+		url: '/discounts/:id/edit/',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
+			"mainContent": { templateUrl: 'app/admin/discount/partials/addDiscounts.html',
+											 controller: 'EditDiscountController',
+										   }
+		},
+		params: {promo_object: null}
 	})
 	.state('admin.giftcard',{
 		url:'/giftcards',

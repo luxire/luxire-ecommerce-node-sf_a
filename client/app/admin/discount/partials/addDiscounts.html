@@ -1,80 +1,112 @@
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+    <div ng-if="state_name!=='admin.edit_discount'" class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
       <i class="fa fa-scissors" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Discounts / Add a discount</span>
     </div>
-    <div class="col-lg-4 col-md-4">
-
+    <div ng-if="state_name=='admin.edit_discount'" class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-scissors" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Discounts / Edit discount</span>
     </div>
-    <div class="col-lg-4 col-md-4" style="text-align: right;">
+
+    <div class="col-lg-4 col-md-4">
+    </div>
+    <!-- <div class="col-lg-4 col-md-4" style="text-align: right;">
       <button type="button" class="btn btn-default" style="color: #3276b1;">Cancel</button>
       <button type="button" class="btn btn-primary">Save discount</button>
-    </div>
+    </div> -->
   </div>
-
   <div class="row" style="margin-left: 0px;height: 93vh;">
     <div class="container-fluid admin-console-content" style="padding-top: 25px !important;">
+      <div class="row">
+        <div class="row col-md-8 col-sm-8 col-lg-8 col-xs-8" style="margin-left: 13.75%;">
+        </div>
+      </div>
       <div class="row" style="margin-top: 2%;display: block">
         <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
           <div class="row">
             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: left">
+              Name
+            </div>
+            <div ng-style="gen_code_style" class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: right;color: #4293C3;cursor: pointer">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+              <input type="text" class="form-control" ng-model="discountObject.promotion.name">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: left">
               Code name
             </div>
-            <div ng-style="gen_code_style" class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: right;color: #4293C3;cursor: pointer"
+            <!-- <div ng-style="gen_code_style" class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align: right;color: #4293C3;cursor: pointer"
                     ng-mouseover="gen_code_style={'text-decoration':'underline'}" ng-mouseleave="gen_code_style={'text-decoration':'none'}"
                     ng-click="discountCodeGen()">
               Generate code
-            </div>
+            </div> -->
           </div>
+
           <div class="row" style="margin-top: 1%">
             <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
-              <input type="text" class="form-control" ng-model="discountCode">
+              <input type="text" class="form-control" ng-model="discountObject.promotion.code">
               <p style="color: #A5B0B7;font-style: italic">Your customers will enter this code at checkout to use the discount (e.g. SPRINGBLOWOUT).​</p>
               <p style="margin-top: 1%">Number of times this discount can be used</p>
             </div>
           </div>
           <div class="row" style="margin-top: 1%;margin-bottom: 4%">
-            <div class="col-lg-2 col-md-2">
-              <input type="number" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usageLimit" style="width: 100%;" ng-disabled="infinityFlag==true">
+            <div class="col-lg-4 col-md-4">
+              <input type="number" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="discountObject.promotion.usage_limit" style="width: 100%;" ng-disabled="infinityFlag==true">
             </div>
-            <div class="col-lg-10 col-md-10" style="padding-top: 1%">
-              <input type="checkbox" ng-model="infinityFlag">
-              <span style="font-size: 13px;">&nbsp;&nbsp;No limit</span>
+            <div class="col-lg-8 col-md-8" style="padding-top: 1%">
+              <input type="checkbox" ng-model="infinityFlag" ng-change="change_infinity_flag(infinityFlag)">
+              <span style="font-size: 13px;" >&nbsp;&nbsp;No limit</span>
             </div>
           </div>
 
         </div>
-        <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
-          <p style="font-size: 18px">Date range</p>
-          <p style="margin-bottom: 5px">Start date</p>
-          <p style="padding-bottom: 2%" class="input-group">
-            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountStart" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
-          <p style="margin-bottom: 5px">End date(end of day)</p>
-          <p class="input-group">
-            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountExpire" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
-          <input type="checkbox" ng-model="expiryFlag">
-          <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;Never expires</span>
+        <div style="margin-left: 0.5%;width: 31%" class=" col-md-4 col-sm-4 col-lg-4 col-xs-4">
+          <div class="placard-grey">
+            <p style="font-size: 18px">Date range</p>
+            <p style="margin-bottom: 5px">Start date</p>
+            <p style="padding-bottom: 2%" class="input-group">
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountObject.promotion.starts_at" is-open="start_date_status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event,'start')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+            <p style="margin-bottom: 5px">End date(end of day)</p>
+            <p class="input-group">
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="discountObject.promotion.expires_at" is-open="end_date_status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+
+          <!-- <input type="checkbox" ng-model="expiryFlag">
+          <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;Never expires</span> -->
+
+        </div>
+
+      </div>
+      <div class="row" style="margin-bottom: 2%">
+        <div class=" row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
+          <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="cancel()">Cancel</button>
+          <button type="button" class="btn btn-primary" ng-disabled="discountObject.promotion.name==''||discountObject.promotion.code==''" ng-click="update_promotion()">Update</button>
         </div>
       </div>
-      <div class="row" style="">
+      <div ng-if="discountObject.promotion.id !== ''"class="row" style="">
         <div class="placard row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">Rules</h3>
             </div>
             <div class="panel-body">
-              <div style="margin: 2% 2%">
+              <div style="margin: 2% 2%" >
                 <p style="font-size: 13px">ADD RULE OF TYPE</p>
-                <select class="form-control" ng-options="rule as rule.title for rule in rules" ng-model="selected_rule" ng-change="select_rule(selected_rule)"></select>
-                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="rules.length==0" ng-click="add_selected_rule()">+ Add</button>
+                <select class="form-control" ng-options="rule as rule.title for rule in rules"  ng-model="selected_rule" ng-change="select_rule(selected_rule)"></select>
+                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="rules.length==0||selected_rule==null" ng-click="add_selected_rule()">+ Add</button>
                 <div ng-repeat="rule in added_rules">
                   <div ng-if="rule.label=='Item total'" class="panel panel-default">
                     <div class="panel-heading">
@@ -157,28 +189,34 @@
 
                 </div>
               </div>
+              <div style="margin: 2% 2%" ng-init="preferred_match_policy='any'">
+                <input type="radio" ng-model="preferred_match_policy" value="any"> MATCH ANY OF THESE RULES<br>
+                <input type="radio" ng-model="preferred_match_policy" value="all"> MATCH ALL OF THESE RULES
+                <uib-alert ng-if="added_rules.length==0" style="margin-bottom: 1% !important; margin-top: 1%" type="warning">No rules added</uib-alert>
+              </div>
             </div>
+            <button type="button" style="margin-left: 2%;margin-bottom: 2%" class="btn btn-primary" ng-click="update_rules()">Update Rules</button>
           </div>
         </div>
-        <div style="margin-left: 2%;width: 25%" class="placard-grey col-md-3 col-sm-3 col-lg-3 col-xs-3">
+        <div style="margin-left: 2%;width: 28%" class="placard-grey col-md-4 col-sm-4 col-lg-4 col-xs-4">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">Actions</h3>
             </div>
             <div class="panel-body">
               <div style="margin: 2% 2%">
-                <select class="form-control" style="margin-bottom: 2%" ng-options="action as action.title for action in actions track by action.id" ng-model="selected_action" ></select>
+                <select class="form-control" style="margin-bottom: 2%" ng-options="action as action.title for action in actions track by action.id" ng-model="selected_action" ng-change="change_action(selected_action)"></select>
                 <div ng-if="selected_action.label=='Create whole order adjustment'" class="panel panel-default">
                   <div class="panel-heading">
-                    <h3 class="panel-title">Adjustment on the order</h3>
+                    <p class="panel-title">Adjustment on the order</p>
                   </div>
                   <div class="panel-body">
                     <div class="form-inline"style="margin: 2% 2%">
-                      <select class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in selected_action.redeem_types track by redeem_type.id" ng-model="selected_action.selected_redeem_type" ></select>
+                      <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in selected_action.redeem_types track by redeem_type.id" ng-model="selected_action.selected_redeem_type" ></select>
                       <!--Rs-->
-                      <div ng-if="selected_action.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 48%">
+                      <div ng-if="selected_action.selected_redeem_type.title=='$'" class="form-group" style="width: 48%">
                         <div class="input-group">
-                          <span class="input-group-addon">Rs.</span>
+                          <span class="input-group-addon">$</span>
                           <input type="text" class="form-control" ng-model="selected_action.selected_redeem_type.value" >
                         </div>
                       </div>
@@ -193,21 +231,21 @@
                 </div>
                 <div ng-if="selected_action.label=='Create line item adjustment'" class="panel panel-default">
                   <div class="panel-heading">
-                    <h3 class="panel-title">Adjustment on the line item</h3>
+                    <p class="panel-title">Adjustment on the line item</p>
                   </div>
                   <div class="panel-body">
                     <div style="margin: 2% 2%" ng-repeat="(key, value) in active_product_tags" class="panel panel-default">
                       <div class="panel-heading">
-                        <h3 class="panel-title">{{value.product_name}}</h3>
+                        <p class="panel-title">{{value.product_name}}</p>
                       </div>
                       <div class="panel-body">
                         <div style="margin: 2% 2%" class="form-inline">
                           <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in redeem_types track by redeem_type.id" ng-model="value.selected_redeem_type"></select>
 
                           <!--Rs-->
-                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 13%">
+                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='$'" class="form-group" style="width: 13%">
                             <div class="input-group">
-                              <span class="input-group-addon">Rs.</span>
+                              <span class="input-group-addon">$</span>
                               <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
                             </div>
                           </div>
@@ -227,15 +265,16 @@
                 </div>
                 <div ng-if="selected_action.label=='Free shipping'" class="panel panel-default">
                   <div class="panel-heading">
-                    <h3 class="panel-title">Free shipping</h3>
+                    <p class="panel-title">Free shipping</p>
                   </div>
                 </div>
+                <button type="button" class="btn btn-primary" ng-click="update_action()">Update Action</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row" style="height: 5em; line-height: 5em;">
+      <!-- <div class="row" style="height: 5em; line-height: 5em;">
         <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
 
         </div>
@@ -246,7 +285,7 @@
           <button type="button" class="btn btn-default" style="color: #3276b1;">Cancel</button>
           <button type="button" class="btn btn-primary">Save discount</button>
         </div>
-      </div>
+      </div> -->
       <!-- <div class="row" style="">
         <div class="placard" style="margin-left: 15%; width: 66%; display: block">
           <div class="row">
@@ -258,11 +297,11 @@
 
           <form class="form-inline" ng-repeat="discount in discounts" style="padding-bottom: 1.5%">
             <select class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in discount.redeem_types track by redeem_type.id" ng-model="discount.selected_redeem_type" ng-change="redeem_option_change($index,discount)"></select>
-            <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" style="display: inline-block">&nbsp;&nbsp;Take&nbsp;&nbsp;</p>
+            <p ng-if="discount.selected_redeem_type.title=='$' || discount.selected_redeem_type.title=='% Discount'" style="display: inline-block">&nbsp;&nbsp;Take&nbsp;&nbsp;</p>
 
-            <div ng-if="discount.selected_redeem_type.title=='Rs.'" class="form-group" style="width: 13%">
+            <div ng-if="discount.selected_redeem_type.title=='$'" class="form-group" style="width: 13%">
               <div class="input-group">
-                <span class="input-group-addon">Rs.</span>
+                <span class="input-group-addon">$</span>
                 <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value">
               </div>
             </div>
@@ -275,13 +314,13 @@
               </div>
             </div>
 
-            <p ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'"style="display: inline-block">&nbsp;off for&nbsp;</p>
-            <select ng-if="discount.selected_redeem_type.title=='Rs.' || discount.selected_redeem_type.title=='% Discount'" class="form-control" ng-options="discount_category as discount_category.title for discount_category in discount.discount_categories track by discount_category.id" ng-model="discount.selected_discount_category" ></select>
+            <p ng-if="discount.selected_redeem_type.title=='$' || discount.selected_redeem_type.title=='% Discount'"style="display: inline-block">&nbsp;off for&nbsp;</p>
+            <select ng-if="discount.selected_redeem_type.title=='$' || discount.selected_redeem_type.title=='% Discount'" class="form-control" ng-options="discount_category as discount_category.title for discount_category in discount.discount_categories track by discount_category.id" ng-model="discount.selected_discount_category" ></select>
 
             <p ng-if="discount.selected_redeem_type.title=='Free Shipping'"style="display: inline-block">&nbsp;for any shipping rate that is less than or equal to&nbsp;</p>
             <div ng-if="discount.selected_redeem_type.title=='Free Shipping'" class="form-group" style="width: 13%">
               <div class="input-group">
-                <span class="input-group-addon">Rs.</span>
+                <span class="input-group-addon">$</span>
                 <input type="text" class="form-control" ng-model="discount.redeem_types[discount.selected_redeem_type.id].value_le">
               </div>
             </div>
@@ -301,6 +340,10 @@
     </div>
   </div>
 </div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+</div>
+
 <!-- <select style="width: 15%; display: inline-block" class="form-control">
   <option ng-repeat="discount_type in discount_types">
     {{discount_type.title}}
@@ -309,7 +352,7 @@
 <p style="display: inline-block">Take</p>&nbsp;&nbsp;
 <div style="display: inline-block;width: 15%;">
   <div class="input-group">
-    <span class="input-group-addon">Rs.</span>
+    <span class="input-group-addon">$</span>
     <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
   </div>
 </div> -->
@@ -362,7 +405,7 @@
     </div>
     <div class="row">
       <div class="col-lg-2 col-md-2">
-        <input type="text" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usageLimit" style="width: 100%;" ng-disabled="infinityFlag==true">
+        <input type="text" class="form-control" ng-class="infinityFlag ? 'infinite' : 'not-infinite'" ng-model="usage_limit" style="width: 100%;" ng-disabled="infinityFlag==true">
       </div>
       <div class="col-lg-10 col-md-10">
         <input type="checkbox" ng-model="infinityFlag">
@@ -381,7 +424,7 @@
   <div class="col-lg-8 col-md-8 placard" style="margin-bottom: 25px;">
     <select class="form-control" ng-model="discountType" style="width: 150px; display: inline;">
       <option value="PERC" selected>% Discount</option>
-      <option value="CASH">Rs.</option>
+      <option value="CASH">$</option>
     </select>
     <span>&nbsp;&nbsp;&nbsp;Take </span>
     <span>INR&nbsp;&nbsp;&nbsp;</span>

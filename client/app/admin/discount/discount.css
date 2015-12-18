@@ -1,0 +1,7 @@
+.close{
+  margin-right: 2%;
+
+}
+.alert-dismissible .close{
+  top: 10px;
+}

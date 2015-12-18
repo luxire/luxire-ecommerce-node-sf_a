@@ -9,7 +9,8 @@ module.exports = {
     countries: '/api/countries',
     orders: '/api/orders',
     checkouts: '/api/checkouts',
-    stock_locations: '/api/stock_locations'
+    stock_locations: '/api/stock_locations',
+    promotions: '/promo'
   }
   /*client requests*/
 

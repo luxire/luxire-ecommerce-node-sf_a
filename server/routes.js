@@ -20,6 +20,7 @@ module.exports = function(app) {
   app.use('/api/orders', require('./api/order'));
   app.use('/api/checkouts', require('./api/checkout'));
   app.use('/api/shipping', require('./api/shipping'));
+  app.use('/api/promotions', require('./api/promotion'))
   // app.use('/api/variants', require('./api/variants'));
 
   // All undefined asset or api routes should return a 404
