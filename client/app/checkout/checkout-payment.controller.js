@@ -29,34 +29,39 @@ angular.module('luxire')
     var generatedhash = calcMD5(genStr)
     return generatedhash
   }
-  console.log(genhash('ebskey','5880',parseFloat(checkoutObject.total), checkoutObject.number, 'http://test.luxire.com:9000/api/checkouts/gateway_Response', 'TEST' )
+  console.log(genhash('c08d88e3fa40573b563af7887a7c9852','18449',parseFloat(checkoutObject.total), checkoutObject.number, 'http://test.luxire.com:9000/api/checkouts/gateway_Response', 'TEST' )
 );
   $scope.proceed_to_checkout_ebs = function (){
     var new_ebs_object = {
       channel: '2',
-      account_id: '5880',
+      account_id: '18449',
       reference_no: checkoutObject.number,
       amount: parseFloat(checkoutObject.total),
       mode: 'TEST',
       currency: 'INR',
       description: 'luxire',
       return_url: 'http://test.luxire.com:9000/api/checkouts/gateway_Response',
-      name: ship_address.full_name || '',
-      address: ship_address.address1 || '',
-      city: ship_address.city || '',
-      state: ship_address.state.name || '',
-      country: ship_address.country.iso3 || '',
-      postal_code: ship_address.zipcode || '',
-      phone: ship_address.phone || '',
-      email: checkoutObject.email || '',
+      name: ship_address.full_name || 'Mudassir',
+      address: ship_address.address1 || '#74,kr colony',
+      city: ship_address.city || 'Bangalore',
+      state: ship_address.state.name || 'Karnataka',
+      country: ship_address.country.iso3 || 'IND',
+      postal_code: ship_address.zipcode || '560071',
+      phone: ship_address.phone || '8951442694',
+      email: checkoutObject.email || 'mudassir@azureiken.com',
       name_on_card: $scope.name_on_card,
       card_number: $scope.card_number,
       card_expiry: $scope.card_expiry,
       card_cvv: $scope.card_cvv,
-      secure_hash: genhash('ebskey','5880',parseFloat(checkoutObject.total), checkoutObject.number, 'http://test.luxire.com:9000/api/checkouts/gateway_Response', 'TEST' )
+      secure_hash: genhash('c08d88e3fa40573b563af7887a7c9852','18449',parseFloat(checkoutObject.total), checkoutObject.number, 'http://test.luxire.com:9000/api/checkouts/gateway_Response', 'TEST' )
     };
     orders.request_ebs(new_ebs_object).then(function(data){
       console.log(data);
+      orders.checkout_confirm_payment(checkoutObject.number, checkoutObject.token).then(function(data){
+        console.log(data);
+      },function(error){
+        console.error(error);
+      });
       $state.go('checkout_gateway',{gatewayObject: data.data});
     },function(error){
       console.error(error);

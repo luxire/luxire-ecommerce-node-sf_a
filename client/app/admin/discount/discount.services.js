@@ -25,5 +25,10 @@ angular.module('luxire')
     console.log("promo id is %s and rule id is %s",promo_id,id);
     return $http.delete('/api/promotions/'+promo_id+'/rules/'+id);
   };
+  this.delete_action = function(promo_id, id, action){
+    console.log('action', action);
+    console.log("promo id is %s and action id is %s",promo_id,id);
+    return $http.post('/api/promotions/'+promo_id+'/actions/'+id, angular.toJson(action));
+  };
 
 });

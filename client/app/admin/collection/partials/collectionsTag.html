@@ -1,0 +1,45 @@
+<div class="row" style="margin:0px; background-color: white; padding: 20px;">
+  <table class="table table-hover admin-product-list">
+    <thead>
+      <tr>
+        <th>
+          Id
+        </th>
+        <th>
+          Name
+        </th>
+        <th>
+          Price
+        </th>
+        <th>
+          description
+        </th>
+        <th>
+
+        </th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in tagsObg.product track by $index">
+          <td>
+              {{x.id}}
+          </td>
+          <td>
+              {{x.name}}
+          </td>
+          <td>
+              {{x.price}}
+          </td>
+          <td>
+              {{x.desc}}
+          </td>
+
+          <td>
+            <button type="button" class="btn btn-danger" >X</button>
+          </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>

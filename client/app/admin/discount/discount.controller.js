@@ -45,12 +45,7 @@ angular.module('luxire')
     });
 
 
-    // DiscountService.delete(id).then(function(data){
-    //   $scope.promotions.splice(index, 1);
-    //   console.log(data);
-    // }, function(error){
-    //   console.error(error);
-    // });
+
   };
 
   $scope.edit_promotion = function(event, promo){
@@ -84,10 +79,7 @@ angular.module('luxire')
     this.message = '';
   };
   $scope.close_alert = function(index){
-    console.log(index);
-    console.log($scope.alerts);
     $scope.alerts.splice(index, 1);
-    console.log($scope.alerts);
   };
 
   $scope.discountObject = {
@@ -113,7 +105,10 @@ angular.module('luxire')
   $scope.update_promotion = function(){
     if($scope.discountObject.promotion.id == ''){
       DiscountService.create($scope.discountObject).then(function(data){
-        $scope.discountObject.promotion = data.data;
+        angular.forEach($scope.discountObject.promotion, function(value, key){
+          $scope.discountObject.promotion[key] = data.data[key];
+        });
+
         $scope.alerts.push({type: 'success', message: 'Discount \''+data.data.code+'\' created successfully!'});
         console.log($scope.alerts);
         console.log(data);
@@ -289,22 +284,30 @@ $scope.rules = [{id: 0,title: 'Item total', label: 'Item total', criteria: {
                 {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
                 {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}];
 
-$scope.actions = [{id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
-                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
-                    selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
-                  {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
-                  redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]},
-                  {id: 2, title: 'Free shipping',label: 'Free shipping'}];
+$scope.rules_json = {
+                    'Spree::Promotion::Rules::ItemTotal': {id: 0,title: 'Item total', label: 'Item total', criteria: {
+                                    base_cutoff_options: [{id:0,title: 'greater than',value: 100},{id:1,title: 'greater than or equal to',value: 1000}],
+                                    base_cutoff_selected_option: {id:0,title: 'greater than',value: 100},
+                                    higher_cutoff_options: [{id:0,title: 'less than',value: 100},{id:1,title: 'less than or equal to',value: 1000}],
+                                    higher_cutoff_selected_option: {id:0,title: 'less than',value: 100}
+                                  }},
+                    'Spree::Promotion::Rules::Product': {id: 1,title: 'Product(s)', label: 'Product(s)', criteria: {
+                                    product_quantity: [{id: 0, title: 'atleast one', label: 'atleast one'},
+                                                      {id: 1, title: 'all', label: 'all'},
+                                                      {id: 2, title: 'none', label: 'none'}],
+                                    selected_product_quantity: {id: 0, title: 'atleast one', label: 'atleast one'},
+                                    selected_products: []
+                                  }},
+                    'Spree::Promotion::Rules::User': {id: 2,title: 'User', label: 'User'},
+                    'Spree::Promotion::Rules::FirstOrder': {id: 3,title: 'First order', label: 'First order'},
+                    'Spree::Promotion::Rules::UserLoggedIn': {id: 4,title: 'User Logged In', label: 'User Logged In'},//to avoid using certain discount codes for guest checkout
+                    'Spree::Promotion::OneUsePerUser': {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
+                    'Spree::Promotion::Taxon': {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}
+                  };
 
-
-
-$scope.selected_action = $scope.actions[0];
-$scope.new_selected_action = $scope.actions[0];
-$scope.change_action = function(action){
-  $scope.new_selected_action = action;
-};
 
 $scope.added_rules = [];
+$scope.added_rules_json = {};
 
 // $scope.added_actions = [];
 
@@ -313,55 +316,37 @@ $scope.added_products_to_rule = [];
 var rules_indexes_map = [0,1,2,3,4,5,6];
 var added_rules_indexes_map = [];
 
-$scope.selected_rule = $scope.rules[0];
+$scope.selected_rule_type = 'Spree::Promotion::Rules::ItemTotal';
 
-$scope.select_rule = function(selected_rule){
-  console.log(selected_rule);
-  if(selected_rule !== null){
-    $scope.selected_rule = selected_rule;
-    console.log('selected_rule', selected_rule);
-    console.log('selected_rule_should have been', $scope.selected_rule);
+$scope.get_obj_key_len = function (val) {
+  return Object.keys(val).length;
+}
+$scope.select_rule = function(selected_rule_type){
+  if(selected_rule_type !== null){
+    $scope.selected_rule_type = selected_rule_type;
   }
+  console.log(selected_rule_type);
+  console.log($scope.selected_rule_type);
+  // if(selected_rule !== null){
+  //   $scope.selected_rule = selected_rule;
+  //   console.log('selected_rule', selected_rule);
+  //   console.log('selected_rule_should have been', $scope.selected_rule);
+  // }
 };
 
 $scope.redeem_types = [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}];
 
 $scope.add_selected_rule = function(){
-  var index = rules_indexes_map.indexOf($scope.selected_rule.id);
-  var promo_rule_type = ''
-  if($scope.selected_rule.label==='Item total'){
-    promo_rule_type = 'Spree::Promotion::Rules::ItemTotal';
-  }
-  else if($scope.selected_rule.label=='Product(s)'){
-    promo_rule_type = 'Spree::Promotion::Rules::Product';
-  }
-  else if($scope.selected_rule.label==='User'){
-    promo_rule_type = 'Spree::Promotion::Rules::User';
-  }
-  else if($scope.selected_rule.label==='First order'){
-    promo_rule_type = 'Spree::Promotion::Rules::FirstOrder';
-  }
-  else if($scope.selected_rule.label==='User Logged In'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::UserLoggedIn';
-  }
-  else if($scope.selected_rule.label==='One Use Per User'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::OneUsePerUser';
-  }
-  else if($scope.selected_rule.label==='Taxon(s)'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::Taxon';
-  }
-
-  var promo_rule = {promotion_rule: {type: promo_rule_type},
+  console.log($scope.selected_rule_type);
+  var promo_rule = {promotion_rule: {type: $scope.selected_rule_type},
   promotion_id: $scope.discountObject.promotion.id};
   DiscountService.add_rule(promo_rule).then(function(data){
-    var index = rules_indexes_map.indexOf($scope.selected_rule.id);
-    $scope.rules[index].ref_id = data.data.id;
-    $scope.added_rules.push($scope.rules[index]);
-    added_rules_indexes_map.push($scope.rules[index].id);
-    $scope.rules.splice(index, 1);
-    rules_indexes_map.splice(index, 1);
-    $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {};
-    console.log($scope.added_rules);
+    $scope.added_rules_json[$scope.selected_rule_type] = $scope.rules_json[$scope.selected_rule_type];
+    $scope.added_rules_json[$scope.selected_rule_type].ref_id = data.data.id;
+    delete $scope.rules_json[$scope.selected_rule_type];
+    var obj_keys = Object.keys($scope.rules_json)
+    $scope.selected_rule_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    console.log(data);
     $scope.alerts.push({type: 'success', message: 'Rule added successfully!'});
   }, function(error){
     $scope.alerts.push({type: 'danger', message: 'Rule addition failed!'});
@@ -369,156 +354,172 @@ $scope.add_selected_rule = function(){
   });
 
 };
+var rule_details = {};
 $scope.update_rules = function () {
   var promo_object = {promotion:{match_policy: $scope.preferred_match_policy, promotion_rules_attributes: {},id: $scope.discountObject.promotion.id}};
-  for(var i=0; i<$scope.added_rules.length; i++){
-    console.log($scope.added_rules[i]);
-    if($scope.added_rules[i].label==='Item total'){
-      var rule_details = {};
-      rule_details.id = $scope.added_rules[i].ref_id;
-      rule_details.preferred_operator_min = $scope.added_rules[i].criteria.base_cutoff_selected_option.title==='greater than'? 'gt' : 'gte';
-      rule_details.preferred_operator_max = $scope.added_rules[i].criteria.higher_cutoff_selected_option.title==='less than'? 'lt' : 'lte';
-      rule_details.preferred_amount_min = $scope.added_rules[i].criteria.base_cutoff_selected_option.value;
-      rule_details.preferred_amount_max = $scope.added_rules[i].criteria.higher_cutoff_selected_option.value;
+  angular.forEach($scope.added_rules_json, function(val, key){
+    if(key === 'Spree::Promotion::Rules::ItemTotal'){
+      rule_details = {};
+      rule_details.id = val.ref_id;
+      rule_details.preferred_operator_min = val.criteria.base_cutoff_selected_option.title==='greater than'? 'gt' : 'gte';
+      rule_details.preferred_operator_max = val.criteria.higher_cutoff_selected_option.title==='less than'? 'lt' : 'lte';
+      rule_details.preferred_amount_min = val.criteria.base_cutoff_selected_option.value;
+      rule_details.preferred_amount_max = val.criteria.higher_cutoff_selected_option.value;
       promo_object.promotion.promotion_rules_attributes[rule_details.id] = rule_details;
     }
-    else if($scope.added_rules[i].label==='Product(s)'){
-      var rule_details = {};
-      rule_details.id = $scope.added_rules[i].ref_id;
-      rule_details.preferred_match_policy = 'any';
+    else if(key === 'Spree::Promotion::Rules::Product'){
+      rule_details = {};
+      rule_details.id = val.ref_id;
+      rule_details.preferred_match_policy = 'any';//change
       rule_details.product_ids_string = '';
-      for(var j=0;j<$scope.added_rules[i].criteria.selected_products.length;j++){
+      for(var j=0;j<val.criteria.selected_products.length;j++){
         if(j==0){
-          rule_details.product_ids_string = rule_details.product_ids_string+$scope.added_rules[i].criteria.selected_products[j].id;
+          rule_details.product_ids_string = rule_details.product_ids_string+val.criteria.selected_products[j].id;
         }
         else{
-          rule_details.product_ids_string = rule_details.product_ids_string+','+$scope.added_rules[i].criteria.selected_products[j].id
+          rule_details.product_ids_string = rule_details.product_ids_string+','+val.criteria.selected_products[j].id
         }
       }
       promo_object.promotion.promotion_rules_attributes[rule_details.id] = rule_details;
     }
     else{
-      promo_object.promotion.promotion_rules_attributes[$scope.added_rules[i].ref_id] = $scope.added_rules[i].ref_id;
+      promo_object.promotion.promotion_rules_attributes[val.ref_id] = val.ref_id;
     }
-  }
-  // $scope.action_id = -1;
+  });
   console.log(promo_object);
   DiscountService.update(promo_object).then(function(data){
     $scope.alerts.push({type: 'success', message: 'Rule updated successfully!'});
-
   }, function(error){
     $scope.alerts.push({type: 'danger', message: 'Rule updation failed!'});
     console.error(error);
   });
-  console.log($scope.added_rules);
+};
+
+$scope.actions = [{id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
+                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
+                    selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
+                  {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
+                  redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]},
+                  {id: 2, title: 'Free shipping',label: 'Free shipping'}];
+
+$scope.actions_json = {
+                      'Spree::Promotion::Actions::CreateAdjustment': {id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
+                                          redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
+                                          selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
+                      'Spree::Promotion::Actions::FreeShipping': {id: 2, title: 'Free shipping',label: 'Free shipping'},
+                      'Spree::Promotions::Actions::LineAdjustment': {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
+                                                                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]}
+          };
+$scope.selected_actions_json = {};
+$scope.selected_action_type = 'Spree::Promotion::Actions::CreateAdjustment';
+
+$scope.selected_action = $scope.actions[0];
+$scope.new_selected_action = $scope.actions[0];
+$scope.change_action_type = function(action){
+  console.log(action);
+  console.log($scope.selected_action_type);
+  if(action!==null){
+    $scope.selected_action_type = action;
+  }
+  // $scope.new_selected_action = action;
+};
+$scope.add_selected_action = function(){
+  var action = {action_type: $scope.selected_action_type, promotion_id: $scope.discountObject.promotion.id}
+  DiscountService.add_action(action).then(function(data){
+    $scope.selected_actions_json[$scope.selected_action_type] = $scope.actions_json[$scope.selected_action_type];
+    $scope.selected_actions_json[$scope.selected_action_type].ref_id = data.data.id;
+    if(data.data.calculator){
+      $scope.selected_actions_json[$scope.selected_action_type].cal_id = data.data.calculator.id;
+    }
+    delete $scope.actions_json[$scope.selected_action_type];
+    var obj_keys = Object.keys($scope.actions_json)
+    $scope.selected_action_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    console.log(data);
+    $scope.alerts.push({type: 'success', message: 'Action added successfully!'});
+  }, function(error){
+    $scope.alerts.push({type: 'danger', message: 'Failed to add action!'});
+    console.error(error);
+  });
+};
+$scope.remove_selected_action = function(event, action_key){
+  event.preventDefault();
+  var promo_id = $scope.discountObject.promotion.id;
+  var action_id = $scope.selected_actions_json[action_key].ref_id;
+  var action = {action_type: action_key,promotion_id: promo_id};
+  DiscountService.delete_action(promo_id, action_id, action).then(function(data){
+    console.log(data);
+    $scope.actions_json[action_key] = $scope.selected_actions_json[action_key];
+    delete $scope.selected_actions_json[action_key];
+    var obj_keys = Object.keys($scope.actions_json)
+    $scope.selected_action_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    $scope.alerts.push({type: 'success', message: 'Action removed successfully!'});
+  }, function(error){
+    $scope.alerts.push({type: 'danger', message: 'Failed to remove action!'});
+    console.log(error);
+  });
 };
 
 $scope.update_action = function(){
-  var action_type = '';
-  switch ($scope.new_selected_action.label) {
-    case 'Create whole order adjustment':
-        action_type = 'Spree::Promotion::Actions::CreateAdjustment';
-        break;
-    case 'Free shipping':
-        action_type = 'Spree::Promotion::Actions::FreeShipping';
-        break;
-
-  }
-  var action = {action_type: action_type,promotion_id: $scope.discountObject.promotion.id};
-  DiscountService.add_action(action).then(function(data){
-    $scope.action_id = data.data.id;
-    if($scope.new_selected_action.label=='Create whole order adjustment'){
-      if($scope.new_selected_action.selected_redeem_type.title==='$'){
-        console.log('$');
-          var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
-          action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatRate"}
-          DiscountService.update(action).then(function(data){
-            action.promotion.promotion_actions_attributes[$scope.action_id].calculator_attributes =
-            {preferred_amount: $scope.new_selected_action.selected_redeem_type.value,preferred_currency: 'USD',id: data.data.spree_promotion_actions.calculator.id}
+  angular.forEach($scope.selected_actions_json, function(val, key){
+    if(val.label=='Create whole order adjustment'){
+        if(val.selected_redeem_type.title==='$'){
+            var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
+            action.promotion.promotion_actions_attributes[val.ref_id] = {id: val.ref_id, calculator_type:"Spree::Calculator::FlatRate"}
             DiscountService.update(action).then(function(data){
-              console.log('action', action);
-              console.log(data);
+              action.promotion.promotion_actions_attributes[val.ref_id].calculator_attributes =
+              {preferred_amount: val.selected_redeem_type.value,preferred_currency: 'USD',id: val.cal_id}
+              DiscountService.update(action).then(function(data){
+                console.log('action', action);
+                console.log(data);
+                $scope.alerts.push({type: 'success', message: 'Action updated successfully!'});
+
+              }, function(error){
+                $scope.alerts.push({type: 'danger', message: 'Failed to update action!'});
+
+                console.error(error);
+              });
+
+                console.log(data);
             }, function(error){
               console.error(error);
             });
-
-              console.log(data);
-          }, function(error){
-            console.error(error);
-          });
-      }
-      else{
-        console.log('%');
-        var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
-        action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
-        DiscountService.update(action).then(function(data){
-          console.log(data.data);
-
-          action.promotion.promotion_actions_attributes[$scope.action_id].calculator_attributes =
-          {preferred_flat_percent: $scope.new_selected_action.selected_redeem_type.value,id: data.data.spree_promotion_actions[0].calculator.id}
+        }
+        else{
+          console.log('%');
+          var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
+          action.promotion.promotion_actions_attributes[val.ref_id] = {id: val.ref_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
           DiscountService.update(action).then(function(data){
-            console.log('action', action);
+            console.log(data.data);
+
+            action.promotion.promotion_actions_attributes[val.ref_id].calculator_attributes =
+            {preferred_flat_percent: val.selected_redeem_type.value,id: val.cal_id}
+            DiscountService.update(action).then(function(data){
+              console.log('action', action);
+              console.log(data);
+              $scope.alerts.push({type: 'success', message: 'Action updated successfully!'});
+            }, function(error){
+              $scope.alerts.push({type: 'danger', message: 'Failed to update action!'});
+              console.error(error);
+            });
             console.log(data);
           }, function(error){
             console.error(error);
           });
-          console.log(data);
-        }, function(error){
-          console.error(error);
-        });
+        }
       }
-    }
-
-  }, function(error){
-    console.error(error);
   });
 
-  // if($scope.selected_action.label=='Create whole order adjustment'){
-  //   if($scope.selected_action.selected_redeem_type.title==='$'){
-  //     console.log('$');
-  //       var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
-  //       action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatRate"}
-  //       DiscountService.update(action).then(function(data){
-  //           console.log(data);
-  //         }, function(error){
-  //           console.error(error);
-  //         });
-  //   }
-  //   else{
-  //     console.log('%');
-  //     var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
-  //     action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
-  //     DiscountService.update(action).then(function(data){
-  //       console.log(data);
-  //     }, function(error){
-  //       console.error(error);
-  //     });
-  //   }
-  // }
-
 };
-$scope.remove_selected_rule = function(event, rule){
-  event.preventDefault();
-  console.log('del ruleId', rule.id);
-  console.log('rule index', rules_indexes_map);
-  console.log('added rule index', added_rules_indexes_map);
 
-  var index = added_rules_indexes_map.indexOf(rule.id);
-  rules_indexes_map.push(rule.id);
-  $scope.rules.push(rule);
-  $scope.added_rules.splice(index, 1);
-  added_rules_indexes_map.splice(index, 1);
-  $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+$scope.remove_selected_rule = function(event, rule_type){
+  event.preventDefault();
   var promo_id = $scope.discountObject.promotion.id;
-  console.log('promoId', promo_id);
-  console.log('ruleId', rule.ref_id);
-  DiscountService.delete_rule(promo_id, rule.ref_id).then(function(data){
-    var index = added_rules_indexes_map.indexOf(rule.id);
-    rules_indexes_map.push(rule.id);
-    $scope.rules.push(rule);
-    $scope.added_rules.splice(index, 1);
-    added_rules_indexes_map.splice(index, 1);
-    $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+  var rule_ref_id = $scope.added_rules_json[rule_type].ref_id;
+  DiscountService.delete_rule(promo_id, rule_ref_id).then(function(data){
+    $scope.rules_json[rule_type] = $scope.added_rules_json[rule_type];
+    delete $scope.added_rules_json[rule_type];
+    var obj_keys = Object.keys($scope.rules_json)
+    $scope.selected_rule_type = obj_keys.length != 0 ? obj_keys[0] : null;
     $scope.alerts.push({type: 'success', message: 'Rule deleted successfully!'});
     console.log(data);
   }, function(error){
@@ -544,7 +545,8 @@ $scope.remove_product_tag = function (tag) {
 
 })
 .controller('EditDiscountController',function($scope, products, DiscountService, $state, $stateParams){
-  console.log($stateParams);
+  console.log('promo_object', $stateParams.promo_object);
+  $scope.promo_edit_object = $stateParams.promo_object
   $scope.state_name = $state.current.name;
   console.log($state);
   /*Alerts to display messages*/
@@ -560,9 +562,60 @@ $scope.remove_product_tag = function (tag) {
     console.log($scope.alerts);
   };
 
-  $scope.discountObject = {promotion: {}}
-  $scope.discountObject.promotion = $stateParams.promo_object;
+  $scope.discountObject = {
+    promotion: {
+      id: '',
+      name: '',
+      code: '',
+      path: '',
+      advertise: '0',
+      description: '',
+      promotion_category_id: '',
+      usage_limit: '',
+      starts_at: new Date(),
+      expires_at: ''
+    }
+  };
+  angular.forEach($scope.discountObject.promotion,function(val,key){
+    $scope.discountObject.promotion[key] = $scope.promo_edit_object[key];
+  });
 
+  $scope.selected_rule_type = null;
+  $scope.selected_action_type = null;
+
+  $scope.added_rules_json = {};
+
+  // $scope.added_actions = [];
+
+  $scope.added_products_to_rule = [];
+
+
+
+  $scope.rules_json = {
+                      'Spree::Promotion::Rules::ItemTotal': {id: 0,title: 'Item total', label: 'Item total', criteria: {
+                                      base_cutoff_options: [{id:0,title: 'greater than',value: 100},{id:1,title: 'greater than or equal to',value: 1000}],
+                                      base_cutoff_selected_option: {id:0,title: 'greater than',value: 100},
+                                      higher_cutoff_options: [{id:0,title: 'less than',value: 100},{id:1,title: 'less than or equal to',value: 1000}],
+                                      higher_cutoff_selected_option: {id:0,title: 'less than',value: 100}
+                                    }},
+                      'Spree::Promotion::Rules::Product': {id: 1,title: 'Product(s)', label: 'Product(s)', criteria: {
+                                      product_quantity: [{id: 0, title: 'atleast one', label: 'atleast one'},
+                                                        {id: 1, title: 'all', label: 'all'},
+                                                        {id: 2, title: 'none', label: 'none'}],
+                                      selected_product_quantity: {id: 0, title: 'atleast one', label: 'atleast one'},
+                                      selected_products: []
+                                    }},
+                      'Spree::Promotion::Rules::User': {id: 2,title: 'User', label: 'User'},
+                      'Spree::Promotion::Rules::FirstOrder': {id: 3,title: 'First order', label: 'First order'},
+                      'Spree::Promotion::Rules::UserLoggedIn': {id: 4,title: 'User Logged In', label: 'User Logged In'},//to avoid using certain discount codes for guest checkout
+                      'Spree::Promotion::OneUsePerUser': {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
+                      'Spree::Promotion::Taxon': {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}
+                    };
+
+  angular.forEach($scope.promo_edit_object.spree_promotion_rules, function(val, key){
+    $scope.added_rules_json[val.type] = $scope.rules_json[val.type];
+    delete $scope.rules_json[val.type];
+  });
 
   $scope.change_infinity_flag = function (flag) {
     if (flag==true) {
@@ -572,7 +625,10 @@ $scope.remove_product_tag = function (tag) {
   $scope.update_promotion = function(){
     if($scope.discountObject.promotion.id == ''){
       DiscountService.create($scope.discountObject).then(function(data){
-        $scope.discountObject.promotion = data.data;
+        angular.forEach($scope.discountObject.promotion, function(value, key){
+          $scope.discountObject.promotion[key] = data.data[key];
+        });
+
         $scope.alerts.push({type: 'success', message: 'Discount \''+data.data.code+'\' created successfully!'});
         console.log($scope.alerts);
         console.log(data);
@@ -606,16 +662,16 @@ $scope.remove_product_tag = function (tag) {
     $scope.discountObject.promotion.expires_at = null;
   };
 
-  $scope.discountCodeGen = function() {
-    var length = 12;
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-   var result = '';
-   for (var i = length; i > 0; --i) {
-     result += chars[Math.round(Math.random() * (chars.length - 1))];
-  }
-  $scope.discountObject.promotion.code = result;
-
-  }
+  // $scope.discountCodeGen = function() {
+  //   var length = 12;
+  //   var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  //  var result = '';
+  //  for (var i = length; i > 0; --i) {
+  //    result += chars[Math.round(Math.random() * (chars.length - 1))];
+  // }
+  // $scope.discountObject.promotion.code = result;
+  //
+  // }
 
 $scope.disabled = function(date, mode) {
   return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
@@ -689,44 +745,7 @@ $scope.getDayClass = function(date, mode) {
   return '';
 };
 
-/*Types of discount*/
-$scope.discount_types = [{id: 1, title: '$'},
-                        {id: 2, title: '% Discount'},
-                         {id: 3, title: 'Free Shipping'}];
 
-/*zones*/
-var zones = [{id: 1,title: 'India'},{id: 2 ,title: 'United States'}];
-
-
-/*Discount object prototype*/
-var Discount = function(){
-  this.redeem_types = [{id: 0, title: '$', value: 100},
-                      {id: 1, title: '% Discount', value: 100},
-                      {id: 2, title: 'Free Shipping', value_le: 100,zones: zones, selected_zone: zones[0]}];
-  this.selected_redeem_type = this.redeem_types[0];
-  this.discount_categories = [{id: 0, title: 'all orders'},
-                              {id: 1, title: 'orders over'},
-                              {id: 2, title: 'collection'},
-                              {id: 3, title: 'specific product'},
-                              {id: 4, title: 'customer in group'}];
-  this.selected_discount_category = this.discount_categories[0];
-};
-
-/*Discounts array*/
-$scope.discounts = [];
-$scope.discounts.push(new Discount());
-console.log($scope.discounts);
-
-$scope.redeem_option_change = function(index, selected_redeem_type){
-  console.log('index', index);
-  console.log('redeem type', selected_redeem_type);
-};
-
-$scope.add_rule = function(event){
-  event.preventDefault();
-  $scope.discounts.push(new Discount());
-
-};
 
 /*spree based approach*/
 $scope.rules = [{id: 0,title: 'Item total', label: 'Item total', criteria: {
@@ -748,79 +767,63 @@ $scope.rules = [{id: 0,title: 'Item total', label: 'Item total', criteria: {
                 {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
                 {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}];
 
-$scope.actions = [{id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
-                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
-                    selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
-                  {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
-                  redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]},
-                  {id: 2, title: 'Free shipping',label: 'Free shipping'}];
+$scope.rules_json = {
+                    'Spree::Promotion::Rules::ItemTotal': {id: 0,title: 'Item total', label: 'Item total', criteria: {
+                                    base_cutoff_options: [{id:0,title: 'greater than',value: 100},{id:1,title: 'greater than or equal to',value: 1000}],
+                                    base_cutoff_selected_option: {id:0,title: 'greater than',value: 100},
+                                    higher_cutoff_options: [{id:0,title: 'less than',value: 100},{id:1,title: 'less than or equal to',value: 1000}],
+                                    higher_cutoff_selected_option: {id:0,title: 'less than',value: 100}
+                                  }},
+                    'Spree::Promotion::Rules::Product': {id: 1,title: 'Product(s)', label: 'Product(s)', criteria: {
+                                    product_quantity: [{id: 0, title: 'atleast one', label: 'atleast one'},
+                                                      {id: 1, title: 'all', label: 'all'},
+                                                      {id: 2, title: 'none', label: 'none'}],
+                                    selected_product_quantity: {id: 0, title: 'atleast one', label: 'atleast one'},
+                                    selected_products: []
+                                  }},
+                    'Spree::Promotion::Rules::User': {id: 2,title: 'User', label: 'User'},
+                    'Spree::Promotion::Rules::FirstOrder': {id: 3,title: 'First order', label: 'First order'},
+                    'Spree::Promotion::Rules::UserLoggedIn': {id: 4,title: 'User Logged In', label: 'User Logged In'},//to avoid using certain discount codes for guest checkout
+                    'Spree::Promotion::OneUsePerUser': {id: 5,title: 'One Use Per User', label: 'One Use Per User'},
+                    'Spree::Promotion::Taxon': {id: 6,title: 'Taxon(s)', label: 'Taxon(s)'}
+                  };
 
-
-
-$scope.selected_action = $scope.actions[0];
-$scope.new_selected_action = $scope.actions[0];
-$scope.change_action = function(action){
-  $scope.new_selected_action = action;
-};
 
 $scope.added_rules = [];
-
-// $scope.added_actions = [];
-
-$scope.added_products_to_rule = [];
-
 var rules_indexes_map = [0,1,2,3,4,5,6];
 var added_rules_indexes_map = [];
 
-$scope.selected_rule = $scope.rules[0];
 
-$scope.select_rule = function(selected_rule){
-  console.log(selected_rule);
-  if(selected_rule !== null){
-    $scope.selected_rule = selected_rule;
-    console.log('selected_rule', selected_rule);
-    console.log('selected_rule_should have been', $scope.selected_rule);
+
+$scope.get_obj_key_len = function (val) {
+  return Object.keys(val).length;
+}
+$scope.select_rule = function(selected_rule_type){
+  if(selected_rule_type !== null){
+    $scope.selected_rule_type = selected_rule_type;
   }
+  console.log(selected_rule_type);
+  console.log($scope.selected_rule_type);
+  // if(selected_rule !== null){
+  //   $scope.selected_rule = selected_rule;
+  //   console.log('selected_rule', selected_rule);
+  //   console.log('selected_rule_should have been', $scope.selected_rule);
+  // }
 };
 
 $scope.redeem_types = [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}];
 
 $scope.add_selected_rule = function(){
-  var index = rules_indexes_map.indexOf($scope.selected_rule.id);
-  var promo_rule_type = ''
-  if($scope.selected_rule.label==='Item total'){
-    promo_rule_type = 'Spree::Promotion::Rules::ItemTotal';
-  }
-  else if($scope.selected_rule.label=='Product(s)'){
-    promo_rule_type = 'Spree::Promotion::Rules::Product';
-  }
-  else if($scope.selected_rule.label==='User'){
-    promo_rule_type = 'Spree::Promotion::Rules::User';
-  }
-  else if($scope.selected_rule.label==='First order'){
-    promo_rule_type = 'Spree::Promotion::Rules::FirstOrder';
-  }
-  else if($scope.selected_rule.label==='User Logged In'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::UserLoggedIn';
-  }
-  else if($scope.selected_rule.label==='One Use Per User'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::OneUsePerUser';
-  }
-  else if($scope.selected_rule.label==='Taxon(s)'){
-    promo_rule_type = 'Spree::Promotion::Rules::Spree::Promotion::Rules::Taxon';
-  }
-
-  var promo_rule = {promotion_rule: {type: promo_rule_type},
+  console.log($scope.selected_rule_type);
+  var promo_rule = {promotion_rule: {type: $scope.selected_rule_type},
   promotion_id: $scope.discountObject.promotion.id};
   DiscountService.add_rule(promo_rule).then(function(data){
-    var index = rules_indexes_map.indexOf($scope.selected_rule.id);
-    $scope.rules[index].ref_id = data.data.id;
-    $scope.added_rules.push($scope.rules[index]);
-    added_rules_indexes_map.push($scope.rules[index].id);
-    $scope.rules.splice(index, 1);
-    rules_indexes_map.splice(index, 1);
-    $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {};
-    console.log($scope.added_rules);
+    $scope.added_rules_json[$scope.selected_rule_type] = $scope.rules_json[$scope.selected_rule_type];
+    $scope.added_rules_json[$scope.selected_rule_type].ref_id = data.data.id;
+    delete $scope.rules_json[$scope.selected_rule_type];
+    var obj_keys = Object.keys($scope.rules_json)
+    $scope.selected_rule_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    console.log(data);
     $scope.alerts.push({type: 'success', message: 'Rule added successfully!'});
   }, function(error){
     $scope.alerts.push({type: 'danger', message: 'Rule addition failed!'});
@@ -828,156 +831,167 @@ $scope.add_selected_rule = function(){
   });
 
 };
+var rule_details = {};
 $scope.update_rules = function () {
   var promo_object = {promotion:{match_policy: $scope.preferred_match_policy, promotion_rules_attributes: {},id: $scope.discountObject.promotion.id}};
-  for(var i=0; i<$scope.added_rules.length; i++){
-    console.log($scope.added_rules[i]);
-    if($scope.added_rules[i].label==='Item total'){
-      var rule_details = {};
-      rule_details.id = $scope.added_rules[i].ref_id;
-      rule_details.preferred_operator_min = $scope.added_rules[i].criteria.base_cutoff_selected_option.title==='greater than'? 'gt' : 'gte';
-      rule_details.preferred_operator_max = $scope.added_rules[i].criteria.higher_cutoff_selected_option.title==='less than'? 'lt' : 'lte';
-      rule_details.preferred_amount_min = $scope.added_rules[i].criteria.base_cutoff_selected_option.value;
-      rule_details.preferred_amount_max = $scope.added_rules[i].criteria.higher_cutoff_selected_option.value;
+  angular.forEach($scope.added_rules_json, function(val, key){
+    if(key === 'Spree::Promotion::Rules::ItemTotal'){
+      rule_details = {};
+      rule_details.id = val.ref_id;
+      rule_details.preferred_operator_min = val.criteria.base_cutoff_selected_option.title==='greater than'? 'gt' : 'gte';
+      rule_details.preferred_operator_max = val.criteria.higher_cutoff_selected_option.title==='less than'? 'lt' : 'lte';
+      rule_details.preferred_amount_min = val.criteria.base_cutoff_selected_option.value;
+      rule_details.preferred_amount_max = val.criteria.higher_cutoff_selected_option.value;
       promo_object.promotion.promotion_rules_attributes[rule_details.id] = rule_details;
     }
-    else if($scope.added_rules[i].label==='Product(s)'){
-      var rule_details = {};
-      rule_details.id = $scope.added_rules[i].ref_id;
-      rule_details.preferred_match_policy = 'any';
+    else if(key === 'Spree::Promotion::Rules::Product'){
+      rule_details = {};
+      rule_details.id = val.ref_id;
+      rule_details.preferred_match_policy = 'any';//change
       rule_details.product_ids_string = '';
-      for(var j=0;j<$scope.added_rules[i].criteria.selected_products.length;j++){
+      for(var j=0;j<val.criteria.selected_products.length;j++){
         if(j==0){
-          rule_details.product_ids_string = rule_details.product_ids_string+$scope.added_rules[i].criteria.selected_products[j].id;
+          rule_details.product_ids_string = rule_details.product_ids_string+val.criteria.selected_products[j].id;
         }
         else{
-          rule_details.product_ids_string = rule_details.product_ids_string+','+$scope.added_rules[i].criteria.selected_products[j].id
+          rule_details.product_ids_string = rule_details.product_ids_string+','+val.criteria.selected_products[j].id
         }
       }
       promo_object.promotion.promotion_rules_attributes[rule_details.id] = rule_details;
     }
     else{
-      promo_object.promotion.promotion_rules_attributes[$scope.added_rules[i].ref_id] = $scope.added_rules[i].ref_id;
+      promo_object.promotion.promotion_rules_attributes[val.ref_id] = val.ref_id;
     }
-  }
-  // $scope.action_id = -1;
+  });
   console.log(promo_object);
   DiscountService.update(promo_object).then(function(data){
     $scope.alerts.push({type: 'success', message: 'Rule updated successfully!'});
-
   }, function(error){
     $scope.alerts.push({type: 'danger', message: 'Rule updation failed!'});
     console.error(error);
   });
-  console.log($scope.added_rules);
+};
+
+$scope.actions = [{id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
+                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
+                    selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
+                  {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
+                  redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]},
+                  {id: 2, title: 'Free shipping',label: 'Free shipping'}];
+
+$scope.actions_json = {
+                      'Spree::Promotion::Actions::CreateAdjustment': {id: 0, title: 'Create whole order adjustment',label: 'Create whole order adjustment',
+                                          redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}],
+                                          selected_redeem_type: {id: 1, title: '% Discount', value: 100}},
+                      'Spree::Promotion::Actions::FreeShipping': {id: 2, title: 'Free shipping',label: 'Free shipping'},
+                      'Spree::Promotions::Actions::LineAdjustment': {id: 1, title: 'Create line item adjustment',label: 'Create line item adjustment',
+                                                                    redeem_types: [{id: 0, title: '$', value: 100},{id: 1, title: '% Discount', value: 100}]}
+          };
+$scope.selected_actions_json = {};
+
+$scope.selected_action = $scope.actions[0];
+$scope.new_selected_action = $scope.actions[0];
+$scope.change_action_type = function(action){
+  console.log(action);
+  console.log($scope.selected_action_type);
+  if(action!==null){
+    $scope.selected_action_type = action;
+  }
+  // $scope.new_selected_action = action;
+};
+$scope.add_selected_action = function(){
+  var action = {action_type: $scope.selected_action_type, promotion_id: $scope.discountObject.promotion.id}
+  DiscountService.add_action(action).then(function(data){
+    $scope.selected_actions_json[$scope.selected_action_type] = $scope.actions_json[$scope.selected_action_type];
+    $scope.selected_actions_json[$scope.selected_action_type].ref_id = data.data.id;
+    $scope.selected_actions_json[$scope.selected_action_type].cal_id = data.data.calculator.id;
+    delete $scope.actions_json[$scope.selected_action_type];
+    var obj_keys = Object.keys($scope.actions_json)
+    $scope.selected_action_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    console.log(data);
+    $scope.alerts.push({type: 'success', message: 'Action added successfully!'});
+  }, function(error){
+    $scope.alerts.push({type: 'danger', message: 'Failed to add action!'});
+    console.error(error);
+  });
+};
+$scope.remove_selected_action = function(event, action_key){
+  event.preventDefault();
+  var promo_id = $scope.discountObject.promotion.id;
+  var action_id = $scope.selected_actions_json[action_key].ref_id;
+  var action = {action_type: action_key,promotion_id: promo_id};
+  DiscountService.delete_action(promo_id, action_id, action).then(function(data){
+    console.log(data);
+    $scope.actions_json[action_key] = $scope.selected_actions_json[action_key];
+    delete $scope.selected_actions_json[action_key];
+    var obj_keys = Object.keys($scope.actions_json)
+    $scope.selected_action_type = obj_keys.length != 0 ? obj_keys[0] : null;
+    $scope.alerts.push({type: 'success', message: 'Action removed successfully!'});
+  }, function(error){
+    $scope.alerts.push({type: 'danger', message: 'Failed to remove action!'});
+    console.log(error);
+  });
 };
 
 $scope.update_action = function(){
-  var action_type = '';
-  switch ($scope.new_selected_action.label) {
-    case 'Create whole order adjustment':
-        action_type = 'Spree::Promotion::Actions::CreateAdjustment';
-        break;
-    case 'Free shipping':
-        action_type = 'Spree::Promotion::Actions::FreeShipping';
-        break;
+  angular.forEach($scope.selected_actions_json, function(val, key){
+    if(val.label=='Create whole order adjustment'){
+        if(val.selected_redeem_type.title==='$'){
+            var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
+            action.promotion.promotion_actions_attributes[val.ref_id] = {id: val.ref_id, calculator_type:"Spree::Calculator::FlatRate"}
+            DiscountService.update(action).then(function(data){
+              action.promotion.promotion_actions_attributes[val.ref_id].calculator_attributes =
+              {preferred_amount: val.selected_redeem_type.value,preferred_currency: 'USD',id: val.cal_id}
+              DiscountService.update(action).then(function(data){
+                console.log('action', action);
+                console.log(data);
+                $scope.alerts.push({type: 'success', message: 'Action updated successfully!'});
 
-  }
-  var action = {action_type: action_type,promotion_id: $scope.discountObject.promotion.id};
-  DiscountService.add_action(action).then(function(data){
-    $scope.action_id = data.data.id;
-    if($scope.new_selected_action.label=='Create whole order adjustment'){
-      if($scope.new_selected_action.selected_redeem_type.title==='$'){
-        console.log('$');
-          var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
-          action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatRate"}
+              }, function(error){
+                $scope.alerts.push({type: 'danger', message: 'Failed to update action!'});
+
+                console.error(error);
+              });
+
+                console.log(data);
+            }, function(error){
+              console.error(error);
+            });
+        }
+        else{
+          console.log('%');
+          var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
+          action.promotion.promotion_actions_attributes[val.ref_id] = {id: val.ref_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
           DiscountService.update(action).then(function(data){
-            action.promotion.promotion_actions_attributes[$scope.action_id].calculator_attributes =
-            {preferred_amount: $scope.new_selected_action.selected_redeem_type.value,preferred_currency: 'USD',id: data.data.spree_promotion_actions.calculator.id}
+            console.log(data.data);
+
+            action.promotion.promotion_actions_attributes[val.ref_id].calculator_attributes =
+            {preferred_flat_percent: val.selected_redeem_type.value,id: val.cal_id}
             DiscountService.update(action).then(function(data){
               console.log('action', action);
               console.log(data);
             }, function(error){
               console.error(error);
             });
-
-              console.log(data);
-          }, function(error){
-            console.error(error);
-          });
-      }
-      else{
-        console.log('%');
-        var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
-        action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
-        DiscountService.update(action).then(function(data){
-          console.log(data.data);
-
-          action.promotion.promotion_actions_attributes[$scope.action_id].calculator_attributes =
-          {preferred_flat_percent: $scope.new_selected_action.selected_redeem_type.value,id: data.data.spree_promotion_actions[0].calculator.id}
-          DiscountService.update(action).then(function(data){
-            console.log('action', action);
             console.log(data);
           }, function(error){
             console.error(error);
           });
-          console.log(data);
-        }, function(error){
-          console.error(error);
-        });
+        }
       }
-    }
-
-  }, function(error){
-    console.error(error);
   });
 
-  // if($scope.selected_action.label=='Create whole order adjustment'){
-  //   if($scope.selected_action.selected_redeem_type.title==='$'){
-  //     console.log('$');
-  //       var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}};
-  //       action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatRate"}
-  //       DiscountService.update(action).then(function(data){
-  //           console.log(data);
-  //         }, function(error){
-  //           console.error(error);
-  //         });
-  //   }
-  //   else{
-  //     console.log('%');
-  //     var action = {promotion:{promotion_actions_attributes:{},id:$scope.discountObject.promotion.id}}
-  //     action.promotion.promotion_actions_attributes[$scope.action_id] = {id: $scope.action_id, calculator_type:"Spree::Calculator::FlatPercentItemTotal"};
-  //     DiscountService.update(action).then(function(data){
-  //       console.log(data);
-  //     }, function(error){
-  //       console.error(error);
-  //     });
-  //   }
-  // }
-
 };
-$scope.remove_selected_rule = function(event, rule){
-  event.preventDefault();
-  console.log('del ruleId', rule.id);
-  console.log('rule index', rules_indexes_map);
-  console.log('added rule index', added_rules_indexes_map);
 
-  var index = added_rules_indexes_map.indexOf(rule.id);
-  rules_indexes_map.push(rule.id);
-  $scope.rules.push(rule);
-  $scope.added_rules.splice(index, 1);
-  added_rules_indexes_map.splice(index, 1);
-  $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+$scope.remove_selected_rule = function(event, rule_type){
+  event.preventDefault();
   var promo_id = $scope.discountObject.promotion.id;
-  console.log('promoId', promo_id);
-  console.log('ruleId', rule.ref_id);
-  DiscountService.delete_rule(promo_id, rule.ref_id).then(function(data){
-    var index = added_rules_indexes_map.indexOf(rule.id);
-    rules_indexes_map.push(rule.id);
-    $scope.rules.push(rule);
-    $scope.added_rules.splice(index, 1);
-    added_rules_indexes_map.splice(index, 1);
-    $scope.selected_rule = $scope.rules.length != 0 ? $scope.rules[0] : {}
+  var rule_ref_id = $scope.added_rules_json[rule_type].ref_id;
+  DiscountService.delete_rule(promo_id, rule_ref_id).then(function(data){
+    $scope.rules_json[rule_type] = $scope.added_rules_json[rule_type];
+    delete $scope.added_rules_json[rule_type];
+    var obj_keys = Object.keys($scope.rules_json)
+    $scope.selected_rule_type = obj_keys.length != 0 ? obj_keys[0] : null;
     $scope.alerts.push({type: 'success', message: 'Rule deleted successfully!'});
     console.log(data);
   }, function(error){
@@ -998,7 +1012,8 @@ $scope.add_product_tag = function (tag) {
 $scope.remove_product_tag = function (tag) {
   delete $scope.active_product_tags[tag.id];
 };
-//
-//
+
+
+
 
 });

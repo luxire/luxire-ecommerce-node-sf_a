@@ -5,52 +5,130 @@
     </div>
   </div>
   <div  style="margin-left: 0px;margin-right: 0px;" class="row admin-console-content" >
-    <div class="row">
-      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div class="row" style="margin-bottom: 10%">
+      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
       </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <div class="placard-grey ">
-          <div class="row">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-              <p style="font-size: 18px">FedEx</p>
-              <p style="font-size: 13px">FedEx is a leader in global logistics services founded in 1998 and based in the United States.
-                FedEx provides both domestic and international shipping services.</p>
-              <button type="button" class="btn btn-primary">Activate</button>
+      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <div class="row">
+          <div class="placard-grey ">
+            <div class="row">
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <p style="font-size: 18px">FedEx</p>
+                <p style="font-size: 13px">FedEx is a leader in global logistics services founded in 1998 and based in the United States.
+                  FedEx provides both domestic and international shipping services.</p>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-top: 5%">
+                <img src="lib/assets/fed_ex.png">
+              </div>
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            </div>
-          </div>
-          <hr style="margin-left: -15px; margin-right: -15px;border-top: solid 1px #EBEEF0">
-          <p style="font-size: 13px">
-            Please provide your FedEx account credentials.
-          </p>
+            <hr style="margin: 10px -15px;border-top: solid 1px #EBEEF0">
+            <!-- <button type="button" class="btn btn-primary">Activate</button> -->
+            <p style="font-size: 13px">
+              Please provide your FedEx account credentials.
+            </p>
 
-          <div class="form-inline">
-            <div style="width: 49%" class="form-group">
-              <p>Meter Number</p><br>
-              <input class="form-control" style="width: 100%" name="fedex_meter_number" ng-model="fedex_meter_number">
+            <div class="form-inline">
+              <div style="width: 49%" class="form-group">
+                <label for="fedex_meter_number">Meter Number</label>
+                <input class="form-control" style="width: 100%" name="fedex_meter_number" ng-model="active_carriers.fedex_login">
+              </div>
+              <div style="width: 49%;margin-left: 1%" class="form-group">
+                <label for="fedex_password">Password</label>
+                <input type="text" style="width: 100%" class="form-control" name="fedex_password" ng-model="active_carriers.fedex_password">
+              </div>
             </div>
-            <div style="width: 49%;margin-left: 1%" class="form-group">
-              <p>Password</p><br>
-              <input type="text" style="width: 100%" class="form-control" name="fedex_password" ng-model="fedex_password">
+            <div class="form-inline" style="margin-top: 2%">
+              <div style="width: 49%" class="form-group">
+                <label for="fedex_authentication_key">Authentication Key</label>
+                <input type="text" style="width: 100%" class="form-control" name="fedex_authentication_key" ng-model="active_carriers.fedex_key">
+              </div>
+              <div style="width: 49%;margin-left: 1%" class="form-group">
+                <label for="fedex_account_number">Account Number</label>
+                <input type="text" style="width: 100%" class="form-control" name="fedex_account_number" ng-model="active_carriers.fedex_account">
+              </div>
             </div>
+            <!-- <hr style="margin: 5px -15px;border-top: solid 1px #EBEEF0">
+            <div style="text-align: right">
+              <button type="button" class="btn btn-default">Cancel</button>
+              <button type="button" class="btn btn-primary">Save</button>
+            </div> -->
           </div>
-          <div class="form-inline" style="margin-top: 2%">
-            <div style="width: 49%" class="form-group">
-              <label for="fedex_authentication_key">Authentication Key</label>
-              <input type="text" style="width: 100%" class="form-control" name="fedex_authentication_key" ng-model="fedex_authentication_key">
+          <div class="placard-grey ">
+            <div class="row">
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <p style="font-size: 18px">USPS</p>
+                <p style="font-size: 13px">The United States Postal Service is the official mail carrier in the US and provides domestic and international services for packages originating there.</p>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-top: 5%">
+                <img style="max-width: 100%" src="lib/assets/usps.png">
+              </div>
             </div>
-            <div style="width: 49%;margin-left: 1%" class="form-group">
-              <label for="fedex_account_number">Account Number</label>
-              <input type="text" style="width: 100%" class="form-control" name="fedex_account_number" ng-model="fedex_account_number">
+            <hr style="margin: 10px -15px;border-top: solid 1px #EBEEF0">
+            <!-- <button type="button" class="btn btn-primary">Activate</button> -->
+            <p style="font-size: 13px">
+              Please provide your USPS account credentials.
+            </p>
+
+            <div class="form-inline">
+              <div style="width: 49%" class="form-group">
+                <label for="usps_user_id">User ID</label>
+                <input class="form-control" style="width: 100%" name="usps_user_id" ng-model="active_carriers.usps_login">
+              </div>
             </div>
+
+            <!-- <hr style="margin: 5px -15px;border-top: solid 1px #EBEEF0">
+            <div style="text-align: right">
+              <button type="button" class="btn btn-default">Cancel</button>
+              <button type="button" class="btn btn-primary">Save</button>
+            </div> -->
+          </div>
+          <div class="placard-grey ">
+            <div class="row">
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <p style="font-size: 18px">UPS</p>
+                <p style="font-size: 13px">United Parcel Service is a U.S. based worldwide shipping operation founded in 1907.</p>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-top: 5%">
+                <img src="lib/assets/ups.png">
+              </div>
+            </div>
+            <hr style="margin: 10px -15px;border-top: solid 1px #EBEEF0">
+            <!-- <button type="button" class="btn btn-primary">Activate</button> -->
+            <p style="font-size: 13px">
+              Please provide your UPS account credentials.
+            </p>
+
+            <div class="form-inline">
+              <div style="width: 49%" class="form-group">
+                <label for="ups_user_id">User ID</label>
+                <input class="form-control" style="width: 100%" name="ups_user_id" ng-model="active_carriers.ups_login">
+              </div>
+              <div style="width: 49%;margin-left: 1%" class="form-group">
+                <label for="ups_password">Password</label>
+                <input type="text" style="width: 100%" class="form-control" name="ups_password" ng-model="active_carriers.ups_password">
+              </div>
+            </div>
+            <div class="form-inline" style="margin-top: 2%">
+              <div style="width: 49%" class="form-group">
+                <label for="ups_xml_key">XML Access Key</label>
+                <input type="text" style="width: 100%" class="form-control" name="ups_xml_key" ng-model="active_carriers.ups_key">
+              </div>
+
+            </div>
+            <!-- <hr style="margin: 5px -15px;border-top: solid 1px #EBEEF0">
+            <div style="text-align: right">
+              <button type="button" class="btn btn-default">Cancel</button>
+              <button type="button" class="btn btn-primary">Save</button>
+            </div> -->
+          </div>
+          <div style="text-align: right">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button type="button" class="btn btn-primary" ng-click="update()">Save</button>
           </div>
         </div>
       </div>
-      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 
-      </div>
     </div>
 
   </div>

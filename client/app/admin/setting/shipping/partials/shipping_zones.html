@@ -1,0 +1,37 @@
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;font-size: 20px;">
+      <i style="display: inline-block" class="fa fa-cog" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:400;">Settings / Shipping / Create new shipping zone</span>
+    </div>
+  </div>
+  <div  style="margin-left: 0px;margin-right: 0px;" class="row admin-console-content" >
+    <div class="row">
+      <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+        <div class="placard">
+          <label for="zone_name">Zone name</label>
+          <input class="form-control" name="zone_name" ng-model="zone.zone.name">
+
+          <label for="zone_name" style="margin-top: 2%">Zone description</label>
+          <input class="form-control" name="zone_description" ng-model="zone.zone.description">
+
+          <label for="zone_members" style="margin-top: 2%">Zone members</label>
+          <tags-input ng-model="selected_countries"   display-property="name"
+          key-property="id" add-from-autocomplete-only="true" name="zone_members" placeholder="Add countries"
+          on-tag-added="add_tag($tag)" on-tag-removed="remove_tag($tag)">
+            <auto-complete  source="loadCountries($query)"></auto-complete>
+          </tags-input>
+          please enter minimum of 3 characters to search
+        </div>
+        <div style="text-align: right">
+          <button type="button" name="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button type="button" name="save" class="btn btn-primary" ng-click="save_zone()">Save</button>
+        </div>
+
+      </div>
+      <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
+      </div>
+    </div>
+  </div>
+</div>

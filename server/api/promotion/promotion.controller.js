@@ -77,7 +77,7 @@ exports.destroy = function(req, res){
 exports.add_rule = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/promo_rules?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -95,7 +95,7 @@ exports.delete_rule = function(req, res){
   console.log(req.params);
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   http
-    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'/promo_rules/'+req.params.rule_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058', function(error, response, body){
+    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules/'+req.params.rule_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058', function(error, response, body){
       if(error == null){
         res.status(response.statusCode).send(body);
       }
@@ -109,7 +109,7 @@ exports.delete_rule = function(req, res){
 exports.add_action = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/promo_actions?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -124,15 +124,20 @@ exports.add_action = function(req, res){
 
 //Delete an action from Promotion
 exports.delete_action = function(req, res){
+  console.log(req.params);
+  console.log(req.body);
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-  http
-    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'/actions/'+req.params.action_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058', function(error, response, body){
-      if(error == null){
-        res.status(response.statusCode).send(body);
-      }
-      else{
-        res.status(500).send("Rails Server Not Responding");
-      }
+  http.del({
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions/'+req.params.action_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+    }
+    else{
+      res.status(500).send("Rails Server Not Responding");
+    }
   });
 };
 

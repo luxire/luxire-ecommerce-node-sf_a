@@ -1,0 +1,609 @@
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;" print-remove>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-check-square" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Orders/ {{order_id}} </span>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
+      <button type="button" class="btn btn-default" style="color: #3276b1;" print-btn>Print Order</button>
+    </div>
+
+  </div>
+  <style media="screen">
+    #order_sheet_outer_area{
+      margin-left: 0px;
+      height: 93vh;
+    }
+  </style>
+
+  <div id="order_sheet_outer_area" class="row" style="">
+    <!-- /*border: 1px solid #DBDEE0;*/ -->
+    <div class="container-fluid admin-console-content">
+      <div id="order_sheet_data" class="row" style="margin:0% 0% 0% 1.5%; background-color: white; border: 1px solid #DBDEE0;" >
+        <div class="row" print-section style="margin: 2% 2%">
+          <div class="row">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Customer:<br>
+              </p>
+              <p style="display: inline-block;font-size: 14px;" >
+                {{order_details.email}}<br>
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Order No:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.number}}
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Date:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+               {{order_details.updated_at | date: 'short'}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Items:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                1S
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4">
+
+            </div>
+            <div class="col col-md-4 col-lg-4">
+
+            </div>
+          </div>
+          <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black">
+          <div class="row">
+            <div class="col col-md-8 col-lg-8  col-sm-8 col-xs-8">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Fabric:
+              </p>
+              <p style="display: inline-block;font-size: 14px;" >
+                Diamond Texture
+              </p>
+            </div>
+
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Sku:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.line_items[0].variant.sku}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-8 col-lg-8  col-sm-8 col-xs-8">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Pattern:
+              </p>
+              <p style="display: inline-block;font-size: 14px;" >
+
+              </p>
+            </div>
+            <!-- <div class="col col-md-4 col-lg-4">
+
+            </div> -->
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Rack:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+
+            </div>
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                STYLING
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4">
+
+            </div>
+
+
+          </div>
+          <!--Collar-->
+          <div class="row">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Collar style:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data.Collar}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Other Details:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+            <style >
+              table {
+                border-collapse: collapse;
+              }
+
+              table, th, td {
+                border: 1px solid black;
+                padding: 0% 0.5%;
+
+              }
+            </style>
+            <table >
+              <thead>
+                <tr>
+                  <td>Points</td>
+                  <td>Spread</td>
+                  <td>Tie Space</td>
+                  <td>NB Ht Back</td>
+                  <td>NB Ht Front</td>
+                  <td>Collar Ht Back</td>
+                  <td>Side curve</td>
+                  <td>NB Const</td>
+                  <td>Collar Const</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="collar_details in collar" style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <!-- <td>{{collar_details.points}}</td>
+                  <td>{{collar_details.spread}}</td>
+                  <td>{{collar_details.tie_space}}</td>
+                  <td>{{collar_details.nb_ht_back}}</td>
+                  <td>{{collar_details.nb_ht_front}}</td>
+                  <td>{{collar_details.collar_ht}}</td>
+                  <td>{{collar_details.side_curve}}</td>
+                  <td>{{collar_details.nb_const}}</td>
+                  <td>{{collar_details.collar_const}}</td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!--Cuffs style-->
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Cuffs style:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data.Cuff}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Other Details:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+
+            <table >
+              <thead>
+                <tr>
+                  <td>Height</td>
+                  <td>Shape</td>
+                  <td>No of Btns</td>
+                  <td>Adj Btns</td>
+                  <td>Slv placket Btn</td>
+                  <td>Construction</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--placket-->
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Placket:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data.Placket}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Other Details:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+
+            <table >
+              <thead>
+                <tr>
+                  <td>Width</td>
+                  <td>No of Btns</td>
+                  <td>Pullover</td>
+                  <td>Construction</td>
+                  <td>Buttons</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!--Pockets-->
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Pockets:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-6 col-lg-6 col-sm-6 col-xs-6">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Left Pocket:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data["Left Pocket"]}}
+              </p>
+              <table >
+                <thead>
+                  <tr>
+                    <td>Width</td>
+                    <td>Height</td>
+                    <td>Shape</td>
+                    <td>Flap</td>
+                    <td>Buttons</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  style="text-align: center">
+                    <td>&nbsp;&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col col-md-6 col-lg-6 col-sm-6 col-xs-6">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Right Pocket:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data["Right Pocket"]}}
+              </p>
+              <table >
+                <thead>
+                  <tr>
+                    <td>Width</td>
+                    <td>Height</td>
+                    <td>Shape</td>
+                    <td>Flap</td>
+                    <td>Buttons</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  style="text-align: center">
+                    <td>&nbsp;&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Back Pleats:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data.Back}}
+              </p>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Bottom Shape:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.customized_data.Buttons}}
+
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Side Curve:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+              </p>
+            </div>
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Gusset:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+              </p>
+            </div>
+          </div>
+          <hr style="width: 100%;margin-top: 2px;margin-bottom: 0px; border-top: solid 1px black">
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Initials:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Initials"]:""}}
+              </p>
+            </div>
+            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Font:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Font"]:""}}
+              </p>
+            </div>
+            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Location:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Location"]:""}}
+
+              </p>
+            </div>
+            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Color:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Color"]:""}}
+
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+            <table >
+              <thead>
+                <tr>
+                  <td>SPI</td>
+                  <td>Contrast</td>
+                  <td>Buttons</td>
+                  <td>Hand Kaja</td>
+                  <td>Thread Collar</td>
+                  <td>Kaja Collar</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Contrast:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+            <table >
+              <thead>
+                <tr>
+                  <td>Collar Back</td>
+                  <td>Collar Front</td>
+                  <td>NB Inside</td>
+                  <td>NB Outside</td>
+                  <td>Placket Btn</td>
+                  <td>Placket Kaja</td>
+                  <td>Cuff Out</td>
+                  <td>Cuff In</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Measurements:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0px !important">
+            <table >
+              <thead>
+                <tr>
+                  <td>Neck</td>
+                  <td>Sleeve</td>
+                  <td>Chest</td>
+                  <td>Waist</td>
+                  <td>Bottom</td>
+                  <td>Arm hole</td>
+                  <td>Biceps</td>
+                  <td>Cuffs</td>
+                  <td>Yoke</td>
+                  <td>Length</td>
+                  <td>Shoulder slope</td>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td >
+                  {{order_details.luxire_order.measurement_data['standard'] != undefined
+                  && order_details.luxire_order.measurement_data['standard']['Necksize']!= undefined?
+                  order_details.luxire_order.measurement_data['standard']['Necksize']: ' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Sleeve']
+                  && order_details.luxire_order.measurement_data['Sleeve']['Shirt Sleeve Length']?
+                   order_details.luxire_order.measurement_data['Sleeve']['Shirt Sleeve Length']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Top']
+                  && order_details.luxire_order.measurement_data['Top']['Chest Width']?order_details.luxire_order.measurement_data['standard']['Necksize']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Bottom']
+                  && order_details.luxire_order.measurement_data['Bottom']['Waist Width']?order_details.luxire_order.measurement_data['Bottom']['Waist Width']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Bottom']
+                  && order_details.luxire_order.measurement_data['Bottom']['Bottom Width']?order_details.luxire_order.measurement_data['Bottom']['Bottom Width']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Sleeve']
+                  && order_details.luxire_order.measurement_data['Sleeve']['Armhole']?order_details.luxire_order.measurement_data['Sleeve']['Armhole']: ' '}}
+                  </td>
+                  <!-- <td ng-if="order_details.luxire_order.measurement_data['standard']
+                  && order_details.luxire_order.measurement_data['standard']['Necksize']">
+                  {{order_details.luxire_order.measurement_data['standard']['Necksize']}}
+                  </td> -->
+                  <td>
+                    &nbsp;&nbsp;
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Sleeve']
+                  && order_details.luxire_order.measurement_data['Sleeve']['Cuff Around']?order_details.luxire_order.measurement_data['Sleeve']['Cuff Around']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Top']
+                  && order_details.luxire_order.measurement_data['Top']['Yoke Width']?order_details.luxire_order.measurement_data['Top']['Yoke Width']:' '}}
+                  </td>
+                  <td >
+                  {{order_details.luxire_order.measurement_data['Sleeve']
+                  && order_details.luxire_order.measurement_data['Sleeve']['Shirt Sleeve Length']?order_details.luxire_order.measurement_data['Sleeve']['Shirt Sleeve Length']:' '}}
+                  </td>
+                  <td>
+                  {{order_details.luxire_order.measurement_data['Top']
+                  && order_details.luxire_order.measurement_data['Top']['Shoulder Slope']?order_details.luxire_order.measurement_data['Top']['Shoulder Slope']:' '}}
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row" style="padding-top: 1%;margin-left: 0px">
+            <table >
+              <thead>
+                <tr>
+                  <td>Order Sheet</td>
+                  <td>Pattern</td>
+                  <td>Fabric</td>
+                  <td>Tailor</td>
+                  <td>QA</td>
+                  <td>Final Checking</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  style="text-align: center">
+                  <td>&nbsp;&nbsp;</td>
+                  <td> </td>
+                  <td> </td>
+                  <td> </td>
+                  <td> </td>
+                  <td> </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- <div ng-repeat="(key, value) in order_details">
+            {{key}}: {{value}}
+          </div> -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

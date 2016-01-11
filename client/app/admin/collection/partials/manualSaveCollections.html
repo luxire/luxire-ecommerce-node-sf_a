@@ -1,0 +1,271 @@
+<div class="container-fluid" style="height:100%" >
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Collections / <span style="color: black;">Add a Collection</span></span>
+    </div>
+    <div class="col-lg-5 col-md-5">
+
+    </div>
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
+      <button type="button" class="btn btn-default" >Cancel</button>
+      <button type="button" class="btn btn-primary" ng-click="createTaxon()"  ng-disabled="save_collection_button">Save Collection</button>
+    </div>
+  </div>
+
+<!-- middle card -->
+<div class="row" style="">
+  <div class="container-fluid admin-console-content">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 middle-card">
+        <div class="placard" >
+          <span style="font-size: 13px;">Title</span>
+          <br>
+          <input type="text" class="form-control" placeholder="Add Title" ng-model="tagTitle" >
+          <br>
+          <span style="font-size: 13px;">Description</span>
+          <br>
+          <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 5px;" ng-hide="false">
+              <div class="btn-group" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="fa fa-font"></span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Paragraph</a></li>
+                    <li><a href="#">Heading 1</a></li>
+                    <li><a href="#">Heading 2</a></li>
+                    <li><a href="#">Heading 3</a></li>
+                    <li><a href="#">Heading 4</a></li>
+                    <li><a href="#">Heading 5</a></li>
+                    <li><a href="#">Heading 6</a></li>
+                    <li><a href="#">Blockquote</a></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-default"><span class="fa fa-bold"></span></button>
+                <button type="button" class="btn btn-default"><span class="fa fa-italic"></span></button>
+              </div>
+              <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default" aria-label="Unordered List">
+                  <span class="fa fa-list-ul" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Ordered List">
+                  <span class="fa fa-list-ol" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Indent">
+                  <span class="fa fa-indent" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Outdent">
+                  <span class="fa fa-outdent" aria-hidden="true"></span>
+                </button>
+
+              </div>
+              <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default" aria-label="Unordered List">
+                  <span class="glyphicon glyphicon-align-center" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Ordered List">
+                  <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Indent">
+                  <span class="glyphicon glyphicon-align-right" aria-hidden="true"></span>
+                </button>
+
+              </div>
+              <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default" aria-label="Unordered List">
+                  <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Ordered List">
+                  <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+                </button>
+
+                <button type="button" class="btn btn-default" aria-label="Indent">
+                  <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                </button>
+
+              </div>
+              <div class="btn-group" role="group" aria-label="..." style="float: right;">
+                <button type="button" class="btn btn-default" aria-label="Unordered List">
+                  <span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+
+              </div>
+            </div>
+            <div class="panel-body">
+              <textarea class="description" ng-model="tagDesc" rows="9" cols="40"></textarea>
+            </div>
+          </div>
+        </div>
+        <!-- conditions card -->
+        <div class="placard conditions" style="background-color: white;">
+            <span style="font-size: 25px;">Conditions</span><br>
+            <div class="radio">
+                <label><input type="radio" ng-model="radio1" ng-value="1"  ng-click="hideCondition(); activeSaveCollectionBtn()"> Manually select products (you will be able to select products on the next page)</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" ng-model="radio1" ng-value="2" ng-click="showCondition()"> Automatically select products based on conditions</label>
+            </div>
+            <div class="placard hide-show-conditions" ng-show="hidecon">
+            <div>
+                <div >
+                    <span>Products must match: </span>&nbsp;&nbsp;&nbsp;
+                    <label><input type="radio" ng-model="radio2" ng-value="true"> &nbsp;&nbsp;&nbsp;all conditions</label>&nbsp;&nbsp;&nbsp;
+                    <label><input type="radio" ng-model="radio2" ng-value="false">&nbsp;&nbsp;&nbsp;any condition</label>&nbsp;&nbsp;&nbsp;
+
+                </div>
+                <div class="row product-panel">
+                  <div class="col-lg-4 col-md-4" style="margin-left:">
+                    <select class="form-control" name="">
+                      <option value="1">Product title</option>
+                      <option value="2">Product type</option>
+                      <option value="1">Product vendor</option>
+                      <option value="2">Product price</option>
+                      <option value="1">Product tag</option>
+                      <option value="2">Compare at price</option>
+                      <option value="1">Weight</option>
+                      <option value="2">Inventory stock</option>
+                      <option value="2">variants title</option>
+                    </select>
+                  </div>
+
+                    <div class="col-lg-4 col-md-4" style="margin-left:">
+                      <select class="form-control" name="">
+                        <option value="1">is equal to </option>
+                        <option value="2">is not equal to</option>
+                        <option value="1">is greater than </option>
+                        <option value="2">is less than</option>
+                        <option value="1">starts with</option>
+                        <option value="2">ends with</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-4 col-md-4" style="margin-left:">
+                      <input type="text" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="row" id="mycon" style="margin-top: 1%;" ng-repeat="x in addConditionArr track by $index">
+                  <div class="col-lg-4 col-md-4" style="margin-left: 2%;" >
+                    <select class="form-control" name="" ng-model="x.selected1" ng-change="getselect1(x.selected1)">
+                      <option ng-repeat="xx in x.select1 "
+                       value="{{xx.opt}}">{{ xx.opt }}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-4 col-md-4" style="margin-left: -1%;">
+                    <select class="form-control" name="" ng-model="con2">
+                      <option ng-repeat="yy in x.select2" value="{{ yy.opt }}">{{ yy.opt }}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3" style="margin-left: -1%;">
+                    <input type="text" class="form-control" placeholder="" ng-model="contxt">
+                  </div>
+                  <div class="col-lg-1 col-md-1" style="left: -1%;">
+
+                      <button type="button" class="btn btn-default btn-sm" aria-label="Indent" ng-click="delCondition($index)">
+                        <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>
+                      </button>
+
+                  </div>
+                  <hr>
+            </div>
+            <div class="row" style="margin-top: 1%; margin-left: 2%;">
+              <button type="button" class="btn btn-default" ng-click="addCondition()">add another condition</button>
+              <!--<button type="button" class="btn btn-default btn-sm" aria-label="Indent" ng-click="showConVal()">show condition value
+              </button>-->
+            </div>
+        </div>
+      </div>
+
+        <div class="placard" style="height: 30%; background-color: white;">
+              <div>
+                  <span style="font-size: 25px;">Search engine listing preview  <a href="#" style="font-size: .5em; float:right;" ng-click="seoForm()">Edit website SEO</a></span>
+              </div>
+              <span>Add a title and description to see how this collection might appear in a search engine listing.</span>
+              <!--<div>
+                <button type="button" class="btn btn-default" ng-click="getTaxonsById()">get collection</button>
+              </div>-->
+              <hr>
+              <div class="row" ng-show="seoform">
+                  <div class="form-group" style="margin-top: 2%;">
+                      <label for="usr">Page title</label>
+                      <input type="text" class="form-control" id="usr">
+                  </div>
+                  <div class="form-group" style="margin-top: 2%;">
+                      <label for="comment">Meta description</label>
+                      <textarea class="form-control" rows="5" id="comment"></textarea>
+                  </div>
+                  <div class="form-group" style="margin-top: 2%;">
+                      <label for="usr">URL and handle</label>
+                      <input type="text" class="form-control" id="usr">
+                  </div>
+              </div>
+        </div>
+
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <div class="placard-grey" ng-init="calFlag = true" style="height: 20%; ">
+          <span style="font-size: 20px;">
+            Visibility
+          </span>
+          <hr>
+          <div class="row">
+            <div class="col-lg-10 col-md-10">
+              <input type="checkbox" value="true"> <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;Online store</span>
+            </div>
+            <div class="col-lg-2 col-md-2" style="text-align: right;">
+              <i class="fa fa-calendar-o" style="color: #479CCF; float: right;cursor: pointer;" tooltip="Set a publish date" ng-click="calFlag = !calFlag"></i>
+            </div>
+          </div>
+          <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
+            <div class="col-lg-12 col-md-12" >
+              <span style="font-size: 13px;">Publish this collection on</span>
+              <div>
+                <datetimepicker data-ng-model=""></datetimepicker>
+                <!--<input ui-date ui-date-format="DD, d MM, yy" ng-model="myDate">-->
+
+                  <!--<input type="date" placeholder="Date" style="" ng-model="mydate" ngclick="datefun()">
+                  <input type="text" placeholder="Time"> -->
+              </div>
+            <!--  <div >
+                  <input type="text" id="datepicker" placeholder="Date">
+              </div> -->
+
+            </div>
+          </div>
+        </div>
+        <div class="placard-grey" style="height: 100%; background-color: white;">
+              <span style="font-size: 25px;">Collection Image</span>
+              <div style="margin-top: 40%; margin-left: 50%; margin-bottom: 30%;">
+                <div class="drag-drop" style="height=5%">
+                  <img class="img-responsive" ng-src="{{productImage}}" style="height: 5% width:5%">
+                </div>
+                  <div style="" ng-show="imgshow" >
+                        <span style="text-align: right; font-size: 50px; " ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)" class="glyphicon glyphicon-picture"></span><br>
+                        <span style="text-align: center; font-size: 10px;" ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)">Choose image</span>
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- page header -->
+<div class="container-fluid" style="background-color: white;">
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+    </div>
+    <div class="col-lg-5 col-md-5">
+
+    </div>
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
+      <button type="button" class="btn btn-default" >Cancel</button>
+      <button type="button" class="btn btn-primary" ng-click="" ng-disabled="save_collection_button">Save Collection</button>
+    </div>
+  </div>
+</div>
+
+</div>

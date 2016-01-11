@@ -1,0 +1,56 @@
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
+      <i class="fa " style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Settings / Taxes/ Create new tax rate</span>
+    </div>
+
+    <div class="col-lg-6 col-md-6" style="text-align: right;">
+    </div>
+
+  </div>
+  <div  style="margin-left: 0px;margin-right: 0px;" class="admin-console-content" >
+    <div class="row">
+      <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+        <div class="placard">
+          <label for="tax_name">Tax name</label>
+          <input class="form-control" name="tax_name" ng-model="tax_rate.tax_rate.name">
+
+          <label for="tax_rate" style="margin-top: 2%">Tax amount</label>
+          <input class="form-control" name="tax_rate" ng-model="tax_rate.tax_rate.amount">
+
+          <label style="padding-top: 2%">Zone</label>
+          <select  class="form-control" ng-model="tax_rate.tax_rate.zone_id"
+          value="" ng-options="zone.id as zone.name for zone in zones">
+          </select>
+
+          <label style="padding-top: 2%" >Tax category</label>
+          <select  class="form-control" value="" ng-model="tax_rate.tax_rate.tax_category_id"
+              ng-options="tax_category.id as tax_category.name for tax_category in tax_categories">
+            </select>
+
+          <!-- <label>
+            <input type="checkbox" name="name" value="">
+            Included in price
+          </label> -->
+
+
+        </div>
+        <div style="text-align: right">
+          <button type="button" name="cancel" class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button type="button" name="save" class="btn btn-primary" ng-click="save()">Save</button>
+        </div>
+
+      </div>
+      <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3">
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+</div>

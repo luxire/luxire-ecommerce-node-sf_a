@@ -12,7 +12,7 @@ router.patch('/:id', controller.update);
 router.post('/:id/rules', controller.add_rule);
 router.delete('/:id/rules/:rule_id', controller.delete_rule);
 router.post('/:id/actions', controller.add_action);
-router.delete('/:id/actions/:action_id', controller.delete_action);
+router.post('/:id/actions/:action_id', controller.delete_action);//delete an action
 
 // router.get('/:id', controller.show);
 

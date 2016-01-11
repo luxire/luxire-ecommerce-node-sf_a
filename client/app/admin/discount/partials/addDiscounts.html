@@ -93,7 +93,7 @@
       <div class="row" style="margin-bottom: 2%">
         <div class=" row col-md-4 col-sm-4 col-lg-4 col-xs-4" style="margin-left: 15%;width: 40%">
           <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="cancel()">Cancel</button>
-          <button type="button" class="btn btn-primary" ng-disabled="discountObject.promotion.name==''||discountObject.promotion.code==''" ng-click="update_promotion()">Update</button>
+          <button type="button" class="btn btn-primary" ng-disabled="discountObject.promotion.name==''" ng-click="update_promotion()">Update</button>
         </div>
       </div>
       <div ng-if="discountObject.promotion.id !== ''"class="row" style="">
@@ -105,13 +105,13 @@
             <div class="panel-body">
               <div style="margin: 2% 2%" >
                 <p style="font-size: 13px">ADD RULE OF TYPE</p>
-                <select class="form-control" ng-options="rule as rule.title for rule in rules"  ng-model="selected_rule" ng-change="select_rule(selected_rule)"></select>
-                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="rules.length==0||selected_rule==null" ng-click="add_selected_rule()">+ Add</button>
-                <div ng-repeat="rule in added_rules">
+                <select class="form-control" ng-options="rule_type as rule.title for (rule_type, rule) in rules_json"  ng-model="selected_rule_type" ng-change="select_rule(selected_rule_type)"></select>
+                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="rules_json=={}||selected_rule_type==null" ng-click="add_selected_rule()">+ Add</button>
+                <div ng-repeat="(rule_type, rule) in added_rules_json">
                   <div ng-if="rule.label=='Item total'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Order total meets these criteria</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
                     <div class="panel-body">
                       <div style="margin: 2% 2%">
@@ -132,7 +132,7 @@
                   <div ng-if="rule.label=='Product(s)'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Order includes specified product(s)</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
                     <div class="panel-body">
                       <div style="margin: 2% 2%">
@@ -141,6 +141,7 @@
                         on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                           <auto-complete  source="loadItems($query)"></auto-complete>
                         </tags-input>
+                        please enter minimum of 3 characters to search
                         <select class="form-control" style="padding-top: 2%" ng-options="product_quantity as product_quantity.title for product_quantity in rule.criteria.product_quantity track by product_quantity.id" ng-model="rule.criteria.selected_product_quantity" ></select>
                       </div>
                     </div>
@@ -148,7 +149,7 @@
                   <div ng-if="rule.label=='User'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Available only to the specified users</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
                     <div class="panel-body">
                       <div style="margin: 2% 2%">
@@ -158,28 +159,28 @@
                   <div ng-if="rule.label=='First order'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Must be the customer's first order</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
 
                   </div>
                   <div ng-if="rule.label=='User Logged In'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Available only to logged in users</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
 
                   </div>
                   <div ng-if="rule.label=='One Use Per User'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Only One Use Per User</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
 
                   </div>
                   <div ng-if="rule.label=='Taxon(s)'" class="panel panel-default">
                     <div class="panel-heading">
                       <h3 style="display: inline-block" class="panel-title">Order includes products with specified taxon(s)</h3>
-                      <a href="#" ng-click="remove_selected_rule($event,rule)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                      <a href="#" ng-click="remove_selected_rule($event,rule_type)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
                     <div class="panel-body">
                       <div style="margin: 2% 2%">
@@ -192,7 +193,8 @@
               <div style="margin: 2% 2%" ng-init="preferred_match_policy='any'">
                 <input type="radio" ng-model="preferred_match_policy" value="any"> MATCH ANY OF THESE RULES<br>
                 <input type="radio" ng-model="preferred_match_policy" value="all"> MATCH ALL OF THESE RULES
-                <uib-alert ng-if="added_rules.length==0" style="margin-bottom: 1% !important; margin-top: 1%" type="warning">No rules added</uib-alert>
+
+                <uib-alert ng-if="get_obj_key_len(added_rules_json)==0" style="margin-bottom: 1% !important; margin-top: 1%" type="warning">No rules added</uib-alert>
               </div>
             </div>
             <button type="button" style="margin-left: 2%;margin-bottom: 2%" class="btn btn-primary" ng-click="update_rules()">Update Rules</button>
@@ -205,69 +207,77 @@
             </div>
             <div class="panel-body">
               <div style="margin: 2% 2%">
-                <select class="form-control" style="margin-bottom: 2%" ng-options="action as action.title for action in actions track by action.id" ng-model="selected_action" ng-change="change_action(selected_action)"></select>
-                <div ng-if="selected_action.label=='Create whole order adjustment'" class="panel panel-default">
-                  <div class="panel-heading">
-                    <p class="panel-title">Adjustment on the order</p>
-                  </div>
-                  <div class="panel-body">
-                    <div class="form-inline"style="margin: 2% 2%">
-                      <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in selected_action.redeem_types track by redeem_type.id" ng-model="selected_action.selected_redeem_type" ></select>
-                      <!--Rs-->
-                      <div ng-if="selected_action.selected_redeem_type.title=='$'" class="form-group" style="width: 48%">
-                        <div class="input-group">
-                          <span class="input-group-addon">$</span>
-                          <input type="text" class="form-control" ng-model="selected_action.selected_redeem_type.value" >
-                        </div>
-                      </div>
-                      <div ng-if="selected_action.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 48%">
-                        <div class="input-group">
-                          <input type="text" class="form-control" ng-model="selected_action.selected_redeem_type.value">
-                          <span class="input-group-addon">%</span>
-                        </div>
-                      </div>
+                <select class="form-control" style="margin-bottom: 2%" ng-options="key as val.title for (key, val) in actions_json" ng-model="selected_action_type" ng-change="change_action_type(selected_action_type)"></select>
+                <button style="margin-top: 1%;margin-bottom: 1%;" class="btn btn-success" ng-disabled="actions_json=={}||selected_action_type==null" ng-click="add_selected_action()">+ Add</button>
+                <div ng-repeat="(key,val) in selected_actions_json">
+                  <div ng-if="val.label=='Create whole order adjustment'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <p style="display: inline-block" class="panel-title">Order adjustment</p>
+                      <a href="#" ng-click="remove_selected_action($event,key)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
                     </div>
-                  </div>
-                </div>
-                <div ng-if="selected_action.label=='Create line item adjustment'" class="panel panel-default">
-                  <div class="panel-heading">
-                    <p class="panel-title">Adjustment on the line item</p>
-                  </div>
-                  <div class="panel-body">
-                    <div style="margin: 2% 2%" ng-repeat="(key, value) in active_product_tags" class="panel panel-default">
-                      <div class="panel-heading">
-                        <p class="panel-title">{{value.product_name}}</p>
-                      </div>
-                      <div class="panel-body">
-                        <div style="margin: 2% 2%" class="form-inline">
-                          <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in redeem_types track by redeem_type.id" ng-model="value.selected_redeem_type"></select>
-
-                          <!--Rs-->
-                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='$'" class="form-group" style="width: 13%">
-                            <div class="input-group">
-                              <span class="input-group-addon">$</span>
-                              <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
-                            </div>
+                    <div class="panel-body">
+                      <div class="form-inline"style="margin: 2% 2%">
+                        <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in selected_action.redeem_types track by redeem_type.id" ng-model="val.selected_redeem_type" ></select>
+                        <!--Rs-->
+                        <div ng-if="val.selected_redeem_type.title=='$'" class="form-group" style="width: 48%">
+                          <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" ng-model="val.selected_redeem_type.value" >
                           </div>
-
-
-                          <!--Discount-->
-                          <div style="width: 48%" ng-if="value.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 13%">
-                            <div class="input-group">
-                              <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
-                              <span class="input-group-addon">%</span>
-                            </div>
+                        </div>
+                        <div ng-if="val.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 48%">
+                          <div class="input-group">
+                            <input type="text" class="form-control" ng-model="val.selected_redeem_type.value">
+                            <span class="input-group-addon">%</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div ng-if="selected_action.label=='Free shipping'" class="panel panel-default">
-                  <div class="panel-heading">
-                    <p class="panel-title">Free shipping</p>
+                  <div ng-if="val.label=='Create line item adjustment'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <p style="display: inline-block" class="panel-title">Line Item adjustment</p>
+                      <a href="#" ng-click="remove_selected_action($event,key)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                    <div class="panel-body">
+                      <div style="margin: 2% 2%" ng-repeat="(key, value) in active_product_tags" class="panel panel-default">
+                        <div class="panel-heading">
+                          <p class="panel-title">{{value.product_name}}</p>
+                        </div>
+                        <div class="panel-body">
+                          <div style="margin: 2% 2%" class="form-inline">
+                            <select style="width: 48%" class="form-control" ng-options="redeem_type as redeem_type.title for redeem_type in redeem_types track by redeem_type.id" ng-model="value.selected_redeem_type"></select>
+
+                            <!--Rs-->
+                            <div style="width: 48%" ng-if="value.selected_redeem_type.title=='$'" class="form-group" style="width: 13%">
+                              <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
+                              </div>
+                            </div>
+
+
+                            <!--Discount-->
+                            <div style="width: 48%" ng-if="value.selected_redeem_type.title=='% Discount'" class="form-group" style="width: 13%">
+                              <div class="input-group">
+                                <input type="text" class="form-control" ng-model="value.selected_redeem_type.value">
+                                <span class="input-group-addon">%</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                  <div ng-if="val.label=='Free shipping'" class="panel panel-default">
+                    <div class="panel-heading">
+                      <p style="display: inline-block" class="panel-title">Free shipping</p>
+                      <a href="#" ng-click="remove_selected_action($event,key)"><i style="display: inline-block;font-size: 20px;" class="fa fa-close pull-right" ></i></a>
+                    </div>
+                  </div>
+
                 </div>
+                <br>
                 <button type="button" class="btn btn-primary" ng-click="update_action()">Update Action</button>
               </div>
             </div>

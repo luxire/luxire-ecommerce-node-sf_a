@@ -37,6 +37,11 @@
     <script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
     <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css">
 
+    <!--Angular print-->
+    <script type="text/javascript" src="bower_components/angularPrint/angularPrint.js"></script>
+    <link rel="stylesheet" href="bower_components/angularPrint/angularPrint.css">
+
+
     <!--File upload for non-html5 browsers-->
     <script src="lib/js/angular-file-upload-shim.min.js"></script>
 
@@ -114,14 +119,47 @@
     <script src="app/admin/setting/shipping/shipping.services.js"></script>
     <!---->
 
+    <!--Taxes-->
+    <script type="text/javascript" src="app/admin/setting/tax/tax.controller.js"></script>
+    <script type="text/javascript" src="app/admin/setting/tax/tax.services.js"></script>
 
+    <!--Print-->
+    <link rel="stylesheet" href="app/print.css" media="print" title="no title" charset="utf-8">
+
+
+    <!--Admin orders-->
+    <link rel="stylesheet" href="app/admin/order/order.css" media="screen" title="Admin Order Stylesheet" charset="utf-8">
+    <script type="text/javascript" src="app/admin/order/order.services.js">
+
+
+
+    </script>
 
 
     <!-- <script src="app/dummy.js"></script> -->
     <script src="app/controller.js"></script>
     <script src="app/services.js"></script>
+    <style media="screen">
+      body{
+        width: 100%;
+        height: 100%
+      }
+    </style>
+
+    <!--    Collection routing      -->
+    <script src="app/admin/collection/addCollection.controller.js"></script>
+    <script src="app/admin/collection/collection.services.js"></script>
+    <script src="app/admin/collection/editCollection.controller.js"></script>
+    <script src="app/admin/collection/collectionHome.controller.js"></script>
+    <script src="app/admin/collection/manualSaveCollection.controller.js"></script>
+    <script src="app/admin/collection/collectionsTag.controller.js"></script>
+
+    <!-- *************************** -->
+
   </head>
-  <body style="width: 100%; height:100%;overflow-y: hidden;overflow-x: hidden">
+  <!-- <body > -->
+
+  <body >
     <div ui-view style="width: 100%; height: 100%"></div>
     <!-- <div ng-view style="width: 100%; height:100%"></div> -->
   </body>

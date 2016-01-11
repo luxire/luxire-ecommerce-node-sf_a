@@ -1,0 +1,68 @@
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;font-size: 20px;">
+      <i style="display: inline-block" class="fa fa-cog" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:400;">Settings / Shipping / Create a new method</span>
+    </div>
+  </div>
+  <div  style="margin-left: 0px;margin-right: 0px;" class="row admin-console-content" >
+    <div class="row" style="padding-left: 2%;padding-right: 2%;">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="">
+        <div class="placard">
+          <label for="method_name">Name (Displayed at checkout)</label>
+          <input class="form-control" type="text" name="method_name" value="" ng-model="shipping_method.shipping_method.name">
+
+          <label style="padding-top: 2%" for="method_tracking_url">Tracking url</label>
+          <input class="form-control" type="text" name="method_tracking_url" placeholder="e.g. http://quickship.com/package?num=:tracking" value=""
+          ng-model="shipping_method.shipping_method.tracking_url">
+
+          <label style="padding-top: 2%">Calculator</label>
+          <select  class="form-control" ng-model="shipping_method.shipping_method.calculator_type"
+          value="" ng-options="calculator.name as calculator.description for calculator in calculators">
+          </select>
+
+          <label style="padding-top: 2%" >Tax category</label>
+          <select  class="form-control" value="" ng-model="shipping_method.shipping_method.tax_category_id"
+              ng-options="tax_category.id as tax_category.name for tax_category in tax_categories">
+            </select>
+
+          <label style="padding-top: 2%">Zones</label>
+          <div ng-repeat="zone in available_zones">
+            <label for="method_zones">
+              <input type="checkbox" name="method_zones" value="is_checked" ng-model="zone.is_selected" ng-change="check_change(zone.is_selected, zone)">
+              {{zone.name}}
+            </label>
+          </div>
+
+
+
+
+
+          <!-- <div class="form-inline" style="width: 48%;padding-top: 2%">
+            <div class="form-group">
+              Tax category
+            </div>
+            <div class="form-group">
+              Calculator
+              <select style="width: 48%" class="form-control" name="method_calculator" value="" >
+            </div>
+
+          </div> -->
+        </div>
+      </div>
+
+    </div>
+    <div class="row" style="text-align: right">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="">
+        <button class="btn btn-default" name="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" name="button" ng-click=save()>Save</button>
+      </div>
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
+      </div>
+
+    </div>
+  </div>
+</div>

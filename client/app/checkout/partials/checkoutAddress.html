@@ -27,7 +27,7 @@
           </select>
 
           <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.state_id">
-            <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id">{{state.name}}</option>
+            <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
           </select>
           <form style="margin-top: 2%" class="form-inline" role="form">
             <div class="form-group">

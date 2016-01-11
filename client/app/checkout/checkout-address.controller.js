@@ -25,12 +25,13 @@ angular.module('luxire')
   }
   else{
     $scope.shipping = {
-      firstname: '',
-      lastname: '',
-      address1: '',
-      city: '',
-      phone: '',
-      zipcode: '',
+      firstname: 'Mudassir',
+      lastname: 'H',
+      address1: '#74, 1st cross',
+      email: 'm@azk.com',
+      city: 'Boston',
+      phone: '8951442694',
+      zipcode: '02108',
       state_id: 3545,
       country_id: 232
     };

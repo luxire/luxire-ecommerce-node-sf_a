@@ -10,7 +10,12 @@ module.exports = {
     orders: '/api/orders',
     checkouts: '/api/checkouts',
     stock_locations: '/api/stock_locations',
-    promotions: '/promo'
+    promotions: '/customized_promotions',
+    carriers: '/customized_active_shipping_settings',
+    zones: '/api/zones',
+    shipping_methods: '/customized_shipping_methods',
+    taxes: '/customized_tax_rates',
+   taxonomie: '/api/taxonomies'
   }
   /*client requests*/
 

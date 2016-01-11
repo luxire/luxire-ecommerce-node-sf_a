@@ -172,7 +172,12 @@ angular.module('luxire')
 		  order: {
 		    line_items: [
 		      { variant_id: cartObject.variant_id, quantity: 1 }
-		    ]
+		    ],
+				luxire_order_attributes: {
+					customized_data: cartObject.Customize,
+					personalize_data: cartObject.Personalize,
+					measurement_data: cartObject.Measurement
+				}
 		  }
 		}
 		return $http.post("/api/orders", angular.toJson(cart));
@@ -228,12 +233,42 @@ angular.module('luxire')
 		// return $http.post('https://secure.ebs.in/pg/ma/payment/request', angular.toJson(ebs_object));
 
 	};
-
+	this.checkout_confirm_payment = function(order_number,order_token){
+		var payment = {
+		  "order": {
+		    "payments_attributes": {
+		      "payment_method_id": 2//for check
+		    }
+		  }
+		}
+		return $http.post("/api/checkouts/"+order_number+"/confirm?order_token="+order_token, payment);
+	};
+	this.checkout_complete = function(order_number,order_token){
+		var payment = {
+		  "order": {
+		    "payments_attributes": {
+		      "payment_method_id": 2//for check
+		    }
+		  }
+		}
+		return $http.post("/api/checkouts/"+order_number+"/complete?order_token="+order_token, payment);
+	};
 })
 
-.service('countries',function($http){
+.service('countries',function($http, $q){
 	this.all = function(){
 		return $http.get('/api/countries');
+	}
+	this.search = function(search_phrase){
+		console.log(search_phrase);
+		var deferred = $q.defer();
+		$http.get('/api/countries/search?q[name_cont]='+search_phrase).then(function(data){
+			console.log(data);
+			deferred.resolve(data.data.countries)
+		},function(error){
+			deferred.reject(error);
+		});
+		return deferred.promise;
 	}
 })
 //fileReader service

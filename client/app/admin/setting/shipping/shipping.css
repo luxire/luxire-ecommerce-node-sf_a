@@ -2,9 +2,9 @@
 .address_modal{
   margin-top: 5%;
 }
-.modal.in .modal-dialog{
-  width: 38%;
-}
+/*.modal.in .modal-dialog{
+  width: 42%;
+}*/
 #address_modal_header{
   margin-top: 3%;
   border-bottom: solid 1px grey;

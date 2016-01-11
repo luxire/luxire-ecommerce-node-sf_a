@@ -6,7 +6,19 @@ var env = require('../../config/constants');
 
 
 exports.index = function(req, res){
-
+  http.get({
+    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    body: ''
+  },function(error, response, body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for reading order, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Rails server not responding")
+      console.log('req from'+req.connection.remoteAddress+'for reading order, responded with'+error);
+    };
+  });
 };
 exports.show = function(req, res){
   console.log('req from'+req.connection.remoteAddress);
@@ -52,7 +64,7 @@ exports.create_blank_order = function(req, res){
 /*Create a new order, with existing details about the customer*/
 exports.create = function(req, res){
   http.post({
-    uri: env.spree.host+env.spree.orders,
+    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){

@@ -5,7 +5,7 @@ var http = require('request');
 var env = require('../../config/constants');
 
 
-/*Proceed to checkout address*/
+/*Proceed to checkout address,cart --> Address*/
 exports.checkout_address = function(req, res){
   console.log(req.params);
   http.put({
@@ -26,113 +26,148 @@ exports.checkout_address = function(req, res){
   });
 };
 
-  /*Proceed to checkout delivery*/
-  exports.checkout_delivery  = function(req, res){
-    http.put({
-      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
-      headers:{'content-type': 'application/json'},
-      body:JSON.stringify(req.body)
-    },function(error,response,body){
-      if(error == null){
-        res.status(response.statusCode).send(body);
-        console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+response.statusCode);
-      }
-      else{
-        res.status(500).send("Internal Server Error");
-        console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+error);
+/*Proceed to checkout delivery, Address --> Shipping Methods*/
+exports.checkout_delivery  = function(req, res){
+  http.put({
+    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_methods, responded with'+error);
 
-      }
+    }
+  });
+};
+
+/*proceed to checkout payment, Shipping Methods --> Payment*/
+exports.checkout_payment  = function(req, res){
+  console.log(req);
+  http.put({
+    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+
+    }
+  });
+
+};
+
+
+/*Confirm Payment*/
+exports.checkout_confirm_payment = function(req, res){
+  http.put({
+    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+
+    }
+  });
+};
+
+/*Complete checkout*/
+exports.checkout_complete = function(req, res){
+  http.put({
+    uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+
+    }
+  });
+};
+/*proceed to checkout gateway directly */
+exports.checkout_gateway  = function(req, res){
+  console.log(req.body);
+  // var ebs = {"vpc_ReferenceNo":"R987886379","vpc_Amount":39.95,"vpc_Mode":"TEST","vpc_Description":"luxire","vpc_Name":"Mudassir H","vpc_Address":"74","vpc_City":"Boston","vpc_State":"Massachusetts","vpc_PostalCode":"02108","vpc_Country":"USA","vpc_Email":"","vpc_Phone":"","vpc_ShipName":"Mudassir H","vpc_ShipAddress":"74","vpc_ShipCity":"Boston","vpc_ShipState":"Massachusetts","vpc_ShipPostalCode":"02108","vpc_ShipCountry":"USA","vpc_PaymentOption":"credit","vpc_CardNo":"4111111111111111","vpc_ExpiryDate":"07/16","vpc_Cvv":"123","vpc_Issuingbank":"EBS","vpc_ReturnUrl":"","vpc_GoBackUrl":""}
+  http.post({
+    uri: 'http://test.luxire.com:3000/send_request_pg/send',
+    headers:{'content-type': 'application/json'},
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    console.log(body);
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+response.statusCode);
+
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+error);
+
+    }
+  });
+
+};
+
+/*Return url for EBS*/
+exports.checkout_gateway_response = function (req, res){
+  console.log(req);
+};
+
+/*Apply coupon code*/
+exports.checkout_apply_coupon_code = function (req, res){
+  console.log(req.params);
+  http
+    .put({
+      uri: env.spree.host+env.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.params.token,
+      headers:{'content-type': 'application/x-www-form-urlencoded'},
+      body: 'coupon_code='+req.params.code
+    }, function(error, response, body){
+        if(error == null){
+          res.status(response.statusCode).send(body);
+          console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+response.statusCode);
+
+        }else{
+          res.status(500).send("Rails Server Not Responding");
+          console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+error);
+
+        }
     });
-  };
+};
 
-  /*proceed to checkout payment*/
-  exports.checkout_payment  = function(req, res){
-    console.log(req);
-    http.put({
-      uri: env.spree.host+env.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.params.token,
-      headers:{'content-type': 'application/json'},
-      body:JSON.stringify(req.body)
-    },function(error,response,body){
-      if(error == null){
-        res.status(response.statusCode).send(body);
-        console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+/*check*/
+exports.check  = function(req, res){
+  console.log(req);
+  http.get({
+    uri: 'http://test.luxire.com:3000/test/check',
+    body: ''
+  },function(error,response,body){
+    console.log(response);
+    if(error == null){
+      res.status(response.statusCode).send(body);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+    }
+  });
 
-      }
-      else{
-        res.status(500).send("Internal Server Error");
-        console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
-
-      }
-    });
-
-  };
-
-  /*proceed to checkout payment */
-  exports.checkout_gateway  = function(req, res){
-    console.log(req.body);
-    // var ebs = {"vpc_ReferenceNo":"R987886379","vpc_Amount":39.95,"vpc_Mode":"TEST","vpc_Description":"luxire","vpc_Name":"Mudassir H","vpc_Address":"74","vpc_City":"Boston","vpc_State":"Massachusetts","vpc_PostalCode":"02108","vpc_Country":"USA","vpc_Email":"","vpc_Phone":"","vpc_ShipName":"Mudassir H","vpc_ShipAddress":"74","vpc_ShipCity":"Boston","vpc_ShipState":"Massachusetts","vpc_ShipPostalCode":"02108","vpc_ShipCountry":"USA","vpc_PaymentOption":"credit","vpc_CardNo":"4111111111111111","vpc_ExpiryDate":"07/16","vpc_Cvv":"123","vpc_Issuingbank":"EBS","vpc_ReturnUrl":"","vpc_GoBackUrl":""}
-    http.post({
-      uri: 'http://test.luxire.com:3000/send_request_pg/send',
-      headers:{'content-type': 'application/json'},
-      body: JSON.stringify(req.body)
-    },function(error,response,body){
-      console.log(body);
-      if(error == null){
-        res.status(response.statusCode).send(body);
-        console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+response.statusCode);
-
-      }
-      else{
-        res.status(500).send("Internal Server Error");
-        console.log('req from'+req.connection.remoteAddress+'for payments gateways, responded with'+error);
-
-      }
-    });
-
-  };
-
-  exports.checkout_gateway_response = function (req, res){
-    console.log(req);
-  };
-
-  exports.checkout_apply_coupon_code = function (req, res){
-    console.log(req.params);
-    http
-      .put({
-        uri: env.spree.host+env.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.params.token,
-        headers:{'content-type': 'application/x-www-form-urlencoded'},
-        body: 'coupon_code='+req.params.code
-      }, function(error, response, body){
-          if(error == null){
-            res.status(response.statusCode).send(body);
-            console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+response.statusCode);
-
-          }else{
-            res.status(500).send("Rails Server Not Responding");
-            console.log('req from'+req.connection.remoteAddress+'for applying coupon code, responded with'+error);
-
-          }
-      });
-  };
-
-
-
-
-
-  /*proceed to checkout payment*/
-  exports.check  = function(req, res){
-    console.log(req);
-    http.get({
-      uri: 'http://test.luxire.com:3000/test/check',
-      body: ''
-    },function(error,response,body){
-      console.log(response);
-      if(error == null){
-        res.status(response.statusCode).send(body);
-      }
-      else{
-        res.status(500).send("Internal Server Error");
-      }
-    });
-
-  };
+};

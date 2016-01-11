@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput', 'ngAnimate', 'ngMessages'])
+angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUpload','ui.bootstrap.datetimepicker','ngTagsInput', 'ngAnimate', 'ngMessages', 'AngularPrint'])
 
 .run(function($location,$rootScope){
 	// $location.path('/collections');
@@ -19,7 +19,9 @@ angular.module('luxire', ['ui.router','ngRoute','ui.bootstrap','angularFileUploa
     });
 
 })
-.config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider',function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider){
+.config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+	$httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 	$urlRouterProvider.otherwise('/collections');
 	$stateProvider
 	.state('test',{

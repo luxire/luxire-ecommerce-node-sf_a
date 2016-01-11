@@ -120,13 +120,14 @@
         <input class="form-control" name="phone" ng-model="address.phone" id="phone" required/>
       </div>
     </div>
-    <div id="address_modal_footer" class="row row1">
-      <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="">
+    <div id="address_modal_footer" class="row row1" style="text-align: right">
+      <button class="btn btn-default" style="color: #4293C3;display: inline-block;padding-right: 2%" ng-click="cancel()">Cancel</button>
+      <button class="btn btn-primary pull-right" style="display: inline-block;padding-right: 2%" ng-click="update_address()">Update shipping address</button>
+
+      <!-- <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="">
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 " style="display: block;">
-        <button class="btn btn-default" style="color: #4293C3;display: inline-block;margin-left: 10%" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-primary pull-right" style="display: inline-block" ng-click="update_address()">Update shipping address</button>
-      </div>
+              </div> -->
     </div>
 
   </div>
