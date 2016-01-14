@@ -6,33 +6,47 @@
 
 var errors = require('./components/errors');
 var path = require('path');
+var jwt = require('jsonwebtoken');//used to create/sign/verify token
+var constants = require('./config/constants');
 
 module.exports = function(app) {
-  app.all('/*', function (req, res, next) {
-    console.log('enabling cors..');
-    res.header("Access-Control-Allow-Origin", "*");
-     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-         next();
-  });
 
-  app.use(function(req, res, next) {
-    console.log('enabling cors in use..');
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
   // Insert routes below
   app.use('/api/userManager', require('./api/userManager'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/things', require('./api/thing'));
-  // app.use('/api/address', require('./api/address'));
-  /*start of common services routes*/
-
   app.use('/api/countries', require('./api/country'));
   app.use('/api/orders', require('./api/order'));
   app.use('/api/checkouts', require('./api/checkout'));
+  // app.use('/api/address', require('./api/address'));
+  app.use(function(req, res, next){
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (token) {
+
+    // verifies secret and checks exp
+    jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        console.log('decoded', decoded);
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(403).send({
+        success: false,
+        message: 'No token provided.'
+    });
+
+  }
+  });
+
   app.use('/api/shipping', require('./api/shipping'));
   app.use('/api/promotions', require('./api/promotion'));
   app.use('/api/zones', require('./api/zone'));
@@ -53,3 +67,18 @@ module.exports = function(app) {
 
 
 };
+// app.all('/*', function (req, res, next) {
+//   console.log('enabling cors..');
+//   res.header("Access-Control-Allow-Origin", "*");
+//    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//        next();
+// });
+//
+// app.use(function(req, res, next) {
+//   console.log('enabling cors in use..');
+//
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });

@@ -6,44 +6,71 @@ angular.module('luxire')
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
 	$urlRouterProvider.when('/admin','/admin/');
 	$stateProvider
+	.state('login',{
+		url: '/login',
+		templateUrl: 'app/auth/partials/login.html',
+		controller: 'LoginController',
+		data: {
+			require_auth: false
+		}
+	})
 	.state('admin',{
 		url:'/admin',
+		abstract: true,
 		templateUrl: 'app/admin/admin.html',
-		controller: 'adminController'
+		controller: 'adminController',
+		data: {
+			require_auth: true
+		}
 	})
 	.state('admin.default',{
 		url:'/',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
 			"mainContent": { templateUrl: 'app/admin/default/partials/adminHome.html' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
   .state('admin.customer',{
 		url:'/customers',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/customer/partials/customerHome.html',controller: 'CustomerController' }
+			"mainContent": { templateUrl: 'app/admin/customer/partials/customerHome.html',controller: 'CustomerController' },
+			data: {
+				require_auth: true
+			}
 		}
 	})
   .state('admin.new_customer',{
 		url:'/customers/new',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/customer/partials/addCustomer.html',controller: 'CustomerController' }
+			"mainContent": { templateUrl: 'app/admin/customer/partials/addCustomer.html',controller: 'CustomerController' },
+			data: {
+				require_auth: true
+			}
 		}
 	})
 	.state('admin.product',{
 		url:'/products',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
-			"mainContent": { templateUrl: 'app/admin/product/partials/productsHome.html',controller: 'ProductController'}
+			"mainContent": { templateUrl: 'app/admin/product/partials/productsHome.html',controller: 'ProductController'},
+			data: {
+				require_auth: true
+			}
 		}
 	})
   .state('admin.new_product',{
 		url:'/products/new',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
-			"mainContent": { templateUrl: 'app/admin/product/partials/addProducts.html',controller: 'ProductController'}
+			"mainContent": { templateUrl: 'app/admin/product/partials/addProducts.html',controller: 'ProductController'},
+			data: {
+				require_auth: true
+			}
 		}
 
 	})
@@ -51,14 +78,20 @@ angular.module('luxire')
 		url:'/discounts',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/discount/partials/discountsHome.html',controller: 'DiscountHomeController' }
+			"mainContent": { templateUrl: 'app/admin/discount/partials/discountsHome.html',controller: 'DiscountHomeController' },
+			data: {
+				require_auth: true
+			}
 		}
 	})
 	.state('admin.new_discount',{
 		url:'/discounts/new',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/default/partials/sideBarDefault.html'},
-			"mainContent": { templateUrl: 'app/admin/discount/partials/addDiscounts.html',controller: 'AddDiscountController' }
+			"mainContent": { templateUrl: 'app/admin/discount/partials/addDiscounts.html',controller: 'AddDiscountController' },
+			data: {
+				require_auth: true
+			}
 		}
 	})
 	.state('admin.edit_discount',{
@@ -69,13 +102,19 @@ angular.module('luxire')
 											 controller: 'EditDiscountController',
 										   }
 		},
-		params: {promo_object: null}
+		params: {promo_object: null},
+		data: {
+			require_auth: true
+		}
 	})
 	.state('admin.giftcard',{
 		url:'/giftcards',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/giftcard/partials/giftCardHome.html',controller: 'GiftCardController'}
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.new_giftcard',{
@@ -83,6 +122,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/giftcard/partials/addGiftProducts.html',controller: 'GiftCardController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.manage_giftcard',{
@@ -90,6 +132,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/giftcard/partials/manageGiftCard.html',controller: 'GiftCardController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.order',{
@@ -97,6 +142,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/order/partials/sidebarOrders.html'},
 			"mainContent": { templateUrl: 'app/admin/order/partials/orderHome.html',controller: 'OrderController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.new_order',{
@@ -104,6 +152,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/order/partials/sideBarOrders.html'},
 			"mainContent": { templateUrl: 'app/admin/order/partials/addOrder.html',controller: 'OrderController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.order_sheet',{
@@ -112,7 +163,13 @@ angular.module('luxire')
 			"sideContent": { templateUrl: 'app/admin/order/partials/sidebarOrders.html'},
 			"mainContent": { templateUrl: 'app/admin/order/partials/order_sheet.html',controller: 'OrderSheetController' }
 		},
-		params: {order: null}
+		params: {order: null},
+		data: {
+			require_auth: true
+		},
+		data: {
+			require_auth: true
+		}
 	})
 	/*Setting*/
 	.state('admin.shipping_setting',{
@@ -121,7 +178,10 @@ angular.module('luxire')
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shippingHome.html', controller: 'ShippingController' }
 		},
-		params: {prev_state_status: null}
+		params: {prev_state_status: null},
+		data: {
+			require_auth: true
+		}
 	})
 	/*shipping carriers*/
 	.state('admin.shipping_setting_realtime_carriers',{
@@ -129,6 +189,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shipping_carriers.html', controller: 'ShippingCarrierController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.shipping_setting_zones_new',{
@@ -136,6 +199,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shipping_zones.html', controller: 'AddZoneController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.shipping_setting_shipping_method_new',{
@@ -143,6 +209,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/shipping/partials/shipping_methods.html', controller: 'ShippingMethodController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.tax_setting',{
@@ -150,6 +219,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/tax/partials/taxHome.html', controller: 'TaxHomeController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.tax_setting_new',{
@@ -157,6 +229,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/setting/partials/sidebarSettings.html'},
 			"mainContent": { templateUrl: 'app/admin/setting/tax/partials/addTax.html', controller: 'AddTaxController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 
@@ -166,6 +241,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarcollection.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/collectionHome.html', controller: 'collectionHomeController'}
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.addCollections',{
@@ -173,6 +251,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarCollections.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/addCollections.html', controller: 'addCollectionController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.editCollections',{
@@ -180,6 +261,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarcollection.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/editCollections.html', controller: 'editCollectionController'}
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.manualSaveCollections',{
@@ -187,6 +271,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/collection/partials/sideBarCollections.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/manualSaveCollections.html', controller: 'manualSaveCollectionController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 	.state('admin.tagSearch',{
@@ -194,6 +281,9 @@ angular.module('luxire')
 		views: {
 			"sideContent": { templateUrl: 'app/admin/collection/partials/sideBarCollections.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/collectionsTag.html', controller: 'collectionsTagController' }
+		},
+		data: {
+			require_auth: true
 		}
 	})
 

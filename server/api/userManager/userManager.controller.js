@@ -2,7 +2,9 @@
 
 var _ = require('lodash');
 var http = require('request');
+var jwt = require('jsonwebtoken');//used to create/sign/verify token
 var env = require('../../config/constants');
+var luxire_secret = env.spree.jwt_secret;
 
 // Get list of users
 exports.index = function(req, res) {
@@ -22,16 +24,26 @@ exports.login = function(req, res){
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
-    var resp = JSON.parse(body)
-    console.log(resp.statusCode)
-    if(resp.statusCode == 200){
-      console.log('Login Successful');
-      res.status(200).send(resp);
+
+    if(error == null){
+      console.log(JSON.parse(body).statusCode);
+      if(JSON.parse(body).statusCode == undefined) {
+        console.log('luxire-secret', luxire_secret);
+        var token = jwt.sign(body, luxire_secret, {
+          expiresInMinutes: 1440 // expires in 24 hours
+        });
+        console.log('token', token);
+        res.status(response.statusCode).send(token);
+
+      }
+      else{
+        res.status(401).send("Invalid userId or password");
+      }
     }
-    else if(resp.statusCode == 401){
-      console.log('Unauthorised User');
-      res.status(401).send(resp);
+    else{
+      res.status(500).send("Rails server not responding");
     }
+
   })
 };
 

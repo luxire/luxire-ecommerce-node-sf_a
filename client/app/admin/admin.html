@@ -31,6 +31,10 @@
             <div class="settings admin-sidebar-tab" ui-sref="admin.shipping_setting">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-cog" style="font-size:20px;"></i>
             </div>
+            <div class="admin-sidebar-tab"
+             style="position: absolute;bottom: 0;width: 85%;">
+              &nbsp;&nbsp;&nbsp;<i class="fa fa-user" style="font-size:20px;"></i>
+            </div>
 
           </div>
           <div class="col-lg-9 col-md-9" style="padding: 0px;" >
@@ -38,20 +42,24 @@
             <!-- <div ng-hide = "showDefaultNav" ui-view="sideContent" style="width: 100%; height:100%;overflow-y: hidden;overflow-x: hidden" print-remove></div> -->
 
 						<div ng-hide = "showDefaultNav" ui-view="sideContent" style="width: 100%; height:100%;overflow-y: hidden;overflow-x: hidden"></div>
-						<div ng-show = "showDefaultNav" ng-mouseleave="mouseleaveNav()">
+						<div ng-show = "showDefaultNav" >
 							<div class="col-lg-11 col-md-11" style="padding: 0px;">
-								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
-								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
-								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
-								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order">Orders</div>
-								<div class="products admin-sidebar-tab" style="font-size:13px;" ui-sref="admin.product">Products</div>
-								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer">Customers</div>
-								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
-								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
-                <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
-                <div class="collections admin-sidebar-tab" style="font-size:13px;" id="collections" ui-sref="admin.collectionHome">Collections</div>
+                <div class="" ng-mouseleave="mouseleaveNav()">
+                  <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
+  								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
+  								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
+  								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order">Orders</div>
+  								<div class="products admin-sidebar-tab" style="font-size:13px;" ui-sref="admin.product">Products</div>
+  								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer">Customers</div>
+  								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
+  								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
+                  <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
+                </div>
+                <div class="admin-sidebar-tab" ng-init="popoverIsOpen=false" uib-popover-template="user_popover.templateUrl" popover-append-to-body="true"
+                 style="font-size:13px;position: fixed; bottom: 0px;width: 20%" id="settings"
+                  popover-is-open="popoverIsOpen" ng-click="popoverIsOpen = !popoverIsOpen">User</div>
 
-							</div>
+              </div>
 							<div class="col-lg-1 col-md-1" style="padding: 0px;">
 								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
 								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
@@ -62,150 +70,18 @@
 								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
 								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount"></div>
               	<div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+                <div class="admin-sidebar-tab" uib-popover-template="user_popover.templateUrl" popover-append-to-body="true"  ng-click="popoverIsOpen = !popoverIsOpen" style="font-size:13px;position: fixed; bottom: 0px;margin-left: -0.5%" id="user" ><i class="fa fa-chevron-up" style="font-size:11px;padding-top: 1%; padding-right: 1%"></i></div>
 							</div>
 						</div>
-
-
-						<!-- <div ng-switch-default>
-							<div class="col-lg-11 col-md-11" style="padding: 0px;">
-	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
-	              <div class="search admin-sidebar-tab" style="font-size:13px;">Search</div>
-	              <div class="home admin-sidebar-tab" style="font-size:13px;">Home</div>
-	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('orders')">Orders</div>
-	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">Products</div>
-	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')">Customers</div>
-	              <div class="reports admin-sidebar-tab" style="font-size:13px;">Reports</div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')">Discounts</div>
-	            </div>
-	            <div class="col-lg-1 col-md-1" style="padding: 0px;">
-	              <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
-	              <div class="search admin-sidebar-tab" style="font-size:13px;"></div>
-	              <div class="home admin-sidebar-tab" style="font-size:13px;"></div>
-	              <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="navbar = 'orders'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-	              <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-	              <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')"></div>
-	              <div class="reports admin-sidebar-tab" style="font-size:13px;"></div>
-	              <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')"></div>
-	            </div>
-						</div>
-
-						<div ng-switch-when="orders">
-							<div class="admin-sidebar-header2">&nbsp;&nbsp;&nbsp;&nbsp;ORDERS</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Orders</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Drafts</div>
-							<div class="home admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Abandonned Checkouts</div>
-						</div>
-
-						<div ng-switch-when="products">
-							<div class="admin-sidebar-header2">&nbsp;&nbsp;&nbsp;&nbsp;PRODUCTS</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">&nbsp;&nbsp;&nbsp;&nbsp;Products</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Inventory</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Collections</div>
-							<div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('giftCardHome')">&nbsp;&nbsp;&nbsp;&nbsp;Gift Card</div>
-						</div> -->
-
           </div>
         </div>
       </div>
 		</div>
 		<div class="col-sm-10 col-xs-10 col-lg-10 col-md-10" style="height:100%; padding-left: 0px; padding-right: 0px">
 			<div ui-view="mainContent" style="width: 100%; height:100%;overflow-y: hidden;overflow-x: hidden"></div>
-
-      <!-- <div ng-switch on="navbar" style="height:100%">
-overflow-y: hidden;overflow-x: hidden
-				<div ng-switch-default>
-					<div admin-home>
-
-					</div>
-				</div> -->
-				<!-- Products Home Page -->
-				<!-- <div ng-switch-when="products" style="height:100%">
-					<div product-home>
-
-					</div>
-				</div> -->
-				<!-- End of Products Home Page -->
-
-				<!-- Add Products Page -->
-				<!-- <div ng-switch-when="addProducts" style="height:100%">
-					<div add-product>
-
-					</div>
-				</div> -->
-				<!-- End of Add Products Page -->
-
-				<!-- Customer Home -->
-				<!-- <div ng-switch-when="customerHome" style="height: 100%">
-					<div customer-home>
-
-					</div>
-				</div> -->
-				<!-- End of Customer Home -->
-
-				<!-- Add Customer -->
-				<!-- <div ng-switch-when="addCustomer" style="height: 100%">
-					<div add-customer>
-
-					</div>
-				</div> -->
-				<!-- End of Add Customer -->
-
-				<!-- Discounts Home -->
-				<!-- <div ng-switch-when="discountsHome" style="height: 100%">
-					<div discounts-home>
-
-					</div>
-				</div> -->
-				<!-- End of Discounts Home -->
-
-				<!-- Add Discounts -->
-				<!-- <div ng-switch-when="addDiscounts" style="height: 100%">
-					<div add-discounts>
-
-					</div>
-				</div> -->
-				<!-- End of Add Discounts -->
-
-				<!-- Gift Card Home -->
-				<!-- <div ng-switch-when="giftCardHome" style="height: 100%">
-					<div gift-card-home>
-
-					</div>
-				</div> -->
-				<!-- End of Gift Card home -->
-
-				<!-- Manage Gift Card -->
-				<!-- <div ng-switch-when="manageGiftCard" style="height: 100%">
-					<div manage-gift-card>
-
-					</div>
-				</div> -->
-				<!-- End of manage gift card -->
-
-				<!-- Add a gift card -->
-				<!-- <div ng-switch-when="addGiftProducts">
-					<div add-gift-products>
-
-					</div>
-				</div> -->
-				<!-- End of add gift card -->
-
-				<!-- Order Home -->
-				<!-- <div ng-switch-when="orders">
-					<div order-home>
-
-					</div>
-				</div> -->
-				<!-- End of order home -->
-
-				<!-- Add order -->
-				<!-- <div ng-switch-when="addOrder">
-					<div add-order>
-
-					</div>
-				</div> -->
-				<!-- End of add order -->
-			<!-- </div> -->
+      <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+        <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+      </div>
 		</div>
 	</div>
 </div>
@@ -259,3 +135,152 @@ overflow-y: hidden;overflow-x: hidden
       $(".settings").toggleClass("active-sidebar1");
     });
 </script>
+<script type="text/ng-template" id="user_popover.html">
+  <div style="color: #479CCF" ng-mouseleave="mouseleaveNav()">
+    <div class="list-group">
+      <a href="#" class="list-group-item profile" ng-style="my_profile_style" ng-mouseover="my_profile_style={'text-decoration':'underline'}"
+        ng-mouseleave="my_profile_style={'text-decoration':'none'}" ng-click="$event.preventDefault()">My Profile</a>
+      <a href="#" class="list-group-item profile" ng-style="edit_addr_style" ng-mouseover="edit_addr_style={'text-decoration':'underline'}"
+        ng-mouseleave="edit_addr_style={'text-decoration':'none'}" ng-click="log_out()">Logout</a>
+    </div>
+  </div>
+  <style>
+    .list-group-item .profile{
+      border: none;
+    }
+  </style>
+
+</script>
+<!-- <div ng-switch-default>
+  <div class="col-lg-11 col-md-11" style="padding: 0px;">
+    <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
+    <div class="search admin-sidebar-tab" style="font-size:13px;">Search</div>
+    <div class="home admin-sidebar-tab" style="font-size:13px;">Home</div>
+    <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('orders')">Orders</div>
+    <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">Products</div>
+    <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')">Customers</div>
+    <div class="reports admin-sidebar-tab" style="font-size:13px;">Reports</div>
+    <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')">Discounts</div>
+  </div>
+  <div class="col-lg-1 col-md-1" style="padding: 0px;">
+    <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
+    <div class="search admin-sidebar-tab" style="font-size:13px;"></div>
+    <div class="home admin-sidebar-tab" style="font-size:13px;"></div>
+    <div class="orders admin-sidebar-tab" style="font-size:13px;" ng-click="navbar = 'orders'"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+    <div class="products admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
+    <div class="customers admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('customerHome')"></div>
+    <div class="reports admin-sidebar-tab" style="font-size:13px;"></div>
+    <div class="discounts admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('discountsHome')"></div>
+  </div>
+</div>
+
+<div ng-switch-when="orders">
+  <div class="admin-sidebar-header2">&nbsp;&nbsp;&nbsp;&nbsp;ORDERS</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Orders</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Drafts</div>
+  <div class="home admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Abandonned Checkouts</div>
+</div>
+
+<div ng-switch-when="products">
+  <div class="admin-sidebar-header2">&nbsp;&nbsp;&nbsp;&nbsp;PRODUCTS</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('products')">&nbsp;&nbsp;&nbsp;&nbsp;Products</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Inventory</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;Collections</div>
+  <div class="admin-sidebar-tab" style="font-size:13px;" ng-click="activeButton('giftCardHome')">&nbsp;&nbsp;&nbsp;&nbsp;Gift Card</div>
+</div> -->
+<!-- <div ng-switch on="navbar" style="height:100%">
+
+overflow-y: hidden;overflow-x: hidden
+  <div ng-switch-default>
+    <div admin-home>
+
+    </div>
+  </div> -->
+  <!-- Products Home Page -->
+  <!-- <div ng-switch-when="products" style="height:100%">
+    <div product-home>
+
+    </div>
+  </div> -->
+  <!-- End of Products Home Page -->
+
+  <!-- Add Products Page -->
+  <!-- <div ng-switch-when="addProducts" style="height:100%">
+    <div add-product>
+
+    </div>
+  </div> -->
+  <!-- End of Add Products Page -->
+
+  <!-- Customer Home -->
+  <!-- <div ng-switch-when="customerHome" style="height: 100%">
+    <div customer-home>
+
+    </div>
+  </div> -->
+  <!-- End of Customer Home -->
+
+  <!-- Add Customer -->
+  <!-- <div ng-switch-when="addCustomer" style="height: 100%">
+    <div add-customer>
+
+    </div>
+  </div> -->
+  <!-- End of Add Customer -->
+
+  <!-- Discounts Home -->
+  <!-- <div ng-switch-when="discountsHome" style="height: 100%">
+    <div discounts-home>
+
+    </div>
+  </div> -->
+  <!-- End of Discounts Home -->
+
+  <!-- Add Discounts -->
+  <!-- <div ng-switch-when="addDiscounts" style="height: 100%">
+    <div add-discounts>
+
+    </div>
+  </div> -->
+  <!-- End of Add Discounts -->
+
+  <!-- Gift Card Home -->
+  <!-- <div ng-switch-when="giftCardHome" style="height: 100%">
+    <div gift-card-home>
+
+    </div>
+  </div> -->
+  <!-- End of Gift Card home -->
+
+  <!-- Manage Gift Card -->
+  <!-- <div ng-switch-when="manageGiftCard" style="height: 100%">
+    <div manage-gift-card>
+
+    </div>
+  </div> -->
+  <!-- End of manage gift card -->
+
+  <!-- Add a gift card -->
+  <!-- <div ng-switch-when="addGiftProducts">
+    <div add-gift-products>
+
+    </div>
+  </div> -->
+  <!-- End of add gift card -->
+
+  <!-- Order Home -->
+  <!-- <div ng-switch-when="orders">
+    <div order-home>
+
+    </div>
+  </div> -->
+  <!-- End of order home -->
+
+  <!-- Add order -->
+  <!-- <div ng-switch-when="addOrder">
+    <div add-order>
+
+    </div>
+  </div> -->
+  <!-- End of add order -->
+<!-- </div> -->

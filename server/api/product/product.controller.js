@@ -78,6 +78,7 @@ exports.create = function(req, res){
 
 //Get product details
 exports.show = function(req, res){
+  console.log(req);
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http

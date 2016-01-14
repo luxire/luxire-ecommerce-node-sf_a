@@ -1,0 +1,8 @@
+.auth-background{
+  height: 100%;
+  background-color: #EBEEF0;
+  overflow-y: hidden
+}
+input:focus {
+    outline:none;
+}

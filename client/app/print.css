@@ -1,6 +1,9 @@
 #admin_side_menu{
   display: none;
 }
+#order_sheet_prod_img{
+  max-width: 30%
+}
 body {
   padding: 5% 5%;
   color:#000000;
@@ -26,4 +29,7 @@ table, th, td {
    @bottom-left {
         content: counter(page) "/" counter(pages);
     }
+ }
+ .qrcode{
+   width: 200px
  }

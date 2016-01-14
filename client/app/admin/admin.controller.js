@@ -1,5 +1,5 @@
  angular.module('luxire')
- .controller('adminController',function($scope, products, fileReader, prototypeObject){
+ .controller('adminController',function($scope, products, fileReader, prototypeObject,$rootScope,$authentication,$state){
    console.log(new prototypeObject.product())
    $scope.navbar = "default";
    $scope.adminConsole = "default";
@@ -13,12 +13,23 @@
 
    $scope.customerData = new prototypeObject.customer();
 
+   $scope.user_popover = {
+    templateUrl: 'user_popover.html',
+  };
 
    $scope.mouseoverNav = function(){
-     $scope.showDefaultNav = true
-   }
+     console.log('mouse over triggered');
+     $scope.showDefaultNav = true;
+     $scope.popoverIsOpen = false;
+  }
    $scope.mouseleaveNav = function(){
+     console.log('mouse leave triggered');
      $scope.showDefaultNav = false
+   }
+   $scope.log_out = function(){
+     $authentication.logout();
+     $state.go('login');
+     $rootScope.alerts.push({type: 'success', message: 'Logout successful!'});
    }
    /* Moved to discount controller
   $scope.today = function() {
