@@ -14,6 +14,23 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('forgot_password',{
+		url: '/forgot_password',
+		templateUrl: 'app/auth/partials/forgot_password.html',
+		controller: 'ForgotPasswordController',
+		data: {
+			require_auth: false
+		}
+	})
+	.state('reset_password',{
+		url: '/reset_password/:reset_token',
+		templateUrl: 'app/auth/partials/reset_password.html',
+		controller: 'ResetPasswordController',
+		params: {reset_token: ''},
+		data: {
+			require_auth: false
+		}
+	})
 	.state('admin',{
 		url:'/admin',
 		abstract: true,
@@ -239,7 +256,7 @@ angular.module('luxire')
 	.state('admin.collectionHome',{
 		url:'/collection',
 		views: {
-			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarcollection.html'},
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/collectionHome.html', controller: 'collectionHomeController'}
 		},
 		data: {
@@ -249,7 +266,7 @@ angular.module('luxire')
 	.state('admin.addCollections',{
 		url:'/collections/new',
 		views: {
-			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarCollections.html'},
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/addCollections.html', controller: 'addCollectionController' }
 		},
 		data: {
@@ -259,7 +276,7 @@ angular.module('luxire')
 	.state('admin.editCollections',{
 		url:'/collection/:id/edit',
 		views: {
-			"sideContent": { templateUrl: 'app/admin/collection/partials/sidebarcollection.html'},
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/editCollections.html', controller: 'editCollectionController'}
 		},
 		data: {
@@ -269,7 +286,7 @@ angular.module('luxire')
 	.state('admin.manualSaveCollections',{
 		url:'/collections/save',
 		views: {
-			"sideContent": { templateUrl: 'app/admin/collection/partials/sideBarCollections.html'},
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/manualSaveCollections.html', controller: 'manualSaveCollectionController' }
 		},
 		data: {
@@ -279,7 +296,7 @@ angular.module('luxire')
 	.state('admin.tagSearch',{
 		url:'/collections/tag',
 		views: {
-			"sideContent": { templateUrl: 'app/admin/collection/partials/sideBarCollections.html'},
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/collection/partials/collectionsTag.html', controller: 'collectionsTagController' }
 		},
 		data: {

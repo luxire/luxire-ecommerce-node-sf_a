@@ -1,0 +1,155 @@
+<div class="row container" style="margin-top: 5%;">
+  <!-- color filter options -->
+  <div class="col-md-4 col-md-4 col-sm-4 " style="background-color:azure; height:100%;">
+    <span style="margin-left: 5%; font-size:20px; font-weight: bold;">Filter products options</span>
+    <div class="row" style="margin-left: 5%;margin-top: 5%;">
+        <span style="margin-left: 3%; font-size:20px; font-weight: bold;">Color</span>
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="item in allOptions">
+                  <td>
+                    <input type="checkbox" ng-change="syncColor(bool, item.color)" ng-model="bool" ng-checked="isCheckedColor(item.id)" ng-click="fun()">
+                  </td>
+                  <td>
+                    <div style="height:20px; width:20px; background-color:{{item.color}};"></div>
+                  </td>
+                  <td>
+                      <span>{{item.color}}</span>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--<div style="margin-top:5%;">
+          <h6>Final Data Array</h6>
+          <pre>{{data}}</pre>
+        </div>-->
+
+    </div>
+    <!-- price range filter options -->
+    <div class="row" style="margin-left: 5%;margin-top:;">
+      <span style="margin-left: 3%; font-size:20px; font-weight: bold;">Price</span>
+      <table class="table">
+          <tbody>
+              <tr ng-repeat="item in priceRange">
+                <td>
+                  <input type="checkbox" ng-change="syncPrice(bool, item.price)" ng-model="bool" ng-checked="isCheckedPrice(item.id)">
+                </td>
+                <td>
+                  <span>{{item.text}}</span>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+          </tbody>
+      </table>
+      <!--<div style="margin-top:5%;">
+        <h6>Final price Array</h6>
+        <pre>{{priceArr}}</pre>
+      </div>-->
+    </div>
+    <!-- material filter options -->
+    <div class="row" style="margin-left: 5%;margin-top:;">
+      <span style="margin-left: 3%; font-size:20px; font-weight: bold;">Material</span>
+      <table class="table">
+          <tbody>
+              <tr ng-repeat="item in materialOption">
+                <td>
+                  <input type="checkbox" ng-change="syncMaterial(bool, item.text)" ng-model="bool" ng-checked="isCheckedMaterial(item.id)">
+                </td>
+                <td>
+                  <span>{{item.text}}</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+          </tbody>
+      </table>
+      <!--<div style="margin-top:5%;">
+        <h6>Final price Array</h6>
+        <pre>{{priceArr}}</pre>
+      </div>-->
+    </div>
+    <!-- weight filter options -->
+    <div class="row" style="margin-left: 5%;margin-top:;">
+      <span style="margin-left: 3%; font-size:20px; font-weight: bold;">Weight</span>
+      <table class="table">
+          <tbody>
+              <tr ng-repeat="item in weightOption">
+                <td>
+                  <input type="checkbox" ng-change="syncWeight(bool, item.text)" ng-model="bool" ng-checked="isCheckedWeight(item.id)">
+                </td>
+                <td>
+                  <span>{{item.text}}</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+          </tbody>
+      </table>
+      <!--<div style="margin-top:5%;">
+        <h6>Final price Array</h6>
+        <pre>{{priceArr}}</pre>
+      </div>-->
+    </div>
+
+  </div>
+  <div class="col-md-8 col-md-8 col-sm-8 container-fluid" style="background-color:azure;height:100%;">
+    <div>
+      <input type="text" class="form-control" id="usr" ng-model="search.$" placeholder="search product..">
+    </div>
+    <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+      <table class="table table-hover admin-product-list">
+        <thead>
+          <tr>
+            <th>
+              Id
+            </th>
+            <th>
+              Name
+            </th>
+            <th>
+              Tags
+            </th>
+            <th>
+              price
+            </th>
+            <th>
+              Image
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="x in productDesc |filter:search|filter:colorFilter|filter:priceFilter|filter:materialFilter|filter:weightFilter">
+              <td>
+                {{x.id}}
+              </td>
+              <td>
+                {{x.name}}
+              </td>
+              <td>
+                {{x.tags}}
+              </td>
+              <td>
+                {{x.price}}
+              </td>
+              <td>
+                <img ng-src="{{x.imgurl}}" alt="Description" />
+
+              </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -7,22 +7,62 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
     <link href="app/style.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400' rel='stylesheet' type='text/css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href='lib/css/google-font-roboto.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
-    <script href="bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
-     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="lib/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <script src="lib/js/jquery.min.js"></script>
+    <script src="lib/js/angular.js"></script>
+    <script src="lib/js/bootstrap.min.js"></script>
+    <script src="lib/js/ui-bootstrap-tpls.js"></script>
     <script src="lib/js/angular-route.min.js"></script>
     <script src="lib/js/angular-ui-router.min.js"></script>
+    <script href="bower_components/jquery-ui/jquery-ui.min.js"></script>
 
+    <!-- SPA routing configuration -->
+    <script src="app/app.js"></script>
+
+    <!-- <script src="app/dummy.js"></script> -->
+    <script src="app/controller.js"></script>
+    <script src="app/services.js"></script>
+    <style media="screen">
+      body{
+        width: 100%;
+        height: 100%
+      }
+    </style>
+
+
+    <!-- Collection-->
+    <link rel="stylesheet" href="app/collection/collection.css">
+    <script src="app/collection/collection.controller.js"></script>
+
+        <!--Back-office Controllers-->
+
+    <!--Print-->
+    <link rel="stylesheet" href="app/print.css" media="print" title="no title" charset="utf-8">
+
+    <!--Auth-->
+    <link rel="stylesheet" href="app/auth/auth.css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" src="app/auth/auth.controllers.js"></script>
+    <script type="text/javascript" src="app/auth/auth.services.js"></script>
+
+
+  </head>
+  <!-- <body > -->
+  <body >
+    <div ui-view style="width: 100%; height: 100%"></div>
+    <!-- <div ng-view style="width: 100%; height:100%"></div> -->
     <!-- Datetimepicker -->
+    <script src="app/admin/admin.route.js"></script>
+    <script src="app/admin/admin.controller.js"></script>
+    <script src="app/admin/admin.services.js"></script>
+
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
 
@@ -56,8 +96,6 @@
     <!--md5 Encryption-->
     <script src="lib/js/md5.js"></script>
 
-    <!-- SPA routing configuration -->
-    <script src="app/app.js"></script>
 
     <!--Test Controller-->
     <script src="app/test/test.controller.js"></script>
@@ -74,9 +112,6 @@
     <!-- Measurement Garments Controller-->
     <script src="app/measurementGarments/measurementGarments.controller.js"></script>
 
-    <!-- Collection-->
-    <link rel="stylesheet" href="app/collection/collection.css">
-    <script src="app/collection/collection.controller.js"></script>
 
     <!-- Cart-->
     <link rel="stylesheet" href="app/cart/cart.css">
@@ -89,10 +124,7 @@
     <script src="app/checkout/checkout-delivery.controller.js"></script>
     <script src="app/checkout/checkout-payment.controller.js"></script>
     <script src="app/checkout/checkout-gateway.controller.js"></script>
-    <!--Back-office Controllers-->
 
-    <!-- Admin Controller-->
-    <script src="app/admin/admin.controller.js"></script>
     <!--Other Controllers-->
     <script src="app/admin/customer/customer.controller.js"></script>
     <script src="app/admin/default/default.controller.js"></script>
@@ -102,7 +134,6 @@
 
     <!--Back-office services-->
     <!--Admin services[Common Services]-->
-    <script src="app/admin/admin.services.js"></script>
 
     <script src="app/admin/product/product.services.js"></script>
 
@@ -114,8 +145,7 @@
 
     <!-- <script src="app/admin/services/customer.service.js"></script> -->
 
-    <!--Back-office routing -->
-    <script src="app/admin/admin.route.js"></script>
+
 
                                 <!--Setting-->
     <!--Shipping-->
@@ -128,28 +158,13 @@
     <script type="text/javascript" src="app/admin/setting/tax/tax.controller.js"></script>
     <script type="text/javascript" src="app/admin/setting/tax/tax.services.js"></script>
 
-    <!--Print-->
-    <link rel="stylesheet" href="app/print.css" media="print" title="no title" charset="utf-8">
 
 
     <!--Admin orders-->
     <link rel="stylesheet" href="app/admin/order/order.css" media="screen" title="Admin Order Stylesheet" charset="utf-8">
     <script type="text/javascript" src="app/admin/order/order.services.js"></script>
 
-    <!--Auth-->
-    <link rel="stylesheet" href="app/auth/auth.css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" src="app/auth/auth.controllers.js"></script>
-    <script type="text/javascript" src="app/auth/auth.services.js"></script>
 
-    <!-- <script src="app/dummy.js"></script> -->
-    <script src="app/controller.js"></script>
-    <script src="app/services.js"></script>
-    <style media="screen">
-      body{
-        width: 100%;
-        height: 100%
-      }
-    </style>
 
     <!--    Collection routing      -->
     <script src="app/admin/collection/addCollection.controller.js"></script>
@@ -160,12 +175,13 @@
     <script src="app/admin/collection/collectionsTag.controller.js"></script>
 
     <!-- *************************** -->
+    <script src="app/filter/filter1.controller.js" charset="utf-8"></script>
+    <!-- <script src="app/filter/filter.controller.js" charset="utf-8"></script> -->
 
-  </head>
-  <!-- <body > -->
+    <script src="app/newProduct/newProduct.controller.js" type="text/javascript">
 
-  <body >
-    <div ui-view style="width: 100%; height: 100%"></div>
-    <!-- <div ng-view style="width: 100%; height:100%"></div> -->
+    </script>
+
+
   </body>
 </html>

@@ -13,10 +13,38 @@
           </div>
           <div ng-show="selected_payment_method == 'cc'"  class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%">
             <input placeholder="Card number" ng-model="card_number" class="form-control"><br>
-            <form class="form-inline" role="form">
-                <input style="width: 40%" placeholder="Name on card" ng-model="name_on_card" class="form-control">
-                <input style="width: 25%" placeholder="MM/YY" class="form-control" ng-model="card_expiry">
-                <input style="width: 25%" placeholder="CVV" class="form-control" ng-model="card_cvv">
+            <input style="width: 40%;" placeholder="Name on card" ng-model="name_on_card" class="form-control"><br>
+            <input style="width: 25%;" placeholder="MM/YY" class="form-control" ng-model="card_expiry"><br>
+            <input style="width: 25%;" placeholder="CVV" class="form-control" ng-model="card_cvv"><br>
+            <form style="display: none" class="form-inline" role="form" method="post" action="https://secure.ebs.in/pg/ma/payment/request" name="frmTransaction" id="ebs_transaction">
+                <!---->
+                <input style="display: none" name="channel" type="hidden" value="{{ebs_object.channel}}" />
+                 <input style="display: none" name="account_id" type = "hidden" value="{{ebs_object.account_id}}" /><br/>
+                 <input style="display: none" id="refNum" name="reference_no"  type="hidden" value="{{ebs_object.reference_no}}"/> <br/>
+                 <input style="display: none" id="amount" name="amount"  type="hidden" value="{{ebs_object.amount}}" /><br/>
+                 <input style="display: none" name="mode"   type="hidden"  value="{{ebs_object.mode}}" /> <br/>
+                 <input style="display: none" name="currency"  type="hidden"  value="{{ebs_object.currency}}" /> <br/>
+                 <input style="display: none" name="description"  type="hidden"   value="{{ebs_object.description}}" /> <br/>
+                 <input style="display: none" name="return_url"  type="hidden"  value="{{ebs_object.return_url}}" /> <br/>
+                 <input style="display: none" name="name"  type="hidden"  value="{{ebs_object.name}}" /><br/>
+                 <input style="display: none" name="address"  type="hidden"  value="{{ebs_object.address}}" /><br/>
+                 <input style="display: none" name="city"  type="hidden"  value="{{ebs_object.city}}" /><br/>
+                 <input style="display: none" name="state"  type="hidden"  value="{{ebs_object.state}}" /><br/>
+                 <input style="display: none" name="country"  type="hidden"  value="{{ebs_object.country}}" /><br/>
+                 <input style="display: none" name="postal_code"  type="hidden"  value="{{ebs_object.postal_code}}" /><br/>
+                 <input style="display: none" name="phone"  type="hidden"  value="{{ebs_object.phone}}" /><br/>
+                 <input style="display: none" name="email"  type="hidden"  value="{{ebs_object.email}}" /><br/>
+
+                 <input style="display: none" name="bank_code"  type="hidden"  value="" /><br/>
+                 <input style="display: none" name="name_on_card"  type="hidden"   value="{{ebs_object.name_on_card}}"/>
+                 <input style="display: none" name="card_number"  value="{{ebs_object.card_number}}"/> <br/>
+                 <input style="display: none" name="card_expiry"  type="hidden"  value="{{ebs_object.card_expiry}}" />
+                  <input style="display: none" name="card_cvv"  value="{{ebs_object.card_cvv}}"/> <br/>
+
+                 <input style="display: none" id="secureHash" name="secure_hash"  value="{{ebs_object.secure_hash}}" /> <br/>
+                 <!-- <input value="Submit" type="submit" /> -->
+
+                <!---->
             </form>
           </div>
           <div class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%">
@@ -83,7 +111,7 @@
           </div>
           <br>
           <br>
-          <button class="btn btn-primary" ng-click="proceed_to_checkout_ebs()">Complete order</button>
+          <button class="btn btn-primary" type="submit" form="ebs_transaction">Complete order</button>
         </div>
       </div>
 

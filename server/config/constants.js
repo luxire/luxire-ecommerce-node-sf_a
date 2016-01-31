@@ -16,7 +16,16 @@ module.exports = {
     zones: '/api/zones',
     shipping_methods: '/customized_shipping_methods',
     taxes: '/customized_tax_rates',
-   taxonomie: '/api/taxonomies'
+    taxonomie: '/api/taxonomies',
+    search: '/api/search'
+  },
+  payment: {
+    ebs: {
+      account_id: '18449',
+      secret_key: 'c08d88e3fa40573b563af7887a7c9852',
+      mode: 'TEST',
+      return_url: 'https://test.luxire.com/api/checkouts/gateway_response'
+    }
   }
   /*client requests*/
 

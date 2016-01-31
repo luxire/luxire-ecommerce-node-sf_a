@@ -232,6 +232,7 @@ angular.module('luxire')
 				});
 		// return $http.post('https://secure.ebs.in/pg/ma/payment/request', angular.toJson(ebs_object));
 
+
 	};
 	this.checkout_confirm_payment = function(order_number,order_token){
 		var payment = {

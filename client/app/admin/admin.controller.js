@@ -1,5 +1,5 @@
  angular.module('luxire')
- .controller('adminController',function($scope, products, fileReader, prototypeObject,$rootScope,$authentication,$state){
+ .controller('adminController',function($scope, $rootScope, products, fileReader, prototypeObject,$rootScope,$authentication,$state,$http){
    console.log(new prototypeObject.product())
    $scope.navbar = "default";
    $scope.adminConsole = "default";
@@ -18,19 +18,196 @@
   };
 
    $scope.mouseoverNav = function(){
-     console.log('mouse over triggered');
      $scope.showDefaultNav = true;
      $scope.popoverIsOpen = false;
   }
    $scope.mouseleaveNav = function(){
-     console.log('mouse leave triggered');
      $scope.showDefaultNav = false
    }
-   $scope.log_out = function(){
+   $scope.log_out = function(event){
+     event.preventDefault();
      $authentication.logout();
      $state.go('login');
-     $rootScope.alerts.push({type: 'success', message: 'Logout successful!'});
+    //  $rootScope.alerts.push({type: 'success', message: 'Logout successful!'});
    }
+   /*Global search starts*/
+   $rootScope.globalSearch = false;
+   $scope.hideNav=true;
+   $scope.searchText='';
+   $scope.productDesc=[];
+   $scope.orderDesc=[];
+   $scope.customerDesc=[];
+   $scope.showProduct=false;
+   $scope.showOrder=false;
+   $scope.showCustomer=false;
+   $scope.textPart=true;
+   $scope.searchAllObject='';
+   $scope.dataPart=false;
+   $scope.showCollection=false;
+
+   // ----------------  implement webworker to fetch data from redis server --------
+   /*var worker=new Worker('worker.js');
+   worker.addEventListener('message', function(e) {
+     console.log('Worker said: ', e.data);
+   }, false);
+   worker.postMessage('Hello World'); // Send data to our worker.*/
+
+   // -----------------  end of webworker --------------------------------
+
+
+   /*$http.get('/products')
+   .success(function(data){
+     var res = data.data;
+     console.log("product description:\n",data);
+     //$scope.productDesc=res.product;
+     //$scope.result=res.product;
+   })
+   .error(function(err){
+     console.log("error: fetching value from redis server");
+   })*/
+
+   $http.get('/api/search')
+   .success(function(data){
+     console.log("searchAllData:\n",data);
+     $scope.productDesc=data.spree_products;
+     $scope.orderDesc=data.spree_orders;
+     $scope.customerDesc=data.spree_users;
+     $scope.showCollection=data.spree_taxons;
+     $scope.searchAllObject=data;
+   })
+   .error(function(err){
+     console.log("error: fetching value from redis server");
+   })
+
+   $scope.showSearch=function(){
+     $scope.globalSearch=false;
+   }
+   $scope.hideSearch=function(){
+     $scope.globalSearch=true;
+   }
+   $scope.close_search_tab = function(){
+     if($scope.globalSearch == true){
+       $scope.globalSearch = false;
+     }
+   };
+
+   $scope.showNav=function(){
+     if($scope.search==''){
+       $scope.hideNav=true;
+     }else{
+       $scope.hideNav=false;
+     }
+   }
+   $scope.change = function(){
+     console.log("search text: "+$scope.searchText);
+     $scope.textPart=false;
+     $scope.showProduct=true;
+     $scope.showOrder=true;
+     $scope.showCustomer=true;
+     $scope.showCollection=true;
+     $scope.dataPart=true;
+     if($scope.searchText.length==0){
+       $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+   }
+   $scope.showAllData=function(){
+     console.log("calling show All data function");
+     $scope.textPart=false;
+     $scope.showProduct=true;
+     $scope.showCustomer=true;
+     $scope.showOrder=true;
+     $scope.showCollection=true;
+     if($scope.searchText.length==0){
+      // $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+     //$scope.dataPart=true;
+     $scope.productDesc=$scope.searchAllObject.spree_products;
+     $scope.orderDesc=$scope.searchAllObject.spree_orders;
+     $scope.customerDesc=$scope.searchAllObject.spree_users;
+     $scope.showCollection=$scope.searchAllObject.spree_taxons;
+     console.log("showAllData product\n",$scope.productDesc);
+     console.log("showAllData order\n",$scope.orderDesc);
+     console.log("showAllData customer\n",$scope.customerDesc);
+     console.log("showAllData collection\n",$scope.collectionDesc);
+
+   }
+   $scope.showOrders=function(){
+     console.log("calling show orders function");
+     $scope.textPart=false;
+     $scope.showProduct=false;
+     $scope.showCustomer=false;
+     $scope.showOrder=true;
+     $scope.showCollection=false;
+     if($scope.searchText.length==0){
+      // $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+     //$scope.dataPart=true;
+     $scope.orderDesc=$scope.searchAllObject.spree_orders;
+     console.log("show order data\n",$scope.orderDesc);
+
+   }
+
+   $scope.showProducts=function(){
+     console.log("calling show product function");
+     $scope.textPart=false;
+     $scope.showProduct=true;
+     $scope.showOrder=false;
+     $scope.showCustomer=false;
+     $scope.showCollection=false;
+     if($scope.searchText.length==0){
+      // $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+     //$scope.dataPart=true;
+     $scope.productDesc=$scope.searchAllObject.spree_products;
+     console.log("show product data\n",$scope.productDesc);
+   }
+
+   $scope.showCustomers=function(){
+     console.log("calling show customer function");
+     $scope.textPart=false;
+     $scope.showProduct=false;
+     $scope.showOrder=false;
+     $scope.showCustomer=true;
+     $scope.showCollection=false;
+     if($scope.searchText.length==0){
+      // $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+     //$scope.dataPart=true;
+     $scope.customerDesc=$scope.searchAllObject.spree_users;
+     console.log("show customer data\n",$scope.customerDesc);
+   }
+   $scope.showCollections=function(){
+     console.log("calling show collections function");
+     $scope.textPart=false;
+     $scope.showProduct=false;
+     $scope.showOrder=false;
+     $scope.showCustomer=false;
+     $scope.showCollection=true;
+     if($scope.searchText.length==0){
+      // $scope.dataPart=false;
+       $scope.textPart=true;
+     }
+     //$scope.dataPart=true;
+     $scope.collectionDesc=$scope.searchAllObject.spree_taxons;
+     console.log("show collection data\n",$scope.collectionDesc);
+   }
+
+   /*$http.get('/query')
+   .success(function(data){
+     var res = data.data;
+     console.log("products\n\n",data.data);
+
+     var end = new Date().getTime();
+   })
+   .error(function(err){
+     console.log("error: fetching value from redis server");
+   })*/
+   /*Global search ends*/
    /* Moved to discount controller
   $scope.today = function() {
     $scope.discountStart = new Date();

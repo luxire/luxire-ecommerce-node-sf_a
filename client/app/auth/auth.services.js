@@ -35,7 +35,17 @@ angular.module('luxire')
   };
   this.identity = function(){
 
-  }
+  };
+  this.forgot_password = function(user){
+    return $http.post('/api/userManager/forgot_password', angular.toJson(user))
+  };
+  this.reset_token_validation = function(token){
+    var reset_token = {token: token};
+    return $http.post('/api/userManager/reset_password_token_validation?token='+token, {});
+  };
+  this.reset_password = function(token, passwords){
+    return $http.post('/api/userManager/reset_password_with_token?token='+token, angular.toJson(passwords));
+  };
 })
 .service('$authorization', function($http){
 

@@ -1,7 +1,7 @@
 <div class="col-lg-11 col-md-11" style="padding: 0px;">
   <div class="" ng-mouseleave="mouseleaveNav()">
     <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
-    <div class="search admin-sidebar-tab" style="font-size:13px;" id="search">Search</div>
+    <div class="search admin-sidebar-tab" style="font-size:13px;" id="search" ng-click="globalSearch=true">Search</div>
     <div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
     <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order">Orders</div>
     <div class="products admin-sidebar-tab" style="font-size:13px;" ui-sref="admin.product">Products</div>
@@ -17,7 +17,7 @@
 </div>
 <div class="col-lg-1 col-md-1" style="padding: 0px;">
   <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
-  <div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
+  <div class="search admin-sidebar-tab" style="font-size:13px;" id="search" ng-click="globalSearch=true"></div>
   <div class="home admin-sidebar-tab" style="font-size:13px;" id="home"></div>
   <div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
   <div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ui-sref="admin.product"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>

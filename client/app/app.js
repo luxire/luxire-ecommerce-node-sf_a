@@ -10,6 +10,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 													 'AngularPrint', 'monospaced.qrcode'])
 
 .run(function($location,$rootScope, $state){
+	$rootScope.spree_host = 'http://localhost:3000';
 	// $location.path('/collections');
 	$rootScope.alerts = [];
 
@@ -35,6 +36,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 					}
 				}
 				if(toState.name == 'login'){
+					console.log('token', window.sessionStorage.luxire_token);
 					if(window.localStorage.luxire_token != undefined || window.sessionStorage.luxire_token != undefined ){
 						event.preventDefault();
 						$rootScope.alerts.push({type: 'warning', message: 'You are already logged in!'});
@@ -60,6 +62,23 @@ angular.module('luxire', ['ui.router','ngRoute',
 		url:'/test',
 		templateUrl: 'app/test/test.html',
 		controller: 'testController',
+		data: {
+			require_auth: false
+		}
+	})
+	.state('filter',{
+		url: '/filter',
+		params: {filterObject: {}},
+		templateUrl: 'app/filter/partials/filter1.html',
+		controller: 'filterController',
+		data: {
+			require_auth: false
+		}
+	})
+	.state('luxire_product',{
+		url: '/luxire_product',
+		templateUrl: 'app/newProduct/partials/newProduct.html',
+		controller: 'newProductController',
 		data: {
 			require_auth: false
 		}
