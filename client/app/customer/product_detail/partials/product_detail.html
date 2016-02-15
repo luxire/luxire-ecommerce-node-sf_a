@@ -1,0 +1,546 @@
+<!-- <h1>product details</h1> -->
+<style>
+.carousel-control {
+font-size: 1px
+}
+.carousel-control.left{
+  background: url("client/assets/images/yeoman.png") no-repeat !important;
+}
+.carousel-control.right {
+  background: url(/path/to/[image-here].png) no-repeat !important;
+}
+.selectSlider{
+  border:3px solid #590423;
+}
+.choose-style-window{
+  z-index: 100000;
+
+}
+.bespoke-style-window .modal-dialog{
+  width: 98%
+}
+.modal-dialog .modal-lg{
+  width: 95%
+}
+.activeCustomizationAttribute{
+  border: solid 2px #02A702;
+  z-index: 200;
+}
+</style>
+<div class="container" style="width: 100%; font-family: roboto">
+  <div id="product_detail"></div>
+  <div class="row" style="border-bottom: solid 1px #D7D7D7 ">
+    <div id="shirt-detail-image-part" class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="padding-left:0%;margin-left:0%;background-color:#F7F7F7;">
+        <div class="row">
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+          </div>
+          <div id="carosel-part" class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 4%">
+              <div class="row " style="width:100%;">
+                <uib-carousel interval="0" style="width:100%;">
+                  <uib-slide ng-repeat="slide in product.master.images" active="slide.active" style="width:100%;">
+                    <img ng-src="{{getImage(slide.large_url)}}" alt="{{slide.alt}}" style="max-width: 97%; margin: auto">
+                    <!-- <div class="carousel-caption">
+                      <h4>Slide {{slide.id}}</h4>
+                    </div> -->
+                  </uib-slide>
+                </uib-carousel>
+
+              </div>
+              <div id="shirt-review"class="row" style="margin-bottom:2%;">
+                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                      <span style="font-size:80%; color:#CF3F74;">Reviews&nbsp;&nbsp;(6) &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:black;"></span></span>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                  </div>
+                  <!-- <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="">
+                      <span style="font-size:80%;">Rating </span>
+                      <span style="margin-left:2%;">
+                        <span style="margin-left:3%;"><i class="fa fa-star"></i></span>
+                        <span style="margin-left:3%;"><i class="fa fa-star"></i></span>
+                        <span style="margin-left:3%;"><i class="fa fa-star"></i></span>
+                        <span style="margin-left:3%;"><i class="fa fa-star"></i></span>
+                        <span style="margin-left:3%;"><i class="fa fa-star-half-o"></i></span>
+                      </span>
+                  </div> -->
+
+                </div>
+              </div>
+          <div id="thumbnail-part"class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left: 0px;margin-top: 2%">
+              <div id="thumbnails" style="">
+                  <div ng-repeat="thumbnail in product.master.images" style="padding-top:12%">
+                    <img src="{{getImage(thumbnail.small_url)}}" alt="{{thumbnail.alt}}" ng-click="activate_slide(thumbnail.id)" style="border: solid 2px #A5A5A5">
+                  </div>
+              </div>
+
+          </div>
+        </div>
+
+    </div>
+      <!-- SHIRT DETAIL VIEW DESCRIPTION PART  -->
+    <div id="shirt-detail-description-part" class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="padding-left:3%;">
+        <div class="row" style="">
+            <div>
+                <span id="shirt-name" style="font-size:200%;">{{product.name}}</span><br>
+                <span id="shirt-price" style="font-size: 125%;color: #233863">{{product.display_price}}</span>
+            </div>
+            <!-- <div class="row" style="font-size:90%;padding-top:3%;padding-left:3%;">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding:0%;">
+                  <span class="glyphicon glyphicon-dashboard" style=" font-size:160%;padding-top:1%;"></span>
+                  <span style="padding-left:3%;">250 Gms</span>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding:0%;margin-left:-3%;">
+                  <span><i class="fa fa-umbrella" style="font-size:160%;margin-left:10%;padding-top:1%;"></i></span>
+                  <span style="padding-left:3%;">Wet/Cool Climate</span>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding:0%;margin-left:-3%;">
+                  <span><i class="fa fa-black-tie" style="margin-left:0%; font-size:160%;padding-top:1%;"></i></span>
+                  <span style="padding-left:3%;">Formal Office Wear</span>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding:0%;margin-left:-3%;">
+                  <span class="glyphicon glyphicon-flag" style="margin-left:0%; font-size:160%;padding-top:1%;"></span>
+                  <span style="padding-left:3%;">Italic Fabric</span>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding:0%;margin-left:-2%;">
+                  <span><i class="fa fa-ban" style="margin-left:0%; font-size:160%;padding-top:1%;"></i></span>
+                  <span style="padding-left:3%;">Dry Wash Only</span>
+                </div>
+
+            </div> -->
+            <div class="row " style="margin-top:4%;margin-right:3%;">
+                <div style="padding-left:2%;">
+                    <span style="font-size:160%;color: #B9B9B9">More On this shirt</span>
+                </div>
+                <div id="shirt-description" style="font-size: 100%;padding-left:2%;text-align: justify">
+                  <p>
+                      {{product.description}}
+                  </p>
+                  <!-- <div class="row" style="text-align:center;margin-top:-1%;">
+                    <div style="text-align:center;"><a data-toggle="collapse" data-target="#demo"><span class="glyphicon glyphicon-chevron-down"></span><a></div>
+                    <div id="demo" class="collapse">
+                      An awesome choice for a formal occasion, this white shirt is made of 100% cotton from india.
+                      With a thread count of 1000, this shirt gives the wearer the comfort and styles at the climates.
+                      An awesome choice for a formal occasion, this white shirt is made of 100% cotton from india.
+                      With a thread count of 1000, this shirt gives the wearer the comfort and styles at the climates.
+
+                    </div>
+                  </div> -->
+              </div>
+              <div class="row " style="margin-top:4%;margin-left:0%;">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="">
+                    <div class="">
+                      <button type="button" class="btn btn-default" ng-click="choose_style()">Choose a style<span style="padding-left:8%;"class="glyphicon glyphicon-arrow-right"></button>
+                    </div>
+                  </div>
+                  <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                        <div class="btn-group" uib-dropdown keyboard-nav>
+                            <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                                Sleeve Length {{cart_object['measurement_std_attributes']['Sleeve Length']['name']}}<span class="caret"></span>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                              <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Sleeve Length']" ng-click="set_attribute_value('measurement_std_attributes', 'Sleeve Length', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                        <div class="btn-group" uib-dropdown keyboard-nav>
+                            <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                                Collar Size {{cart_object['measurement_std_attributes']['Collar Size']['name']}}<span class="caret"></span>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                              <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Collar Size']" ng-click="set_attribute_value('measurement_std_attributes', 'Collar Size', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                        <div class="btn-group" uib-dropdown keyboard-nav>
+                            <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                                Fit Type {{cart_object['measurement_std_attributes']['Fit Type']['name']}}<span class="caret"></span>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                              <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Fit Type']" ng-click="set_attribute_value('measurement_std_attributes', 'Fit Type', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+
+                  </div>
+
+              </div>
+              <hr>
+              <div class="row " style="margin-top:6%;margin-left:1%;">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:0%;">
+                    <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:4%;">
+                        <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color:#6D032B;color:#EDEDED;border-radius:0px;color:white;">Add To Cart<i style="margin-left:5%;"class="fa fa-plus-circle"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:0%;">
+                    <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;">
+                        <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color:#191919;color:#EDEDED;border-radius:0px;color:white;" ng-click="make_my_own_style()"><i style="margin-right:15%;font-size:140%;"class="fa fa-scissors"></i>Make My Own Style</button>
+                    </div>
+                  </div>
+
+                  </div>
+
+              </div>
+
+
+        </div>
+    </div>
+
+  </div>
+  <div id="make_my_own_style" class="row" style = "border-bottom: solid 1px #D7D7D7 ">
+    <div style="text-align:center;margin-top: 2%;margin-bottom: 2%;">
+        <span style="font-size: 250%;font-weight: 300;"><span style="color:#D7D7D7;">Make </span><span style="color: black">My Own Style</span></span>
+    </div>
+    <div class="row" style="margin-left: 0px;margin-right: 0px; margin-left: 2%;cursor: pointer">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row" ng-init="count=0;" >
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="padding-right:0%;cursor: pointer">
+                <span ng-hide="hidePrev" class="glyphicon glyphicon-chevron-left" ng-click="slidePrev()" style="padding-right:0%;padding-top:65%;font-size:200%;"></span>
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" id="myCarousel2" style="">
+              <div class="carousel-inner" style="cursor: pointer">
+                <div class="item active"  ng-repeat="luxire_style in luxire_styles | limitTo: 6" style="display:inline-block;float:left;margin-right:1%;" ng-click="selectSlider($index)">
+                    <div class="" style="width:150px;height:150px;background-color: #9F9F9F;" ng-class="{'selectSlider': $index == selectSliderIndex }">
+                        <!-- <img src="{{luxire_style.imgurl}}" style="width:100%;height:100%;" ng-click="selectSlider($index)" ng-class="{'selectSlider': $index == selectSliderIndex }"> -->
+                    </div>
+                    <div style="text-align:center;font-size:120%;color:black;">{{luxire_style.name}}</div>
+                    <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.description}}" popover-trigger="mouseenter"></i></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="padding-left:0%;cursor: pointer">
+                <span ng-hide="hideNext" class="glyphicon glyphicon-chevron-right" ng-click="slideNext()" style="padding-left:0%;padding-top:65%;font-size:200%;"></span>
+            </div>
+
+          </div>
+        </div>
+
+
+    </div>
+    <div class="row" style="margin-top:2%;margin-left: 0px; margin-right: 0px">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="border-bottom: 1px solid #D7D7D7;padding-top: 2.5%">
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align:center;">
+                <span style="font-size:175%;color:#000000;font-weight: 300">Or<span>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="border-bottom: 1px solid #D7D7D7;padding-top: 2.5%">
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
+    </div>
+    <div class="row" style="margin-top:2%;margin-bottom:4%;margin-left: 0px; margin-right: 0px">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin:0%;padding:0%;">
+          <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:4%;">
+              <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:140%;background-color:#CCCCCC;border-radius:0px;color:black;">My Present Styles</button>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin:0%;padding:0%;">
+          <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:4%;">
+              <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:140%;background-color:#6D032B;color:#EDEDED;border-radius:0px;color:white;" ng-click="bespoke_style()"><span style="margin-right:15%;font-size:140%;"class="fa fa-scissors"></span>Bespoke Style</button>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+    </div>
+
+
+  </div>
+  <div id="measurement_and_fits" class="row">
+    <div id="mesurements-and-fit" class="row" style="margin-top: 1%;margin-left: 0px; margin-right: 0px">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <div class="" style="text-align:center;">
+              <span style="font-size: 250%;color:#000000;font-weight: 300">Measurements and Fit</span>
+          </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+    </div>
+    <div class="" style="padding-top: 3%">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+          <div class="btn-group" uib-dropdown keyboard-nav>
+              <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                  Sleeve Length {{cart_object['measurement_std_attributes']['Sleeve Length']['name']}}<span class="caret"></span>
+              </button>
+              <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Sleeve Length']" ng-click="set_attribute_value('measurement_std_attributes', 'Sleeve Length', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+              </ul>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+          <div class="btn-group" uib-dropdown keyboard-nav>
+              <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                  Neck Size {{cart_object['measurement_std_attributes']['Neck Size']}}<span class="caret"></span>
+              </button>
+              <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Collar Size']" ng-click="set_attribute_value('measurement_std_attributes', 'Neck Size', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+              </ul>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+          <div class="btn-group" uib-dropdown keyboard-nav>
+              <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+                  Fit Type {{cart_object['measurement_std_attributes']['Fit Type']['name']}}<span class="caret"></span>
+              </button>
+              <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                <li role="menuitem" ng-repeat="(key,value) in measurement_std_attributes['Fit Type']" ng-click="set_attribute_value('measurement_std_attributes', 'Fit Type', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+              </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row " style="text-align:center; margin-top:4%;margin-left: 0px;margin-right: 0px">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <span style="font-size: 175%;color:#6D032B;">Or</span>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+    </div>
+    <div class="row " style="margin-top:4%;margin-left: 0px;margin-right: 0px">
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+      <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:4%;">
+                  <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color:#CCCCCC;border-radius:0px;color:black;text-align:center;">Custom Measurements</button>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:4%;">
+                  <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color:#CCCCCC;border-radius:0px;color:black;text-align:center;">Body Measurements</button>
+              </div>
+            </div>
+
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align:center;padding-top:2%;">
+            <span style="font-size:1em;color:#CCCCCC;">Or</span>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-top:2%;">
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+              <div class="" style="border: 1px solid black; width:1.5em; height:1.5em;"></div>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+              <span style="font-size:130%;color:black;">Send Shirt Sample</span>
+          </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:7%;margin-left: 0px;margin-right: 0px">
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="border-bottom: 1px solid #D7D7D7;padding-top: 3%">
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align:center;padding:0%;">
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;margin-left:0%;">
+                  <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:130%;background-color:#6D032B;color:#EDEDED;border-radius:0px;color:white;">Add To Cart</button>
+              </div>
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="border-bottom: 1px solid #D7D7D7;padding-top: 3%">
+          </div>
+    </div>
+
+  </div>
+</div>
+<script type="text/ng-template" id="choose_style.html">
+  <div class="row" style="margin-top: 3%">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+    <div class="carousel-inner" style="cursor: pointer">
+      <div class="item active"  ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;margin-right:1%;" ng-click="selectSlider($index, luxire_style)">
+          <div class="" style="width:75px;height:75px;background-color: #9F9F9F;" ng-class="{'selectSlider': $index == selectSliderIndex }">
+              <!-- <img src="{{luxire_style.imgurl}}" style="width:100%;height:100%;" ng-click="selectSlider($index)" ng-class="{'selectSlider': $index == selectSliderIndex }"> -->
+          </div>
+          <div style="text-align:center;font-size:120%;color:black;">{{luxire_style.name}}</div>
+          <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.description}}" popover-trigger="mouseenter"></i></span></div>
+      </div>
+    </div>
+
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+  </div>
+  <div class="row" style="text-align: center;margin-bottom: 2%">
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="done()">Done</button>
+  </div>
+
+  </script>
+<script type="text/ng-template" id="bespoke_style.html">
+<div class="row">
+    <div id="customize-shirt-body"class="" style="margin: 3%; font-family: roboto">
+          <div class="row container-fluid" style="">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <span style="font-size:140%;color:black;font-weight: 300">{{product.name}}</span>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                    <span style="font-size:120%;color:black;font-weight: 300">Pre-set Style</span>
+                </div>
+
+          </div>
+          <hr>
+          <div class="row container-fluid" style="width:100%;height:100%;">
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-left:2.5%;">
+                  <div class="row" style="margin-top:1%;">
+                      <img src="{{getImage(product.master.images[0].large_url)}}" alt="{{product.master.images[0].alt}}" style="max-width: 80%"/>
+                  </div>
+                  <div class="row" style="margin-top:4%; border-bottom: 1px solid #DDDCDA;padding-bottom:10%;">
+                      <span style="font-size:130%;">Selected Options</span>
+                      <div>
+                          <table class="shirt-details">
+                              <tr ng-repeat="item in shirtDetails.description" style="">
+                                  <td >{{item.name}}:</td>
+                                  <td >{{item.value}}</td>
+                              </tr>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="row container-fluid" style="margin-top: 10%;">
+                      <span style="font-size:120%;">Show More Details</span>
+                      <span style="margin-left:2%;"><span class="glyphicon glyphicon-chevron-down"></span></span>
+                  </div>
+                  <div class="row" style="margin-top:12%;">
+                      <span style="font-size:200%;">{{shirtDetails.price}}</span>
+                  </div>
+              </div>
+              <div class="col-lg-9 col-md-9 col-sm-9 col-xs-10" style="">
+                  <div class="row container-fluid">
+                      <div class="row" style="display:block;padding-bottom:2%;margin-left: 8%">
+                          <div class="" style="display:inline-block;width:5%;">
+                            <span ng-hide="hidePrev" class="glyphicon glyphicon-chevron-left" ng-click="slidePrev()" style="padding-right:0%;padding-top:50%;font-size:200%;"></span>
+                          </div>
+                          <div class="" style="display:inline-block;float:left;width: 100%;">
+                              <div class="item active"  ng-repeat="luxire_style in luxire_styles | limitTo: 8" style="display:inline-block;float:left;margin-right:1%;border: 1px solid #DDDCDA;">
+                                  <div class="" ng-class="{'activeFitClass': $index == selectSliderIndex }">
+                                    <div class="" style="width:80px;height:80px;background-color: #9F9F9F;" ng-click="selectSlider($index)">
+                                        <!--//img src="{{img.imgurl}}" style="width:100%;height:100%;" -->
+                                    </div>
+                                    <div style="font-size:80%;text-align:center;padding-top:1%;"><span>{{luxire_style.name}}</span></div>
+                                  </div>
+                              </div>
+                          <div class="" style="display:inline-block; width:5%;float:left;">
+                            <span ng-hide="hideNext" class="glyphicon glyphicon-chevron-right" ng-click="slideNext()" style="padding-left:0%;padding-top:50%;font-size:200%;"></span>
+                          </div>
+                      </div>
+
+                  </div>
+                  <hr>
+                  <div class="row container-fluid">
+                      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                      <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                          <div class="row container-fluid">
+                              <div id="style-part" class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <span style="font-size:150%; ">Customization</span>
+                              </div>
+                              <div id="style-size-checkout" class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+
+                              </div>
+
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row container-fluid" style="width:100%;height:100%;margin-top:2%;">
+                          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                          <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="border: 1px solid #DDDCDA;">
+                              <div id="option-design-details" class="row container-fluid">
+                                <div id="option-part" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border-right: 1px solid #DDDCDA;z-index: 200">
+                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:4%;">
+                                      <div class="row" style="margin-top:3%;">
+                                        <div><span style="font-size:110%;">Options</span></div>
+                                      </div>
+                                      <div class="row container-fluid" style="margin-top:5%;">
+                                        <div class="" ng-repeat="customization_attribute in product['customization_attributes']" style="margin-top:8%;border: 1px solid #DDDCDA; z-index: -200" >
+                                            <div ng-class="{'activeCustomizationAttribute': $index==selected_customization_attribute_index}" ng-click="activate_customization_attribute(customization_attribute, $index)">
+                                              <div class="" style="width:100%;height:100px;background-color: #CCCCCC;">
+                                                <!--//img src="{{img.imgurl}}" style="width:100%;height:100%;"  -->
+                                              </div>
+                                              <div style="font-size:80%;text-align:center;padding-top:1%;"><span>{{customization_attribute.name}}</span></div>
+                                            </div>
+                                        </div>
+                                  </div>
+
+
+                                </div>
+                                </div>
+                                <div id="design-style" class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="">
+                                  <div class="row container-fluid" style="margin-top:2%;padding-left:2%;">
+                                      <div><span style="font-size:110%;padding-left:3%;">Choose Design Style</span></div>
+                                  </div>
+                                  <div class="row container-fluid" style="margin-top:2%;">
+                                    <div class="item active"  ng-repeat="(style_name, style_object) in selected_customization_attribute.value" style="display:inline-block;float:left;margin-left:2%;border: 1px solid #DDDCDA;" >
+                                        <div class="" ng-click="activate_customization_style(style_object, $index)" ng-class="{'activeCustomizationAttribute': $index==selected_customization_style_index}">
+                                          <div class="" style="width:95px;height:95px;background-color: #CCCCCC;" >
+                                              <!-- //--img src="{{img.imgurl}}" style="width:100%;height:100%;" ng-click="selectCollar($index,img.text)" -->
+                                          </div>
+                                          <div style="font-size:80%;text-align:center;padding-top:1%;"><span>{{style_name}}</span></div>
+                                        </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                                <div id="details" class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-left: 1px solid #DDDCDA;">
+
+                                  <div class="row container-fluid" style="margin-top:3%;">
+                                      <div class="row" style="padding-left:11%;" >
+                                          <span style="font-size:110%;">Details</span>
+                                      </div>
+                                      <div class="row" style="margin-top:5%;">
+                                          <span>{{}}</span>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                                          <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="position:relative;height:650px;">
+                                            <div class=""  style="padding: 3% 3% 3% 3%;border:1px solid #DDDCDA;position:absolute;bottom:3%;width:80%;">
+                                              <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color:black;color:white;border-radius:0px;color:white;">Next Step</button>
+                                            </div>
+                                          </div>
+                                          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+
+                    </div>
+
+
+
+              </div>
+          </div>
+    </div>
+</div>
+
+</script>
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>

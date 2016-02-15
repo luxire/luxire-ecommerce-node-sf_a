@@ -1,0 +1,110 @@
+
+
+  <!--style>
+    .aligning{
+      margin-left: 50px;
+      margin-right: 50px;
+      margin-bottom: 500px;
+
+
+    }
+    div.sm {
+      display: block;
+      float: left;
+      width: 35%;
+      margin-bottom: 10px;
+    }
+div.sm:last-child:after {
+  clear: both;
+  content: " ";
+  display: block;
+  height: 10px;
+  overflow: hidden;
+  }
+</style-->
+<style>
+.ProductType-checkboxColumn{
+    display: inline-block;
+    width:30%;
+}
+.productType-DivAlign{
+    width: 50%;
+    /* Set the margin-left and margin-right automatically set */
+    margin-left:50%;
+    margin-right: 10%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    position: relative;
+}
+.productTypePlacard{
+
+    background-color: white;
+    border: 1px solid #D3DBE2;
+    border-radius: 4px;
+    padding: 4% !important;
+    margin-bottom: 15px;
+
+}
+
+
+</style>
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types / <span style="color: black;">New Type</span></span>
+    </div>
+    <div class="col-lg-5 col-md-5">
+    </div>
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
+      <!--<button type="button" class="btn btn-default" ng-click="activeButton('products')">Cancel</button>-->
+      <!-- <button type="button" class="btn btn-default" ng-click="createProductType()">Save</button> -->
+    </div>
+  </div>
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" >
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <div class="productTypePlacard" >
+              <span style="font-size: 13px;">Name</span>
+              <br>
+              <input type="text" ng-model="productTypeData.product_type" class="form-control" placeholder="Product Type">
+              <br>
+              <span style="font-size: 13px;">Description</span>
+              <br>
+              <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea>
+
+              <p style="font-size: 13px;">Attributes</p>
+              <input type="text" placeholder="search" class="form-control" ng-model="search_attr.$">
+              <br>
+              <div class="ProductType-checkboxColumn" ng-repeat="m in measurementTypeJson.data | filter: search | orderBy:'name'" >
+                  <input type="checkbox" ng-model="m.selected" value="{{m.name}}" >&nbsp;&nbsp;&nbsp;{{m.name}}<br>
+              </div><br>
+              <div class="pull-right">
+                <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="createProductType()">Save</button>
+              </div>
+              <br>
+          </div>
+
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
+        </div>
+      </div>
+    </div>
+        <!-- <div class="col-lg-4 col-md-4">
+          <div class="placard-grey" ng-init="calFlag = true">
+          </div>
+        </div> -->
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="1500">{{alert.message}}</uib-alert>
+</div>
+
+   <!--</div>
+  </div>
+</div>-->

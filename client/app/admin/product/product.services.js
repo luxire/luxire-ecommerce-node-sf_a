@@ -12,8 +12,11 @@ angular.module('luxire')
 	}
 	this.createProduct = function(product) {
 		var deferred = $q.defer();
-
-		$http.post("/api/products", angular.toJson(product)).success(function(res) {
+		var prod = {
+			product: product
+		};
+		console.log('creating product', prod);
+		$http.post("/api/products", angular.toJson(prod)).success(function(res) {
 			console.log(res);
 			deferred.resolve(res.data);
   		})

@@ -1,0 +1,133 @@
+<style>
+#select-button-width-change{
+  width: 32%;
+}
+</style>
+
+
+<div class="container-fluid" style="height:100%" >
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types</span>
+    </div>
+    <div class="col-lg-2 col-md-2">
+
+    </div>
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+
+      <button type="button" class="btn btn-primary" ui-sref="admin.new_productTypes">Add a productType</button>
+    </div>
+  </div>
+
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
+        <div class="row" style="margin:0px; background-color: white;">
+          <div  class="col-lg-2 col-md-2" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+            <span style="font-size: 12px;">All Product Types</span>
+          </div>
+          <div  class="col-lg-10 col-md-10" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+
+          </div>
+        </div>
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+          <div class="input-group">
+            <div class="input-group-btn">
+
+          </div>
+        </div>
+        <div class="row " style="margin:0px; background-color: white; padding: 20px;">
+          <table class="table table-hover admin-productType-list">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" name="selectAll" value="">
+                </th>
+                <th>
+                  Product Type
+                </th>
+                <th>
+                  Discription
+                </th>
+                <!--th>
+                  Attributes
+                </th-->
+
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="x in productTypeJsonResponse.data track by $index">
+                <td>
+                  <input type="checkbox" name="selectAll" value="">
+                </td>
+                <td>
+                    <a ui-sref="admin.editProductType" ng-click="showEditProdTypes(x.id)" >{{x.product_type}}</a>
+                </td>
+                <td>
+                  {{x.description}}
+                </td>
+                <!--td>
+                  <select onmousedown="if(this.options.length>3){this.size=5;}" onchange='this.size=0;' onblur="this.size=0;" id="select-button-width-change">
+                    <option ng-repeat="attribute in measurementTypeJson.data" value="attribute.name" size="2">{{attribute.name}}</option>
+                  </select-->
+
+
+
+                  <!--button class="btn btn-primary " uib-dropdown-toggle type="button" data-toggle="uib-dropdown" aria-haspopup="true" aria-expanded="true" >{{selectedAttribute}}
+                    <span class="caret">
+                    </span></button>
+                    <ul class="uib-dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxitemselected(attribute)">{{attribute.name}}</a></li></ul>-->
+                  <!--    <div class="btn-group">
+                        <button type="button" class="btn btn-default">Action</button>
+                        <button type="button" class="btn btn-default uib-dropdown-toggle" data-toggle="uib-dropdown" aria-haspopup="true">
+                          <span class="caret"></span>
+                          <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="uibdropdown-menu" role="menu" aria-expanded="false">
+                          <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxitemselected(attribute)">{attribute.name}}</a></li>
+
+                        </ul>
+                      </div>-->
+
+
+
+<!--
+                  <div class="uib-dropdown">
+                        <button class="btn btn-default uib-dropdown-toggle" type="button" id="uib-dropdownMenu1" data-toggle="uib-dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{selectedItem}}
+                            <span class="caret"></span>
+                            <ul class="uib-dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxAttributeselected(attribute)">{{attribute.name}}</a></li>
+                            </ul>
+                        </button>
+
+                    </div>
+-->
+
+
+
+
+
+                </td>
+
+                <td>
+                  <button type="button" class="btn btn-danger" ng-click="deleteProductTypes(x.id,$index)">X</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+          <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,7 +7,8 @@ angular.module('luxire', ['ui.router','ngRoute',
 													'ui.bootstrap','angularFileUpload',
 													'ui.bootstrap.datetimepicker','ngTagsInput',
 													'ngAnimate', 'ngMessages',
-													 'AngularPrint', 'monospaced.qrcode'])
+													 'AngularPrint', 'monospaced.qrcode',
+												   'ui.tree'])
 
 .run(function($location,$rootScope, $state){
 	$rootScope.spree_host = 'http://localhost:3000';
@@ -56,7 +57,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 	$httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
-	$urlRouterProvider.otherwise('/collections');
+	$urlRouterProvider.otherwise('/');
 	$stateProvider
 	.state('test',{
 		url:'/test',
@@ -71,14 +72,6 @@ angular.module('luxire', ['ui.router','ngRoute',
 		params: {filterObject: {}},
 		templateUrl: 'app/filter/partials/filter1.html',
 		controller: 'filterController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('luxire_product',{
-		url: '/luxire_product',
-		templateUrl: 'app/newProduct/partials/newProduct.html',
-		controller: 'newProductController',
 		data: {
 			require_auth: false
 		}
@@ -167,6 +160,41 @@ angular.module('luxire', ['ui.router','ngRoute',
 		params: {gatewayObject: {}},
 		templateUrl: 'app/checkout/partials/checkoutGateway.html',
 		controller: 'checkoutGatewayController',
+		data: {
+			require_auth: false
+		}
+	})
+	.state('productListing',{
+		url: '/product-listing',
+		params: {filterObject: {}},
+		templateUrl: 'app/newProduct/partials/productListing.html',
+		controller: 'productListingController',
+		css: 'app/newProduct/css/productListing.css',
+		data: {
+			require_auth: false
+		}
+	})
+
+
+.state('shirtDetailedView',{
+		url: '/shirt-detailed-view',
+		params: {filterObject: {}},
+		templateUrl: 'app/newProduct/partials/shirtDetailView.html',
+		controller: 'shirtDetailedViewController',
+		css: 'app/newProduct/css/shirtDetailView.css',
+		data: {
+			require_auth: false
+		}
+	})
+
+
+
+.state('customizeShirt',{
+		url: '/customize-shirt',
+		params: {filterObject: {}},
+		templateUrl: 'app/customize-shirt/partials/customize-shirt.html',
+		controller: 'customizeShirtController',
+		css: 'app/customize-shirt/css/customize-shirt.css',
 		data: {
 			require_auth: false
 		}

@@ -65,25 +65,23 @@ exports.create = function(req, res){
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
-    if(response.statusCode == 201){
-      console.log(body)
-      res.send({data: body,status: 201});
+    if(error){
+      res.status(500).send(error.syscall);
     }
     else{
-      console.log('Could not post');
-      res.status(response.statusCode).send(response.body.error);
-    }
+      res.status(response.statusCode).send(body);
+    };
   })
 };
 
 //Get product details
 exports.show = function(req, res){
-  console.log(req);
   req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
   var params = querystring.stringify(req.params);
   http
     .get(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
       if(response){
+        res.cookie('remember_mudassir', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
         res.status(response.statusCode).send(body);
       }
       else{

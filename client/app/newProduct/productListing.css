@@ -1,0 +1,42 @@
+.nav > li > a{
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.nav-items li{
+  width:20%;
+
+}
+ul.nav-items{
+  line-height: 28px;
+}
+/* Extra small devices (phones, up to 480px) */
+@media screen and (max-width: 767px) {
+  body{font-size: 6px;}
+  .productImg{
+    display:inline-block;
+    float:left;
+    width:15%;
+    height:50%;
+    margin-left: 1%;
+    padding-right: 0%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+  body{font-size: 8px;}
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+  body{font-size: 12px;}
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
+  body{font-size: 14px;}
+}
+#top-navbar{
+  background-color: yellow;
+}

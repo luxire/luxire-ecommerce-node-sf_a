@@ -2,7 +2,6 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('luxire')
-
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
 	$urlRouterProvider.when('/admin','/admin/');
 	$stateProvider
@@ -89,8 +88,94 @@ angular.module('luxire')
 				require_auth: true
 			}
 		}
+	})
+	.state('admin.product_attributes',{
+		url:'/product_attributes',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/product_attributes/partials/product_attributes_home.html', controller: 'ProductAttributesController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.product_attributes_new',{
+		url:'/product_attributes/new',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/product_attributes/partials/product_attributes_create.html', controller: 'AddProductAttributesController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.product_attributes_edit',{
+		url:'/product_attributes/:id/edit',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/product_attributes/partials/product_attributes_edit.html', controller: 'EditProductAttributesController'},
+			params: {id: null},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.productTypes',{
+		url:'/product_types',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/productTypes/partials/productTypeHome.html',controller: 'ProductTypeController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.new_productTypes',{
+		url:'/product_types/new',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/productTypes/partials/addProductType.html',controller: 'ProductTypeController'},
+			data: {
+				require_auth: true
+			}
+		}
 
 	})
+
+	.state('admin.editProductType',{
+		url:'/product_types/:id/edit',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/productTypes/partials/editProductType.html',controller: 'editProductTypeController'}
+		},
+		data: {
+			require_auth: true
+		}
+	})
+
+	.state('admin.styleMasterCreate',{
+		url:'/product_styles/new',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterCreate.html',controller: 'styleMasterCreateController'}
+		}
+	})
+	.state('admin.styleMasterHome',{
+		url:'/product_styles',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterHome.html',controller: 'styleMasterHomeController'}
+		}
+	})
+	.state('admin.styleMasterEdit',{
+		url:'/product_styles/:id/edit',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterEdit.html',controller: 'styleMasterEditController'}
+		}
+	})
+
+
 	.state('admin.discount',{
 		url:'/discounts',
 		views: {

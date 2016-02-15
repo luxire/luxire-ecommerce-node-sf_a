@@ -1,0 +1,23 @@
+@media (min-width: 768px) and (max-width: 991px) {
+  body{font-size: 8px;}
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+  body{font-size: 12px;}
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
+  body{font-size: 14px;}
+}
+table.shirt-details td{
+  padding-right: 1.5em;
+}
+.activeCuffsClass{
+    border:2px solid green;
+}
+.activeCollarClass{
+    border:2px solid green;
+}
+.activeFitClass{
+    border:2px solid green;
+}

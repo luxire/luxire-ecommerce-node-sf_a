@@ -1,5 +1,12 @@
 angular.module('luxire')
-
+.service('AdminConstants',function(){
+	this.api = {
+		products: '',
+		product_types: '/api/v1/admin/product_types',
+		measurement_types: '/api/v1/admin/measurement_types',//product attributes
+		style_masters: '/api/v1/admin/style_masters'
+	};
+})
 .service('prototypeObject',function(){
 	this.product = function(){
 		this.name = ''

@@ -128,6 +128,7 @@ angular.module('luxire')
 
   //controller function for file reader
   $scope.uploadSponsorLogo = function(files) {
+    console.log('files',files);
           if (files && files.length) {
           $scope.sponsorLogoFileName = files[0].name
           fileReader.readAsDataUrl(files[0], $scope).then(function(result) {
@@ -137,7 +138,7 @@ angular.module('luxire')
     }
 
   $scope.createProduct = function() {
-    console.log($scope.productData);
+    console.log('products',$scope.productData);
     products.createProduct($scope.productData).then(function(data){
       alert('Product successfully added');
       $scope.activeButton('products')

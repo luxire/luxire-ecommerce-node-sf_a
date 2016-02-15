@@ -20,34 +20,11 @@ module.exports = function(app) {
   app.use('/api/orders', require('./api/order'));
   app.use('/api/checkouts', require('./api/checkout'));
   app.use('/api/search', require('./api/search'));
-  // app.use('/api/address', require('./api/address'));
-  // app.use(function(req, res, next){
-  //   var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  //   if (token) {
-  //
-  //   // verifies secret and checks exp
-  //   jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
-  //     if (err) {
-  //       return res.json({ success: false, message: 'Failed to authenticate token.' });
-  //     } else {
-  //       console.log('decoded', decoded);
-  //       // if everything is good, save to request for use in other routes
-  //       req.decoded = decoded;
-  //       next();
-  //     }
-  //   });
-  //
-  // } else {
-  //
-  //   // if there is no token
-  //   // return an error
-  //   return res.status(403).send({
-  //       success: false,
-  //       message: 'No token provided.'
-  //   });
-  //
-  // }
-  // });
+
+
+  /*API with versioning namespace*/
+  app.use('/api/v1', require('./api/v1'));
+  /**/
 
   app.use('/api/shipping', require('./api/shipping'));
   app.use('/api/promotions', require('./api/promotion'));
@@ -71,7 +48,7 @@ module.exports = function(app) {
       })
     });
 
-  
+
   // app.use('/api/variants', require('./api/variants'));
 
   // All undefined asset or api routes should return a 404
@@ -338,4 +315,32 @@ module.exports = function(app) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //   next();
+// });
+// app.use('/api/address', require('./api/address'));
+// app.use(function(req, res, next){
+//   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+//   if (token) {
+//
+//   // verifies secret and checks exp
+//   jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
+//     if (err) {
+//       return res.json({ success: false, message: 'Failed to authenticate token.' });
+//     } else {
+//       console.log('decoded', decoded);
+//       // if everything is good, save to request for use in other routes
+//       req.decoded = decoded;
+//       next();
+//     }
+//   });
+//
+// } else {
+//
+//   // if there is no token
+//   // return an error
+//   return res.status(403).send({
+//       success: false,
+//       message: 'No token provided.'
+//   });
+//
+// }
 // });

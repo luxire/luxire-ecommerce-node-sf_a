@@ -1,0 +1,295 @@
+  <div class="container-fluid myclass">
+      <div class="row" style="margin-left: 0px;margin-right: 0px;margin-top:-1%;">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="border-bottom:1px solid #7A012E; margin-top:2%;">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"  style="">
+              <img src="lib/assets/Luxire_logo_collection_page.png" style="max-width: 90%;">
+            </div>
+            <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>-->
+            <div id="top-navbar"class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: .5%;">
+              <div class="fixed" style="">
+                  <nav class="navbar navbar top-bar" data-topbar>
+                    <div class="container-fluid">
+                      <ul class="nav navbar-nav" style="background-color:white;cursor: pointer">
+                          <li class="active"><a href="#" style="font-size:90%;color:#B8B8B8">HOME</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">SHIRTS</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">PANTS</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">JACKETS & COATS</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">ACCESSORIES</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">QUALITY</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">MEASUREMENTS</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">LOG IN</a></li>
+                          <li><a href="#" style="font-size:90%;color:#B8B8B8">CONTACT</a></li>
+                          <li ng-hide="topSearchBar">
+                                <input class="form-control" id="ex2" type="text" placeholder="search..." style="width:160%;height:10%;padding: 2% 0% 2% 0%;border-radious:6px;">
+                          </li>
+                      </ul>
+                      <ul class="nav navbar-nav navbar-right">
+
+                        <li><a href="#" ng-click="showTopSearchBar()"><span class="glyphicon glyphicon-search " style="color:#7A012E"></span></a></li>
+                      </ul>
+                    </div>
+                  </nav>
+                </div>
+            </div>
+          </div>
+          <!-- BODY PART -->
+
+
+          <!-- end of body part -->
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+      </div>
+    </div>
+    <div id="product-type-part" class="container-fluid">
+        <div class="row" style="margin-left: 0px;margin-right: 0px;">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div id="main-body" class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="margin:0%;height:30px;">
+              <nav class="navbar" data-topbar>
+                <div class="row container-fluid">
+                    <ul class="nav-items " style="height:30px;line-height:20px;text-align:center;cursor: pointer;">
+                      <li class="shirts " style="color:#7F7F7F;font-size:90%;margin-top:-5%;margin-left:30%;" ng-click="showCasual()">Casual</li>
+                      <li class="pants" style="color:#7F7F7F;font-size:90%;" ng-click="showFormal()">Formal</li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:90%;" ng-click="showDress()">Dress</li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
+                      <li class="jackets" ><i class="fa fa-shopping-cart" style="background-color:#7A012E;color:white;width:70%;font-size:170%;padding-top:4%;"></i></li>
+                    </ul>
+                    <!--<ul class="nav navbar-nav navbar-right" style="margin-left:-10%;">
+                      <li class="jackets" ><i class="fa fa-shopping-cart" style="background-color:#7A012E;color:white;width:70%;font-size:170%;"></i></li>
+                    </ul>-->
+                </div>
+              </nav>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        </div>
+
+    </div>
+    <div id="product-body-part" class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div id="main-body" class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="">
+                  <div class="container-fluid">
+                        <div id="filter-categories" class="" style="float:left;display:inline-block;width:10%;border-bottom:1px solid #7A012E;border-right:1px solid #7A012E;">
+                          <div class="container-fluid" style="background-color:#FAFAFA;margin-left:0%;margin-top:1%;">
+                          <div>
+                            <span style="margin-top:50%;margin-left:3%;font-size:120%;font-weight: bold;">Filter</span>
+                            <a data-toggle="collapse" data-target="">
+                              <span style="margin-left:5%;color:black;"class="glyphicon glyphicon-chevron-right"></span>
+                            </a>
+                          </div>
+                          <div id="filterOptions" class="" style="margin-left:%">
+                            <div class="row" style="margin-left: 2%;margin-top:8%;">
+                              <span style="margin-left: 1%; font-size:100%; font-weight: bold;">Material</span>
+                              <table class="">
+                                  <tbody>
+                                      <tr ng-repeat="item in materialOption">
+                                        <td style="padding-top:5%;">
+                                          <input type="checkbox" ng-change="syncMaterial(bool, item.text)" ng-model="bool" ng-checked="isCheckedMaterial(item.id)">
+                                        </td>
+                                        <td style="padding-top:5%;">
+                                          <span style="margin-left:7%;font-size:90%">{{item.text}}</span>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+
+                            </div>
+                            <div class="row" style="margin-left: 2%;margin-top:8%;">
+                              <span style="margin-left: 1%; font-size:100%; font-weight: bold;">Price  </span>
+                              <table class="">
+                                  <tbody>
+                                      <tr ng-repeat="item in priceRange">
+                                        <td style="padding-top:5%;">
+                                          <input type="checkbox" ng-change="syncPrice(bool, item.price)" ng-model="bool" ng-checked="isCheckedPrice(item.id)">
+                                        </td>
+                                        <td style="padding-top:5%;">
+                                          <span style="margin-left:7%;font-size:90%">{{item.text}}</span>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+
+                            </div>
+                            <div class="row" style="margin-left: 2%;margin-top:8%;">
+                              <span style="margin-left: 1%; font-size:100%; font-weight: bold;">Weight</span>
+                              <table class="">
+                                  <tbody>
+                                      <tr ng-repeat="item in weightOption">
+                                        <td style="padding-top:5%;">
+                                          <input type="checkbox" ng-change="syncWeight(bool, item.text)" ng-model="bool" ng-checked="isCheckedWeight(item.id)">
+                                        </td>
+                                        <td style="padding-top:5%;">
+                                          <span style="margin-left:7%;font-size:90%;">{{item.text}}</span>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+
+                            </div>
+                            <div class="row" style="margin-left: 5%;margin-top: 8%;">
+                                <span style="margin-left: 1%; font-size:100%; font-weight: bold;">Color</span>
+                                <table class="">
+                                    <tbody>
+                                        <tr ng-repeat="item in allOptions" style="padding-top:20%;">
+
+                                          <td style="padding-top:2%;">
+                                            <div style="height:1em; margin-left:0%;width:1em; background-color:{{item.color1}};"></div>
+                                          </td>
+                                          <td style="padding-left:%;padding-top:5%;">
+                                            <div style="height:1em; margin-left:2%;width:1em; background-color:{{item.color2}};"></div>
+                                          </td>
+                                          <td style="padding-left:%;padding-top:5%;">
+                                            <div style="height:1em; margin-left:2%;width:1em; background-color:{{item.color3}};"></div>
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row" style="margin-top:90%;"></div>
+
+                          </div>
+                        </div>
+                        </div>
+                        <div class="" style="display:inline-block;width:88%;margin-left:2%;background-color:#FFFFFF;margin-top:1%;">
+                          <!-- start product type name part -->
+                              <div id="product-type-name-part" class=" container-fluid">
+                                <div id="product-type-name-part" class="row" style="margin-left:0%;">
+                                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:1%;">
+                                      <span style="font-size:200%;font-weight: 100;">Formal Shirt Collection</span>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:2%;">
+                                    <div style="float:right;">
+                                        <p style="font-size:80%;float:left;">Sort by price</p>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="" style="float:right;margin-top:-2%;">
+                                          <select class="form-control">
+                                                <option value = "0" label = "Please Select"></option>
+                                                <option ng-repeat="price in priceFilter" value="{{price.Id}}"
+                                                            ng-selected="{{ price.selected == true }}">
+                                                    {{price.name}}
+                                                </option>
+                                          </select>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          <!-- end product type name part -->
+
+                          <!-- start product type description part -->
+                          <div class="container-fluid" style="">
+                              <div class="container-fluid" style="margin-left:0;">
+
+                                <div ng-repeat="product in productObj" style="padding-top:2%;margin-left:2%;display:inline-block;width:30%;height:80%;padding-right:4%;float-left;">                                  <div class="row" style="height:100%;" >
+                                        <div class="">
+                                          <div class="container-fluid">
+                                            <img class="w3-card-4" src="{{product.imgurl}}" style="display:inline-block;height:auto;max-width:100%;"></img>
+                                          </div>
+                                          <div class="" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                                              <div class="container-fluid">
+                                                <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;">
+                                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style=""></div>
+                                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"style="">
+                                                      <span style="font-size:140%;">{{product.text}}</span><br>
+                                                      <span style="margin-left:35%;font-size:90%;color:#7F7F7F;">{{product.price}}</span><br>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style=""></div>
+                                                </div>
+                                                <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;">
+                                                      <div style="margin-top:5%;margin-bottom:5%;">
+                                                        <span style="text-align:center;font-size:80%;">Order fabric swatch</span><br>
+                                                      </div>
+                                                    </div>
+                                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="">
+                                                      <div style="margin-top:5%;margin-bottom:10%;">
+                                                        <span style="font-size:80%;">Quick View</span><br>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
+                                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;">
+                                                      <div style="">
+                                                        <span class="glyphicon glyphicon-dashboard" style="margin-left:8%; font-size:130%;"></span>
+                                                        <span><i class="fa fa-umbrella" style="font-size:130%;margin-left:10%;"></i></span>
+                                                        <i class="fa fa-black-tie" style="margin-left:10%; font-size:130%;"></i>
+                                                        <span class="glyphicon glyphicon-flag" style="margin-left:10%; font-size:130%;"></span>
+                                                      </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:0%;">
+                                                      <!--<div style="margin:%;">-->
+                                                        <!--<button type="button" class="btn btn-default btn-md" style="width:%;font-size:90%;margin-bottom:8%;margin-left:-12%;background-color:#7A012E;color:#EDEDED;border-radius:0px;">SELECT</button>-->
+                                                        <div style="padding: 5% 0% 5% 9%">
+                                                            <button type="button" class="btn btn-default" style="width:90%;font-size:90%;background-color:#7A012E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                                                        </div>
+                                                      <!--</div>-->
+                                                    </div>
+                                                </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                              <div class="" style="background-color:#2A3139;height:;width:24%;border:1px solid black;margin-left:35%;margin-top:5%;margin-bottom:5%;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                                <div style="margin-top:8%;margin-left:12%;margin-bottom:8%;"><span style="color:white;">View more (100 Designs)</span></div>
+
+                              </div>
+
+                          </div>
+                          <!-- end product type description part -->
+
+                        </div>
+                        <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>-->
+
+                    </div>
+                </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        </div>
+
+    </div>
+    <!--<footer > -->
+      <div  id="footer" class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-top:5%;padding-bottom:5%;">
+                      <div id="luxire-logo">
+                        <img src="lib/assets/Luxire_logo_collection_page.png" >
+                      </div>
+                      <div style="margin-top:2%;">
+                          <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+                      </div>
+
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+                      <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+                      <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+                      <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+                    </div>
+              </div>
+
+            </div>
+
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+
+        </div>
+
+    <!--</footer>-->

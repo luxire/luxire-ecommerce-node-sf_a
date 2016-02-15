@@ -1,0 +1,53 @@
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-8 col-md-8" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Product Types</span>
+    </div>
+
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+    </div>
+  </div>
+  <div class="row" style="height: 93vh;margin-left: 0px; margin-right: 0px">
+    <div class="container-fluid admin-console-content">
+      <script type="text/ng-template" id="nodes_renderer.html">
+        <div ui-tree-handle class="tree-node tree-node-content" style="border: solid 1px black;padding: 1%;margin-top: 1%;">
+          <a class="btn btn-success btn-xs" ng-if="!checkIsString(node.value)" data-nodrag ng-click="toggle(this)"><span
+              class="glyphicon"
+              ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span></a>
+              <span><input type="text" contenteditable="true" ng-disabled="node.key=='Add Attributes'" ng-model="node.key"/></span><span>&nbsp;&nbsp;<input type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
+          <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-if="node.key!=data[0]['key']" ng-click="remove(this)"><span
+              class="glyphicon glyphicon-remove"></span></a>
+          <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
+              class="glyphicon glyphicon-plus"></span></a>
+        </div>
+        <div ng-if="!checkIsString(node.value)" ui-tree-nodes="" ng-model="node.value" ng-class="{hidden: collapsed}">
+          <div ng-repeat="node in node.value track by $index" ui-tree-node ng-include="'nodes_renderer.html'">
+          </div>
+        </div>
+      </script>
+      <div class="row">
+        <div class="col-sm-7 col-xs-7 col-md-7 col-lg-7">
+          <div ui-tree id="tree-root">
+            <div ui-tree-nodes ng-model="data">
+              <div ng-repeat="node in data  track by $index" ui-tree-node ng-include="'nodes_renderer.html'"></div>
+            </div>
+          </div>
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" name="button">Cancel</button>
+            <button type="button" class="btn btn-success" name="button" ng-click="save()">Save</button>
+          </div>
+        </div>
+        <div class="col-sm-5 col-xs-5 col-md-5 col-lg-5">
+          <div class="info">
+            {{info}}
+          </div>
+          <pre class="code">{{ data | json }}</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+  <img src="lib/assets/loader.gif"/>
+</div>
