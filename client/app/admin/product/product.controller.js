@@ -1,5 +1,6 @@
 angular.module('luxire')
-.controller('ProductController',function($scope, products, fileReader, prototypeObject){
+
+.controller('ProductController',function($scope, products, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
 
   $scope.productData  = new prototypeObject.product();
 
@@ -128,27 +129,25 @@ angular.module('luxire')
 
   //controller function for file reader
   $scope.uploadSponsorLogo = function(files) {
-    console.log('files',files);
           if (files && files.length) {
           $scope.sponsorLogoFileName = files[0].name
           fileReader.readAsDataUrl(files[0], $scope).then(function(result) {
-          $scope.productImage = result
+          $scope.productImage = result;
+					console.log("image-url: "+$scope.productImage);
         })
       }
     }
 
-  $scope.createProduct = function() {
-    console.log('products',$scope.productData);
-    products.createProduct($scope.productData).then(function(data){
-      alert('Product successfully added');
-      $scope.activeButton('products')
-    }, function(info) {
-      console.log(info);
-    })
+  $scope.uploadFile = function(files){
+    if (files && files.length) {
+      fileUpload.upload(files[0]);
+          console.log('files to upload',files[0]);
+    }
   }
 
-  $scope.deleteProducts = function(id) {
+  $scope.deleteProducts = function(id,index) {
     products.deleteProduct(id).then(function(data){
+			$scope.jsonresponse.data.products.splice(index,1);
       alert('Product deleted successfully');
       $scope.activeButton('products')
     }, function(info) {
@@ -156,24 +155,292 @@ angular.module('luxire')
     })
   }
 
+  // ******************* start inventory modal part *****************
+	$scope.modalCount=0;
+	$scope.animationsEnabled = true;
+	$scope.dummyInventoryData='';
+
+
+  $scope.luxireStock='';
+	$scope.parentSkuStatus='';
+	$scope.parentSkuFalseCount=0;
+	var productTypeId='';
+	var parentSkuObj='';
+	products.allProductType().then(function(data) {
+		//$scope.loading= false;
+		console.log("values of all product type \n\n");
+		$scope.allproductType=data.data;
+		console.log("\n\nall product type values are \n\n",data.data);
+
+	}, function(info){
+		console.log(info);
+	})
+
+	$scope.showProductType=function(){
+		console.log("select product type is calling..");
+		 console.log("selected product type is "+$scope.newProductType.type);
+		 productTypeId=$scope.newProductType.type;
+		 console.log("selected product type id: "+productTypeId);
+
+	}
+
+
+  $scope.checkParentSku=function(sku){
+    console.log("checkParentSku fun is calling 1...");
+    var parentSku={
+      parent_sku: sku,
+    }
+    createProductModalService.checkParentSku(parentSku).then(function(res){
+       //console.log(" parent sku response is: ",res.msg);
+       $scope.parentSkuStatus=res.msg;
+       if($scope.parentSkuStatus == "false") {
+           console.log("parent sku false part");
+					 console.log("sku status: ",$scope.parentSkuStatus);
+					 parentSkuObj = parentSku;
+					 $scope.parentSkuFalseCount=0;
+					 console.log("perentskuObj: ",parentSkuObj);
+					 //$scope.parentSkuFalseCount++;
+					 //$scope.luxireStock={};
+
+       }else{
+				 console.log("parent sku true part..");
+				 $scope.parentSkuStatus=true;
+         $scope.luxireStock=res;
+				 $scope.parentSkuFalseCount=0;
+				 console.log("+++++++++++++++++false count: "+$scope.parentSkuFalseCount);
+				 parentSkuObj = $scope.luxireStock;
+				 console.log("sku status: ",$scope.parentSkuStatus);
+					console.log("luxire stock object: ",$scope.luxireStock);
+       }
+
+     }, function(info) {
+       console.log(info);
+     })
+
+  }
+	function bytesToSize(bytes) {
+	 var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	 if (bytes == 0) return '0 Byte';
+	 var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+	 return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+	};
+	function CSVToArray(strData, strDelimiter) {
+    // Check to see if the delimiter is defined. If not,
+    // then default to comma.
+    strDelimiter = (strDelimiter || ",");
+    // Create a regular expression to parse the CSV values.
+    var objPattern = new RegExp((
+    // Delimiters.
+    "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+    // Quoted fields.
+    "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+    // Standard fields.
+    "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
+    // Create an array to hold our data. Give the array
+    // a default empty first row.
+    var arrData = [[]];
+    // Create an array to hold our individual pattern
+    // matching groups.
+    var arrMatches = null;
+    // Keep looping over the regular expression matches
+    // until we can no longer find a match.
+    while (arrMatches = objPattern.exec(strData)) {
+        // Get the delimiter that was found.
+        var strMatchedDelimiter = arrMatches[1];
+        // Check to see if the given delimiter has a length
+        // (is not the start of string) and if it matches
+        // field delimiter. If id does not, then we know
+        // that this delimiter is a row delimiter.
+        if (strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
+            // Since we have reached a new row of data,
+            // add an empty row to our data array.
+            arrData.push([]);
+        }
+        // Now that we have our delimiter out of the way,
+        // let's check to see which kind of value we
+        // captured (quoted or unquoted).
+        if (arrMatches[2]) {
+            // We found a quoted value. When we capture
+            // this value, unescape any double quotes.
+            var strMatchedValue = arrMatches[2].replace(
+            new RegExp("\"\"", "g"), "\"");
+        } else {
+            // We found a non-quoted value.
+            var strMatchedValue = arrMatches[3];
+        }
+        // Now that we have our value string, let's add
+        // it to the data array.
+        arrData[arrData.length - 1].push(strMatchedValue);
+    }
+    // Return the parsed data.
+    return (arrData);
+}
+	function CSV2JSON(csv) {
+	    var array = CSVToArray(csv);
+	    var objArray = [];
+	    for (var i = 1; i < array.length; i++) {
+	        objArray[i - 1] = {};
+	        for (var k = 0; k < array[0].length && k < array[i].length; k++) {
+	            var key = array[0][k];
+	            objArray[i - 1][key] = array[i][k]
+	        }
+	    }
+
+	    var json = JSON.stringify(objArray);
+	    var str = json.replace(/},/g, "},\r\n");
+
+	    return str;
+	}
+	$scope.importModal=function(size){
+		var importCsvModalInstance = $uibModal.open({
+			animation: $scope.animationsEnabled,
+			templateUrl: 'importCsvModal.html',
+			controller: 'importCsvModalController',
+			size: size,
+			resolve: {
+				importValue: function () {
+					return {name: "rajib" };
+				}
+			}
+		});
+		importCsvModalInstance.result.then(function (res) {
+		$scope.importModalValue = res;
+
+		//console.log("modal return value is : \n\n",$scope.importModalValue);
+		var len=JSON.stringify($scope.importModalValue).length;
+		console.log("length: "+$scope.importModalValue.length);
+		console.log("len: "+bytesToSize(len));
+		var csvToJsonData = CSV2JSON($scope.importModalValue);
+		console.log("csv to json file is: \n\n"+typeof(csvToJsonData));
+		//console.log("file content: ",csvToJsonData);
+		console.log("csv to json file is: \n\n"+typeof(JSON.parse(csvToJsonData)));
+		var data=JSON.parse(csvToJsonData);
+
+		csvFileUpload.uploadCsvFile(res).then(function(data) {
+	    console.log("in import modal controller response is: ",data);
+
+	  }, function(info){
+	    console.log(info);
+	  })
+
+
+	}, function () {
+		$log.info('Modal dismissed at: ' + new Date());
+	});
+
+	}
+
+
+  $scope.openModal = function (size) {
+    $scope.modalCount++;
+    console.log("modal count: "+$scope.modalCount);
+    if($scope.modalCount>1){
+			console.log("parent sku object: ",parentSkuObj);
+      console.log("dummy data is : ",$scope.dummyInventoryData);
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'createProductInventoryModal.html',
+        controller: 'createProductInventoryModalController',
+        size: size,
+        resolve: {
+          luxireStock: function () {
+            return { count:$scope.modalCount,data:$scope.dummyInventoryData, parent_sku_obj: parentSkuObj, sku_status:$scope.parentSkuStatus, falseCount: $scope.parentSkuFalseCount};
+          }
+        }
+      });
+    }else{
+			console.log("parent sku object: ",parentSkuObj);
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'createProductInventoryModal.html',
+        controller: 'createProductInventoryModalController',
+        size: size,
+        resolve: {
+          luxireStock: function () {
+            return {count:$scope.modalCount, data: $scope.luxireStock, parent_sku_obj:parentSkuObj, sku_status:$scope.parentSkuStatus};
+          }
+        }
+      });
+    }
+
+
+    modalInstance.result.then(function (luxireStock) {
+      $scope.luxireStock = luxireStock;
+      console.log("modal return value is : ",$scope.luxireStock);
+			$scope.parentSkuFalseCount++;
+      $scope.dummyInventoryData=$scope.luxireStock;
+			console.log("dummy result: ",$scope.dummyInventoryData);
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+
+	$scope.createProduct = function() {
+    console.log("in fun create product : \nproduct object:\n",$scope.product);
+		console.log("luxire_product object: \n",$scope.luxireProduct);
+		console.log("luxire stock obj:\n",$scope.luxireStock);
+		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
+		if($scope.parentSkuStatus==true){
+				console.log("create product true part...");
+				$scope.postProductData={};
+				$scope.product["luxire_product_attributes"] = {};
+				$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
+				$scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
+				$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
+				$scope.postProductData["product"]=$scope.product;
+				console.log("inventory id: "+$scope.luxireStock.id);
+				console.log(" create product true part\n before posting the product data is: ",$scope.postProductData);
+				products.createProduct($scope.postProductData).then(function(data){
+		      alert('Product successfully added');
+		      $scope.activeButton('products')
+		    }, function(info) {
+		      console.log(info);
+		    })
+
+				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
+		      alert('inventory successfully updated');
+		      $scope.activeButton('products')
+		    }, function(info) {
+		      console.log(info);
+		    })
 
 
 
+		}else{
+
+		$scope.postProductData={};
+		//$scope.postProductData["product"]={};
+		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
+		$scope.product["luxire_product_attributes"] = {};
+		$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
+		//$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = {};
+		$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = $scope.luxireStock;
+		$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
+
+		$scope.postProductData["product"]=$scope.product;
+
+		$scope.modalCount=0;
+    console.log(" create product false part \nbefore posting the product data is: ",$scope.postProductData);
+    products.createProduct($scope.postProductData).then(function(data){
+      alert('Product successfully added');
+      $scope.activeButton('products')
+    }, function(info) {
+      console.log(info);
+    })
+  }
+}
+
+	$scope.showEditProducts=function(id){
+	  console.log("selected inventory id:  "+id);
+	  $state.go("admin.edit_product",{id :id});
+	}
 
 
+  /*$scope.toggleAnimation = function () {
+    $scope.animationsEnabled = !$scope.animationsEnabled;
+  };*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // ******************* end inventory modal part *****************
 
 });

@@ -1,7 +1,7 @@
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-8 col-md-8" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Product Types</span>
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Product Attributes</span>
     </div>
 
     <div class="col-lg-4 col-md-4" style="text-align: right;">
@@ -14,7 +14,11 @@
           <a class="btn btn-success btn-xs" ng-if="!checkIsString(node.value)" data-nodrag ng-click="toggle(this)"><span
               class="glyphicon"
               ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span></a>
-              <span><input type="text" contenteditable="true" ng-disabled="node.key=='Add Attributes'" ng-model="node.key"/></span><span>&nbsp;&nbsp;<input type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
+              <span>
+              <input type="text" contenteditable="true" ng-hide="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'" ng-model="node.key"/>
+              <label style="width: 36%" ng-show="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'">{{node.key}}</label>
+              </span><span>&nbsp;&nbsp;
+              <input type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
           <a class="pull-right btn btn-danger btn-xs" ng-if="node.key!=data[0]['key']" data-nodrag ng-click="remove(this)"><span
               class="glyphicon glyphicon-remove"></span></a>
           <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
@@ -41,7 +45,17 @@
           <div class="info">
             {{info}}
           </div>
-          <pre class="code">{{ data | json }}</pre>
+          <!-- <pre class="code">{{ data | json }}</pre> -->
+          Instructions
+          <ul>
+            <li>Name is a mandatory field</li>
+            <li>Description should not contain '#'</li>
+            <li>Categories of Measurement Types: customize, personalize, measurement</li>
+            <li>Sub categories of Measurement Types: 'std' for standard measurement attributes</li>
+            <li>Sub categories of Measurement Types: 'body' for body measurement attributes</li>
+
+
+          </ul>
         </div>
       </div>
 

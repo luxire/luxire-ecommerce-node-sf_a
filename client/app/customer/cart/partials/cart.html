@@ -1,0 +1,150 @@
+<div class="row" style="margin-left: 0px; margin-right: 0px">
+  <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+    <div id="luxire-logo">
+      <img src="lib/assets/Luxire_logo_collection_page.png" >
+    </div>
+    <div style="border: solid 2px #AD7984;border-radius: 10px;margin-top: 3%;padding-bottom: 2%">
+      <div style="margin-left: 2%;margin-right: 2%">
+        <h4>CART OVERVIEW</h4>
+        <hr style="width: 100%">
+        <div ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" class="row" style="" >
+          <div class="row" style="background-color: #F5F5F5; padding: 1% 0%;font-size: 125%;margin: 1%;">
+            <div class="col-md-5 col-lg-5 col-sm-5 col-xs-5">
+              Item
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+              Price
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+              Qty
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+              Total
+            </div>
+          </div>
+          <div class="row" ng-repeat="line_item in luxire_cart.line_items" style="font-size: 125%">
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+              <img style="max-width: 100%;margin-left: 12%" src="{{getImage(line_item.variant.images[0].small_url)}}">
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3" style="margin-top: 2%">
+              {{line_item.variant.name}}
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="margin-top: 2%">
+              {{line_item.single_display_amount}}
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="padding-left: 0%;margin-top: 1%">
+              <input type="number" class="form-control" ng-model="line_item.quantity" style="width: 50px">
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="padding-left: 0%;margin-top: 2%">
+              {{line_item.display_amount}}
+            </div>
+            <div class="col-md-1 col-lg-1 col-sm-1 col-xs-1">
+              <!-- <i class="fa fa-minus-square-o"></i> -->
+            </div>
+          </div>
+          <hr style="width: 100%">
+          <div class="pull-right">
+            <button class="btn btn-primary" ng-click="update_cart(luxire_cart.line_items)">Update</button>
+            <button class="btn btn-success" ng-click="checkout()">Checkout</button>
+          </div>
+        </div>
+        <uib-alert ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert>
+        <button type="button" class="btn btn-default" name="button" ui-sref="customer.product_listing({taxonomy_name: 'shirts',taxon_name: 'casual'})">Continue Shopping</button>
+      </div>
+  </div>
+  <div>
+    Luxire Custom Clothing process all orders in USD. While the content of your cart is currently displayed in , you will checkout using USD at the most current exchange rate.
+  </div>
+
+  <div style="margin-top: 30%">
+  </div>
+
+</div>
+
+
+
+
+
+</div>
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>
+
+<!-- <h6 ng-if="cartItem.product_price_after_personalisation"><i>{{item_count}} items (${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}})</i></h6>
+<h6 ng-if="cartItem.product_price_after_personalisation == undefined"><i>{{item_count}} items (${{(cartItem.product_price * product_quantity).toFixed(2)}})</i></h6>
+<!--  -->
+<!--h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
+<h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3> -->
+
+
+
+<!-- <div class="row" style="" ng-repeat="cartItem in cartItems">
+  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+    <img style="max-width: 100%" src="{{cartItem.product_img}}">
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h4>{{cartItem.product_name}}</br></h4>
+    <h6 ng-if="cartItem.style != ''">&nbsp;&nbsp;&nbsp;style: {{cartItem.style}}</br></h6>
+    <h6 ng-if="cartItem.fits != ''">&nbsp;&nbsp;&nbsp;fits: {{cartItem.fits}}</br></h6>
+    <h6 ng-if="cartItem.Collar != ''">&nbsp;&nbsp;&nbsp;collar: {{cartItem.Collar}}</br></h6>
+    <h6 ng-if="cartItem.Sleeves != ''">&nbsp;&nbsp;&nbsp;Sleeves: {{cartItem.Sleeves}}</br></h6>
+    <h5 ng-if="cartItem.Customize != undefined">Customize</h5>
+    <div ng-repeat="(key,value) in cartItem.Customize"><h5 ng-if="value != ''">&nbsp;&nbsp;&nbsp;{{key}}:{{value}}</br></h5></div>
+    <h6 ng-if="cartItem.Personalize != undefined">Personalize</h6>
+    <h6 ng-if="cartItem.Personalize.Monogram">Monogram</h6>
+    <div ng-repeat="(key,value) in cartItem.Personalize.Monogram"><h6 ng-if="value != ''">{{key}}:{{value}}</br></h6></div>
+    <h6 ng-if="cartItem['Personalize']['Additional Options'] != undefined">Additional Optional</h5>
+    <div ng-repeat="addOption in cartItem['Personalize']['Additional Options']"><h6 ng-if="addOption.selected == true">{{addOption.name}}</br></h6></div>
+    <h6 ng-if="cartItem['Personalize']['Contrast'] != undefined">Contrast</h6>
+    <div ng-repeat="contrast in cartItem['Personalize']['Contrast']"><h6 ng-if="contrast.selected == true">{{contrast.name}}</br></h6></div>
+    <!-- <h4>Measurement</h4>
+    <h5 ng-repeat="(key,value) in cartItem.Measurement">{{key}}</h5>
+    <div ><h6 >{{value}}</br></h6></div> -->
+  <!--/div>
+  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+    <!-- <h3>Quantity</h3> -->
+    <!--input class="form-control" ng-model="$parent.product_quantity" style="width: 50px">
+  </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h4 ng-if="cartItem.product_price_after_personalisation">${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h4>
+    <h4 ng-if="cartItem.product_price_after_personalisation == undefined">${{(cartItem.product_price * product_quantity).toFixed(2)}}</h4>
+
+    <!-- <h2>Order summary</h2>
+    <h3>Item price: ${{cartItem.product_price}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
+
+    <hr>
+    <h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
+    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3>
+
+    <br><br>ng-repeat="line_item in luxire_cart[0].line_items"
+    <button class="btn btn-primary" ng-click="go_to_checkout_address(product_quantity)">Checkout</button> -->
+  <!--/div>
+
+</div-->

@@ -9,6 +9,12 @@ var path = require('path');
 var jwt = require('jsonwebtoken');//used to create/sign/verify token
 var constants = require('./config/constants');
 var redis_client = require('./config/redis');
+var formidable = require('formidable');
+var util = require('util');
+var fs = require('fs');
+var http = require('request');
+
+
 console.log('redis client', redis_client);
 module.exports = function(app) {
 
@@ -31,6 +37,9 @@ module.exports = function(app) {
   app.use('/api/zones', require('./api/zone'));
   app.use('/api/taxes', require('./api/tax'));
   app.use('/api/taxonomies', require('./api/taxonomie'));
+  app.use('/api/luxire_stocks/validate_stocks_sku', require('./api/parentSku'));
+  app.use('/api/luxire_stocks', require('./api/updateStock'));
+  app.use('/api/my_account', require('./api/myAccount'));
 
   /*To test filteration*/
   app.get('/redis_products',function(req,res){
@@ -47,7 +56,48 @@ module.exports = function(app) {
         }
       })
     });
-
+    app.post('/files/csv',function(req,res){
+      console.log('file uploading to node...');
+      console.log("another node server is calling....");
+      var form = new formidable.IncomingForm();
+      // form.uploadDir = 'tmp/';
+      var data;
+      console.log("data:\n\n",req.body);
+      form.parse(req, function(err, fields, files) {
+      console.log("file object in node is: ",files.file);
+      console.log("file path in node is: ",files.file.path);
+      console.log("file name in node is: ",files.file.name);
+      res.write('received upload:\n\n');
+      var formDataToPost = {
+        file: {
+          value:  fs.createReadStream(files.file.path),
+          options: {
+            filename: files.file.name,
+            contentType: files.file.type
+          }
+        }
+      };
+      http.post({uri:'http://192.168.1.25:3000/luxire_product_data/imports', formData: formDataToPost}, function (err, response, body) {
+        if (err) {
+          return console.error('upload failed:', err);
+        }
+        console.log('Upload successful!  Server responded with:', body);
+      });
+      // http.get({uri:'http://192.168.1.103:3000/api/products'}, function (err, response, body) {
+      //   if (err) {
+      //     return console.error('upload failed:', err);
+      //   }
+      //   console.log('Upload successful!  Server responded with:', body);
+      // });
+      res.end(util.inspect({fields: fields, files: files}));
+      data=files.file;
+      console.log("file is: ",data);
+      console.log("file path is  : ",data.path);
+      console.log("bytes received: ",form.bytesReceived);
+      // var jsonObject = JSON.parse(fs.readFileSync(data.path, 'utf8'));
+      // console.log("file content is: ",jsonObject);
+    });
+    });
 
   // app.use('/api/variants', require('./api/variants'));
 
@@ -58,6 +108,9 @@ module.exports = function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get(function(req, res) {
+      console.log('route path');
+      console.log(path.resolve(app.get('appPath') + '/index.html'));
+
       res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
     });
 

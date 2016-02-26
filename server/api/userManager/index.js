@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.post('/login', controller.login);
+router.post('/cloudhop_login', controller.cloudhop_login)
 router.post('/signup', controller.signup);
 router.delete('/delete/:id', controller.delete);
 router.put('/:id/edit/change_password',controller.change_password);

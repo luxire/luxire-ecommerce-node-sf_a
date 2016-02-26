@@ -28,10 +28,10 @@ div.sm:last-child:after {
 .productType-DivAlign{
    width: 50%;
    /* Set the margin-left and margin-right automatically set */
-   margin-left:30%;
+   /*margin-left:10%;
    margin-right: 10%;
    margin-top: 10%;
-   margin-bottom: 10%;
+   margin-bottom: 10%;*/
    position: relative;
 }
 .productTypePlacard{
@@ -48,7 +48,7 @@ div.sm:last-child:after {
 </style>
 <div class="container-fluid" style="height:100%">
  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-   <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
+   <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Style Master / <span style="color: black;">New Style Master </span></span>
    </div>
    <div class="col-lg-5 col-md-5">
@@ -61,12 +61,14 @@ div.sm:last-child:after {
  <div class="row" style="margin-left: 0px;height: 93vh;">
    <div class="container-fluid admin-console-content">
      <div class="row" >
+      <div class="col-lg-2 col-md-2"> </div>
        <div class="col-lg-8 col-md-8">
-         <div class="productType-DivAlign">
-           <div class="productTypePlacard" >
+         <div class="row" style="margin-top:10%;">
+           <div class="col-lg-3 col-md-3"> </div>
+           <div class="productTypePlacard col-lg-6 col-md-6">
                <span style="font-size: 13px;">Name</span>
                <br>
-               <input type="text" ng-model="newProductType.name" class="form-control" placeholder="product name.." >
+               <input type="text" ng-model="newProductType.name" class="form-control" placeholder="style master name.." >
                <br>
                <span style="font-size: 13px;">Description</span>
                <br>
@@ -83,14 +85,35 @@ div.sm:last-child:after {
                <span style="font-size:1.2em;">Product type</span>
 
                <div class="">
-                 <select class="form-control" ng-model="newProductType.type"  ng-change="showProductType()" >
+                 <select class="form-control" ng-model="newProductType.luxire_product_type_id"  ng-change="showProductType()" >
                    <option value = "0" label = "Please Select"></option>
                    <option ng-repeat="type in allproductType" value="{{type.id}}">
                        {{type.product_type}}
                    </option>
                  </select>
                </div>
-               <div class="row" ng-repeat="type in allMeasurementType | filter : selectedMeasurementType" style="margin-top:2%;font-size:1em;">
+               <div class="row" ng-repeat="(key,value) in allMeasurementType " style="margin-top:5%;font-size:1em;">
+
+                    <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
+                      <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
+                    </div>
+                    <div class="row" ng-repeat="individualMeasurementType in value" style="padding-left:3%; margin-top:2%;">
+                      <div class="col-md-4" style="margin-top:1%;" ng-init="measurementTypeName=(individualMeasurementType.name)">
+                          <span style="font-size:90%;">{{individualMeasurementType.name}}</span>
+                      </div>
+                      <div class="col-md-8" style="padding-right:6%;">
+                        <select class="form-control" ng-model="key"  ng-change="showMeasurementType(keyToWord,measurementTypeName, key)" >
+                          <option value = "0" label = "Please Select"></option>
+                          <option ng-repeat="(key,value) in individualMeasurementType.value" value="{{key}}">
+                              {{key}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+               </div>
+
+               <!--<div class="row" ng-repeat="type in allMeasurementType | filter : selectedMeasurementType" style="margin-top:2%;font-size:1em;">
                    <div class="col-md-4">
                        <span style="font-size:1.2em;">{{type.name}}</span>
                    </div>
@@ -100,31 +123,21 @@ div.sm:last-child:after {
                        <option ng-repeat="(key,value) in type.value" value="{{key}}">
                            {{key}}
                        </option>
-                       <!--<option  ng-repeat="type in allproductType" value="{{type.id}}">{{type.name}}</option>-->
                      </select>
                    </div>
-
-
-               </div>
+               </div>-->
                <div class="row" style="margin-top:20%;">
                  <center><button type="button" class="btn btn-primary" ng-click="save()">Save</button></center>
                </div>
            </div>
+           <div class="col-lg-3 col-md-3"> </div>
 
          </div>
 
-           <!--  <div class="col-lg-6 col-md-6">
-
-           </div> -->
        </div>
+       <div class="col-lg-2 col-md-2"> </div>
      </div>
    </div>
-   <!--<div class="col-lg-4 col-md-4">
-         <div class="placard-grey" ng-init="calFlag = true">
-         </div>
-    </div>-->
+
  </div>
 </div>
-  <!--</div>
- </div>
-</div>-->

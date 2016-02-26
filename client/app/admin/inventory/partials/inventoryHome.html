@@ -1,0 +1,199 @@
+<div class="container-fluid" style="height:100%" >
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="color:#928CA2;font-seze:2em;">Products &nbsp;/&nbsp;Inventory</span>
+    </div>
+    <div class="col-lg-4 col-md-4">
+
+    </div>
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+      <div class="btn-group" role="group" aria-label="...">
+      </div>
+      <button type="button" class="btn btn-primary" ui-sref="admin.new_product">Create Inventory</button>
+    </div>
+  </div>
+
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+
+  <div class="row" style="height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
+        <div class="row" style="margin:0px; background-color: white;">
+          <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+            <span style="font-size: 12px;">All Variants</span>
+          </div>
+          <div  class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+
+          </div>
+        </div>
+
+
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+          <div class="input-group col-md-12 col-xs-12">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Variants <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="#">collection</a></li>
+              <li><a href="#">collection</a></li>
+              <li><a href="#">collection</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">collection</a></li>
+            </ul>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+                <input type="text" ng-model="searchText.$" class="form-control" aria-label="..." placeholder="Start typing to search for variants...">
+            </div>
+          </div>
+        </div>
+
+                  <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+                    <table class="table table-hover admin-product-list">
+                      <thead>
+                        <tr>
+                          <th>
+                             <div><button type="button"><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></button></div>
+                          </th>
+                          <th></th>
+                          <th>
+                            Parent sku
+                          </th>
+                          <th>
+                          </th>
+                          <th>
+                            Threshold
+                          </th>
+                          <th>
+                            Rack
+                          </th>
+                          <th>
+                          </th>
+                          <th>
+                            Backorderable
+                          </th>
+                          <th>
+
+                          </th>
+                          <th>
+                            <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;"class="glyphicon glyphicon-triangle-bottom"></span>
+
+                          </th>
+                          <th>
+
+                          </th>
+                          <th>
+
+                          </th>
+                          <th>
+
+                          </th>
+
+                        </tr>
+                      </thead>
+                      <tbody ng-init="set=false;add=true;variant.setInitial;">
+                        <tr ng-repeat="variant in inventoryObj |filter:searchText | orderBy:predicate:reverse track by variant.id">
+                            <td>
+                              <div><input <input type="checkbox" name="selectAll" value=""> </input></div>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                              <a  ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
+                            </td>
+                            <td></td>
+                            <td>
+                              <span style="text-align:center">{{variant.threshold}}</span>
+                            </td>
+                            <td>
+                              <span style="text-align:center">{{variant.rack}}</span>
+                            </td>
+                            <td></td>
+                            <td>
+                              <span style="text-align:center">{{variant.backorderable}}</span>
+                            </td>
+                            <td></dt>
+                            <td>
+                              <span style="text-align:center">{{variant.physical_count_on_hands}}</span>
+                              <span ng-hide="variant.set_value==0||variant.set_value==undefined">
+                                <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                                <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.set_value}}</span>
+                              </span>
+                              <span ng-hide="variant.setInitial==0||variant.setInitial==undefined">
+                                <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                                <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.setInitial}}</span>
+                              </span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <form class="no-wrap">
+                                  <div class="btn-group" style="float:left;height:35px; ">
+                                      <div class="col-lg-2 col-md-2" style="padding:0%;">
+                                        <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#4293C2;margin-right:0%;" ng-click="add=true;set=false;">add</button>
+                                      </div>
+                                      <div class="col-lg-2 col-md-2" style="padding-left:0%;padding-right:0%;">
+                                        <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#4293C2; margin-right:0%;" ng-click="add=false;set=true;">set</button>
+                                      </div>
+                                      <div class="col-lg-2 col-md-2" style="margin-top:1.2%; padding-left:0%;margin-left:-1%;">
+                                        <span ng-if="add" style="">
+                                          <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;line-height:30px;">
+                                        </span>
+                                        <span ng-if="set">
+                                          <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;line-height:30px;">
+                                        </span>
+                                      </div>
+                                      <div class="no-wrap col-lg-2 col-md-2" style="padding-left:9%;">
+                                        <span ng-if="add">
+                                          <button type="button" ng-disabled="(variant.set_value==0||variant.set_value==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="updateQuantityValue(variant)" data-toggle="modal" data-target="#myModal"  >save</button>
+                                        </span>
+                                        <span ng-if="set">
+                                          <button type="button" ng-disabled="(variant.setInitial==0||variant.setInitial==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="setQuantityValue(variant)" data-toggle="modal" data-target="#myModal" >save</button>
+                                        </span>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4">
+
+                                      </div>
+                                </div>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+                    <!-- start modal section -->
+
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header" style="background-color:black;">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body" style="background-color:black;">
+                              <p style="font-size:2em;color:white;">Inventory is Updated Sucessfully </p>
+                            </div>
+                            <div class="modal-footer" style="background-color:black;">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                    <!-- end modal section -->
+
+                  </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end -->

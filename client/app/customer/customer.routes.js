@@ -34,6 +34,24 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.invoice',{
+		url:'/invoice',
+		views: {
+			"customer": { templateUrl: "app/customer/invoices/partials/invoicePage.html",
+			 controller: "invoiceController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+
+	// .state('customer.productListing',{
+	// 	url: '/product-listing',
+	// 	params: {filterObject: {}},
+	// 	templateUrl: 'app/customer/newProduct/partials/productListing.html',
+	// 	controller: 'productListingController',
+	// 	css: 'app/customer/newProduct/css/productListing.css'
+	// 	})
 	.state('customer.product_detail',{
 		url:'/products/:taxonomy_name/:taxon_name/:product_name',
 		views: {
@@ -45,6 +63,54 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.cart',{
+		url:'/cart',
+		views: {
+			"customer": { templateUrl: "app/customer/cart/partials/cart.html",
+			 							controller: "CustomerCartController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.checkout_address',{
+		url: '/checkout/address',
+		views: {
+			"customer": { templateUrl: "app/customer/checkout/partials/checkoutAddress.html",
+										controller: "CustomerCheckoutAddressController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.checkout_delivery',{
+		url: '/checkout/delivery',
+		views: {
+			"customer": { templateUrl: "app/customer/checkout/partials/checkoutDelivery.html",
+										controller: "CustomerCheckoutDeliveryController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.checkout_payment',{
+		url: '/checkout/payment',
+		templateUrl: 'app/customer/checkout/partials/checkoutPayment.html',
+		controller: 'CustomerCheckoutPaymentController',
+		data: {
+			require_auth: false
+		}
+	})
+	// .state('customer.checkout_gateway',{
+	// 	url: '/checkout/gateway',
+	// 	params: {gatewayObject: {}},
+	// 	templateUrl: 'app/checkout/partials/checkoutGateway.html',
+	// 	controller: 'checkoutGatewayController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+
 
 
 

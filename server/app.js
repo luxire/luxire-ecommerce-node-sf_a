@@ -76,16 +76,16 @@ server.listen(cfg.port, cfg.ip, function () {
 
 
 /**HTTPS*/
-var fs = require('fs');
-var https = require('https');
-var privateKey  = fs.readFileSync('/opt/certs/localhost:9000.key', 'utf8');
-var certificate = fs.readFileSync('/opt/certs/localhost:9000.crt', 'utf8');
-
-var credentials = {key: privateKey, cert: certificate};
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(https_config.port, https_config.ip, function(){
-  console.log('Express server(https) listening on %d, in %s mode', https_config.port, app.get('env'));
-});
+// var fs = require('fs');
+// var https = require('https');
+// var privateKey  = fs.readFileSync('/opt/certs/localhost:9000.key', 'utf8');
+// var certificate = fs.readFileSync('/opt/certs/localhost:9000.crt', 'utf8');
+//
+// var credentials = {key: privateKey, cert: certificate};
+// var httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(https_config.port, https_config.ip, function(){
+//   console.log('Express server(https) listening on %d, in %s mode', https_config.port, app.get('env'));
+// });
 
 // Expose app
 exports = module.exports = app;

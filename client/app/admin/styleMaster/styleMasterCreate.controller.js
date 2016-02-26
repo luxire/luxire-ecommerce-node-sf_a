@@ -2,6 +2,7 @@ angular.module('luxire')
 .controller('styleMasterCreateController',function($scope,styleMasterService){
 
   $scope.allproductType='';
+  $scope.allMeasurementType={};
   styleMasterService.getAllProductType().then(function(data) {
     //$scope.loading= false;
     console.log("values of all product type \n\n");
@@ -14,18 +15,18 @@ angular.module('luxire')
     console.log(info);
   })
 
-  styleMasterService.getAllMeasurementType().then(function(data) {
+  /*styleMasterService.getAllMeasurementType().then(function(data) {
     //$scope.loading= false;
     console.log("values of all measurement type \n\n");
-    $scope.allMeasurementType=data.data;
-    console.log("\n\nall product type values are \n\n",data.data);
+    $scope.allMeasurementType=data.data.luxire_product_attributes;
+    console.log($scope.allMeasurementType);
+    /*console.log("\n\nall product type values are \n\n",data.data);
     for(i=0;i<$scope.allMeasurementType.length;i++){
         console.log("measurement type: "+$scope.allMeasurementType[i].name);
     }
   }, function(info){
     console.log(info);
-  })
-  $scope.desc="*****8";
+  })*/
 
   $scope.selectedType=[];
   $scope.selectedMeasurementType=function(product){
@@ -45,15 +46,13 @@ angular.module('luxire')
 
    $scope.showProductType=function(){
      console.log("select product type is calling..");
-      console.log("selected product type is "+$scope.newProductType.type);
-      var id=$scope.newProductType.type;
-      styleMasterService.getProductTypeById(id).then(function(data) {
+      console.log("selected product type is "+$scope.newProductType.luxire_product_type_id);
+      var id=$scope.newProductType.luxire_product_type_id;
+        styleMasterService.getProductTypeById(id).then(function(data) {
         //$scope.loading= false;
-        console.log("selected product type value is \n",data.data.measurement_types);
-          for(i=0;i<data.data.measurement_types.length;i++){
-              $scope.selectedType[i]=data.data.measurement_types[i].name;
-          }
-          console.log("selected type: "+$scope.selectedType);
+        $scope.allMeasurementType = data.data.luxire_product_attributes;
+        console.log("selected product type value is \n",$scope.allMeasurementType);
+
       }, function(info){
         console.log(info);
       });
@@ -62,21 +61,40 @@ angular.module('luxire')
 
 
    $scope.default_values={};
-   $scope.showMeasurementType=function(name,value){
+   var customization_attributes={};
+   var personalization_attributes={};
+   var standard_mesurement_attributes={};
+   var body_mesurement_attributes={};
+   $scope.showMeasurementType=function(key,name,value){
      console.log("select measurement type is calling.. : ");
+     console.log("key: "+key);
      console.log("name: "+name);
      console.log("value: "+value);
-     //$scope.default_values.push({name : name, value: value});
-     $scope.default_values[name]=value;
-      //console.log("selected item is "+$scope.key);
+     if(key == 'customization'){
+        customization_attributes[name]=value;
 
+     }else if(key == 'personalization'){
+       personalization_attributes[name]=value;
+
+     }else if(key == 'standard'){
+       standard_mesurement_attributes[name]=value;
+
+     }else if(key == 'body'){
+       body_mesurement_attributes[name]=value;
+
+     }
+     console.log("****** default values *******\n\n",$scope.default_values);
    }
 
    $scope.save=function(){
+     $scope.default_values["customization_attributes"]=customization_attributes;
+     $scope.default_values["personalization_attributes"]=personalization_attributes;
+     $scope.default_values["standard_mesurement_attributes"]=standard_mesurement_attributes;
+     $scope.default_values["body_mesurement_attributes"]=body_mesurement_attributes;
+
      console.log("new product type :\n",$scope.newProductType);
      console.log("default_values: \n",$scope.default_values);
-     //angular.extend($scope.newProductType.default_values,$scope.default_values);
-     //console.log(" after extend new product type :\n",$scope.newProductType);
+
      $scope.newProductType["default_values"]=$scope.default_values;
      console.log(" before posting the new product type obj is  :\n",$scope.newProductType);
      styleMasterService.createStyleMaster($scope.newProductType).then(function(data){
@@ -87,6 +105,7 @@ angular.module('luxire')
       })
 
    }
+
 
 
 });

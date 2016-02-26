@@ -14,7 +14,7 @@
 
 
         <hr style="width: 100%">
-        <div class="row" style="" ng-repeat="cartItem in cartItems">
+        <!-- <div class="row" style="" ng-repeat="cartItem in cartItems">
           <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
             <img style="max-width: 100%" src="{{cartItem.product_img}}">
           </div>
@@ -36,10 +36,10 @@
             <!-- <h4>Measurement</h4>
             <h5 ng-repeat="(key,value) in cartItem.Measurement">{{key}}</h5>
             <div ><h6 >{{value}}</br></h6></div> -->
-          </div>
+          <!--/div>
           <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
             <!-- <h3>Quantity</h3> -->
-            <input class="form-control" ng-model="$parent.product_quantity" style="width: 50px">
+            <!--input class="form-control" ng-model="$parent.product_quantity" style="width: 50px">
           </div>
           <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
             <h4 ng-if="cartItem.product_price_after_personalisation">${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h4>
@@ -56,9 +56,26 @@
 
             <br><br>
             <button class="btn btn-primary" ng-click="go_to_checkout_address(product_quantity)">Checkout</button> -->
-          </div>
+          <!--/div>
 
-      </div>
+      </div-->
+      <div ng-if="luxire_cart.length>0" class="row" style="" ng-repeat="line_item in luxire_cart[0].line_items">
+        <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+          <img style="max-width: 100%" src="{{getImage(line_item.variant.images[0].small_url)}}">
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+          <input class="form-control" ng-model="$parent.product_quantity" style="width: 50px">
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+          <h4 ng-if="luxire_cart[0].total_cost">${{(parseFloat(luxire_cart[0].total_cost.split['$'][1]) * product_quantity).toFixed(2)}}</h4>
+          <h4 ng-if="luxire_cart[0].total_cost == undefined">${{(parseFloat(line_item.display_price.split['$'][1]) * product_quantity).toFixed(2)}}</h4>
+
+        </div>
+
+    </div>
+
     </div>
       <button style="margin-left: 75%" class="btn btn-primary" ng-click="go_to_checkout_address(product_quantity)">Checkout</button>
   </div>

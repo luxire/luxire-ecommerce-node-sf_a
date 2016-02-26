@@ -3,6 +3,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('luxire')
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
+	// $urlRouterProvider.when('/','/admin/');
 	$urlRouterProvider.when('/admin','/admin/');
 	$stateProvider
 	.state('login',{
@@ -30,11 +31,13 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+
 	.state('admin',{
 		url:'/admin',
 		abstract: true,
 		templateUrl: 'app/admin/admin.html',
 		controller: 'adminController',
+		params: {id: null},
 		data: {
 			require_auth: true
 		}
@@ -88,7 +91,75 @@ angular.module('luxire')
 				require_auth: true
 			}
 		}
+
 	})
+	.state('admin.edit_product',{
+		url:'/products/:id/edit',
+		params: {},
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/product/partials/editProducts.html',controller: 'editProductController'},
+			data: {
+				require_auth: true
+			}
+		}
+
+	})
+	.state('admin.inventory',{
+		url:'/inventory',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/inventory/partials/inventoryHome.html',controller: 'inventoryHomeController' },
+			data: {
+				require_auth: true
+			}
+		}
+	})
+
+	.state('admin.inventoryProductEdit',{
+		url:'/inventory_product_edit',
+		params: {
+			obj:null
+		},
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/inventory/partials/inventoryProductEdit.html',controller: 'inventoryProductEditController' },
+			data: {
+				require_auth: true
+			}
+		}
+	})
+
+	.state('admin.inventoryModal',{
+			url:'/inventory-modal',
+			views: {
+				"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+				"mainContent": { templateUrl: 'app/admin/inventory/partials/inventoryModal.html',controller: 'inventoryModalTestController' },
+				data: {
+					require_auth: true
+				}
+			}
+		})
+	// .state('admin.product',{
+	// 	url:'/products',
+	// 	views: {
+	// 		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+	// 		"mainContent": { templateUrl: 'app/admin/product/partials/productsHome.html',controller: 'ProductController'},
+	// 		data: {
+	// 			require_auth: true
+	// 		}
+	// 	}
+	// })
+  // .state('admin.new_product',{
+	// 	url:'/products/new',
+	// 	views: {
+	// 		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+	// 		"mainContent": { templateUrl: 'app/admin/product/partials/addProducts.html',controller: 'ProductController'},
+	// 		data: {
+	// 			require_auth: true
+	// 		}
+	// 	}
+	// })
 	.state('admin.product_attributes',{
 		url:'/product_attributes',
 		views: {

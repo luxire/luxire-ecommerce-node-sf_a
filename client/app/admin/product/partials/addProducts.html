@@ -1,25 +1,119 @@
+<script type="text/ng-template" id="createProductInventoryModal.html">
+        <div class="modal-header">
+            <center><h3 class="modal-title">ADD A INVENTORY</h3></center>
+        </div>
+        <hr>
+        <div class="modal-body">
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <div class="row" style="margin-top:2%;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                            <span>Quantity </span>
+                            <input type="text" ng-model="luxireStock.physical_count_on_hands" class="form-control" id="quantity">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-show="addSetView" style="; padding-left:0%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                              <span>Enter quantity </span>
+                              <input type="text" class="form-control" ng-model="quantity" id="quantity">
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                              <button class="btn btn-primary" type="button" ng-click="addQuantity(quantity)" style="margin-left:4%; width:90%;">add</button>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                              <button class="btn btn-primary" type="button"  ng-click="setQuantity(quantity)" style="margin-left:4%; width:90%;">set</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:3%;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                          <span>Rack </span>
+                          <input type="text" ng-model="luxireStock.rack" class="form-control" id="rack">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                          <span>Thresold </span>
+                          <input type="text" ng-model="luxireStock.threshold" class="form-control" id="thresold">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:3%;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                          <span>Measuring unit</span>
+                          <select class="form-control" name="" ng-model="luxireStock.measuring_unit" style="margin-left:; width: 100%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
+                            <option value="kg">kg</option>
+                            <option value="lb">lb</option>
+                            <option value="oz">oz</option>
+                            <option value="g">g</option>
+                          </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
+                          <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:3%;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+                </div>
+
+            </div>
+
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <center>
+                      <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
+                      <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Cancel</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+</script>
+
 <div class="container-fluid" style="height:100%">
-  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Products / <span style="color: black;">Add a product</span></span>
     </div>
     <div class="col-lg-5 col-md-5">
 
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
-      <button type="button" class="btn btn-default" ng-click="activeButton('products')">Cancel</button>
-      <button type="button" class="btn btn-default" ng-click="createProduct(name, price, 1, productImage)">Save product</button>
+      <!--<button type="button" class="btn btn-default btn-info" ui-sref="admin.product">Home</button>-->
+      <button type="button" class="btn btn-default" ui-sref="admin.product" ng-click="activeButton('products')">Cancel</button>
+      <button type="button" class="btn btn-default" ng-click="createProduct()" ui-sref="admin.product">Save product</button>
     </div>
   </div>
 
-  <div class="row" style="margin-left: 0px;height: 93vh;">
+  <div class="row" style="height: 93vh;">
     <div class="container-fluid admin-console-content">
       <div class="row">
         <div class="col-lg-8 col-md-8">
           <div class="placard">
             <span style="font-size: 13px;">Title</span>
             <br>
-            <input type="text" ng-model="productData.name" class="form-control" placeholder="Short Sleeve T-Shirt">
+            <input type="text" ng-model="product.name" class="form-control" placeholder="Short Sleeve T-Shirt">
+            <br>
+            <span style="font-size: 13px;">Parent sku</span>
+            <br>
+            <input type="text" ng-model="luxireProduct.parent_sku" ng-blur="checkParentSku(luxireProduct.parent_sku)" class="form-control" placeholder="Parent SKU..">
+            <br>
+            <span style="font-size: 13px;">Shipping category id</span>
+            <br>
+            <input type="text" ng-model="product.shipping_category_id"  class="form-control" placeholder="shipping category id..">
             <br>
             <span style="font-size: 13px;">Description</span>
             <br>
@@ -61,7 +155,7 @@
                 </div>
               </div>
               <div class="panel-body">
-                <textarea class="description" ng-model="productData.description" rows="9" cols="40"></textarea>
+                <textarea class="description" ng-model="product.description" rows="9" cols="40"></textarea>
               </div>
             </div>
           </div>
@@ -70,6 +164,8 @@
             <span style="font-size: 20px;">Images</span>
               <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label>
             <br>
+            <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label>
+
             <div class="drag-drop">
               <img ng-src="{{productImage}}" style="margin: 30px;">
             </div>
@@ -89,19 +185,42 @@
             </div>
             <div class="row">
               <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="productData.price">
+                <input type="text" class="form-control" ng-model="product.price">
               </div>
               <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="productData.display_price">
+                <input type="text" class="form-control" ng-model="luxireProduct.product_compare_at_price">
               </div>
             </div>
             <br>
-            <input type="checkbox" ng-model="productData.taxFlag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Charge taxes on this product</span>
+            <input type="checkbox" ng-model="product.taxFlag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Charge taxes on this product</span>
             <hr>
             <span style="font-size: 20px;">Inventory</span>
+            <div style="float:right;"><button type="button" class="btn btn-default" ng-click="openModal('lg')">Add Inventory</button></div>
+
             <br>
             <br>
             <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <span style="font-size: 13px;">Inventory Policy</span></span>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <span style="font-size: 13px;">Barcode <span style="color:#95A7B7;">(ISBN, UPC, etc.)</span></span>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <select class="form-control" name="">
+                  <option value="1">Don't track inventory</option>
+                  <option value="2">Spree tracks this product's inventory</option>
+                </select>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <input type="text" class="form-control" ng-model="luxireProduct.barcode">
+              </div>
+
+            </div>
+            <!--<div class="row">
               <div class="col-lg-6 col-md-6">
                 <span style="font-size: 13px;">SKU <span style="color:#95A7B7;">(Stock keeping unit)</span></span>
               </div>
@@ -110,8 +229,9 @@
               </div>
             </div>
             <div class="row">
+
               <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="productData.sku">
+                <span style="font-size: 13px;">Inventory Policy</span></span>
               </div>
               <div class="col-lg-6 col-md-6">
                 <input type="text" class="form-control" ng-model="productData.barcode">
@@ -120,7 +240,7 @@
             <br>
             <div class="row">
               <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Inventory Policy</span></span>
+                <input type="text" class="form-control" ng-model="productData.sku">
               </div>
               <div class="col-lg-6 col-md-6">
                 <span style="font-size: 13px;"></span>
@@ -136,7 +256,7 @@
               <div class="col-lg-6 col-md-6">
 
               </div>
-            </div>
+            </div>-->
             <hr>
             <span style="font-size: 20px;">Shipping</span>
             <br>
@@ -153,7 +273,7 @@
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
                   <div class="input-group">
-                    <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="productData.weight">
+                    <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="product.weight">
                     <div class="input-group-btn">
                       <select class="form-control" name="" style="margin-left: -1px; width: auto; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
                         <option value="kg">kg</option>
@@ -180,7 +300,7 @@
             <hr>
             <div class="row">
               <div class="col-lg-10 col-md-10">
-                <input type="checkbox" ng-model="productData.onlineStore" value="true"> <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;Online store</span>
+                <input type="checkbox" ng-model="luxireProduct.product_visibility" value="true"> <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;Online store</span>
               </div>
               <div class="col-lg-2 col-md-2" style="text-align: right;">
                 <i class="fa fa-calendar-o" style="color: #479CCF; float: right;cursor: pointer;" tooltip="Set a publish date" ng-click="calFlag = !calFlag"></i>
@@ -189,7 +309,7 @@
             <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Publish on this date</span>
-                <datetimepicker data-ng-model="productData.available_on"></datetimepicker>
+                <datetimepicker data-ng-model="luxireProduct.product_publish_date"></datetimepicker>
               </div>
             </div>
           </div>
@@ -206,8 +326,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.prodType">
-                  <option value="shirts">Shirts</option>
+                <select class="form-control" ng-model="newProductType.type"  ng-change="showProductType()" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in allproductType" value="{{type.id}}">
+                      {{type.product_type}}
+                  </option>
                 </select>
               </div>
             </div>
@@ -220,7 +343,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.vendor">
+                <select class="form-control" ng-model="luxireProduct.vendor">
                   <option value="luxire">Luxire</option>
                 </select>
               </div>
@@ -233,7 +356,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" class="form-control" placeholder="Search for collections" ng-model="productData.collections">
+                <input type="text" class="form-control" placeholder="Search for collections" ng-model="luxireProduct.collections">
               </div>
             </div>
             <br>
@@ -250,7 +373,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" class="form-control" ng-model="productData.tags" placeholder="Vintage, cotton, summer">
+                <input type="text" class="form-control" ng-model="luxireProduct.product_tags" placeholder="Vintage, cotton, summer">
               </div>
             </div>
             <br>
@@ -261,9 +384,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <tags-input ng-model="productData.colorTags">
+                <!-- <tags-input ng-model="luxireProduct.product_color" display-property="text" key-property="text">
                   <auto-complete source="loadTags('color')"></auto-complete>
-                </tags-input>
+                  {{luxireProduct.product_color}}
+                </tags-input> -->
+                  <input type="text" ng-model="luxireProduct.product_color" class="form-control">
               </div>
             </div>
             <br>
@@ -274,7 +399,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.weaveType">
+                <select class="form-control" ng-model="luxireProduct.product_weave_type">
                   <option value="plain">Plain Weave</option>
                   <option value="twill">Twill Weave</option>
                   <option value="satin">Satin Weave</option>
@@ -290,7 +415,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="productData.threadCount" class="form-control">
+                <input type="text" ng-model="luxireProduct.thread_count" class="form-control">
               </div>
             </div>
             <br>
@@ -301,10 +426,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.material">
+                <select class="form-control" ng-model="luxireProduct.material">
                   <option value="cotton">Cotton</option>
                   <option value="silk">Silk</option>
                   <option value="wool">Wool</option>
+                  <option value="wool">Linen</option>
                 </select>
               </div>
             </div>
@@ -316,7 +442,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="productData.composition" class="form-control">
+                <input type="text" ng-model="luxireProduct.composition" class="form-control">
               </div>
             </div>
             <br>
@@ -327,7 +453,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.pattern">
+                <select class="form-control" ng-model="luxireProduct.pattern">
                   <option value="checks">Checks</option>
                   <option value="stripes">Stripes</option>
                   <option value="printed">Printed</option>
@@ -342,9 +468,9 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.transperancy">
+                <select class="form-control" ng-model="luxireProduct.transparency">
                   <option value="opaque">Opaque</option>
-                  <option value="seethru">See Through</option>
+                  <option value="see_through">See Through</option>
                 </select>
               </div>
             </div>
@@ -356,9 +482,9 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="productData.wrinkleResistant">
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                <select class="form-control" ng-model="luxireProduct.wrinkle_resistance">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
                 </select>
               </div>
             </div>
@@ -370,7 +496,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="productData.thickness" class="form-control">
+                <input type="text" ng-model="luxireProduct.thickness" class="form-control">
               </div>
             </div>
             <br>
@@ -381,7 +507,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <tags-input ng-model="productData.season">
+                <tags-input ng-model="luxireProduct.season">
                   <auto-complete source="loadTags('season')"></auto-complete>
                 </tags-input>
               </div>

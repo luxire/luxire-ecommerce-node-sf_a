@@ -72,88 +72,88 @@ angular.module('luxire')
 
 
 })
-
-.service('products', function($http, $q, restApiService){
-	//Get all products
-	this.getProducts = function(){
-		var deferred = $q.defer();
-		$http.get('/api/products').then(function(data){
-			deferred.resolve(data)
-		},function(errData, errStatus, errHeaders, errConfig){
-			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
-		});
-		return deferred.promise;
-	}
-
-	/*search product by name*/
-	this.searchProducts = function(search_phrase){
-		var deferred = $q.defer();
-		$http.get('/api/products?q[name_cont]='+search_phrase).then(function(data){
-			deferred.resolve(data.data.products)
-		},function(errData, errStatus, errHeaders, errConfig){
-			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
-		});
-		return deferred.promise;
-	}
-
-	this.createProduct = function(product) {
-		var deferred = $q.defer();
-
-		$http.post("/api/products", angular.toJson(product)).success(function(res) {
-			console.log(res);
-			deferred.resolve(res.data);
-  		})
-  		.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-	this.getProductByID = function(id) {
-		var deferred = $q.defer();
-		$http.get("/api/products/"+id).success(function(data) {
-			console.log(data)
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-
-
-	this.updateProduct = function(id, prod_parameters) {
-		var deferred = $q.defer();
-		var parameters = {
-			product: prod_parameters
-		}
-		$http.put("/api/products/"+ id, angular.toJson(parameters)).success(function(data) {
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-
-	this.deleteProduct = function(id) {
-		var deferred = $q.defer();
-		$http.delete("/api/products/"+id).success(function(data) {
-			console.log(data);
-			deferred.resolve(data);
-  		})
-			.error(function(errData, errStatus, errHeaders, errConfig) {
-				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-  		});
-  		return deferred.promise;
-	}
-})
-
+//
+// .service('products', function($http, $q, restApiService){
+// 	//Get all products
+// 	this.getProducts = function(){
+// 		var deferred = $q.defer();
+// 		$http.get('/api/products').then(function(data){
+// 			deferred.resolve(data)
+// 		},function(errData, errStatus, errHeaders, errConfig){
+// 			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+// 		});
+// 		return deferred.promise;
+// 	}
+//
+// 	/*search product by name*/
+// 	this.searchProducts = function(search_phrase){
+// 		var deferred = $q.defer();
+// 		$http.get('/api/products?q[name_cont]='+search_phrase).then(function(data){
+// 			deferred.resolve(data.data.products)
+// 		},function(errData, errStatus, errHeaders, errConfig){
+// 			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+// 		});
+// 		return deferred.promise;
+// 	}
+//
+// 	this.createProduct = function(product) {
+// 		var deferred = $q.defer();
+//
+// 		$http.post("/api/products", angular.toJson(product)).success(function(res) {
+// 			console.log(res);
+// 			deferred.resolve(res.data);
+//   		})
+//   		.error(function(errData, errStatus, errHeaders, errConfig) {
+// 				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+//   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+//   		});
+//   		return deferred.promise;
+// 	}
+//
+// 	this.getProductByID = function(id) {
+// 		var deferred = $q.defer();
+// 		$http.get("/api/products/"+id).success(function(data) {
+// 			console.log(data)
+// 			deferred.resolve(data);
+//   		})
+// 			.error(function(errData, errStatus, errHeaders, errConfig) {
+// 				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+//   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+//   		});
+//   		return deferred.promise;
+// 	}
+//
+//
+//
+// 	this.updateProduct = function(id, prod_parameters) {
+// 		var deferred = $q.defer();
+// 		var parameters = {
+// 			product: prod_parameters
+// 		}
+// 		$http.put("/api/products/"+ id, angular.toJson(parameters)).success(function(data) {
+// 			deferred.resolve(data);
+//   		})
+// 			.error(function(errData, errStatus, errHeaders, errConfig) {
+// 				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+//   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+//   		});
+//   		return deferred.promise;
+// 	}
+//
+// 	this.deleteProduct = function(id) {
+// 		var deferred = $q.defer();
+// 		$http.delete("/api/products/"+id).success(function(data) {
+// 			console.log(data);
+// 			deferred.resolve(data);
+//   		})
+// 			.error(function(errData, errStatus, errHeaders, errConfig) {
+// 				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+//   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+//   		});
+//   		return deferred.promise;
+// 	}
+// })
+//
 .service('variants', function($http){
 
 	this.get_variants_by_product_id = function(id){
@@ -182,6 +182,15 @@ angular.module('luxire')
 		}
 		return $http.post("/api/orders", angular.toJson(cart));
 	};
+	// this.update_cart_by_quantity = function(order_number, order_token, line_items){
+	// 	var order = {
+	// 		order: {
+	// 			line_items: line_items
+	// 		}
+	// 	}
+	// 	return $http.put("/api/orders/"+order_number+"?order_token="+order_token, angular.toJson(order));
+	// };
+	//
 	this.update_cart_by_quantity = function(order_number, order_token, line_item_id,variant_id,quantity){
 		var updated_cart = {
 			order_number: order_number,

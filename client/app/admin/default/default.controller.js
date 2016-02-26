@@ -1,4 +1,4 @@
 angular.module('luxire')
-.controller('DefaultController',function($scope){
-
+.controller('DefaultController',function($scope, $stateParams){
+  console.log($stateParams);
 });

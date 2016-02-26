@@ -8,7 +8,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 													'ui.bootstrap.datetimepicker','ngTagsInput',
 													'ngAnimate', 'ngMessages',
 													 'AngularPrint', 'monospaced.qrcode',
-												   'ui.tree'])
+												   'ui.tree','infinite-scroll'])
 
 .run(function($location,$rootScope, $state){
 	$rootScope.spree_host = 'http://localhost:3000';
@@ -30,6 +30,14 @@ angular.module('luxire', ['ui.router','ngRoute',
     });
 		$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
 				console.log('tostate', toState);
+				console.log('toStateParams', toStateParams);
+				if(toState.name == 'test'){
+					window.sessionStorage.luxire_token = toStateParams.id;
+					console.log('state.go to admin');
+					event.preventDefault();
+
+					$state.go('admin.default');
+				}
 				if(toState.data.require_auth){
 					if(window.localStorage.luxire_token == undefined && window.sessionStorage.luxire_token == undefined ){
 						event.preventDefault();
@@ -60,9 +68,10 @@ angular.module('luxire', ['ui.router','ngRoute',
 	$urlRouterProvider.otherwise('/');
 	$stateProvider
 	.state('test',{
-		url:'/test',
+		url:'/test/:id',
 		templateUrl: 'app/test/test.html',
 		controller: 'testController',
+		params: {id: null},
 		data: {
 			require_auth: false
 		}
@@ -119,86 +128,86 @@ angular.module('luxire', ['ui.router','ngRoute',
 			require_auth: false
 		}
 	})
-	.state('cart',{
-		url: '/cart',
-		params: {cartObject: {}},
-		templateUrl: 'app/cart/partials/cart.html',
-		controller: 'CartController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('checkout_address',{
-		url: '/checkout/address',
-		params: {checkoutObject: {}},
-		templateUrl: 'app/checkout/partials/checkoutAddress.html',
-		controller: 'CheckoutAddressController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('checkout_delivery',{
-		url: '/checkout/delivery',
-		params: {checkoutObject: {}},
-		templateUrl: 'app/checkout/partials/checkoutDelivery.html',
-		controller: 'CheckoutDeliveryController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('checkout_payment',{
-		url: '/checkout/payment',
-		params: {checkoutObject: {}},
-		templateUrl: 'app/checkout/partials/checkoutPayment.html',
-		controller: 'checkoutPaymentController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('checkout_gateway',{
-		url: '/checkout/gateway',
-		params: {gatewayObject: {}},
-		templateUrl: 'app/checkout/partials/checkoutGateway.html',
-		controller: 'checkoutGatewayController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('productListing',{
-		url: '/product-listing',
-		params: {filterObject: {}},
-		templateUrl: 'app/newProduct/partials/productListing.html',
-		controller: 'productListingController',
-		css: 'app/newProduct/css/productListing.css',
-		data: {
-			require_auth: false
-		}
-	})
-
-
-.state('shirtDetailedView',{
-		url: '/shirt-detailed-view',
-		params: {filterObject: {}},
-		templateUrl: 'app/newProduct/partials/shirtDetailView.html',
-		controller: 'shirtDetailedViewController',
-		css: 'app/newProduct/css/shirtDetailView.css',
-		data: {
-			require_auth: false
-		}
-	})
-
-
-
-.state('customizeShirt',{
-		url: '/customize-shirt',
-		params: {filterObject: {}},
-		templateUrl: 'app/customize-shirt/partials/customize-shirt.html',
-		controller: 'customizeShirtController',
-		css: 'app/customize-shirt/css/customize-shirt.css',
-		data: {
-			require_auth: false
-		}
-	})
+	// .state('cart',{
+	// 	url: '/cart',
+	// 	params: {cartObject: {}},
+	// 	templateUrl: 'app/cart/partials/cart.html',
+	// 	controller: 'CartController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('checkout_address',{
+	// 	url: '/checkout/address',
+	// 	params: {checkoutObject: {}},
+	// 	templateUrl: 'app/checkout/partials/checkoutAddress.html',
+	// 	controller: 'CheckoutAddressController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('checkout_delivery',{
+	// 	url: '/checkout/delivery',
+	// 	params: {checkoutObject: {}},
+	// 	templateUrl: 'app/checkout/partials/checkoutDelivery.html',
+	// 	controller: 'CheckoutDeliveryController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('checkout_payment',{
+	// 	url: '/checkout/payment',
+	// 	params: {checkoutObject: {}},
+	// 	templateUrl: 'app/checkout/partials/checkoutPayment.html',
+	// 	controller: 'checkoutPaymentController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('checkout_gateway',{
+	// 	url: '/checkout/gateway',
+	// 	params: {gatewayObject: {}},
+	// 	templateUrl: 'app/checkout/partials/checkoutGateway.html',
+	// 	controller: 'checkoutGatewayController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+// 	.state('productListing',{
+// 		url: '/product-listing',
+// 		params: {filterObject: {}},
+// 		templateUrl: 'app/newProduct/partials/productListing.html',
+// 		controller: 'productListingController',
+// 		css: 'app/newProduct/css/productListing.css',
+// 		data: {
+// 			require_auth: false
+// 		}
+// 	})
+//
+//
+// .state('shirtDetailedView',{
+// 		url: '/shirt-detailed-view',
+// 		params: {filterObject: {}},
+// 		templateUrl: 'app/newProduct/partials/shirtDetailView.html',
+// 		controller: 'shirtDetailedViewController',
+// 		css: 'app/newProduct/css/shirtDetailView.css',
+// 		data: {
+// 			require_auth: false
+// 		}
+// 	})
+//
+//
+//
+// .state('customizeShirt',{
+// 		url: '/customize-shirt',
+// 		params: {filterObject: {}},
+// 		templateUrl: 'app/customize-shirt/partials/customize-shirt.html',
+// 		controller: 'customizeShirtController',
+// 		css: 'app/customize-shirt/css/customize-shirt.css',
+// 		data: {
+// 			require_auth: false
+// 		}
+// 	})
 
 	// $locationProvider.html5Mode({
   //      enabled: true,

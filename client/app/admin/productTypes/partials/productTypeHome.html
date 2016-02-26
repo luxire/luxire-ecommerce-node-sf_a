@@ -51,7 +51,7 @@
                   Product Type
                 </th>
                 <th>
-                  Discription
+                  Description
                 </th>
                 <!--th>
                   Attributes
@@ -117,7 +117,13 @@
                 </td>
 
                 <td>
-                  <button type="button" class="btn btn-danger" ng-click="deleteProductTypes(x.id,$index)">X</button>
+                  <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+                    <i href="#" class="fa fa-pencil-square-o" ng-click="showEditProdTypes(x.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>
+                </td>
+                <td>
+                    <i class="fa fa-trash-o" ng-click="deleteProductTypes(x.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                  </div>
+                  <!--button type="button" class="btn btn-danger" ng-click="deleteProductTypes(x.id,$index)">X</button-->
                 </td>
               </tr>
             </tbody>

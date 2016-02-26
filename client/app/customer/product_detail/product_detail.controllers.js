@@ -1,22 +1,76 @@
 angular.module('luxire')
-.controller('ProductDetailController', function($scope, $stateParams, ProductDetailService, ImageHandler,  $location, $anchorScroll, $uibModal){
+.controller('ProductDetailController', function($scope, CustomerOrders, $state, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal){
   /*fn to convert array of object in a object*/
   $scope.cart_object = {};
   $scope.luxire_styles = [];
+  $rootScope.customer_alerts = [];
   $scope.product = {};
   var json_array_to_obj = function(parent, arr){
     $scope[parent] = {};
     $scope.cart_object[parent] = {};
     angular.forEach(arr, function(val, key){
-      $scope.cart_object[parent][val.name] = {name: '',options: {}};
+      if(parent !=='personalization_attributes'){
+        $scope.cart_object[parent][val.name] = {value: '',options: {}};
+      }
+      else{
+        $scope.cart_object[parent][val.name] = {};
+      }
       $scope[parent][val.name] = val.value;
     })
     console.log('after_conv',$scope[parent]);
     return $scope[parent];
   };
+  $scope.close_alert = function(index){
+    $rootScope.customer_alerts.splice(index);
+  };
+  $scope.add_to_cart = function(){
+    CustomerOrders.addTocart($scope.cart_object, $scope.product.master).then(function(data){
+      console.log(JSON.parse(data.data.body));
+      $rootScope.luxire_cart = JSON.parse(data.data.body);
+      console.log($rootScope.luxire_cart.line_items.length);
+      $state.go('customer.cart');
+      $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+    }, function(error){
+      console.error(error);
+    })
+  };
 
+  var style_iterator = function(style){
+    angular.forEach($scope.cart_object["customization_attributes"], function(value, key){
+      if(angular.isUndefined(style)){
+        $scope.cart_object["customization_attributes"][key]['value'] = '';
+      }
+      else{
+        if(angular.isDefined(style["customization_attributes"][key])){
+          $scope.cart_object["customization_attributes"][key]['value'] = style["customization_attributes"][key];
+        }
+        else{
+          $scope.cart_object["customization_attributes"][key]['value'] = '';
+        }
+      }
+    })
+    return;
 
-  ProductDetailService.showProduct($stateParams.product_name).then(function(data){
+  };
+
+  $scope.style_extractor = function(style){
+    console.log('cart_object',$scope.cart_object);
+    console.log('extracted style', style);
+    if(angular.isDefined(style)){
+      style_iterator(style.default_values);
+    }
+    else{
+      style_iterator();
+    }
+    console.log('cart_object',$scope.cart_object);
+    return;
+  };
+
+  $scope.revert_style = function(){
+    style_iterator();
+  };
+
+  CustomerProducts.show($stateParams.product_name).then(function(data){
     console.log(data);
     $scope.product = data.data;
     $scope.images_array = [];
@@ -25,10 +79,11 @@ angular.module('luxire')
     })
     json_array_to_obj("customization_attributes", $scope.product.customization_attributes);
     json_array_to_obj("personalization_attributes", $scope.product.personalization_attributes);
-    json_array_to_obj("measurement_std_attributes", $scope.product.measurement_std_attributes);
-    json_array_to_obj("measurement_body_attributes", $scope.product.measurement_body_attributes);
+    json_array_to_obj("standard_measurement_attributes", $scope.product.standard_measurement_attributes);
+    json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
     $scope.luxire_styles = data.data.luxire_style_masters;
     $scope.hideNext= $scope.product.luxire_style_masters.length>6 ? false : true;
+    console.log('cart', $scope.cart_object);
 
   }, function(error){
     console.log(error);
@@ -49,6 +104,8 @@ angular.module('luxire')
     });
     modal_instance.result.then(function (selected_style) {
       console.log(selected_style);
+      $scope.style_extractor(selected_style);
+      $scope.cart_object.selected_style = selected_style;
     }, function () {
       console.info('Modal dismissed at: ' + new Date());
     });
@@ -67,11 +124,70 @@ angular.module('luxire')
         },
         cart_object: function(){
           return $scope.cart_object;
+        },
+        parent_scope: function(){
+          return $scope;
         }
       }
     });
     modal_instance.result.then(function (cart_object) {
       console.log(cart_object);
+    }, function () {
+      console.info('Modal dismissed at: ' + new Date());
+    });
+
+  };
+
+  $scope.standard_measurement = function(){
+    var modal_instance = $uibModal.open({
+      animation: true,
+      templateUrl: 'standard_measurements.html',
+      controller: 'StandardMeasurementController',
+      size: 'lg',
+      windowClass: 'bespoke-style-window',
+      resolve: {
+        product: function () {
+          return $scope.product;
+        },
+        cart_object: function(){
+          return $scope.cart_object;
+        },
+        parent_scope: function(){
+          return $scope;
+        }
+      }
+    });
+    modal_instance.result.then(function (cart_object) {
+      console.log(cart_object);
+      $scope.cart_object = cart_object;
+    }, function () {
+      console.info('Modal dismissed at: ' + new Date());
+    });
+
+  };
+
+  $scope.body_measurement = function(){
+    var modal_instance = $uibModal.open({
+      animation: true,
+      templateUrl: 'body_measurements.html',
+      controller: 'BodyMeasurementController',
+      size: 'lg',
+      windowClass: 'bespoke-style-window',
+      resolve: {
+        product: function () {
+          return $scope.product;
+        },
+        cart_object: function(){
+          return $scope.cart_object;
+        },
+        parent_scope: function(){
+          return $scope;
+        }
+      }
+    });
+    modal_instance.result.then(function (cart_object) {
+      console.log(cart_object);
+      $scope.cart_object = cart_object;
     }, function () {
       console.info('Modal dismissed at: ' + new Date());
     });
@@ -89,7 +205,7 @@ angular.module('luxire')
   };
 
   $scope.set_attribute_value = function(attribute_type, attribute_key, attribute_value){
-    $scope.cart_object[attribute_type][attribute_key]['name'] = attribute_value;
+    $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
     console.log($scope.cart_object);
   };
 
@@ -139,12 +255,20 @@ angular.module('luxire')
     }
 
   };
-  $scope.selectSliderIndex=-1;
-  $scope.selectSlider=function(index){
+  $scope.active_style_index = -1;
+  $scope.select_style=function(index, style){
     console.log("index: "+index);
-    //$(event.target).addClass('selectSlider');
-    $scope.selectSliderIndex=index;
-
+    console.log('style', style);
+    if($scope.active_style_index == index){
+      $scope.active_style_index = -1;
+      $scope.style_extractor();
+      console.log($scope.cart_object);
+    }
+    else{
+      $scope.active_style_index = index;
+      $scope.style_extractor(style);
+      console.log($scope.cart_object);
+    };
   };
 
 })
@@ -170,13 +294,20 @@ angular.module('luxire')
 
 
 })
-.controller('BespokeStyleController', function($scope, $uibModalInstance, ImageHandler, product, cart_object){
+.controller('BespokeStyleController', function($scope, $uibModalInstance, ImageHandler, product, cart_object, parent_scope){
+  console.log('parent');
   console.log('product', product);
   console.log('cart', cart_object);
   $scope.product = product;
+  $scope.cart_object = cart_object;
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
+
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
+  };
+
   $scope.selected_customization_attribute_index = 0;
   $scope.selected_customization_style_index = -1;
   $scope.selected_customization_attribute = $scope.product['customization_attributes'][0];
@@ -188,240 +319,102 @@ angular.module('luxire')
     console.log($scope.selected_customization_attribute_index);
   };
 
-  $scope.activate_customization_style  = function(style_object, index){
-    $scope.selected_customization_style_index = index;
+  $scope.activate_customization_style  = function(style_object, index, style_name){
     console.log(style_object);
+    if($scope.selected_customization_style_index == index){
+      $scope.selected_customization_style_index = -1;
+      $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['value'] = '';
+      $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
+      delete $scope["customization_attributes"][$scope.selected_customization_attribute.name];
+
+    }
+    else{
+      console.log('index not same');
+      $scope.selected_customization_style_index = index;
+      $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['value'] = style_name;
+      if(!angular.isObject($scope["customization_attributes"])){
+        $scope["customization_attributes"] = {};
+      };
+      if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][$scope.selected_customization_attribute.name])){
+        $scope["customization_attributes"][$scope.selected_customization_attribute.name] = {};
+      };
+      if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][$scope.selected_customization_attribute.name]) && !angular.isObject($scope["customization_attributes"][$scope.selected_customization_attribute.name]["options"])){
+        $scope["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
+      }
+      console.log($scope["customization_attributes"]);
+      $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
+      $scope["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = style_object;
+      // $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = style_object;
+    }
   };
 
-  $scope.selectedOptions = {
-    "collar":"",
-    "cuffs": "",
-    "back" :"",
-    "pocket": "",
-    "placket": ""
+  $scope.selected_personalization_attribute = $scope.product["personalization_attributes"][0];
+  $scope.selected_personalization_attribute_index = 0;
+  $scope.activate_personalization_attribute = function(personalization_attribute, index){
+    $scope.selected_personalization_attribute_index = index;
+    $scope.selected_personalization_attribute = personalization_attribute;
   }
 
-
-  $scope.shirtDetails={
-    "name": "Grey wool Flannel",
-    "alt" : "Grey wool Flannel",
-    "imgurl": "lib/filter-img/fabric2.jpg",
-    "price": "$99.99",
-    "fabric": "blue cotton",
-    "fitStyle": [
-      {
-        "imgurl":"lib/filter-img/fabric1.jpg",
-        "text":"Regular",
-        "id":1,
-      },
-      {
-        "imgurl":"lib/filter-img/fabric2.jpg",
-        "text":"Retro",
-        "id":2
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric4.jpg",
-        "text":"Classic",
-        "id":3
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric1.jpg",
-        "text":"Minimalist",
-        "id":4
-      },
-      {
-        "imgurl":"lib/filter-img/fabric2.jpg",
-        "text":"Regular",
-        "id":5
-      },
-      {
-        "imgurl":"lib/filter-img/fabric4.jpg",
-        "text":"Retro",
-        "id":6
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric1.jpg",
-        "text":"Classic",
-        "id":7
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric2.jpg",
-        "text":"Regular",
-        "id":8
-      },
-      {
-        "imgurl":"lib/filter-img/fabric4.jpg",
-        "text":"Minimalist",
-        "id":9
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric1.jpg",
-        "text":"Retro",
-        "id":10
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric2.jpg",
-        "text":"GMinimalist",
-        "id":11
-      },
-      {
-        "imgurl":"lib/filter-img/fabric4.jpg",
-        "text":"Regular",
-        "id":12
-      },
-      {
-        "imgurl":"lib/filter-img/fabric1.jpg",
-        "text":"Classic",
-        "id":13
-
-      },
-      {
-        "imgurl":"lib/filter-img/fabric2.jpg",
-        "text":"Retro",
-        "id":14
-
-      }
-    ],
-    "collarStyle": [
-      {
-        "imgurl":"lib/collar-style/collar1.png",
-        "text":"Semi Spread",
-        "id":1
-      },
-      {
-        "imgurl":"lib/collar-style/collar2.png",
-        "text":"Button Down",
-        "id":2
-
-      },
-      {
-        "imgurl":"lib/collar-style/collar3.png",
-        "text":"English Spread",
-        "id":3
-
-      },
-      {
-        "imgurl":"lib/collar-style/collar4.png",
-        "text":"Spear Point",
-        "id":4
-      },
-      {
-        "imgurl":"lib/collar-style/collar5.png",
-        "text":"Custom",
-        "id":5
-      }
-    ],
-    "cuffStyle": [
-      {
-        "imgurl":"lib/cuffs-style/style2.png",
-        "text":"collar",
-        "id":1
-      },
-      {
-        "imgurl":"lib/cuffs-style/style3.png",
-        "text":"cuffs",
-        "id":2
-
-      },
-      {
-        "imgurl":"lib/cuffs-style/style4.png",
-        "text":"back",
-        "id":3
-
-      },
-      {
-        "imgurl":"lib/cuffs-style/style5.png",
-        "text":"Spear Point",
-        "id":4
-      },
-      {
-        "imgurl":"lib/cuffs-style/style6.png",
-        "text":"pocket",
-        "id":5
-      },
-      {
-        "imgurl":"lib/cuffs-style/style7.png",
-        "text":"placket",
-        "id":6
-
-      },
-      {
-        "imgurl":"lib/cuffs-style/style8.png",
-        "text":"pocket",
-        "id":7
-      },
-      {
-        "imgurl":"lib/cuffs-style/style9.png",
-        "text":"Custom",
-        "id":8
-      }
-    ],
-    "description": [
-      {
-        "name" :"fabric",
-        "value":"blue cotton"
-      },
-      {
-        "name" :"Fit",
-        "value":"Slim"
-      },
-      {
-        "name" :"sleeve",
-        "value":"Full"
-      },
-      {
-        "name" :"collar",
-        "value":"Semi Spread"
-      },
-      {
-        "name" :"cuffs",
-        "value":"Regular"
-      },
-      {
-        "name" :"back",
-        "value":"Pleaeted"
-      },
-    ]
+  $scope.cart_object.personalization_cost = '$0.00';
+  $scope.add_personalization_cost = function(cost){
+    console.log(parseFloat($scope.cart_object.personalization_cost.split('$')[1]));
+    console.log(parseFloat(cost.split('$')[1]));
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
   };
-  $scope.selectedOptions=[
-    {
-      "name" :"fabric",
-      "value":"blue cotton"
-    },
-    {
-      "name" :"Fit",
-      "value":"Slim"
-    },
-    {
-      "name" :"sleeve",
-      "value":"Full"
-    },
-    {
-      "name" :"collar",
-      "value":"Semi Spread"
-    },
-    {
-      "name" :"cuffs",
-      "value":"Regular"
-    },
-    {
-      "name" :"back",
-      "value":"Pleaeted"
-    },
-  ];
-    // start of slider functionality
+
+  $scope.cart_object.total_cost = $scope.product.display_price;
+  $scope.total_price = function(){
+    $scope.cart_object.total_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat($scope.product.display_price.split('$')[1])).toFixed(2);
+  };
+  $scope.remove_personalization_cost = function(cost){
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])-parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
+  };
+  $scope.add_remove_personalization = function(value, child){
+    console.log($scope.selected_personalization_attribute.name);
+    if(value.selected){
+      $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child] = value.cost;
+      $scope.add_personalization_cost(value.cost);
+      console.log(status);
+    }
+    else{
+      console.log(status);
+      delete $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child];
+      $scope.remove_personalization_cost(value.cost);
+    }
+  };
+
+  $scope.monogram_options = {};
+  $scope.add_remove_monogram = function(value){
+    console.log(value);
+    if(value.selected){
+      $scope.monogram_options = $scope.selected_personalization_attribute.value;
+      $scope.add_personalization_cost($scope.monogram_options['cost']);
+      console.log($scope.monogram_options);
+    }
+    else{
+      $scope.remove_personalization_cost($scope.monogram_options.cost);
+      $scope.monogram_options = {};
+    }
+  };
+
+  $scope.checkIsArray = function(style_value){
+    console.log(style_value);
+    console.log('style_value',angular.isArray(style_value));
+    if(angular.isArray(style_value)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  };
   $scope.luxire_styles = $scope.product.luxire_style_masters;
 
   console.log('luxire_styles length', $scope.luxire_styles.length);
     var tempObj=[];
     var slideStart=0;
-    var slideEnd=8;
+    var slideEnd=7;
     $scope.hideNext= $scope.product.luxire_style_masters.length>9 ? false : true;
     $scope.hidePrev= slideStart==0? true: false;
     $scope.slideNext=function(){
@@ -457,12 +450,22 @@ angular.module('luxire')
       }
 
     };
-    $scope.selectSliderIndex=-1;
-    $scope.selectSlider=function(index){
+    $scope.active_style_index = -1;
+    $scope.select_style=function(index, style){
       console.log("index: "+index);
-      //$(event.target).addClass('selectSlider');
-      $scope.selectSliderIndex=index;
+      if($scope.active_style_index==index){
+        $scope.active_style_index = -1;
+        parent_scope.style_extractor();
+      }
+      else{
+        $scope.active_style_index = index;
+        parent_scope.style_extractor(style);
+      }
 
+    };
+
+    $scope.next_step = function(){
+      $uibModalInstance.close($scope.cart_object);
     };
 
 
@@ -513,28 +516,149 @@ angular.module('luxire')
   // end of slider functionality
 
   //start of onclick functionality
-  $scope.selectedCuffsIndex = -1;
-  $scope.selectCuffs=function(index,type){
-    console.log(" cuff type: "+type);
-
-    $scope.selectedCuffsIndex = index;
-
-  }
-
-  $scope.selectedCollarIndex = -1;
-  $scope.selectCollar=function(index,type){
-    console.log(" collar type: "+type);
-    $scope.selectedCollarIndex = index;
-
-  }
-  $scope.selectedFitIndex = -1;
-  $scope.selectFit=function(index,type){
-    console.log(" fit type: "+type);
-    $scope.selectedFitIndex= index;
-
-  }
 
   //end of onclick functionality
 
 
 })
+.controller('StandardMeasurementController', function($scope, $uibModalInstance, ImageHandler, product, cart_object, parent_scope){
+  console.log('parent');
+  console.log('product', product);
+  console.log('cart', cart_object);
+  $scope.product = product;
+  $scope.cart_object = cart_object;
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
+
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.cart_object.personalization_cost = '$0.00';
+  $scope.add_personalization_cost = function(cost){
+    console.log(parseFloat($scope.cart_object.personalization_cost.split('$')[1]));
+    console.log(parseFloat(cost.split('$')[1]));
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
+  };
+
+  $scope.cart_object.total_cost = $scope.product.display_price;
+  $scope.total_price = function(){
+    $scope.cart_object.total_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat($scope.product.display_price.split('$')[1])).toFixed(2);
+  };
+  $scope.remove_personalization_cost = function(cost){
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])-parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
+  };
+  $scope.add_remove_personalization = function(value, child){
+    console.log($scope.selected_personalization_attribute.name);
+    if(value.selected){
+      $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child] = value.cost;
+      $scope.add_personalization_cost(value.cost);
+      console.log(status);
+    }
+    else{
+      console.log(status);
+      delete $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child];
+      $scope.remove_personalization_cost(value.cost);
+    }
+  };
+
+
+  $scope.checkIsArray = function(style_value){
+    console.log(style_value);
+    console.log('style_value',angular.isArray(style_value));
+    if(angular.isArray(style_value)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  };
+    $scope.next_step = function(){
+      $uibModalInstance.close($scope.cart_object);
+    };
+
+
+})
+.controller('BodyMeasurementController', function($scope, $uibModalInstance, ImageHandler, product, cart_object, parent_scope){
+  console.log('parent');
+  console.log('product', product);
+  console.log('cart', cart_object);
+  $scope.product = product;
+  $scope.cart_object = cart_object;
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
+
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.cart_object.personalization_cost = '$0.00';
+  $scope.add_personalization_cost = function(cost){
+    console.log(parseFloat($scope.cart_object.personalization_cost.split('$')[1]));
+    console.log(parseFloat(cost.split('$')[1]));
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
+  };
+
+  $scope.cart_object.total_cost = $scope.product.display_price;
+  $scope.total_price = function(){
+    $scope.cart_object.total_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat($scope.product.display_price.split('$')[1])).toFixed(2);
+  };
+  $scope.remove_personalization_cost = function(cost){
+    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])-parseFloat(cost.split('$')[1])).toFixed(2);
+    $scope.total_price();
+  };
+  $scope.add_remove_personalization = function(value, child){
+    console.log($scope.selected_personalization_attribute.name);
+    if(value.selected){
+      $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child] = value.cost;
+      $scope.add_personalization_cost(value.cost);
+      console.log(status);
+    }
+    else{
+      console.log(status);
+      delete $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child];
+      $scope.remove_personalization_cost(value.cost);
+    }
+  };
+
+
+  $scope.checkIsArray = function(style_value){
+    console.log(style_value);
+    console.log('style_value',angular.isArray(style_value));
+    if(angular.isArray(style_value)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  };
+    $scope.next_step = function(){
+      $uibModalInstance.close($scope.cart_object);
+    };
+
+
+})
+
+
+  // $scope.personalization_item_cost = '';
+  // $scope.selected_personalization_attribute_child_index = -1;
+  // $scope.activate_personalization_attribute_child = function(child, index, child_value){
+  //   console.log('index',index);
+  //   console.log('p_index', $scope.selected_personalization_attribute_child_index);
+  //   console.log();
+  //   if($scope.selected_personalization_attribute_child_index == index){
+  //     delete $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute][child];
+  //     $scope.personalization_item_cost = '';
+  //
+  //   }
+  //   else{
+  //     $scope.cart_object["personalization_attributes"][$scope.selected_personalization_attribute.name][child] = child_value.cost;
+  //     $scope.personalization_item_cost = child_value.cost;
+  //   }
+  //   console.log($scope.cart_object);
+  // };

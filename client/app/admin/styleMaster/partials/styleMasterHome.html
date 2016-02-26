@@ -56,10 +56,7 @@
                         <tr>
                           <th>
                              <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
-                          </th>
-                          <th>
-
-                          </th>
+                          </th><th></th><th></th>
                           <th>
                             Name
                           </th>
@@ -69,30 +66,26 @@
                           <th>
 
                           </th>
+                          <th>
 
-
-
+                          </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr ng-repeat="type in allStyleMasterType | filter:searchText track by $index">
-                            <td>
-                              <div><input <input type="checkbox" name="selectAll" value=""></input></div>
-                            </td>
-                            <td>
-                              <img src={{type.url}} style="width:50px;height:50px;"></img>
-                            </td>
+                      <tbody style="padding:5%;">
+                        <tr ng-repeat="type in allStyleMasterType | filter:searchText">
+                            <td style="padding-right:0%;">
+                              <div>
+                                <input <input type="checkbox" name="selectAll" value=""></input>
+                                <img src={{type.url}} style="width:50px;height:50px;margin-left:2%;"></img>
+                              </div>
+                            </td><td></td><td></td>
                             <td>
                               <a ui-sref="admin.styleMasterEdit" ng-click="editStyleMaster(type.id)">{{ type.name }}</a>
                             </td>
+                            <td style="padding-right:60%;"> </td>
                             <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-danger" ng-click="deleteStyleMaster(type.id,$index)">X</button>
+                              <button type="button" class="btn btn-info" ng-click="editStyleMaster(type.id)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
+                              <button type="button" class="btn btn-danger" ng-click="deleteStyleMaster(type.id,$index)"><i class="fa fa-trash-o"></i></button>
                             </td>
                         </tr>
 

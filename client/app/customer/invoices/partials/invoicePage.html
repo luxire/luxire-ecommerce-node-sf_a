@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+.page-wrap {
+     width: 800px;
+     margin: 0 auto;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+.invoice-table{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: ;
+}
+#hidden_div{
+  display: none;
+}
+</style>
+<script>
+function printDiv(divName) {
+         var printContents = document.getElementById(divName).innerHTML;
+         console.log(printContents);
+         var originalContents = document.body.innerHTML;
+         document.body.innerHTML = printContents;
+         //var w = window.open("invoicePage.html","_blank");
+         //w.print();
+         window.print();
+         document.body.innerHTML = originalContents;
+    }
+</script>
+</head>
+<body>
+
+<ul>
+  <li><a href="collection.html">Home</a></li>
+
+
+</ul>
+<div class="page-wrap">
+<div id="printableArea">
+<h3>Your order has been placed successfully</h3>
+<h1>Order {{invoiceDetailedJson.number}}</h1>
+<table class="table table-hover">
+	<thead><!--ng-repeat="i in invoiceDetailedJson"-->
+
+
+		<tr>
+			<th>Billing Addres</th>
+			<th>Shipping Address</th>
+			<th>Shipments</th>
+			<th>Payment Information</th>
+		</tr>
+	</thead>
+	<tbody><!-- ng-repeat="invoice in invoiceDetailedJson"-->
+		<tr>
+			<td>{{invoiceDetailedJson.bill_address.full_name}}<br/>
+        {{invoiceDetailedJson.bill_address.address1}}<br/>
+        {{invoiceDetailedJson.bill_address.address2}}<br/>
+        {{invoiceDetailedJson.bill_address.city}} {{invoice.bill_address.state_text}} {{invoice.bill_address.zipcode}}<br/>
+        {{invoiceDetailedJson.bill_address.country.iso_name}}<br/>
+        Phone {{invoiceDetailedJson.bill_address.phone}}<br/>
+      </td>
+      <td>{{invoiceDetailedJson.bill_address.full_name}}<br/>
+        {{invoiceDetailedJson.bill_address.address1}}<br/>
+        {{invoiceDetailedJson.bill_address.address2}}<br/>
+        {{invoiceDetailedJson.bill_address.city}} {{invoice.bill_address.state_text}} {{invoice.bill_address.zipcode}}<br/>
+        {{invoiceDetailedJson.bill_address.country.iso_name}}<br/>
+        Phone {{invoiceDetailedJson.bill_address.phone}}<br/>
+      </td>
+
+      <td ng-repeat="shipment in invoiceDetailedJson.shipments">
+        <!--<div ng-repeat="rate in shipment.shipping_rates">
+          {{rate.name}}
+        </div-->
+        {{shipment.selected_shipping_rate.name}}
+      </td>
+      <td ng-repeat="payment in invoiceDetailedJson.payments">
+        {{payment.payment_method.name}}
+
+      </td>
+		</tr>
+
+
+	</tbody>
+</table>
+
+<div >
+  <legend>Order Details</legend>
+  <table class="table">
+    <thead >
+    <th>Item</th>
+    <th>Price</th>
+     <th>Qty</th>
+     <th>Total</th>
+     <thead>
+       <tbody>
+         <tr ng-repeat="item in invoiceDetailedJson.line_items">
+
+          <!--{{item["variant"]["images"][0]["mini_url"]}}-->
+          <!--{{item.variant.images[0].product_url}}-->
+            <td><img src="http://54.169.41.36:3000/spree/products/26/small/ror_jr_spaghetti.jpeg?1451992073"> &nbsp;{{item.variant.name}}<br/>{{item.variant.description}}</td>
+            <td>{{item.variant.price}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.variant.price}}</td>
+          </tr>
+          <tr>
+             <td>Subtotal:</td>
+             <td> </td>
+             <td> </td>
+             <td>{{invoiceDetailedJson.item_total}}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td ng-repeat="shipment in invoiceDetailedJson.shipments">Shipping:{{shipment.selected_shipping_rate.name}}</td>
+            <td ng-repeat="shipment in invoiceDetailedJson.shipments">{{shipment.selected_shipping_rate.cost}}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+           <td>Tax:</td>
+           <td>{{invoiceDetailedJson.tax_total}}</td>
+          </tr>
+          <div class="table-div">
+           <tr>
+             <td></td>
+             <td></td>
+             <td>Order Total:</td>
+             <td> {{invoiceDetailedJson.total}}</td>
+           </tr>
+         </div>
+       </tbody>
+  </table>
+</div>
+</div>
+<div ><h4>Thank you for your business. Please print out a copy of this confirmation page for your records.
+</h4></div>
+
+<input type="button" class="btn btn-primary" onclick="printDiv('printableArea')" value="Print Report" />
+
+
+</div>
+</body>
+</html>

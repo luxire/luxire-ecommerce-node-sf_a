@@ -1,0 +1,156 @@
+<div class="container-fluid row">
+  <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+    <div id="luxire-logo">
+      <img src="lib/assets/Luxire_logo_collection_page.png" >
+    </div>
+    <div style="border: solid 2px #AD7984;border-radius: 10px;margin-top: 3%;padding-bottom: 2%">
+      <div class="row" style="margin-left: 2%;margin-top: 2%">
+        <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+            <h4>Shipping address</h4>
+            {{shipping_address.full_name}}<br>
+            {{shipping_address.address1}}<br>
+            {{shipping_address.address2}}<br>
+            {{shipping_address.city}}, {{shipping_address.state_text}}, {{shipping_address.zipcode}}<br>
+            {{shipping_address.country.iso_name}}<br>
+            {{shipping_address.phone}}<br><br><br>
+
+            <h4>Shipping Methods</h4>
+            <div class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%" ng-repeat="shipping_rate in shipments.shipping_rates">
+              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
+                <input type="radio" ng-selected = "true" ng-model="$parent.selected_shipping_rate" ng-change="change_shipping_rate($parent.selected_shipping_rate)" ng-value="shipping_rate" >
+                {{shipping_rate.name}}
+              </div>
+              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                {{shipping_rate.display_cost}}
+              </div>
+
+            </div>
+        </div>
+        <div style="text-align: left;padding-right: 4%" class="col-md-7 col-sm-7 col-lg-7 col-xs-7">
+          <div class="row" ng-repeat="line_item in luxire_cart.line_items">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+              <img src="{{getImage(line_item.variant.images[0].small_url)}}">
+            </div>
+            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
+              <span class="badge">{{line_item.quantity}}</span>
+            </div>
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+              <p style="font-size: 12px">{{line_item.variant.name}}<p>
+            </div>
+            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
+              {{line_item.display_amount}}
+            </div>
+          </div>
+          <hr style="margin-top: 2%">
+            <!-- <div class="row">
+              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
+                <input type="text" placeholder="Gift card or Coupon code" class="form-control" ng-model="coupon_code">
+              </div>
+              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                <button class="btn-primary" ng-click="apply_coupon_code()">Apply</button>
+              </div>
+            </div> -->
+          <hr style="margin-top: 5%;margin-bottom: 2%">
+          <div class="row">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+              Subtotal:<br>
+              Coupon Discount:<br>
+              Shipping Cost:<br>
+            </div>
+            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
+            </div>
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+            </div>
+            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
+              {{display_item_total}}<br>
+              {{adjustment_total}}<br>
+              ${{shipping_cost}}
+            </div>
+          </div>
+          <hr style="margin-top: 2%;margin-bottom: 2%">
+          <div class="row">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+              Total:
+            </div>
+            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
+            </div>
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
+            </div>
+            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
+              ${{total_cost}}
+            </div>
+          </div>
+          <br>
+          <br>
+          <button class="btn btn-primary" ng-click="proceed_to_checkout_payment()">Continue to payment method</button>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      Luxire Custom Clothing process all orders in USD. While the content of your cart is currently displayed in , you will checkout using USD at the most current exchange rate.
+    </div>
+
+    <div style="margin-top: 30%">
+      <div style="border-top: solid 2px #C7BD98;margin-top: 2%;padding-top: 2%">
+        <div style="display: inline-block;margin-left: 2%">search&nbsp;&nbsp;</div>
+        <div style="display: inline-block" >&nbsp;&nbsp;about us&nbsp;&nbsp;</div>
+        <div style="display: inline-block">&nbsp;&nbsp;privacy policy&nbsp;&nbsp;</div>
+        <div style="display: inline-block">&nbsp;&nbsp;shipping & returns&nbsp;&nbsp;</div>
+        <div style="display: inline-block">&nbsp;&nbsp;FAQs&nbsp;&nbsp;</div>
+        <div style="display: inline-block">&nbsp;&nbsp;quality and satisfaction&nbsp;&nbsp;</div>
+        <div style="display: inline-block" >&nbsp;&nbsp;contact us&nbsp;&nbsp;</div>
+      </div>
+      <div style="text-align: center">
+        responsible manufacturing
+      </div>
+      <div>
+        <div style="display: inline-block;text-align: right;width:40%;padding-top: 2%">
+          Enter in your email to join our mailing list:
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div  style="display: inline-block;">
+            <input type="text" class="form-control" id="email-feild" placeholder="email">
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div  style="display: inline-block;">
+            <button type="button" style="background-color:black;color: white" class="btn btn-default btn-sm">Submit</button>
+        </div>
+      </div>
+      <div style="text-align: center;padding-top: 2%;color: #C7BD98">
+        Copyright © 2012 Luxire Custom clothing
+      </div>
+      <!-- <button style="margin-left: 86%" class="btn btn-primary" ng-click="go_to_checkout_address(product_quantity)">Checkout</button> -->
+  </div>
+</div>
+
+</div>
+
+
+
+
+<!-- <header><h2>Delivery</h2></header>
+<div class="row" style="margin-left: 5%" >
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h2>Shipping Methods</h2>
+    <li ng-repeat="shipping_rate in shipments.shipping_rates">
+        <input type="radio" ng-model="$parent.selected_shipping_rate" ng-change="change_shipping_rate($parent.selected_shipping_rate)" ng-value="shipping_rate" >
+        {{shipping_rate.name}} [{{shipping_rate.display_cost}}]</br>
+    </li>
+
+    <!-- {{selected_shipping_rate}} -->
+  <!-- </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"> -->
+
+  <!-- </div>
+  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+    <h2>Order summary</h2>
+    <h3>Item Price: ${{item_price}}</h3>
+    <h3>Shipping Cost: ${{shipping_cost}}</h3>
+    <hr>
+    <h3>Total: ${{total_cost}}</h3>
+
+    <button class="btn btn-success" ng-click="proceed_to_checkout_payment()">save & continue</button>
+  </div>
+
+
+
+</div> -->

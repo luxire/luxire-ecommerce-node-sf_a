@@ -12,6 +12,7 @@ $scope.close_alert = function(index){
   $scope.alerts.splice(index, 1);
 };
 
+$scope.measurement_type_ids=[];
 
 //Loading all the data to Home page
 $scope.loading = true;
@@ -92,13 +93,28 @@ productTypeService.getMeasurementTypes().then(function(data) {
 })
 
 
+//function for ng-channge
+$scope.myFunc = function(status,id){
+  console.log('status', status);
+  console.log('id',id);
+  if(status == true)
+    $scope.measurement_type_ids.push(id);
+  else {
+    $scope.measurement_type_ids.splice($scope.measurement_type_ids.indexOf(id), 1);
+  }
+}
+
 
 //$scope.productTypeData  = new prototypeObject.productType();
 //Creating productTypes
 
 $scope.createProductType = function() {
+  console.log($scope.measurement_type_ids);
   $scope.selectedAttributes = [];
+  console.log("Create button clicked");
   angular.forEach($scope.measurementTypeJson.data, function(attribute){
+    console.log("create button loop",$scope.measurementTypeJson.data);
+
     if (attribute.selected == true){
       $scope.selectedAttributes.push(attribute.id);
       console.log(attribute.selected);
@@ -106,8 +122,11 @@ $scope.createProductType = function() {
 
     }
   })
-  $scope.productTypeData.measurement_type_ids = $scope.selectedAttributes;
-//   console.log($scope.productTypeData);
+  console.log("outside the loop");
+  console.log($scope.productTypeData);
+  $scope.productTypeData.measurement_type_ids = $scope.measurement_type_ids;
+  console.log($scope.productTypeData.measurement_type_ids);
+  //console.log($scope.productTypeData.measurement_type_ids);
   productTypeService.createProductType($scope.productTypeData).then(function(data){
 
     //alert('Product type successfully added')
@@ -122,6 +141,10 @@ $scope.createProductType = function() {
   })
 }
 })
+
+
+
+
 .controller('editProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window){
 
 
@@ -137,10 +160,12 @@ $scope.createProductType = function() {
     $scope.alerts.splice(index, 1);
   };
 
+$scope.measurement_type_ids=[];
 
-  $scope.productTypeData = {};
+  $scope.productTypeData = {product_type:'', description: '', measurement_type_ids: []};
   console.log($stateParams);
   productTypeService.getProductTypeById($stateParams.id).then(function(res){
+    console.log(res.data);
      $scope.productTypeData.product_type = res.data.product_type;
      $scope.productTypeData.description = res.data.description;
      $scope.measurement_type_ids = [];
@@ -158,15 +183,19 @@ $scope.createProductType = function() {
           //  console.log(value.id);
           //  console.log($scope.measurementTypeJson.data);
           //  console.log("log is in loop");
-          //  console.log('ids', $scope.measurement_type_ids);
-          //  console.log('key', key);
-          //  console.log('value', value);
-           if($scope.measurement_type_ids.indexOf(value.id)!= -1){
-             $scope.measurementTypeJson.data[key].selected = true;
-           }
-           else{
-             $scope.measurementTypeJson.data[key].selected = false;
-         }
+          // console.log("printing measurement_type_ids\n");
+            // console.log('ids', $scope.measurement_type_ids);
+            // console.log('key=', key);
+            // console.log('value=', value);
+            angular.forEach(value, function(attribute){
+              if($scope.measurement_type_ids.indexOf(attribute.id)!= -1){
+            //  console.log("value.id=", attribute.id);
+              attribute.selected = true;
+              }
+              else{
+                attribute.selected = false;
+              }
+            })
          })
        }, function(info){
          console.log(info);
@@ -201,6 +230,7 @@ $scope.createProductType = function() {
       }
     })
     $scope.productTypeData.measurement_type_ids = $scope.selectedAttributes;
+
     console.log($scope.productTypeData);
     productTypeService.updateProductType($stateParams.id,$scope.productTypeData).then(function(data){
       $scope.alerts.push({type: 'success', message: 'Product Type updated successfully!'});
@@ -211,5 +241,7 @@ $scope.createProductType = function() {
       console.log(info);
     })
   }
+
+
 
 });

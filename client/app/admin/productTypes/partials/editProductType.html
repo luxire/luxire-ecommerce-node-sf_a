@@ -45,6 +45,9 @@ div.sm:last-child:after {
     margin-bottom: 15px;
 
 }
+p.capitalize {
+    text-transform: capitalize;
+}
 
 
 </style>
@@ -68,24 +71,45 @@ div.sm:last-child:after {
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
           <div class="productTypePlacard" >
-              <span style="font-size: 13px;">Name</span>
+              <span style="font-size: 15px;font-weight: 900;">Name</span>
               <br>
               <input type="text" ng-model="productTypeData.product_type" class="form-control" placeholder="Product Type">
               <br>
-              <span style="font-size: 13px;">Description</span>
+              <span style="font-size: 15px;font-weight: 900;">Description</span>
               <br>
-              <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea>
+              <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
 
-              <p style="font-size: 13px;">Attributes</p>
+              <p style="font-size: 15px;font-weight: 900;">Attributes</p>
+<!--          working code
+
               <input type="text" placeholder="search" class="form-control" ng-model="search_attr.$">
               <br>
-              <div class="ProductType-checkboxColumn" ng-repeat="attribute in measurementTypeJson.data | filter: search | orderBy:'name'" >
-                  <input type="checkbox" ng-model="attribute.selected"  value="{{attribute.name}}" >{{attribute.name}}<br>
-              </div><br>
+
+                <div class="ProductType-checkboxColumn" ng-repeat="attribute in measurementTypeJson.data | filter: search | orderBy:'name'" >
+                    <input type="checkbox" ng-model="attribute.selected"  value="{{attribute.name}}" >&nbsp;&nbsp;&nbsp;{{attribute.name}}<br/></div><br/><br/>
+
+
+
+<div ng-repeat="(key, value) in measurementTypeJson.data">
+{{key}}
+<>
+</div>
+-->
+
+                <div  ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
+                <p class="capitalize" style="font-size: 15px;font-weight: 500;" >{{requiredAttributeName}}</p>
+                  <div class="ProductType-checkboxColumn" ng-repeat="v in value" >
+                    <input type="checkbox" ng-model="v.selected"  value="{v.name}}"  >&nbsp;&nbsp;&nbsp;{{v.name}}<br/></div><br/><br/></div><br/><br/><br/>
+
+
+
+
+
+
               <div class="pull-right">
                 <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="updateProductType()">Update</button>
-              </div>
+                <button type="button" class="btn btn-primary" ng-click="updateProductType1()">Update</button>
+              </div><br></div>
               <br>
           </div>
 

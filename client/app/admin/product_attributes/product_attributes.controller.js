@@ -2,7 +2,20 @@ angular.module('luxire')
 .controller('ProductAttributesController', function($scope, ProductAttributes, $state){
   $scope.product_attributes = [];
   ProductAttributes.index().then(function(data){
-    $scope.product_attributes = data.data;
+    $scope.product_attributes = data.data.customization_attributes;
+    // angular.forEach(data.data, function(val, key){
+    //   $scope.product_attributes.concat(val);
+    // });
+    // console.log(data.data);
+    // angular.forEach(data.data, function(val,key){
+    //   $scope.product_attributes.concat(val);
+      // angular.forEach(val, function(value, key){
+      //   $scope.product_attributes.push(value);
+      // })
+      // $scope.product_attributes.concat(val);
+      // console.log(val);
+      // $scope.product_attributes.push(val);
+    // })
     console.log(data);
   }, function(error){
     console.log(error);
@@ -70,7 +83,9 @@ angular.module('luxire')
     'value': [
       {'key':'name', 'value': ''},
       {'key': 'description', 'value': ''},
-      {'key': 'value', 'value': ''}
+      {'key': 'value', 'value': ''},
+      {'key': 'category', 'value': ''},
+      {'key': 'sub_category', 'value': ''}
       // [{
       //   'key': '',
       //   'value': ''

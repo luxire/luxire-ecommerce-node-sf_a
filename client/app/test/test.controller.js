@@ -1,6 +1,7 @@
 angular.module('luxire')
 
-.controller('testController', function($scope, products, $location, userManager) {
+.controller('testController', function($scope, $stateParams, products, $location, userManager) {
+	console.log($stateParams);
 	$scope.getProducts =  function() {
 		products.getProducts().then(function(data){
 				console.log(data);

@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CartController',function($scope, $state, $rootScope, $stateParams, orders){
+.controller('CartController',function($scope, $state, ImageHandler, $rootScope, $stateParams, orders){
   console.log('CartController params', $stateParams);
   $scope.product_quantity = 1;
   $scope.cartItems = [];
@@ -7,6 +7,11 @@ angular.module('luxire')
   var customize = []
   var personalise = []
   var measurement = []
+  $rootScope.cart = [];
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  }
+
   $scope.item_count = $rootScope.cart.length;
   angular.forEach($rootScope.cart, function(value, key){
     viewCartObj = {}

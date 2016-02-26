@@ -65,8 +65,9 @@ angular.module('luxire')
   };
 
 })
-.controller('OrderSheetController', function($scope, $stateParams){
+.controller('OrderSheetController', function($scope, $stateParams, ImageHandler){
   $scope.order_id = $stateParams.order_number;
+  $scope.luxire_order = $stateParams.order;
   $scope.order_details = $stateParams.order;
   console.log($scope.order_details);
   $scope.order_url = window.location.href+'/'+$stateParams.order_number;
@@ -78,6 +79,9 @@ angular.module('luxire')
     console.log('printing sheet');
     window.print();
   }
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
 
   // <td>{{collar_details.points}}</td>
   // <td>{{collar_details.spread}}</td>

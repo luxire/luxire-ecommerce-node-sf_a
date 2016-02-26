@@ -5,6 +5,7 @@
   var jwt = require('jsonwebtoken');//used to create/sign/verify token
   var env = require('../../config/constants');
   var luxire_secret = env.spree.jwt_secret;
+  var path = require('path');
 
   // Get list of users
   exports.index = function(req, res) {
@@ -15,6 +16,7 @@
   curl -H 'Content-Type: application/json' -d '{"user":{"email":"spree@example.com","password":"spree123"}}' -X POST http://127.0.0.1:9000/api/userManager/login
   */
   exports.login = function(req, res){
+    console.log(req.body);
     console.log('login user with id: '+req.body.user.email)
     console.log(req.connection.remoteAddress)
     req.body.userIp = req.connection.remoteAddress
@@ -46,6 +48,51 @@
 
     })
   };
+
+
+  /** user login / signin
+  curl -H 'Content-Type: application/json' -d '{"user":{"email":"spree@example.com","password":"spree123"}}' -X POST http://127.0.0.1:9000/api/userManager/login
+  */
+  exports.cloudhop_login = function(req, res){
+    console.log(req.body);
+    console.log('login user with id: '+req.params)
+    console.log(req.connection.remoteAddress)
+    req.body.userIp = req.connection.remoteAddress
+    console.log('request', env.spree.host+env.spree.users+'/login.json');
+    http.post({
+      uri: env.spree.host+env.spree.users+'/cloudhop_login.json',
+      headers:{'content-type': 'application/json'},
+      body:JSON.stringify(req.body)
+    },function(error,response,body){
+      console.error(error);
+      if(error == null){
+        console.log(JSON.parse(body).statusCode);
+        if(JSON.parse(body).statusCode == undefined) {
+          console.log('luxire-secret', luxire_secret);
+          var token = jwt.sign(body, luxire_secret, {
+            expiresInMinutes: 1440 // expires in 24 hours
+          });
+          console.log('token', token);
+          res.header('luxire_token', token);
+          res.send();
+          // res.set('luxire_token', token);
+          // res.sendFile(path.resolve('client/index.html'))
+          // res.status(response.statusCode).send(token);
+
+        }
+        else{
+          res.status(401).send("Invalid userId or password");
+        }
+      }
+      else{
+        res.status(500).send("Rails server not responding");
+      }
+
+    })
+  };
+
+
+
 
   /**user signup
   curl : curl -H 'Content-Type: application/json' -d '{"user":{"email":"spree@example1123234.com","password":"spree123","password_confirmation":"spree123"}}' -X POST http://127.0.0.1:9000/api/userManager/signup
