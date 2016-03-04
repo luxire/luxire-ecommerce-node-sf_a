@@ -1,6 +1,7 @@
 angular.module('luxire')
 .service('AdminConstants',function(){
 	this.api = {
+		host: 'http://54.169.41.36:3000',
 		products: '',
 		product_types: '/api/v1/admin/product_types',
 		measurement_types: '/api/v1/admin/measurement_types',//product attributes
