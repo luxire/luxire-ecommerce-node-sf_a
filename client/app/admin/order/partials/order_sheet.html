@@ -128,6 +128,16 @@
                 </div>
               </div>
             <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black">
+            <div class="row" >
+                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px;" >
+                  Note: {{luxire_order.special_instructions}}
+                </p>
+              <div class="col col-md-4 col-lg-4">
+
+              </div>
+
+
+            </div>
 
             <div class="row" >
               <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
@@ -145,8 +155,8 @@
 
             </div>
             <!--Collar-->
-            <div class="row" ng-repeat="(attribute,val) in luxire_order.luxire_order.customized_data">
-              <div class="row">
+            <div style="margin-top: 2%" ng-if="line_item.luxire_line_item && line_item.luxire_line_item.customized_data" class="row" ng-repeat="(attribute,val) in line_item.luxire_line_item.customized_data">
+              <div class="row" style="margin-left: 0px">
                 <div class="col col-md-4 col-lg-4">
                   <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                     {{attribute}} style:
@@ -156,8 +166,8 @@
                   </p>
                 </div>
               </div>
-              <div class="row">
-                <div class="col col-md-4 col-lg-4">
+              <div class="row" style="margin-left: 0px">
+                <div class="col col-md-4 col-lg-4" >
                   <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                     Other Details:
                   </p>
@@ -165,7 +175,7 @@
                   </p>
                 </div>
               </div>
-              <div class="row" style="margin-left: 0px !important">
+              <div class="row" style="margin-left: 2%">
                 <table >
                   <thead>
                     <tr>
@@ -182,7 +192,14 @@
                   </thead>
                   <tbody>
                     <tr style="text-align: center">
-                      <td ng-repeat="(key,value) in val.options">{{value}}</td>
+                      <td ng-repeat="(key,value) in val.options">
+                        <p ng-if="value">
+                          {{value}}
+                        </p>
+                        <p ng-if="!value">
+                          &nbsp;
+                        </p>
+                      </td>
 
                       <!-- <td>{{collar_details.points}}</td>
                       <td>{{collar_details.spread}}</td>
@@ -201,42 +218,17 @@
             </div>
 
           <hr style="width: 100%;margin-top: 2px;margin-bottom: 0px; border-top: solid 1px black">
-          <!-- <div class="row" style="padding-top: 1%">
-            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
               <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Initials:
+                Contrasts:
               </p>
               <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Initials"]:""}}
-              </p>
-            </div>
-            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Font:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Font"]:""}}
-              </p>
-            </div>
-            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Location:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Location"]:""}}
 
               </p>
             </div>
-            <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Color:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Color"]:""}}
+          </div>
 
-              </p>
-            </div>
-          </div> -->
           <div class="row" style="margin-left: 0px !important">
             <table >
               <thead>
@@ -313,41 +305,66 @@
               </p>
             </div>
           </div>
-          <div class="row" style="margin-left: 0px !important">
+          <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin-left: 0px !important; padding-top: 1%">
             <table >
               <thead>
                 <tr>
-                  <td ng-repeat="(std_attr,val) in luxire_order.luxire_order.measurement_data.standard_measurement_attributes">
+                  <td ng-repeat="(std_attr,val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
                     {{std_attr}}
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr  style="text-align: center">
-                  <td ng-repeat="(std_attr,val) in luxire_order.luxire_order.measurement_data.standard_measurement_attributes">
-                    {{val.value}}
+                  <td ng-repeat="(std_attr,val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
+                    <p ng-if="val.value">{{val.value}}</p>
+                    <p ng-if="!val.value">&nbsp;</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="row" style="margin-left: 0px !important">
+          <div  ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin-left: 0px !important;padding-top: 1%">
             <table >
               <thead>
                 <tr>
-                  <td ng-repeat="(body_attr,val) in luxire_order.luxire_order.measurement_data.body_measurement_attributes">
+                  <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
                     {{body_attr}}
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr  style="text-align: center">
-                  <td ng-repeat="(body_attr,val) in luxire_order.luxire_order.measurement_data.body_measurement_attributes">
-                    {{val.value}}
+                  <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
+                    <p ng-if="val.value">{{val.value}}</p>
+                    <p ng-if="!val.value">&nbsp;</p>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                Customer:
+              </p>
+              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+              </p>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1%">
+            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4" style="font-size: 12px; font-weight: 500">
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.full_name">{{luxire_order.bill_address.full_name}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address1">{{luxire_order.bill_address.address1}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address2">{{luxire_order.bill_address.address2}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.city">{{luxire_order.bill_address.city}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.state">{{luxire_order.bill_address.state.name}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.country">{{luxire_order.bill_address.country.name}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.zipcode">{{luxire_order.bill_address.zipcode}}</p>
+              <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.phone">{{luxire_order.bill_address.phone}}</p>
+            </div>
           </div>
 
           <div class="row" style="padding-top: 1%;margin-left: 0px">
@@ -385,3 +402,39 @@
     </div>
   </div>
 </div>
+<!-- <div class="row" style="padding-top: 1%">
+  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+      Initials:
+    </p>
+    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Initials"]:""}}
+    </p>
+  </div>
+  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+      Font:
+    </p>
+    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Font"]:""}}
+    </p>
+  </div>
+  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+      Location:
+    </p>
+    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Location"]:""}}
+
+    </p>
+  </div>
+  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
+    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+      Color:
+    </p>
+    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Color"]:""}}
+
+    </p>
+  </div>
+</div> -->

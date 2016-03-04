@@ -65,15 +65,16 @@ angular.module('luxire')
   };
 
 })
-.controller('OrderSheetController', function($scope, $stateParams, ImageHandler){
+.controller('OrderSheetController', function($scope, $stateParams, ImageHandler, AdminConstants){
   $scope.order_id = $stateParams.order_number;
   $scope.luxire_order = $stateParams.order;
   $scope.order_details = $stateParams.order;
   console.log($scope.order_details);
+  console.log('luxire_order', $scope.luxire_order);
   $scope.order_url = window.location.href+'/'+$stateParams.order_number;
   console.log('order_url', $scope.order_url);
   console.log($scope.order_details.line_items[0].variant.images[0].small_url);
-  $scope.prod_image = "http://54.169.41.36:3000"+$scope.order_details.line_items[0].variant.images[0].small_url;
+  $scope.prod_image = AdminConstants.api.host +$scope.order_details.line_items[0].variant.images[0].small_url;
   console.log($scope.prod_image);
   $scope.print_sheet = function () {
     console.log('printing sheet');
