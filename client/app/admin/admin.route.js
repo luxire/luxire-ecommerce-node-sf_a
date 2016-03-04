@@ -227,21 +227,21 @@ angular.module('luxire')
 	.state('admin.styleMasterCreate',{
 		url:'/product_styles/new',
 		views: {
-		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterCreate.html',controller: 'styleMasterCreateController'}
 		}
 	})
 	.state('admin.styleMasterHome',{
 		url:'/product_styles',
 		views: {
-		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterHome.html',controller: 'styleMasterHomeController'}
 		}
 	})
 	.state('admin.styleMasterEdit',{
 		url:'/product_styles/:id/edit',
 		views: {
-		"sideContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterSideBar.html'},
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 		"mainContent": { templateUrl: 'app/admin/styleMaster/partials/styleMasterEdit.html',controller: 'styleMasterEditController'}
 		}
 	})
