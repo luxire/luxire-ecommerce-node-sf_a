@@ -125,13 +125,23 @@ exports.destroy = function(req, res){
         res.status(500).send("Rails server not responding");
       };
   });
+};
 
 
-
-
-
-
-
-
-
+exports.createVariants = function(req, res){
+  console.log("create variants fun in node is calling...");
+  console.log("variant id is: ",req.params.id);
+  console.log("variant price is: ",req.body);
+  http.post({
+    uri: env.spree.host+env.spree.products+'/'+req.params.id+'/variants?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  })
 };
