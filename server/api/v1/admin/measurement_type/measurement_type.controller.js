@@ -4,6 +4,10 @@ var _ = require('lodash');
 var http = require('request');
 var path = require('path');
 var constants = require(path.resolve('server/api/v1/version_constants'));
+var formidable = require('formidable');
+var util = require('util');
+var fs = require('fs');
+
 
 exports.getAllMeasurementType = function(req, res) {
   console.log('get all measurementType');
@@ -32,25 +36,6 @@ exports.getMeasurementTypeById = function(req, res) {
     });
 
 };
-
-/*exports.createMeasurementType = function(req, res){
-  console.log(req.body);
-  http.post({
-    uri: constants.spree.host+constants.spree.measurement_types+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
-    headers:{'content-type': 'application/json'},
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
-    console.log(response);
-    if(response.statusCode == 201){
-      res.send({data: body,status: 201});
-    }
-    else{
-      console.log('Could not post');
-      res.status(response.statusCode).send(response.body.error);
-    }
-  })
-
-}*/
 exports.createMeasurementType = function(req, res){
       http.post({
         uri: constants.spree.host+constants.spree.measurement_types+'?token='+req.headers['X-Spree-Token'],
@@ -111,5 +96,40 @@ exports.deleteMeasurementType= function(req, res) {
         res.status(response.statusCode).send(body);
       };
   });
-
 }
+
+exports.add_image = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    console.log("fields", fields);
+    console.log("file object in node is: ",files);
+    var formDataToPost = {};
+    for (var key in fields){
+      console.log('key', key);
+      console.log('value', fields[key]);
+      formDataToPost[key] = fields[key];
+    }
+    if(files && files.image){
+      formDataToPost.image = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    http
+      .post({
+        uri: constants.spree.host+'/custom_images?token='+req.headers['X-Spree-Token'],
+        formData: formDataToPost
+      }, function(error, response, body){
+        if(error){
+          res.status(500).send(error);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        };
+      });
+  });
+
+};

@@ -22,7 +22,9 @@ module.exports = {
     incomplete_order: '/get_order',
     parentSku: '/luxire_stocks/validate_stocks_sku',
     updateStock: '/luxire_stocks',
-    myAccount: '/my_account'
+    myAccount: '/my_account',
+    luxireProperties: '/luxire_properties.json',
+    luxireVendor: '/luxire_vendor_masters'
   },
   payment: {
     ebs: {

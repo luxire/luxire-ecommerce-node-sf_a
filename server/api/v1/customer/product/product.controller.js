@@ -34,38 +34,41 @@ exports.index = function(req, res) {
   console.log(qstr);
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'?'+qstr
+      uri: constants.spree.host+constants.spree.products+'?'+qstr,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }, function(error, response, body){
       if(error){
         res.status(500).send(error.syscall);
       }
       else{
+        spree_cookie = response.headers['set-cookie'][0].split(';');
         if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
           res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
         }
-        spree_cookie = response.headers['set-cookie'][0].split(';');
         res.status(response.statusCode).send(body);
       };
+
   });
 };
 
 //Get product by id
 exports.show = function(req, res){
   console.log('req params', req.params);
-  http.cookie('guest_token='+req.cookies.guest_token);
+  console.log('req cookies', req.cookies.guest_token);
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id
+      uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }
       , function(error, response, body){
         if(error){
           res.status(500).send(error.syscall);
         }
         else{
+          spree_cookie = response.headers['set-cookie'][0].split(';');
           if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
             res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
           }
-          spree_cookie = response.headers['set-cookie'][0].split(';');
           res.status(response.statusCode).send(body);
         };
   });
@@ -75,7 +78,8 @@ exports.show = function(req, res){
 exports.productVariants = function(req, res) {
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id+'/variants'
+      uri: constants.spree.host+constants.spree.products+'/'+req.params.id+'/variants',
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }, function(error, response, body){
       if(error){
         res.status(500).send(error.syscall);

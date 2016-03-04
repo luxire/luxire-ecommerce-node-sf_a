@@ -32,6 +32,7 @@ app.use(function(req, res, next){
       else {
         if(decoded.spree_api_key != undefined && decoded.spree_api_key != null && decoded.spree_api_key != ''){
           req.headers["X-Spree-Token"] = decoded.spree_api_key;
+          next();
         }
         else{
           return res.status(401).json({ error: 'Failed to authenticate token.' });
@@ -42,12 +43,16 @@ app.use(function(req, res, next){
   });
 
   }
-  next();
+  else{
+    req.headers["X-Spree-Token"] = '';
+    next();
+  }
 
 });
 
 app.use('/products', require('./product'));
 app.use('/product_types', require('./product_type'));
 app.use('/style_masters', require('./style_master'));
-
+app.use('/orders', require('./order'));
+app.use('/checkouts', require('./checkout'));
 module.exports = app;

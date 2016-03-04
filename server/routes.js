@@ -40,6 +40,8 @@ module.exports = function(app) {
   app.use('/api/luxire_stocks/validate_stocks_sku', require('./api/parentSku'));
   app.use('/api/luxire_stocks', require('./api/updateStock'));
   app.use('/api/my_account', require('./api/myAccount'));
+  app.use('/api/luxire_properties.json', require('./api/luxireProperties'));
+  app.use('/api/luxire_vendor_masters', require('./api/luxireVendor'));
 
   /*To test filteration*/
   app.get('/redis_products',function(req,res){
@@ -108,9 +110,6 @@ module.exports = function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get(function(req, res) {
-      console.log('route path');
-      console.log(path.resolve(app.get('appPath') + '/index.html'));
-
       res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
     });
 

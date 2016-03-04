@@ -13,6 +13,10 @@ var http = require('request');
 var querystring = require('querystring');
 var path = require('path');
 var constants = require(path.resolve('server/api/v1/version_constants'));
+var formidable = require('formidable');
+var util = require('util');
+var fs = require('fs');
+
 
 // Get list of all products
 exports.index = function(req, res) {
@@ -132,4 +136,63 @@ exports.productVariants = function(req, res) {
         res.status(response.statusCode).send(body);
       };
     });
+};
+
+exports.add_variant_image = function(req, res){
+  console.log('params', req.params);
+  var form = new formidable.IncomingForm();
+  console.log('form', form);
+  form.parse(req, function(err, fields, files) {
+    console.log("fields", fields);
+    console.log("file object in node is: ",files);
+    console.log("files", files.image);
+    var formDataToPost = {};
+    formDataToPost.product_id = req.params.product_id;
+    formDataToPost["image[viewable_id]"] = req.params.variant_id;
+    if(files && files.image){
+      formDataToPost["image[attachment]"] = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    http.post({
+      uri: constants.spree.host+'/customized_images',
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']},
+      formData: formDataToPost
+    }, function(error, response, body){
+        if(error){
+          res.status(500).send(error.syscall);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        };
+    });
+
+  });
+
+}
+
+
+exports.createVariants = function(req, res){
+  console.log("create variants fun in node is calling...");
+  console.log("variant id is: ",req.params.id);
+  console.log("variant price is: ",req.body);
+  http.post({
+    uri: env.spree.host+env.spree.products+'/'+req.params.id+'/variants',
+    headers:{
+      'content-type': 'application/json',
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    },
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  })
 };

@@ -28,3 +28,22 @@ exports.getProductTypeById = function(req, res) {
       };
   });
 };
+
+exports.standard_sizes =  function(req, res){
+  console.log('std sizes parms',req.query);
+  var fit_type = req.query.fit_type+' Fit';
+  var neck = req.query.neck_size;
+  var shirt_length = req.query.shirt_length;
+  console.log(constants.spree.host+"/get_standard_size?token="+req.headers['X-Spree-Token']+'&fit_type='+fit_type+'&neck='+neck+'&shirt_length='+shirt_length);
+  http
+    .get(constants.spree.host+"/get_standard_size?"+'&fit_type='+fit_type+'%20Fit&neck='+neck+'&shirt_length='+shirt_length,
+     function(error, response, body){
+      if(error){
+        res.status(500).send(error.syscall);
+      }
+      else{
+        console.log(body);
+        res.status(response.statusCode).send(body);
+      };
+  });
+};

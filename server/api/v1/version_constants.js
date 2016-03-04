@@ -17,6 +17,9 @@ module.exports = {
     users: '/luxire-users',
     countries: '/api/countries',
     orders: '/api/orders',
+    line_items: '/line_items',
+    payments: '/payments',
+    my_account: '/my_account',
     checkouts: '/api/checkouts',
     stock_locations: '/api/stock_locations',
     promotions: '/customized_promotions',
@@ -28,7 +31,10 @@ module.exports = {
     search: '/api/search',
     measurement_types: '/measurement_types',
     product_types: '/luxire_product_types',
-    style_masters: '/luxire_style_masters'
+    style_masters: '/luxire_style_masters',
+    incomplete_order: '/get_order',
+
+
   },
   payment: {
     ebs: {
