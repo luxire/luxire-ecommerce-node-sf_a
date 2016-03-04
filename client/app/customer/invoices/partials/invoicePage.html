@@ -32,9 +32,9 @@ li a:hover:not(.active) {
     background-color: #111;
 }
 
-.active {
+/*.active {
     background-color: #4CAF50;
-}
+}*/
 .invoice-table{
   list-style-type: none;
   margin: 0;
@@ -60,12 +60,6 @@ function printDiv(divName) {
 </script>
 </head>
 <body>
-
-<ul>
-  <li><a href="collection.html">Home</a></li>
-
-
-</ul>
 <div class="page-wrap">
 <div id="printableArea">
 <h3>Your order has been placed successfully</h3>
@@ -83,19 +77,19 @@ function printDiv(divName) {
 	</thead>
 	<tbody><!-- ng-repeat="invoice in invoiceDetailedJson"-->
 		<tr>
-			<td>{{invoiceDetailedJson.bill_address.full_name}}<br/>
-        {{invoiceDetailedJson.bill_address.address1}}<br/>
-        {{invoiceDetailedJson.bill_address.address2}}<br/>
-        {{invoiceDetailedJson.bill_address.city}} {{invoice.bill_address.state_text}} {{invoice.bill_address.zipcode}}<br/>
-        {{invoiceDetailedJson.bill_address.country.iso_name}}<br/>
-        Phone {{invoiceDetailedJson.bill_address.phone}}<br/>
-      </td>
       <td>{{invoiceDetailedJson.bill_address.full_name}}<br/>
         {{invoiceDetailedJson.bill_address.address1}}<br/>
         {{invoiceDetailedJson.bill_address.address2}}<br/>
         {{invoiceDetailedJson.bill_address.city}} {{invoice.bill_address.state_text}} {{invoice.bill_address.zipcode}}<br/>
         {{invoiceDetailedJson.bill_address.country.iso_name}}<br/>
         Phone {{invoiceDetailedJson.bill_address.phone}}<br/>
+      </td>
+      <td>{{invoiceDetailedJson.ship_address.full_name}}<br/>
+        {{invoiceDetailedJson.ship_address.address1}}<br/>
+        {{invoiceDetailedJson.ship_address.address2}}<br/>
+        {{invoiceDetailedJson.ship_address.city}} {{invoice.ship_address.state_text}} {{invoice.ship_address.zipcode}}<br/>
+        {{invoiceDetailedJson.ship_address.country.iso_name}}<br/>
+        Phone {{invoiceDetailedJson.ship_address.phone}}<br/>
       </td>
 
       <td ng-repeat="shipment in invoiceDetailedJson.shipments">
@@ -118,6 +112,7 @@ function printDiv(divName) {
   <legend>Order Details</legend>
   <table class="table">
     <thead >
+    <th></th>
     <th>Item</th>
     <th>Price</th>
      <th>Qty</th>
@@ -125,38 +120,42 @@ function printDiv(divName) {
      <thead>
        <tbody>
          <tr ng-repeat="item in invoiceDetailedJson.line_items">
-
-          <!--{{item["variant"]["images"][0]["mini_url"]}}-->
-          <!--{{item.variant.images[0].product_url}}-->
-            <td><img src="http://54.169.41.36:3000/spree/products/26/small/ror_jr_spaghetti.jpeg?1451992073"> &nbsp;{{item.variant.name}}<br/>{{item.variant.description}}</td>
-            <td>{{item.variant.price}}</td>
+            <td><img src="{{getImage(item.variant.images[0].mini_url)}}" alt="" /></td>
+            <td><h4>{{item.variant.name}}</h4>{{item.variant.description}}</td>
+            <td>{{item.single_display_amount}}</td>
             <td>{{item.quantity}}</td>
-            <td>{{item.variant.price}}</td>
+            <td>{{item.display_amount}}</td>
           </tr>
           <tr>
+             <td> </td>
              <td>Subtotal:</td>
              <td> </td>
              <td> </td>
-             <td>{{invoiceDetailedJson.item_total}}</td>
+             <td>{{invoiceDetailedJson.display_item_total}}</td>
           </tr>
           <tr>
+            <td> </td>
             <td></td>
             <td></td>
-            <td ng-repeat="shipment in invoiceDetailedJson.shipments">Shipping:{{shipment.selected_shipping_rate.name}}</td>
-            <td ng-repeat="shipment in invoiceDetailedJson.shipments">{{shipment.selected_shipping_rate.cost}}</td>
+            <td ng-repeat="shipment in invoiceDetailedJson.shipments">Shipping:{{shipment.shipping_method.name}}</td>
+            <td ng-repeat="shipment in invoiceDetailedJson.shipments">${{shipment.cost}}</td>
           </tr>
           <tr>
+            <td> </td>
+
             <td></td>
             <td></td>
            <td>Tax:</td>
-           <td>{{invoiceDetailedJson.tax_total}}</td>
+           <td>{{invoiceDetailedJson.display_tax_total}}</td>
           </tr>
           <div class="table-div">
            <tr>
+             <td> </td>
+
              <td></td>
              <td></td>
              <td>Order Total:</td>
-             <td> {{invoiceDetailedJson.total}}</td>
+             <td> {{invoiceDetailedJson.display_total}}</td>
            </tr>
          </div>
        </tbody>
@@ -166,7 +165,7 @@ function printDiv(divName) {
 <div ><h4>Thank you for your business. Please print out a copy of this confirmation page for your records.
 </h4></div>
 
-<input type="button" class="btn btn-primary" onclick="printDiv('printableArea')" value="Print Report" />
+<input type="button" class="btn btn-primary" onclick="printDiv('printableArea')" value="Print" />
 
 
 </div>
