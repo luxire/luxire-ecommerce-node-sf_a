@@ -15,14 +15,14 @@
               class="glyphicon"
               ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span></a>
               <span>
-              <input type="text" contenteditable="true" ng-hide="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'" ng-model="node.key"/>
-              <label style="width: 36%" ng-show="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'">{{node.key}}</label>
+              <input type="text" contenteditable="true" ng-hide="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value' || node.key=='category' || node.key=='sub_category' || node.key=='image'" ng-model="node.key"/>
+              <label style="width: 36%" ng-show="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'  || node.key=='category' || node.key=='sub_category' || node.key=='image'">{{node.key}}</label>
               </span><span>&nbsp;&nbsp;
               <input type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
-          <a class="pull-right btn btn-danger btn-xs" ng-if="node.key!=data[0]['key']" data-nodrag ng-click="remove(this)"><span
-              class="glyphicon glyphicon-remove"></span></a>
-          <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
-              class="glyphicon glyphicon-plus"></span></a>
+              <a ng-hide="node.key == 'name' || node.key == 'description' || node.key.indexOf('category') !== -1 || node.key.indexOf('help') !== -1 || node.key == 'image'" class="pull-right btn btn-danger btn-xs" data-nodrag ng-if="node.key!=data[0]['key']" ng-click="remove(this)"><span
+                  class="glyphicon glyphicon-remove"></span></a>
+              <a ng-hide="node.key == 'name' || node.key == 'description' || node.key.indexOf('category') !== -1 || node.key.indexOf('help') !== -1 || node.key == 'image'" class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
+                  class="glyphicon glyphicon-plus"></span></a>
         </div>
         <div ng-if="!checkIsString(node.value)" ui-tree-nodes="" ng-model="node.value" ng-class="{hidden: collapsed}">
           <div ng-repeat="node in node.value track by $index" ui-tree-node ng-include="'nodes_renderer.html'">
@@ -56,6 +56,27 @@
 
 
           </ul>
+
+          <div class="placard">
+            <h4 style="font-size: 20px;">Image Upload</h4>
+            Add New Image
+            <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value=""><br>
+            <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
+            <img id="attr_image" src="" alt="" /><br>
+
+            <textarea name="name" ng-model="image_url" rows="2" cols="40"></textarea>
+              <!-- <label style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload Product Image</label> -->
+              <!-- <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label> -->
+            <br>
+            <!-- <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label> -->
+
+            <div class="drag-drop">
+              <img ng-src="{{productImage}}" style="margin: 30px;">
+            </div>
+          </div>
+
+
+
         </div>
       </div>
 

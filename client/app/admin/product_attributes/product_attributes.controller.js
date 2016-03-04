@@ -1,11 +1,17 @@
 angular.module('luxire')
-.controller('ProductAttributesController', function($scope, ProductAttributes, $state){
+.controller('ProductAttributesController', function($scope, ProductAttributes, $state, ImageHandler){
   $scope.product_attributes = [];
+
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  }
   ProductAttributes.index().then(function(data){
-    $scope.product_attributes = data.data.customization_attributes;
-    // angular.forEach(data.data, function(val, key){
-    //   $scope.product_attributes.concat(val);
-    // });
+    // $scope.product_attributes = data.data.customization_attributes;
+    angular.forEach(data.data, function(val, key){
+      angular.forEach(val, function(value, key){
+        $scope.product_attributes.push(value);
+      });
+    });
     // console.log(data.data);
     // angular.forEach(data.data, function(val,key){
     //   $scope.product_attributes.concat(val);
@@ -42,6 +48,29 @@ angular.module('luxire')
   $scope.remove = function (scope) {
     scope.remove();
   };
+
+  /*Image*/
+  $scope.upload_image = function(files){
+    console.log('attr image', files[0]);
+    if (files && files.length) {
+      $scope.product_image = files[0];
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#attr_image').attr('src', e.target.result);
+       }
+       reader.readAsDataURL(files[0]);
+       ProductAttributes.add_image(files[0])
+       .then(function(data){
+         $scope.image_url = data.data.image;
+         console.log(data);
+       }, function(error){
+         console.error(error);
+       });
+      console.log('files to upload',files[0]);
+    }
+  }
+
+
 
   $scope.toggle = function (scope) {
     scope.toggle();
@@ -85,7 +114,9 @@ angular.module('luxire')
       {'key': 'description', 'value': ''},
       {'key': 'value', 'value': ''},
       {'key': 'category', 'value': ''},
-      {'key': 'sub_category', 'value': ''}
+      {'key': 'sub_category', 'value': ''},
+      {'key': 'image', 'value': ''}
+
       // [{
       //   'key': '',
       //   'value': ''
@@ -176,6 +207,28 @@ angular.module('luxire')
     'key': 'Add Attributes',
     'value': []
   }];
+
+  /*Image*/
+  $scope.upload_image = function(files){
+    console.log('attr image', files[0]);
+    if (files && files.length) {
+      $scope.product_image = files[0];
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#attr_image').attr('src', e.target.result);
+       }
+       reader.readAsDataURL(files[0]);
+       ProductAttributes.add_image(files[0])
+       .then(function(data){
+         $scope.image_url = data.data.image;
+         console.log(data);
+       }, function(error){
+         console.error(error);
+       });
+      console.log('files to upload',files[0]);
+    }
+  }
+
   String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.split(search).join(replacement);

@@ -19,4 +19,19 @@ angular.module('luxire')
   this.update = function(measurement_type,id){
     return $http.put('api/v1/admin/measurement_types/'+id, angular.toJson(measurement_type));
   };
+
+  this.add_image = function(image){
+    console.log('image', image);
+    var fd = new FormData();
+    fd.append('source', 'measurement type');
+    fd.append('image', image);
+    console.log('fd', fd);
+    return $http.post('api/v1/admin/measurement_types/images', fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+     });
+  };
+
+  
+
 })
