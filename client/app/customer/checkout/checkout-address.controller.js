@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CustomerCheckoutAddressController',function($scope, $state, orders, $rootScope, ImageHandler, countries, $rootScope, $stateParams){
+.controller('CustomerCheckoutAddressController',function($scope, $state, orders, $rootScope, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams){
   $scope.billing = {};
   $scope.shipping = {};
   $scope.states = [];
@@ -41,12 +41,10 @@ angular.module('luxire')
         }
       };
       console.log(order_address);
-      order_number = $rootScope.luxire_cart.number;
-      order_token = $rootScope.luxire_cart.token;
-      orders.proceed_to_checkout_delivery(order_number, order_token, order_address)
+      CustomerOrders.proceed_to_checkout_delivery($rootScope.luxire_cart, order_address)
       .then(function(data){
-        $rootScope.luxire_cart = data.data;
         console.log(data);
+        $rootScope.luxire_cart = data.data;
         $state.go('customer.checkout_delivery');
       },function(error){
         console.log(error);

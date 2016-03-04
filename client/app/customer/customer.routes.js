@@ -34,16 +34,18 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
-	.state('customer.invoice',{
-		url:'/invoice',
-		views: {
-			"customer": { templateUrl: "app/customer/invoices/partials/invoicePage.html",
-			 controller: "invoiceController"},
-		},
-		data: {
-			require_auth: false
-		}
-	})
+	// .state('customer.invoice',{
+	// 	url:'/invoice/:number?id',
+	// 	views: {
+	// 		"customer": {
+	// 			templateUrl: "app/customer/invoices/partials/invoicePage.html",
+	// 		 	controller: "invoiceController"
+	// 		},
+	// 	},
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
 
 	// .state('customer.productListing',{
 	// 	url: '/product-listing',
@@ -95,8 +97,12 @@ angular.module('luxire')
 	})
 	.state('customer.checkout_payment',{
 		url: '/checkout/payment',
-		templateUrl: 'app/customer/checkout/partials/checkoutPayment.html',
-		controller: 'CustomerCheckoutPaymentController',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/checkout/partials/checkoutPayment.html',
+				controller: 'CustomerCheckoutPaymentController'
+			}
+		},
 		data: {
 			require_auth: false
 		}

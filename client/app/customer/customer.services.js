@@ -6,11 +6,13 @@ angular.module('luxire')
     product_types: '/api/v1/product_types',
     style_masters: '/api/v1/style_masters',
     get_incomplete_order: '/api/orders/incomplete',
+    orders: '/api/v1/orders',
+    checkouts: '/api/v1/checkouts'
   };
 })
 .service('ImageHandler', function(CustomerConstants){
   this.url = function(path){
-    if(angular.isDefined(path)){
+    if(angular.isDefined(path) && !angular.isObject(path)){
       if(path.indexOf('http')>-1){
         return path;
       }
@@ -28,65 +30,98 @@ angular.module('luxire')
   this.show = function(product_name){
     return $http.get(CustomerConstants.api.products+'/'+product_name);
   };
+
+  this.standard_sizes = function(fit_type, neck_size, shirt_length){
+    return $http.get(CustomerConstants.api.product_types+'/standard_sizes?fit_type='+fit_type+'&neck_size='+neck_size+'&shirt_length='+shirt_length);
+  };
 })
 .service('CustomerOrders', function($http, CustomerConstants){
   this.get_order_by_cookie = function(){
     console.log('get order by cookie');
-    return $http.get(CustomerConstants.api.get_incomplete_order);
+    return $http.get(CustomerConstants.api.orders+'/incomplete');
   };
-	this.get_order_by_id = function(order_number, order_token){
-		return $http.get('/api/orders/'+order_number+'/'+order_token);
+
+	this.get_order_by_id = function(order){
+		// return $http.get('/api/orders/'+order_number+'/'+order_token);
+    return $http.get(CustomerConstants.api.orders+'/'+order.number+'?order_token='+order.token);
 	};
 
-	this.addTocart = function(cartObject, variant){
-		var cart = {
-		  order: {
-		    line_items: [
-		      { variant_id: variant.id,
+  this.create_blank_order = function(){
+    return $http.post(CustomerConstants.api.orders+'/new');
+  };
+
+  this.create_order = function(cartObject, variant, sample){
+    var order = {
+      order: {
+        line_items: [
+          {
+            variant_id: variant.id,
             quantity: 1,
             luxire_line_item_attributes:{
-              customized_data: cartObject.customization_attributes,
-              personalize_data: cartObject.personalization_attributes,
+              customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
+              personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
               measurement_data: {
-                standard_measurement_attributes: cartObject.standard_measurement_attributes,
-                body_measurement_attributes: cartObject.body_measurement_attributes
+                standard_measurement_attributes: cartObject && cartObject.standard_measurement_attributes ? cartObject.standard_measurement_attributes : {},
+                body_measurement_attributes: cartObject && cartObject.body_measurement_attributes ? cartObject.body_measurement_attributes : {}
               }
             }
           }
-		    ]
-		  }
-		}
-		return $http.post("/api/orders", angular.toJson(cart));
-	};
-	this.update_cart_by_quantity = function(order_number, order_token, line_item_id,variant_id,quantity){
+        ],
+        special_instructions: sample ? "Customer should send measurement sample" : ""
+      }
+    };
+    return $http.post(CustomerConstants.api.orders, angular.toJson(order));
+  };
+
+  this.add_line_item = function(order, cartObject, variant){
+    var line_item = {
+      line_item: {
+        variant_id: variant.id,
+        quantity: 1,
+        luxire_line_item_attributes:{
+          customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
+          personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
+          measurement_data: {
+            standard_measurement_attributes: cartObject && cartObject.standard_measurement_attributes ? cartObject.standard_measurement_attributes : {},
+            body_measurement_attributes: cartObject && cartObject.body_measurement_attributes ? cartObject.body_measurement_attributes : {}
+          }
+        }
+      }
+    };
+    return $http.post(CustomerConstants.api.orders+'/'+order.number+'/line_items?order_token='+order.token, angular.toJson(line_item));
+  };
+
+  this.update_cart_by_quantity = function(order, line_item_id,variant_id,quantity){
 		var updated_cart = {
-			order_number: order_number,
-			order_token: order_token,
+			order_number: order.number,
+			order_token: order.token,
 			line_item_id: line_item_id,
 			variant_id: variant_id,
 			quantity: quantity
 		}
 		return $http.put("/api/orders", angular.toJson(updated_cart));
 	};
-	this.proceed_to_checkout = function(order_number, order_token){
-		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/next", '');
+
+	this.proceed_to_checkout = function(order){
+		return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/address?order_token='+order.token, '');
 	};
-	this.proceed_to_checkout_delivery = function(order_number, order_token, order_address){
-		console.log(order_number,order_address);
-		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/delivery", angular.toJson(order_address));
+
+	this.proceed_to_checkout_delivery = function(order, order_address){
+		return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/delivery?order_token='+order.token, angular.toJson(order_address));
 	};
-	this.proceed_to_checkout_payment = function(order_number,order_token, shipment_id, shipping_rate_id){
+	this.proceed_to_checkout_payment = function(order, shipment_id, shipping_rate_id){
 		var shipment = {
-		  "order": {
-		    "shipments_attributes": {
-		      "0": {
-		        "selected_shipping_rate_id": shipping_rate_id,
-		        "id": shipment_id
+		  order: {
+		    shipments_attributes: {
+		      0: {
+		        selected_shipping_rate_id: shipping_rate_id,
+		        id: shipment_id
 		      }
 		    }
 		  }
 		}
-		return $http.post("/api/checkouts/"+order_number+"/"+order_token+"/payment", shipment);
+    console.log(shipment);
+		return $http.post(CustomerConstants.api.checkouts+'/'+order.number+"/payment?order_token="+order.token, angular.toJson(shipment));
 	};
 	this.proceed_to_checkout_gateway = function(order_number, payment_object){
 		console.log('order_number',order_number);
@@ -110,7 +145,17 @@ angular.module('luxire')
 
 
 	};
-	this.checkout_confirm_payment = function(order_number,order_token){
+  this.create_payment = function(order){
+    var payment = {
+      "payment" : {
+          "payment_method_id": order.payment_methods[0].id,
+          "amount" : order.total
+      }
+    }
+    return $http.post(CustomerConstants.api.orders+'/'+order.number+'/payments?order_token='+order.token, payment)
+  };
+
+  this.checkout_confirm_payment = function(order_number,order_token){
 		var payment = {
 		  "order": {
 		    "payments_attributes": {

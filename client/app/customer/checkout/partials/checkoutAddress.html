@@ -7,7 +7,7 @@
     <div style="border: solid 2px #AD7984;border-radius: 10px;margin-top: 3%;padding-bottom: 2%">
       <div class="row" style="margin-left: 2%">
         <h4>Customer information</h4>
-        <input type="email" style="width: 35%" class="form-control" ng-model="customer_email" placeholder="Email">
+        <input type="email" name="email" autocomplete="email" style="width: 35%" class="form-control" ng-model="customer_email" placeholder="Email">
         <input type="checkbox" name="name" ng-model="same" ng-change="same_address()">Same address
       </div>
       <div class="row" style="margin-left: 2%;margin-top: 4%">
@@ -21,32 +21,35 @@
               <input placeholder="Lastname" class="form-control" ng-model="shipping.lastname">
             </div>
           </form> -->
-          <input placeholder="Firstname" class="form-control" ng-model="shipping.firstname" style="width: 86%;margin-top: 2%">
-          <input placeholder="Lastname" class="form-control" ng-model="shipping.lastname" style="width: 86%;margin-top: 2%">
+          <form autocomplete="on">
+            <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="shipping.firstname" style="width: 86%;margin-top: 2%">
+            <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="shipping.lastname" style="width: 86%;margin-top: 2%">
 
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1">
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2">
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City">
+            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1">
+            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2">
+            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City">
 
-          <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.country_id" ng-change="populate_states(shipping.country_id)">
-            <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id==shipping.country_id">{{country.name}}</option>
-          </select>
+            <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.country_id" ng-change="populate_states(shipping.country_id)">
+              <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id==shipping.country_id">{{country.name}}</option>
+            </select>
 
-          <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.state_id">
-            <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
-          </select>
-          <!-- <form style="margin-top: 2%" class="form-inline" role="form">
-            <div class="form-group">
-              <input placeholder="Postal Code" class="form-control" ng-model="shipping.zipcode">
-            </div>
-            <div class="form-group">
-              <input class="form-control" placeholder="phone" ng-model="shipping.phone">
-            </div>
-          </form> -->
-          <input style="width: 86%;margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode">
-          <input style="width: 86%;margin-top: 2%" class="form-control" placeholder="phone" ng-model="shipping.phone">
+            <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.state_id">
+              <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
+            </select>
+            <!-- <form style="margin-top: 2%" class="form-inline" role="form">
+              <div class="form-group">
+                <input placeholder="Postal Code" class="form-control" ng-model="shipping.zipcode">
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="phone" ng-model="shipping.phone">
+              </div>
+            </form> -->
+            <input style="width: 86%;margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode">
+            <input style="width: 86%;margin-top: 2%" class="form-control" placeholder="phone" ng-model="shipping.phone">
 
 
+
+          </form>
         </div>
         <div ng-show="same" class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
 
