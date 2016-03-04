@@ -12,7 +12,7 @@
         <!--<button type="button" class="btn btn-default">Export</button>-->
         <!--<button type="button" class="btn btn-default" ng-click="importModal('md')">Import</button>-->
       </div>
-      <button type="button" class="btn btn-primary" ui-sref="admin.inventory">Cancel</button>
+      <button type="button" class="btn btn-danger" ui-sref="admin.inventory">Cancel</button>
     </div>
   </div>
 
@@ -46,54 +46,70 @@
             <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products...">
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <table class="table table-hover admin-product-list">
-            <thead>
-              <tr>
-                <th>
-                  <input type="checkbox" name="selectAll" value="">
-                </th>
-                <th>
-                  Product
-                </th>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Type
-                </th>
-                <th>
-                  Vendor
-                </th>
-                <th>
 
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="x in allProductsDataObj | filter:{name:searchText} | filter: productFilter ">
-                <td>
-                  <input type="checkbox" name="selectAll" value="">
-                </td>
-                <td style="width:15%;">
-                  <span ng-if="x.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{x.master.images[0].mini_url}}" style="width:100px; height:100px;"></span>
-                </td>
-                <td>
-                  <a  ng-click="showEditProducts(x)">{{x.name}}</a>
-                </td>
-                <td>
-                  Shirts
-                </td>
-                <td style="width:30%;">
-                  Luxire
-                </td>
-                <td>
-                  <button type="button" class="btn btn-info" ng-click="showEditProducts(x)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
-                  <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)">X</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div  class="row" style="margin:0px; background-color: white; padding: 20px;">
+          <div class="row" ng-show="noProductMsg">
+            <div class="col-md-9">
+              <center><span style="font-size: 150%; color:red;">No product in this inventory </span><center>
+            </div>
+            <div class="col-md-3" style="float-right;">
+              <!-- <button type="button" class="btn btn-default" ui-sref="admin.inventory">Home</button> -->
+              <button type="button" class="btn btn-default" ng-click="showEditInventory(parentSku)">Add products</button>
+
+              <!-- <button class="btn-default" ui-sref="admin.inventory">Inventory Home</button> -->
+              <!-- <button class="btn-default" ng-click="showEditInventory(parentSku)" >Ad</button> -->
+            </div>
+          </div>
+          <div ng-show="!noProductMsg">
+              <table class="table table-hover admin-product-list">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" name="selectAll" value="">
+                    </th>
+                    <th>
+                      Product
+                    </th>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Type
+                    </th>
+                    <th>
+                      Vendor
+                    </th>
+                    <th>
+
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="product in allInventoryRelatedProducts.product | filter:{name:searchText}">
+                    <td>
+                      <input type="checkbox" name="selectAll" value="">
+                    </td>
+                    <td style="width:15%;">
+                      <span ng-if="product.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{product.master.images[0].mini_url}}" style="width:40px; height:40px;"></span>
+                    </td>
+                    <td style="width:15%;">
+                      <a  ng-click="showEditProducts(product)">{{product.name}}</a>
+                    </td>
+                    <td style="width:15%;">
+                      Shirts
+                    </td>
+                    <td style="width:15%;">
+                      Luxire
+                    </td>
+                    <td style="width:25%;"></td>
+                    <td>
+                      <button type="button" class="btn btn-info" ng-click="showEditProducts(x)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
+                      <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
       </div>
     </div>

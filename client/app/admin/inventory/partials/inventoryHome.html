@@ -9,7 +9,8 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
-      <button type="button" class="btn btn-primary" ui-sref="admin.new_product">Create Inventory</button>
+      <!-- <button type="button" class="btn btn-default btn-danger" ui-sref="admin.inventory">Cancel</button> -->
+      <!-- <button type="button" class="btn btn-primary" ui-sref="admin.new_product">Create Inventory</button> -->
     </div>
   </div>
 
@@ -58,66 +59,53 @@
                           <th>
                              <div><button type="button"><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></button></div>
                           </th>
-                          <th></th>
+
                           <th>
                             Parent sku
                           </th>
-                          <th>
-                          </th>
+
                           <th>
                             Threshold
                           </th>
                           <th>
                             Rack
                           </th>
-                          <th>
-                          </th>
+
                           <th>
                             Backorderable
                           </th>
-                          <th>
 
-                          </th>
                           <th>
-                            <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;"class="glyphicon glyphicon-triangle-bottom"></span>
-
-                          </th>
-                          <th>
-
-                          </th>
-                          <th>
-
-                          </th>
-                          <th>
+                            <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;font-size:100%;"class="glyphicon glyphicon-triangle-bottom"></span>
 
                           </th>
 
                         </tr>
                       </thead>
-                      <tbody ng-init="set=false;add=true;variant.setInitial;">
-                        <tr ng-repeat="variant in inventoryObj |filter:searchText | orderBy:predicate:reverse track by variant.id">
-                            <td>
+                      <tbody ng-init="set=false;add=true;variant.setInitial;" style="">
+                        <tr ng-repeat="variant in inventoryObj|filter:searchText | orderBy:predicate:reverse track by variant.id">
+                            <td >
                               <div><input <input type="checkbox" name="selectAll" value=""> </input></div>
                             </td>
-                            <td>
+                            <td style="width:15%;">
+                              <a ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
                             </td>
-                            <td>
-                              <a  ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
+                            <td style="width:10%;">
+                              <span style="text-align:center" ng-if="variant.threshold">{{variant.threshold}}</span>
+                              <span style="text-align:center" ng-if="variant.threshold == null">N/A</span>
                             </td>
-                            <td></td>
-                            <td>
-                              <span style="text-align:center">{{variant.threshold}}</span>
+                            <td style="width:10%;">
+                              <span style="text-align:center" ng-if="variant.rack">{{variant.rack}}</span>
+                              <span style="text-align:center" ng-if="variant.rack == null">N/A</span>
                             </td>
-                            <td>
-                              <span style="text-align:center">{{variant.rack}}</span>
+                            <td style="width:15%;">
+                              <span style="text-align:center" ng-if="variant.backorderable">{{variant.backorderable}}</span>
+                              <span style="text-align:center" ng-if="variant.backorderable == null">N/A</span>
                             </td>
-                            <td></td>
-                            <td>
-                              <span style="text-align:center">{{variant.backorderable}}</span>
-                            </td>
-                            <td></dt>
-                            <td>
-                              <span style="text-align:center">{{variant.physical_count_on_hands}}</span>
+                            <td style="width:20%;">
+                              <span style="text-align:center" ng-if="variant.physical_count_on_hands">{{variant.physical_count_on_hands}}</span>
+                              <span style="text-align:center" ng-if="variant.physical_count_on_hands == null">N/A</span>
+
                               <span ng-hide="variant.set_value==0||variant.set_value==undefined">
                                 <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
                                 <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.set_value}}</span>
@@ -127,8 +115,6 @@
                                 <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.setInitial}}</span>
                               </span>
                             </td>
-                            <td></td>
-                            <td></td>
                             <td>
                                 <form class="no-wrap">
                                   <div class="btn-group" style="float:left;height:35px; ">
@@ -138,15 +124,15 @@
                                       <div class="col-lg-2 col-md-2" style="padding-left:0%;padding-right:0%;">
                                         <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#4293C2; margin-right:0%;" ng-click="add=false;set=true;">set</button>
                                       </div>
-                                      <div class="col-lg-2 col-md-2" style="margin-top:1.2%; padding-left:0%;margin-left:-1%;">
+                                      <div class="col-lg-2 col-md-2" style="margin-top:2%; padding-left:0%;margin-left:-1%;">
                                         <span ng-if="add" style="">
-                                          <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;line-height:30px;">
+                                          <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;width:200%;line-height:30px;">
                                         </span>
                                         <span ng-if="set">
-                                          <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;line-height:30px;">
+                                          <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px; width:200%;line-height:30px;">
                                         </span>
                                       </div>
-                                      <div class="no-wrap col-lg-2 col-md-2" style="padding-left:9%;">
+                                      <div class="no-wrap col-lg-2 col-md-2" style="padding-left:6%;">
                                         <span ng-if="add">
                                           <button type="button" ng-disabled="(variant.set_value==0||variant.set_value==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="updateQuantityValue(variant)" data-toggle="modal" data-target="#myModal"  >save</button>
                                         </span>
@@ -193,6 +179,10 @@
         </div>
 
       </div>
+    </div>
+    <!-- angular alert section-->
+    <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+      <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
     </div>
   </div>
 </div>

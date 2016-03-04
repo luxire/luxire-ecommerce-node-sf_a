@@ -7,6 +7,16 @@ var count=0;
 $scope.example={
   "value": 0
 };
+$scope.alerts = [];
+var alert = function(){
+  this.type = '';
+  this.message = '';
+};
+$scope.close_alert = function(index){
+  console.log(index);
+  $scope.alerts.splice(index, 1);
+};
+
 $scope.predicate="physical_count_on_hands";
 
 $scope.productVariantObj=[
@@ -107,7 +117,9 @@ $scope.updateQuantityValue=function(variant){
     console.log("before posting...",luxire_stock);
 
     luxireStocks.luxireStocks_addQuantity(luxire_stock).then(function(data) {
-      alert("add quantity sucessfully...");
+      $scope.alerts.push({type: 'success', message: 'Added quantity successfully!'});
+
+      //alert("add quantity sucessfully...");
       console.log(data);
     }, function(err){
      console.log(err);
@@ -127,7 +139,9 @@ $scope.setQuantityValue=function(variant){
     console.log("before posting...",luxire_stock);
 
     luxireStocks.luxireStocks_setQuantity(luxire_stock).then(function(data) {
-      alert("set quantity sucessfully...");
+      $scope.alerts.push({type: 'success', message: 'Set quantity successfully!'});
+
+      //alert("set quantity sucessfully...");
       console.log(data);
     }, function(err){
      console.log(err);
@@ -138,12 +152,11 @@ $scope.setQuantityValue=function(variant){
 
 $scope.showEditProducts=function(inventory){
   console.log("selected inventory id:  "+inventory.id);
-  if(inventory.product_ids.length>=1){
+  if(inventory.product.length>=1){
     console.log("inventoryProductEdit...........");
-    $state.go("admin.inventoryProductEdit",{obj: inventory});
+    $state.go("admin.inventoryProductEdit",{id: inventory.id});
   }else{
-    $state.go("admin.edit_product",{id :inventory.id});
-
+    $state.go("admin.inventoryProductEdit",{id:inventory.id});
   }
 }
 

@@ -12,7 +12,7 @@ angular.module('luxire')
   }
   this.luxireStocksById = function(id){
     var deferred = $q.defer();
-    $http.get('/api/luxire_stocks'+id).then(function(data){
+    $http.get('/api/luxire_stocks/'+id).then(function(data){
       deferred.resolve(data)
     },function(errData, errStatus, errHeaders, errConfig){
       deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
