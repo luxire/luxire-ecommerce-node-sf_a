@@ -128,6 +128,19 @@ angular.module('luxire', ['ui.router','ngRoute',
 			require_auth: false
 		}
 	})
+
+
+	/*Invoices*/
+	.state('invoices',{
+		url: '/invoice/:number?token',
+		params: {param	: {}},
+		templateUrl: 'app/customer/invoices/partials/invoicePage.html',
+		controller: 'invoiceController',
+		data: {
+			require_auth: false
+		},
+		// reloadOnSearch: true
+	})
 	// .state('cart',{
 	// 	url: '/cart',
 	// 	params: {cartObject: {}},
