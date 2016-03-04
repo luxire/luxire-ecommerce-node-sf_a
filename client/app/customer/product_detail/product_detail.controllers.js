@@ -1,5 +1,6 @@
 angular.module('luxire')
 .controller('ProductDetailController', function($scope, CustomerOrders, $state, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal){
+
   /*fn to convert array of object in a object*/
   $scope.cart_object = {};
   $scope.luxire_styles = [];
@@ -23,16 +24,37 @@ angular.module('luxire')
   $scope.close_alert = function(index){
     $rootScope.customer_alerts.splice(index);
   };
+
+  $scope.send_sample = function(measurement_sample){
+    console.log(measurement_sample);
+  };
   $scope.add_to_cart = function(){
-    CustomerOrders.addTocart($scope.cart_object, $scope.product.master).then(function(data){
-      console.log(JSON.parse(data.data.body));
-      $rootScope.luxire_cart = JSON.parse(data.data.body);
-      console.log($rootScope.luxire_cart.line_items.length);
-      $state.go('customer.cart');
-      $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
-    }, function(error){
-      console.error(error);
-    })
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
+      CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, $scope.product.master)
+      .then(function(data){
+        CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+          $rootScope.luxire_cart = data.data;
+          $state.go('customer.cart');
+          $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        }, function(error){
+          console.error(error);
+        });
+        console.log(data);
+      },function(error){
+        console.error(error);
+      });
+    }
+    else{
+      CustomerOrders.create_order($scope.cart_object, $scope.product.master, $scope.measurement_sample)
+      .then(function(data){
+        $rootScope.luxire_cart = data.data;
+        $state.go('customer.cart');
+        $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        console.log(data);
+      },function(error){
+        console.error(error);
+      });
+    }
   };
 
   var style_iterator = function(style){
@@ -110,6 +132,40 @@ angular.module('luxire')
       console.info('Modal dismissed at: ' + new Date());
     });
   };
+
+  $scope.get_standard_sizes = function(){
+    console.log($scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"]);
+    console.log($scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"]);
+    console.log($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]);
+
+    if($scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"]
+       && $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"]
+       && $scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]){
+         console.log('making request');
+         CustomerProducts.standard_sizes($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"],
+          $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"],
+          $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"])
+         .then(function(data){
+           if(data.data && data.data.length){
+            //  $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"] =
+            //  $scope.cart_object["body_measurement_attributes"]["Chest Around"]["value"] =
+            //  $scope.cart_object["body_measurement_attributes"]["Waist Around"]["value"] =
+            //  $scope.cart_object["standard_measurement_attributes"]["Bottom"]["value"] =
+            //  $scope.cart_object["standard_measurement_attributes"]["Biceps"]["value"] =
+            //  $scope.cart_object["standard_measurement_attributes"]["Yoke Width"]["value"] =
+            //  $scope.cart_object["standard_measurement_attributes"]["Wrist Around"]["value"] =
+            //  $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"] =
+
+           }
+           console.log('std sizes', data);
+         },function(error){
+           console.log(error);
+         });
+   }
+
+
+  };
+
 
   $scope.bespoke_style = function(){
     var modal_instance = $uibModal.open({
@@ -206,6 +262,7 @@ angular.module('luxire')
 
   $scope.set_attribute_value = function(attribute_type, attribute_key, attribute_value){
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
+    $scope.get_standard_sizes();
     console.log($scope.cart_object);
   };
 
@@ -272,11 +329,14 @@ angular.module('luxire')
   };
 
 })
-.controller('ChooseStyleController', function($scope, $uibModalInstance, luxire_styles){
+.controller('ChooseStyleController', function($scope, $uibModalInstance, luxire_styles, ImageHandler){
   console.log(luxire_styles);
   $scope.luxire_styles = luxire_styles;
   $scope.selectSliderIndex=-1;
   $scope.selected_style = {};
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
   $scope.selectSlider=function(index, selected_style){
     console.log("index: "+index);
     //$(event.target).addClass('selectSlider');
@@ -320,7 +380,7 @@ angular.module('luxire')
   };
 
   $scope.activate_customization_style  = function(style_object, index, style_name){
-    console.log(style_object);
+    console.log('style_object', style_object);
     if($scope.selected_customization_style_index == index){
       $scope.selected_customization_style_index = -1;
       $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['value'] = '';
@@ -342,7 +402,16 @@ angular.module('luxire')
         $scope["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
       }
       console.log($scope["customization_attributes"]);
-      $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
+      console.log('style_object', style_object);
+
+      angular.forEach(style_object, function(val, key){
+        console.log('style_object key', key );
+        if(key != 'url'){
+          $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'][key] = '';
+          console.log('attr for order_sheet',$scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options']);
+        }
+      });
+      // $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = {};
       $scope["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = style_object;
       // $scope.cart_object["customization_attributes"][$scope.selected_customization_attribute.name]['options'] = style_object;
     }

@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('ProductListingController', function($scope, CustomerProducts, $uibModal, ImageHandler, $state, products, $stateParams){
+.controller('ProductListingController', function($scope, CustomerProducts, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams){
   console.log($stateParams);
   $scope.go_to_product_detail = function(taxonomy_name, taxon_name, product_name){
     $state.go('customer.product_detail',{taxonomy_name: taxonomy_name,taxon_name: taxon_name,product_name: product_name});
@@ -8,6 +8,39 @@ angular.module('luxire')
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   }
+
+  $scope.order_swatch = function(variant){
+    console.log(variant);
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
+      CustomerOrders.add_line_item($rootScope.luxire_cart, {}, variant)
+      .then(function(data){
+        CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+          $rootScope.luxire_cart = data.data;
+          $state.go('customer.cart');
+          $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        }, function(error){
+          console.error(error);
+        });
+        console.log(data);
+      },function(error){
+        console.error(error);
+      });
+    }
+    else{
+      CustomerOrders.create_order({}, variant, false)
+      .then(function(data){
+        $rootScope.luxire_cart = data.data;
+        $state.go('customer.cart');
+        $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        console.log(data);
+      },function(error){
+        console.error(error);
+      });
+    }
+
+  };
+
+
 
   $scope.productDesc=[];
    $scope.result=[];

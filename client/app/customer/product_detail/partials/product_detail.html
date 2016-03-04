@@ -219,10 +219,10 @@ font-size: 1px
               <div class="carousel-inner" style="cursor: pointer">
                 <div   ng-repeat="luxire_style in luxire_styles | limitTo: 6" style="display:inline-block;float:left;margin-right:1%;" ng-click="select_style($index, luxire_style)">
                     <div class="luxireStyle" style="width:150px;height:150px;background-color: #9F9F9F;" ng-class="{'selectSlider': $index==active_style_index }">
-                        <!-- <img src="{{luxire_style.imgurl}}" style="width:100%;height:100%;" ng-click="selectSlider($index)" ng-class="{'selectSlider': $index == selectSliderIndex }"> -->
+                        <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
                     </div>
                     <div style="text-align:center;font-size:120%;color:black;">{{luxire_style.name}}</div>
-                    <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.description}}" popover-trigger="mouseenter"></i></span></div>
+                    <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.help}}" popover-trigger="mouseenter"></i></span></div>
                 </div>
               </div>
             </div>
@@ -343,7 +343,8 @@ font-size: 1px
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-top:2%;">
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-              <div class="" style="border: 1px solid black; width:1.5em; height:1.5em;"></div>
+            <input type="checkbox" name="name" ng-model="measurement_sample" ng-change="send_sample(measurement_sample)">
+              <!-- <div class="" style="border: 1px solid black; width:1.5em; height:1.5em;"></div> -->
           </div>
           <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
               <span style="font-size:130%;color:black;">Send Shirt Sample</span>
@@ -373,10 +374,11 @@ font-size: 1px
     <div class="carousel-inner" style="cursor: pointer">
       <div class="item active"  ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;margin-right:1%;" ng-click="selectSlider($index, luxire_style)">
           <div class="" style="width:75px;height:75px;background-color: #9F9F9F;" ng-class="{'selectSlider': $index == selectSliderIndex }">
-              <!-- <img src="{{luxire_style.imgurl}}" style="width:100%;height:100%;" ng-click="selectSlider($index)" ng-class="{'selectSlider': $index == selectSliderIndex }"> -->
+            {{}}
+            <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
           </div>
           <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name}}</div>
-          <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.description}}" popover-trigger="mouseenter"></i></span></div>
+          <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.help}}" popover-trigger="mouseenter"></i></span></div>
       </div>
     </div>
 
@@ -450,8 +452,9 @@ font-size: 1px
                               <div ng-repeat="luxire_style in luxire_styles | limitTo: 7" style="display:inline-block;float:left;margin-right:1%;cursor: pointer">
                                   <div class="" >
                                     <div class="luxireStyle" ng-class="{'activeStyleClass': $index==active_style_index }" style="width:80px;height:80px;background-color: #9F9F9F;" ng-click="select_style($index, luxire_style)">
-                                        <!--//img src="{{img.imgurl}}" style="width:100%;height:100%;" -->
+                                      <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
                                     </div>
+
                                     <div style="font-size:100%;text-align:center;padding-top:1%;"><span>{{luxire_style.name}}</span></div>
                                   </div>
                               </div>
@@ -492,7 +495,7 @@ font-size: 1px
                                       <div  ng-repeat="customization_attribute in product['customization_attributes']" style="margin-top:8%; z-index: -200;cursor: pointer" >
                                           <div ng-click="activate_customization_attribute(customization_attribute, $index)">
                                             <div class="luxireStyle" ng-class="{'activeCustomizationAttribute': $index==selected_customization_attribute_index}" style="width:100%;height:100px;background-color: #CCCCCC;">
-                                              <!--//img src="{{img.imgurl}}" style="width:100%;height:100%;"  -->
+                                            <img src="{{getImage(customization_attribute.image)}}" style="width:100%;height:100%;">
                                             </div>
                                             <div style="font-size: 100%;text-align:center;padding-top:1%;"><span>{{customization_attribute.name}}</span></div>
                                           </div>
@@ -511,7 +514,7 @@ font-size: 1px
                                    <!-- //div class="" ng-click="activate_customization_style(style_object, $index, style_name)" ng-class="{'activeCustomizationAttribute': $index==selected_customization_style_index}"-->
                                       <div class="" ng-click="activate_customization_style(style_object, $index, style_name)" >
                                         <div class="luxireStyle" style="width:95px;height:95px;background-color: #CCCCCC;" ng-class="{'activeCustomizationAttribute': style_name==cart_object['customization_attributes'][selected_customization_attribute.name]['value']}">
-                                            <!-- //--img src="{{img.imgurl}}" style="width:100%;height:100%;" ng-click="selectCollar($index,img.text)" -->
+                                        <img src="{{getImage(style_object.image)}}" style="width:100%;height:100%;">
                                         </div>
                                         <div style="font-size: 100%;text-align:center;padding-top:1%;"><span>{{style_name}}</span></div>
                                       </div>
@@ -523,7 +526,16 @@ font-size: 1px
                                 <div style="height: 100%;padding-left: 3%;padding-right: 3%; padding-top: 4%" >
                                   <span style="font-size:110%;">Details</span>
                                   <div class="row" style="margin-top:5%;">
-                                    {{cart_object['customization_attributes'][selected_customization_attribute.name]['value']}}
+
+                                  <p>{{cart_object['customization_attributes'][selected_customization_attribute.name]['value']}}</p>
+                                  
+                                  <p>
+                                  {{selected_customization_attribute['value'][cart_object['customization_attributes'][selected_customization_attribute.name]['value']]['help']}}
+                                  </p>
+
+                                  <a href="{{selected_customization_attribute['help_url']}}">For more details</a>
+
+
 
                                     <div ng-repeat="(style_property,style_values) in customization_attributes[selected_customization_attribute.name]['options']" style="padding-top: 4%">
                                       <div ng-if="!checkIsArray(style_values) && style_property!=='url'">
