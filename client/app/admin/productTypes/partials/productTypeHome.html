@@ -48,6 +48,8 @@
                   <input type="checkbox" name="selectAll" value="">
                 </th>
                 <th>
+                </th>
+                <th>
                   Product Type
                 </th>
                 <th>
@@ -64,6 +66,9 @@
               <tr ng-repeat="x in productTypeJsonResponse.data track by $index">
                 <td>
                   <input type="checkbox" name="selectAll" value="">
+                </td>
+                <td>
+                  <img src="{{getImage(x.image)}}" alt="" />
                 </td>
                 <td>
                     <a ui-sref="admin.editProductType" ng-click="showEditProdTypes(x.id)" >{{x.product_type}}</a>

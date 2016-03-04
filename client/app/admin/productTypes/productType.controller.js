@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('ProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window){
+.controller('ProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window, ImageHandler){
 
 //Alerts to display the message
 $scope.alerts = [];
@@ -13,6 +13,16 @@ $scope.close_alert = function(index){
 };
 
 $scope.measurement_type_ids=[];
+
+$scope.uploadFile = function(files){
+  if (files && files.length) {
+    $scope.productTypeData.image = files[0];
+    console.log('files to upload',files[0]);
+  }
+}
+$scope.getImage = function(url){
+  return ImageHandler.url(url);
+}
 
 //Loading all the data to Home page
 $scope.loading = true;
@@ -145,7 +155,7 @@ $scope.createProductType = function() {
 
 
 
-.controller('editProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window){
+.controller('editProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window, ImageHandler){
 
 
 
@@ -160,14 +170,22 @@ $scope.createProductType = function() {
     $scope.alerts.splice(index, 1);
   };
 
-$scope.measurement_type_ids=[];
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  }
+ $scope.measurement_type_ids=[];
+
 
   $scope.productTypeData = {product_type:'', description: '', measurement_type_ids: []};
   console.log($stateParams);
+
+
   productTypeService.getProductTypeById($stateParams.id).then(function(res){
     console.log(res.data);
      $scope.productTypeData.product_type = res.data.product_type;
      $scope.productTypeData.description = res.data.description;
+     $scope.productTypeData.image = res.data.image;
+
      $scope.measurement_type_ids = [];
      angular.forEach(res.data.measurement_types,function(value){
        console.log(value.id);
@@ -207,28 +225,41 @@ $scope.measurement_type_ids=[];
    })
 
 
+
 //  $scope.loading1 = true;
   $scope.showEditProdTypes=function(id){
     console.log("Id of prodType id in home: "+id);
     $state.go("admin.editProductType",{id: id});
   }
 
+  /*Image upload*/
+  $scope.uploadFile = function(files){
+    if (files && files.length) {
+      $scope.productTypeData.image = files[0];
+      console.log('files to upload',files[0]);
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#product_type_image').attr('src', e.target.result);
+       }
+
+       reader.readAsDataURL(files[0]);
+    }
+  };
+
 
   $scope.updateProductType = function(id) {
 
     $scope.selectedAttributes = [];
-//      $scope.productTypeJsonResponse = data;
-
-    angular.forEach($scope.measurementTypeJson.data, function(attribute){
-      // $scope.productTypeData.product_type = $scope.measurementTypeJson.data.product_type;
-      // $scope.productTypeData.description = $scope.measurementTypeJson.data.description;
-      // console.log($scope.measurementTypeJson);
-      if (attribute.selected == true){
-        $scope.selectedAttributes.push(attribute.id);
-        console.log(attribute.selected);
-        console.log($scope.selectedAttributes);
-      }
-    })
+    // angular.forEach($scope.measurementTypeJson.data, function(val, key){
+    //   angular.forEach(val, function(attribute){
+    //     if (attribute.selected == true){
+    //       $scope.selectedAttributes.push(attribute.id);
+    //       console.log(attribute.selected);
+    //       console.log($scope.selectedAttributes);
+    //     };
+    //
+    //   })
+    // });
     $scope.productTypeData.measurement_type_ids = $scope.selectedAttributes;
 
     console.log($scope.productTypeData);

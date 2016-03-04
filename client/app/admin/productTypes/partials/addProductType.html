@@ -81,6 +81,7 @@ p.capitalize {
               <br>
               <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
 
+              <input ng-file-select ng-file-change="uploadFile($files)" type="file" name="choose file">
   <!--             <p style="font-size: 15px;">Attributes</p>
            <input type="text" placeholder="search" class="form-control" ng-model="search_attr">
               <br>

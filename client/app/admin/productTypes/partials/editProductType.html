@@ -78,7 +78,12 @@ p.capitalize {
               <span style="font-size: 15px;font-weight: 900;">Description</span>
               <br>
               <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
-
+              <input ng-file-select ng-file-change="uploadFile($files)" type="file" name="choose file">
+              <br>
+              <!-- <img  alt="" /> -->
+              {{productTypeData.image}}
+              <img src="{{getImage(productTypeData.image)}}" alt="" />
+              <img id="product_type_image"  src="" alt="" />
               <p style="font-size: 15px;font-weight: 900;">Attributes</p>
 <!--          working code
 
@@ -99,7 +104,7 @@ p.capitalize {
                 <div  ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
                 <p class="capitalize" style="font-size: 15px;font-weight: 500;" >{{requiredAttributeName}}</p>
                   <div class="ProductType-checkboxColumn" ng-repeat="v in value" >
-                    <input type="checkbox" ng-model="v.selected"  value="{v.name}}"  >&nbsp;&nbsp;&nbsp;{{v.name}}<br/></div><br/><br/></div><br/><br/><br/>
+                    <input type="checkbox" ng-model="v.selected"  value="{{v.name}}"  >&nbsp;&nbsp;&nbsp;{{v.name}}<br/></div><br/><br/></div><br/><br/><br/>
 
 
 

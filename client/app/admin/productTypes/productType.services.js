@@ -20,7 +20,17 @@ angular.module('luxire')
 
   this.updateProductType = function(id,productType) {
     console.log(productType);
-		return $http.put(AdminConstants.api.product_types+"/"+id, angular.toJson(productType));
+    var fd = new FormData();
+    // fd.append('image', productType.image);
+    angular.forEach(productType, function(val, key){
+      fd.append(key, val);
+    })
+    console.log('form in service', fd);
+    return $http.put(AdminConstants.api.product_types+"/"+id, fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+     });
+		// return $http.put(AdminConstants.api.product_types+"/"+id, angular.toJson(productType));
 	}
 
   this.getMeasurementTypes = function(){
