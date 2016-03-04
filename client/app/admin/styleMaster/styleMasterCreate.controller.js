@@ -15,6 +15,31 @@ angular.module('luxire')
     console.log(info);
   })
 
+  /*Image upload*/
+  $scope.upload_image = function(files){
+    console.log('typeof', typeof(files[0]));
+    console.log('product image', typeof(files[0]));
+    if (files && files.length) {
+      $scope.newProductType.image = files[0];
+      console.log('files to upload',files[0]);
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#style_master_image').attr('src', e.target.result);
+       }
+
+       reader.readAsDataURL(files[0]);
+    }
+  }
+
+  $scope.getImage = function(url){
+    console.log(url);
+    console.log(ImageHandler.url(url));
+    return ImageHandler.url(url);
+  };
+
+  /*Image upload*/
+
+
   /*styleMasterService.getAllMeasurementType().then(function(data) {
     //$scope.loading= false;
     console.log("values of all measurement type \n\n");

@@ -9,7 +9,7 @@
    div.sm {
      display: block;
      float: left;
-     width: 35%;
+     width: 35%;margin-left
      margin-bottom: 10px;
    }
 div.sm:last-child:after {
@@ -76,13 +76,16 @@ div.sm:last-child:after {
                  <div class="panel-heading" style="padding: 0px;">
                  </div>
                  <div class="panel-body">
-                   <textarea class="description"  rows="4" cols="20"></textarea>
+                   <textarea class="description" ng-model="newProductType.help" rows="2" cols="20"></textarea>
                  </div>
 
                </div>
                <span style="font-size: 13px;">Image</span>
-               <input type="text" ng-model="newProductType.url" class="form-control" placeholder="image.."><br>
-               <span style="font-size:1.2em;">Product type</span>
+               <!--Image-->
+               <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="">
+               <img id="style_master_image" src="" alt="" /><br>
+
+              <span style="font-size:1.2em;">Product type</span>
 
                <div class="">
                  <select class="form-control" ng-model="newProductType.luxire_product_type_id"  ng-change="showProductType()" >

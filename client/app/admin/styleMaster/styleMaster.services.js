@@ -14,7 +14,21 @@ angular.module('luxire')
   }
 
   this.createStyleMaster = function(styleMasterObj) {
-    return $http.post(AdminConstants.api.style_masters, angular.toJson(styleMasterObj));
+    console.log('styleMasterObj', styleMasterObj);
+		var fd = new FormData();
+    fd.append('name', styleMasterObj.name);
+    fd.append('help', styleMasterObj.help);
+    fd.append('default_values', angular.toJson(styleMasterObj.default_values));
+    fd.append('luxire_product_type', angular.toJson(styleMasterObj.luxire_product_type));
+    if(styleMasterObj.image && angular.isObject(styleMasterObj.image)){
+      fd.append('image', styleMasterObj.image);
+    }
+    console.log('fd', fd);
+    return $http.post(AdminConstants.api.style_masters, fd, {
+	      transformRequest: angular.identity,
+	      headers: {'Content-Type': undefined}
+	   });
+    // return $http.post(AdminConstants.api.style_masters, angular.toJson(styleMasterObj));
   }
 
   this.getAllStyleMaster= function(){
@@ -31,6 +45,21 @@ angular.module('luxire')
   }
 
   this.updateStyleMasterById = function(id,updatedObj) {
-    return $http.put(AdminConstants.api.style_masters+'/'+id,angular.toJson(updatedObj));
+    console.log('updatedObj', updatedObj);
+		var fd = new FormData();
+    fd.append('id', updatedObj.id);
+    fd.append('name', updatedObj.name);
+    fd.append('help', updatedObj.help);
+    fd.append('default_values', angular.toJson(updatedObj.default_values));
+    fd.append('luxire_product_type', angular.toJson(updatedObj.luxire_product_type));
+    if(updatedObj.image && angular.isObject(updatedObj.image)){
+      fd.append('image', updatedObj.image);
+    }
+    console.log('fd', fd);
+		return $http.put(AdminConstants.api.style_masters+'/'+id, fd, {
+	      transformRequest: angular.identity,
+	      headers: {'Content-Type': undefined}
+	   });
+    // return $http.put(AdminConstants.api.style_masters+'/'+id,angular.toJson(updatedObj));
   }
 })

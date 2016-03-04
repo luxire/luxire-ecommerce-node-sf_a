@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('styleMasterEditController',function($scope,styleMasterService,$state,$stateParams){
+.controller('styleMasterEditController',function($scope,styleMasterService,$state,$stateParams, ImageHandler){
   $scope.styleMasterByIdValue='';
   $scope.newProductType='';
   $scope.selectedType=[];
@@ -7,6 +7,30 @@ angular.module('luxire')
   $scope.productType='';
   $scope.values={};
    var productTypeId='';
+
+  /*Image upload*/
+  $scope.upload_image = function(files){
+    console.log('typeof', typeof(files[0]));
+    console.log('product image', typeof(files[0]));
+    if (files && files.length) {
+      $scope.newProductType.image = files[0];
+      console.log('files to upload',files[0]);
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#style_master_img').attr('src', e.target.result);
+       }
+
+       reader.readAsDataURL(files[0]);
+    }
+  }
+
+  $scope.getImage = function(url){
+    console.log(url);
+    console.log(ImageHandler.url(url));
+    return ImageHandler.url(url);
+  };
+
+  /*Image upload*/
 
   console.log(" in style master edit state params: "+$stateParams.id);
   styleMasterService.getStyleMasterById($stateParams.id).then(function(data){
@@ -133,7 +157,7 @@ angular.module('luxire')
      $scope.newProductType["default_values"]=$scope.values;
      console.log(" before posting the new product type obj is  :\n",$scope.newProductType);
      styleMasterService.updateStyleMasterById($stateParams.id,$scope.newProductType).then(function(data){
-        alert('style master is updated successfully added');
+        alert('style master is updated successfully');
         //$scope.activeButton('products')
       }, function(info) {
         console.log(info);

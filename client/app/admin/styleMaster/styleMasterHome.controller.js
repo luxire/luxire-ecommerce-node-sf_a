@@ -1,5 +1,12 @@
 angular.module('luxire')
-.controller('styleMasterHomeController',function($scope,styleMasterService,$state){
+.controller('styleMasterHomeController',function($scope,styleMasterService,$state, ImageHandler){
+
+
+  /*Image*/
+  $scope.getImage = function(url){
+    console.log(ImageHandler.url(url));
+    return ImageHandler.url(url);
+  };
 
   styleMasterService.getAllStyleMaster().then(function(data) {
     //$scope.loading= false;
