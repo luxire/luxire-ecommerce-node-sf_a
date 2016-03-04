@@ -75,7 +75,7 @@
           </div>
         </div>
         <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <table class="table table-hover admin-product-list">
+          <table class="table table-hover admin-product-list w3-striped">
             <thead>
               <tr>
                 <th>
@@ -85,6 +85,7 @@
                   Product
                 </th>
                 <th>
+                  Name
                 </th>
                 <th>
                   Type
@@ -102,24 +103,32 @@
                 <td>
                   <input type="checkbox" name="selectAll" value="">
                 </td>
-                <td>
-                  <span ng-if="x.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{x.master.images[0].mini_url}}" style="width:50px; height:50px;"></span>
-                <td>
-                  <a ui-sref="admin.edit_product" ng-click="showEditProducts(x.id)">{{x.name}}</a>
+                <td style="width: 15%;">
+                  <span ng-if="x.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{x.master.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
+                  <span ng-if="x.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
+                <td style="width: 20%;">
+                  <a   style="cursor:pointer;" ng-click="showEditProducts(x.id)">{{x.name}}</a>
                 </td>
-                <td>
-                  Shirts
+                <td style="width: 15%;">
+                  <span ng-if="x.luxire_product_type.product_type">{{x.luxire_product_type.product_type}}</span>
+                 <span ng-if="x.luxire_product_type.product_type == null">N/A</span>
                 </td>
-                <td>
-                  Luxire
+                <td style="width:15%;">
+                  <span>{{luxireVendor[0].name}}</span>
                 </td>
-                <td>
-                  <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)">X</button>
+                <td style="width:20%;"></td>
+                <td >
+                  <button type="button" class="btn btn-info" ng-click="showEditProducts(x.id)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
+                  <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)"><i class="fa fa-trash"></i></button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+      <!-- angular alert  -->
+      <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+        <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
       </div>
     </div>
   </div>

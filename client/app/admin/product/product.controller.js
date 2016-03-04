@@ -1,8 +1,34 @@
 angular.module('luxire')
 
-.controller('ProductController',function($scope, products, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
+.controller('ProductController',function($scope, products, luxireProperties, luxireVendor, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
 
   $scope.productData  = new prototypeObject.product();
+
+
+  $scope.upload_product_image = function(files){
+    console.log('product image', files[0]);
+    if (files && files.length) {
+      $scope.product_image = files[0];
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#product_image').attr('src', e.target.result);
+       }
+
+       reader.readAsDataURL(files[0]);
+      // fileUpload.upload(files[0]);
+          console.log('files to upload',files[0]);
+    }
+  }
+
+  $scope.post_image = function(){
+    products.add_variant_image(24, 34, $scope.product_image)
+    .then(function(data){
+      console.log(data);
+    }, function(error){
+      console.error(error);
+    });
+  };
+
 
   /*Loading all products*/
   $scope.loading = true;
@@ -147,18 +173,55 @@ angular.module('luxire')
 
   $scope.deleteProducts = function(id,index) {
     products.deleteProduct(id).then(function(data){
+      $scope.alerts.push({type: 'success', message: 'Product deleted successfully!'});
 			$scope.jsonresponse.data.products.splice(index,1);
-      alert('Product deleted successfully');
+      //alert('Product deleted successfully');
       $scope.activeButton('products')
     }, function(info) {
       console.log(info);
     })
   }
 
+  luxireProperties.getAllLuxireProperties().then(function(data) {
+    console.log('admin luxire properties values are ...');
+    console.log(data);
+    $scope.luxireProperties = data.data;
+    //$scope.loading = false;
+    console.log($scope.luxireProperties);
+    console.log("type of properties: ",typeof($scope.luxireProperties[0]));
+    var arr=$scope.luxireProperties[0].value.split(',');
+    console.log("arr\n\n",arr);
+  }, function(info){
+    console.log(info);
+  })
+
+  luxireVendor.getAllLuxireVendor().then(function(data) {
+    console.log('admin luxire vendor values are ...\n\n');
+    //console.log(data);
+    $scope.luxireVendor = data.data;
+    //$scope.loading = false;
+    console.log($scope.luxireVendor);
+  }, function(info){
+    console.log(info);
+  })
+
+  $scope.alerts = [];
+  var alert = function(){
+    this.type = '';
+    this.message = '';
+  };
+  $scope.close_alert = function(index){
+    console.log(index);
+    $scope.alerts.splice(index, 1);
+  };
+
   // ******************* start inventory modal part *****************
+
+  $scope.swatchPrice=1;
 	$scope.modalCount=0;
 	$scope.animationsEnabled = true;
 	$scope.dummyInventoryData='';
+  $scope.pid='';
 
 
   $scope.luxireStock='';
@@ -380,6 +443,7 @@ angular.module('luxire')
     console.log("in fun create product : \nproduct object:\n",$scope.product);
 		console.log("luxire_product object: \n",$scope.luxireProduct);
 		console.log("luxire stock obj:\n",$scope.luxireStock);
+
 		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
 		if($scope.parentSkuStatus==true){
 				console.log("create product true part...");
@@ -392,18 +456,52 @@ angular.module('luxire')
 				console.log("inventory id: "+$scope.luxireStock.id);
 				console.log(" create product true part\n before posting the product data is: ",$scope.postProductData);
 				products.createProduct($scope.postProductData).then(function(data){
+          //$scope.alerts.push({type: 'success', message: 'Product created successfully!'});
+          products.add_variant_image(data.data.id, data.data.master.id, $scope.product_image)
+          .then(function(data){
+            console.log(data);
+            //$scope.alerts.push({type: 'success', message: 'Product created successfully!'});
+          }, function(error){
+            console.error(error);
+          });
+
+          console.log("\n\ncreated product  is: \n\n",data);
+          console.log("\n\ncreated product  id is: \n\n",data.id);
+          $scope.pid=data.id;
+          var variants = {
+              "variant":{
+              "sku": "swt_"+$scope.product.sku,
+              "price": $scope.swatchPrice
+            }
+          };
+          // variants["variant"]["sku"] = "swt_"+$scope.product.sku;
+          // variants["variant"]["price"] = $scope.swatchPrice;
+          console.log("variant object is: ",variants);
+          console.log("pid: ",$scope.pid);
+          products.createVariants(data.id,variants).then(function(data){
+            // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
+
+            //alert('variant is  successfully added');
+            $scope.activeButton('products')
+          }, function(info) {
+            console.log(info);
+          })
+
 		      alert('Product successfully added');
+		      $scope.activeButton('products')
+		    }, function(info) {
+		      console.log("creating product error:\n\n",info);
+		    })
+
+				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
+          // $scope.alerts.push({type: 'success', message: 'Stock updated successfully!'});
+
+		      //alert('inventory successfully updated');
 		      $scope.activeButton('products')
 		    }, function(info) {
 		      console.log(info);
 		    })
 
-				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
-		      alert('inventory successfully updated');
-		      $scope.activeButton('products')
-		    }, function(info) {
-		      console.log(info);
-		    })
 
 
 
@@ -423,11 +521,22 @@ angular.module('luxire')
 		$scope.modalCount=0;
     console.log(" create product false part \nbefore posting the product data is: ",$scope.postProductData);
     products.createProduct($scope.postProductData).then(function(data){
-      alert('Product successfully added');
+      products.add_variant_image(data.data.id, data.data.master.id, $scope.product_image)
+      .then(function(data){
+        console.log(data);
+      }, function(error){
+        console.error(error);
+      });
+      console.log("after creation the product is ",data);
+      $scope.alerts.push({type: 'success', message: 'Product created successfully!'});
+
+      //alert('Product successfully added');
       $scope.activeButton('products')
     }, function(info) {
       console.log(info);
     })
+
+
   }
 }
 

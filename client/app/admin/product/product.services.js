@@ -2,6 +2,22 @@ angular.module('luxire')
 .service('products', function($http, $q, restApiService){
 	// autocomplete
 
+	this.createVariants = function(productId,variant) {
+		console.log("create variants in client service is calling...");
+		var deferred = $q.defer();
+        var data=angular.toJson(variant);
+        console.log("*******variant data is : \n\n"+data);
+		$http.post("/api/products/"+productId+"/variants", angular.toJson(variant)).success(function(res) {
+			console.log(res);
+			deferred.resolve(res.data);
+  		})
+  		.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+  			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+  		});
+  		return deferred.promise;
+	}
+
 	this.allProductType= function(){
     console.log("get all product  services is calling...");
     var deferred = $q.defer();
@@ -19,7 +35,7 @@ angular.module('luxire')
 		var deferred = $q.defer();
 		console.log("inventory id: "+id);
 		console.log("inventory obj: ",inventoryObj);
-		$http.put("/luxire_stocks/"+id, angular.toJson(inventoryObj)).success(function(data) {
+		$http.put("/api/luxire_stocks/"+id, angular.toJson(inventoryObj)).success(function(data) {
 			deferred.resolve(data);
 			})
 			.error(function(errData, errStatus, errHeaders, errConfig) {
@@ -51,13 +67,26 @@ angular.module('luxire')
 		return deferred.promise;
 	}
 
+	this.add_variant_image = function(product_id, variant_id, image){
+		console.log('product_id', product_id);
+		console.log('variant_id', variant_id);
+		console.log('image', image);
+		var fd = new FormData();
+		fd.append('image', image);
+		return $http.post('/api/v1/admin/products/'+product_id+'/variants/'+variant_id+'/images', fd, {
+	      transformRequest: angular.identity,
+	      headers: {'Content-Type': undefined}
+	   });
+ 	};
+
+
 	this.createProduct = function(product) {
 		var deferred = $q.defer();
         var data=angular.toJson(product);
         console.log("*******product data is : \n\n"+data);
 		$http.post("/api/products", angular.toJson(product)).success(function(res) {
 			console.log(res);
-			deferred.resolve(res.data);
+			deferred.resolve(res);
   		})
   		.error(function(errData, errStatus, errHeaders, errConfig) {
 				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
@@ -128,12 +157,43 @@ angular.module('luxire')
 	   });
 	};
 })
+.service('luxireProperties', function($http,$q){
+	this.getAllLuxireProperties= function(){
+    console.log("get all product  properties is calling...");
+    var deferred = $q.defer();
+    $http.get('/api/luxire_properties.json').then(function(data){
+      deferred.resolve(data)
+      console.log(data);
+    },function(errData, errStatus, errHeaders, errConfig){
+      deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+    });
+    return deferred.promise;
+  }
+
+
+})
+.service('luxireVendor', function($http,$q){
+	this.getAllLuxireVendor= function(){
+    console.log("get all luxire vendor is calling...");
+    var deferred = $q.defer();
+    $http.get('/api/luxire_vendor_masters').then(function(data){
+      deferred.resolve(data)
+      console.log(data);
+    },function(errData, errStatus, errHeaders, errConfig){
+      deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+    });
+    return deferred.promise;
+  }
+
+
+})
 .service('createProductModalService', function($http, $q){
 	//Get all products
+	console.log("parent sku check fun is calling in client services...");
 	this.checkParentSku = function(parentSku) {
 		var deferred = $q.defer();
 		console.log("check parent sku fun is calling...");
-		$http.post("/luxire_stocks/validate_stocks_sku", angular.toJson(parentSku)).success(function(res) {
+		$http.post("/api/luxire_stocks/validate_stocks_sku", angular.toJson(parentSku)).success(function(res) {
 			console.log("parent sku :",res);
 			deferred.resolve(res);
 			})
@@ -207,7 +267,7 @@ angular.module('luxire')
 		})
 		.service('editModalService', function($http, $q ){
 			//Get all products
-			this.checkParentSku = function(parentSku) {
+			/*this.checkParentSku = function(parentSku) {
 				var deferred = $q.defer();
 				console.log("check parent sku fun is calling...");
 				$http.post("/luxire_stocks/validate_stocks_sku", angular.toJson(parentSku)).success(function(res) {
@@ -219,7 +279,7 @@ angular.module('luxire')
 						deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
 					});
 					return deferred.promise;
-			}
+			}*/
 
 			this.updateStock = function(id,inventoryObj) {
 				var deferred = $q.defer();

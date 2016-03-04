@@ -91,13 +91,14 @@
 
     </div>
     <div class="col-lg-5 col-md-5" style="text-align: right;">
-      <button type="button" class="btn btn-default" ><span class="glyphicon glyphicon-new-window"></span>View</button>
-      <div class="btn-group">
+      <!-- <button type="button" class="btn btn-default" ><span class="glyphicon glyphicon-new-window"></span>View</button> -->
+    <!--  <div class="btn-group">
         <button type="button" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span></button>
         <button type="button" class="btn btn-default "><span class="glyphicon glyphicon-chevron-right"></span></button>
-      </div>
-      <button type="button" class="btn btn-default" >Duplicate</button>
-      <button type="button" class="btn btn-default" ng-click="editProduct()">Save</button>
+      </div>-->
+      <!-- <button type="button" class="btn btn-default" >Duplicate</button> -->
+      <button type="button" class="btn btn-default" ui-sref="admin.product">Cancel</button>
+      <button type="button" class="btn btn-default" ng-click="editProduct()">Save Product</button>
     </div>
   </div>
 
@@ -117,7 +118,7 @@
             <span style="font-size: 13px;">Description</span>
             <br>
             <div class="panel panel-default">
-              <div class="panel-heading" style="padding: 5px;">
+              <div class="panel-heading" style="padding: 5px;display: none">
                 <div class="btn-group" role="group" aria-label="...">
                   <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -159,14 +160,7 @@
             </div>
           </div>
 
-          <div class="placard">
-            <span style="font-size: 20px;">Images</span>
-              <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label>
-            <br>
-            <div class="drag-drop">
-              <img style="height:200px;width:150px;margin-left:0px;" ng-src="{{products.master.images[0].small_url}}">
-            </div>
-          </div>
+          <!--    previous images field    -->
 
           <div class="placard">
             <span style="font-size: 20px;">Pricing</span>
@@ -195,6 +189,30 @@
             <div style="float:right;"><button type="button" class="btn btn-default" ng-click="openModal('lg')">Edit Inventory</button></div>
             <br>
             <br>
+            <br>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <span style="font-size: 13px;">Inventory Policy</span></span>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <span style="font-size: 13px;">Barcode <span style="color:#95A7B7;">(ISBN, UPC, etc.)</span></span>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <select class="form-control" ng-model="luxire_product.product_inventory_policy" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[6].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <input type="text" class="form-control" ng-model="luxire_product.barcode">
+              </div>
+
+            </div>
             <!--<div class="row">
               <div class="col-lg-6 col-md-6">
                 <span style="font-size: 13px;">SKU <span style="color:#95A7B7;">(Stock keeping unit)</span></span>
@@ -238,7 +256,7 @@
               </div>
             </div>-->
             <br>
-            <input type="checkbox" ng-model="productData.taxFlag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Allow customers to purchase this product when it's out of stock</span>
+            <!-- <input type="checkbox" ng-model="productData.taxFlag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Allow customers to purchase this product when it's out of stock</span> -->
             <hr>
             <span style="font-size: 20px;">Shipping</span>
             <br>
@@ -255,14 +273,14 @@
             <div class="row">
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
-                  <div class="input-group">
+                  <div class="input-group" style="width:90%;">
                     <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="products.master.weight">
-                    <div class="input-group-btn">
-                      <select class="form-control" name="" style="margin-left: -1px; width: auto; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
-                        <option value="kg">kg</option>
-                        <option value="lb">lb</option>
-                        <option value="oz">oz</option>
-                        <option value="g">g</option>
+                    <div class="input-group-btn" style="width:30%;">
+                      <select class="form-control" ng-model="luxire_product.product_shipping_weight_unit" >
+                        <option value = "0" label = "Please Select"></option>
+                        <option ng-repeat="type in luxireProperties[7].value.split(',')" value="{{type}}">
+                            {{type}}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -274,19 +292,49 @@
             </div>
             <input type="checkbox" ng-model="productData.taxFlag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">This product requires shipping</span>
             <hr>
-            <!--<div class="row">
+
+          </div>
+          <div class="placard">
+            <h4 style="font-size: 20px;">Images</h4>
+            Add New Image
+            <input type="file" name="name" ng-file-select ng-file-change="upload_product_image($files)" value="">
+            <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
+            <img id="product_image" src="" alt="" />
+              <!-- <label style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload Product Image</label> -->
+              <!-- <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label> -->
+            <br>
+            <!-- <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label> -->
+
+            <div class="drag-drop">
+              <img ng-src="{{productImage}}" style="margin: 30px;">
+            </div>
+          </div>
+
+          <!-- <div class="placard" ng-show="true">
+            <span style="font-size: 20px;">Images</span>
+              <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label>
+            <br>
+            <div class="drag-drop">
+              <img style="height:200px;width:150px;margin-left:0px;" ng-src="{{products.master.images[0].small_url}}">
+            </div>
+          </div> -->
+          <div class="placard" ng-show="true">
+            <span style="font-size: 20px;">Swatch</span>
+            <br>
+            <div class="row">
               <div class="col-lg-6 col-md-6">
-                  <p style="font-size: 20px;">Variants</p>
-                  <span>Does this product come in multiple variations like size or color?</span>
+                <span style="font-size: 13px;">Price</span>
               </div>
-              <div class="col-lg-4 col-md-4">
-
+              <div class="col-lg-6 col-md-6">
               </div>
-              <div class="col-lg-2 col-md-2">
-                <button type="button" class="btn btn-default btn-primary" >Add variants</button>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <input type="number" class="form-control" ng-model="swatchPrice" ng-init="swatchPrice">
               </div>
-
-            </div>-->
+              <div class="col-lg-6 col-md-6">
+              </div>
+            </div>
           </div>
 
         </div>
@@ -324,7 +372,7 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.luxire_product_type.product_type">
+                <select class="form-control" ng-init="luxireProduct.luxire_vendor_master_id = 'shirts'" ng-model="luxire_product.luxire_product_type_id" ng-selected="luxire_product.luxire_product_type_id == item.id">
                   <option ng-repeat="item in products.luxire_product_type" value="{{item.product_type}}">{{item.product_type}}</option>
                 </select>
               </div>
@@ -337,12 +385,26 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.luxire_vendor_master_id">
-                  <option ng-repeat="item in products.luxire_vendor_master" value="{{item.id}}">{{item.name}}</option>
+                <select class="form-control" ng-model="luxire_product.luxire_vendor_master_id" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireVendor" value="{{type.id}}">
+                      {{type.name}}
+                  </option>
                 </select>
               </div>
             </div>
             <hr>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">SKU</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <input type="text" class="form-control" aria-label="..." ng-model="products.variants[0].sku" placeholder="product sku...">
+              </div>
+            </div>
+            <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Collections</span>
@@ -371,6 +433,16 @@
               </div>
             </div>
             <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">No of color</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.noOfColor" class="form-control">
+              </div>
+            </div>
             <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
@@ -393,11 +465,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.product_weave_type">
-                  <option value="plain">Plain Weave</option>
-                  <option value="twill">Twill Weave</option>
-                  <option value="satin">Satin Weave</option>
-                  <option value="basket">Basket Weave</option>
+                <select class="form-control"  ng-model="luxire_product.product_weave_type" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[0].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
                 </select>
               </div>
             </div>
@@ -420,11 +492,98 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.material">
-                  <option value="cotton">Cotton</option>
-                  <option value="silk">Silk</option>
-                  <option value="wool">Wool</option>
+                <select class="form-control" ng-model="luxire_product.material" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[1].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
                 </select>
+              </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Wash Care</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <select class="form-control" ng-model="luxire_product.wash_care" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[2].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Stiffness</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="luxire_product.stiffness">
+                    <div class="input-group-btn" style="width:30%;">
+                      <select class="form-control" ng-model="luxire_product.stiffness_unit" >
+                        <option value = "0" label = "Please Select"></option>
+                        <option ng-repeat="type in luxireProperties[8].value.split(',')" value="{{type}}">
+                            {{type}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Ounces</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.ounces" class="form-control">
+              </div>
+            </div>
+
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">GSM</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.gsm" class="form-control">
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Shrinkage</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.shrinkage" class="form-control">
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Pitch Sales</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <input type="text" ng-model="luxire_product.pitchSales" class="form-control">
               </div>
             </div>
             <br>
@@ -446,10 +605,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.pattern">
-                  <option value="checks">Checks</option>
-                  <option value="stripes">Stripes</option>
-                  <option value="printed">Printed</option>
+                <select class="form-control" ng-model="luxire_product.pattern" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[3].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
                 </select>
               </div>
             </div>
@@ -461,9 +621,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.transparency">
-                  <option value="opaque">Opaque</option>
-                  <option value="see through">See Through</option>
+                <select class="form-control" ng-model="luxire_product.transparency" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[4].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
                 </select>
               </div>
             </div>
@@ -475,9 +637,11 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxire_product.wrinkle_resistance">
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
+                <select class="form-control" ng-model="luxire_product.wrinkle_resistance" >
+                  <option value = "0" label = "Please Select"></option>
+                  <option ng-repeat="type in luxireProperties[5].value.split(',')" value="{{type}}">
+                      {{type}}
+                  </option>
                 </select>
               </div>
             </div>

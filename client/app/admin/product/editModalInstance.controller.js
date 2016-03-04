@@ -59,10 +59,13 @@ angular.module('luxire')
 		$scope.addQuantity=function(quantity){
 			console.log("add quantity is calling...");
 			$scope.luxireStock.physical_count_on_hands=parseInt($scope.luxireStock.physical_count_on_hands)+parseInt(quantity);
-		}
+      $scope.quantity='';
+    }
 		$scope.setQuantity=function(quantity){
 			console.log("add quantity is calling...");
 			$scope.luxireStock.physical_count_on_hands=parseInt(quantity);
+      $scope.quantity='';
+
 		}
 
 });
