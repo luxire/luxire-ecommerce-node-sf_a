@@ -90,7 +90,7 @@ exports.create = function(req, res){
   console.log('In order controller', req.cookies.guest_token);
   console.log(req.body);
   http.post({
-    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.orders,
     headers:{
       'content-type': 'application/json',
       'Cookie': 'guest_token='+req.cookies.guest_token
