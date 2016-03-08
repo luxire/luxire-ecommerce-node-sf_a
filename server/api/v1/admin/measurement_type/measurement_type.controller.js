@@ -37,6 +37,7 @@ exports.getMeasurementTypeById = function(req, res) {
 
 };
 exports.createMeasurementType = function(req, res){
+  console.log('create measurement type', req.params);
       http.post({
         uri: constants.spree.host+constants.spree.measurement_types+'?token='+req.headers['X-Spree-Token'],
         headers:{'content-type': 'application/json'},
@@ -98,6 +99,7 @@ exports.deleteMeasurementType= function(req, res) {
   });
 }
 
+/*Utility to store image and return url of stored image*/
 exports.add_image = function(req, res){
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
@@ -121,6 +123,46 @@ exports.add_image = function(req, res){
     http
       .post({
         uri: constants.spree.host+'/custom_images?token='+req.headers['X-Spree-Token'],
+        formData: formDataToPost
+      }, function(error, response, body){
+        if(error){
+          res.status(500).send(error);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        };
+      });
+  });
+
+};
+
+
+/*Utility to update image of product attribute*/
+exports.update_image = function(req, res){
+  console.log('request to update image', req.params.id);
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    console.log("fields", fields);
+    console.log("file object in node is: ",files);
+    var formDataToPost = {};
+    for (var key in fields){
+      console.log('key', key);
+      console.log('value', fields[key]);
+      formDataToPost[key] = fields[key];
+    }
+    if(files && files.image){
+      formDataToPost.image = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    console.log('formDataToPost', formDataToPost);
+    http
+      .put({
+        uri: constants.spree.host+constants.spree.measurement_types+"/"+req.params.id+'?token='+req.headers['X-Spree-Token'],
         formData: formDataToPost
       }, function(error, response, body){
         if(error){

@@ -49,7 +49,21 @@ angular.module('luxire')
     scope.remove();
   };
 
-  /*Image*/
+  /*Parent attr Image*/
+  $scope.upload_prod_attr_image = function(files){
+    console.log('prod attr image', files[0]);
+    $scope.prod_attr_image = files;
+    if (files && files.length) {
+      var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#parent_image').attr('src', e.target.result);
+       }
+       reader.readAsDataURL(files[0]);
+    }
+  };
+
+
+  /*Image attr image*/
   $scope.upload_image = function(files){
     console.log('attr image', files[0]);
     if (files && files.length) {
@@ -114,8 +128,7 @@ angular.module('luxire')
       {'key': 'description', 'value': ''},
       {'key': 'value', 'value': ''},
       {'key': 'category', 'value': ''},
-      {'key': 'sub_category', 'value': ''},
-      {'key': 'image', 'value': ''}
+      {'key': 'sub_category', 'value': ''}
 
       // [{
       //   'key': '',
@@ -166,9 +179,19 @@ angular.module('luxire')
   $scope.save = function(){
     console.log(array_to_object(target_object, $scope.data[0].key, $scope.data[0].value));
     var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
-    if(measurement_type['name']){
+    if(measurement_type['name'] && $scope.prod_attr_image && $scope.prod_attr_image.length){
       ProductAttributes.create(measurement_type)
       .then(function(data){
+        console.log('data after create', data);
+        ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
+        .then(function(data){
+          console.log(data);
+          alert('created successfuly');
+        }, function(error){
+          console.error(error);
+          alert('creation failed');
+
+        });
         console.log(data);
         console.log('created successfuly');
       }, function(error){
@@ -177,7 +200,7 @@ angular.module('luxire')
       });
     }
     else{
-      alert('Name can\'t be blank');
+      alert('Fill mandatory fields');
     }
   };
 
@@ -201,12 +224,27 @@ angular.module('luxire')
     return false;
   };
 })
-.controller('EditProductAttributesController',function($scope, ProductAttributes, $state, $stateParams){
+.controller('EditProductAttributesController',function($scope, ProductAttributes, $state, $stateParams, ImageHandler){
   console.log('stateParams', $stateParams);
   $scope.data = [{
     'key': 'Add Attributes',
     'value': []
   }];
+
+  $scope.checkParent = function(node){
+    if(node.$modelValue.key === 'image'){
+      console.log(node.$modelValue.key +'  '+ node.$parentNodeScope.$modelValue.key);
+      if(node.$parentNodeScope && node.$parentNodeScope.$modelValue.key === 'Add Attributes'){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return false;
+    };
+  };
 
   /*Image*/
   $scope.upload_image = function(files){
@@ -228,6 +266,17 @@ angular.module('luxire')
       console.log('files to upload',files[0]);
     }
   }
+
+  // $scope.upload_measurement_type_image = function(files){
+  //   if (files && files.length) {
+  //     $scope.measurement_attribute_image = files[0];
+  //     var reader = new FileReader();
+  //      reader.onload = function (e) {
+  //          $('#attr_image').attr('src', e.target.result);
+  //      }
+  //      reader.readAsDataURL(files[0]);
+  //   }
+  // };
 
   String.prototype.replaceAll = function(search, replacement) {
     var target = this;
@@ -269,13 +318,32 @@ angular.module('luxire')
 
   ProductAttributes.show($stateParams.id).then(function(data){
     delete data.data.id;
+    $('#parent_image').attr('src', ImageHandler.url(data.data.image));
+    delete data.data.image;
     object_to_array($scope.data[0]['value'], $scope.data[0]['key'], data.data)
     console.log(data);
   },
    function(error){
      $state.go('admin.product_attributes');
      console.log(error);
-   })
+   });
+
+
+
+
+   /*Parent attr Image*/
+   $scope.upload_prod_attr_image = function(files){
+     console.log('prod attr image', files[0]);
+     $scope.prod_attr_image = files;
+     if (files && files.length) {
+       var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#parent_image').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(files[0]);
+     }
+   };
+
   $scope.remove = function (scope) {
     scope.remove();
   };
@@ -359,20 +427,47 @@ angular.module('luxire')
 
   $scope.save = function(){
     var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
-    console.log(measurement_type);
-    if(measurement_type['name']){
+    if(measurement_type['name'] && $scope.prod_attr_image && $scope.prod_attr_image.length){
       ProductAttributes.update(measurement_type, $stateParams.id)
       .then(function(data){
+        console.log('data after create', data);
+        ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
+        .then(function(data){
+          console.log(data);
+          alert('Updated successfuly');
+        }, function(error){
+          console.error(error);
+          alert('Update failed');
+
+        });
         console.log(data);
-        console.log('update successful');
+        console.log('updated successfuly');
       }, function(error){
         console.log(error);
-        console.log('update Failed');
+        console.log('update failed');
       });
     }
     else{
-      alert('Name can\'t be blank');
+      alert('Fill mandatory fields');
     }
+
+
+
+    // var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
+    // console.log(measurement_type);
+    // if(measurement_type['name']){
+    //   ProductAttributes.update(measurement_type, $stateParams.id)
+    //   .then(function(data){
+    //     console.log(data);
+    //     console.log('update successful');
+    //   }, function(error){
+    //     console.log(error);
+    //     console.log('update Failed');
+    //   });
+    // }
+    // else{
+    //   alert('Name can\'t be blank');
+    // }
   };
 
   $scope.checkIsString = function(data){
