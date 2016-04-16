@@ -7,27 +7,42 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
     <link href="app/style.css" rel="stylesheet">
     <link href='lib/css/google-font-roboto.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
-    <link href="lib/css/font-awesome.min.css" rel="stylesheet"/>
+    <!-- <link href="lib/css/font-awesome.min.css" rel="stylesheet"/> -->
     <link rel="stylesheet" href="lib/css/bootstrap.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400' rel='stylesheet' type='text/css'>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 
     <script src="lib/js/jquery.min.js"></script>
     <!-- <script src="lib/js/angular.js"></script> -->
     <script src="lib/js/angular-v1.4.9.js"></script>
-    <script src="lib/js/angular-animate-v1.4.9.js"></script>
+    <script src="lib/js/angular-animate-1.5.0.js"></script>
     <script src="lib/js/bootstrap.min.js"></script>
     <script src="lib/js/ui-bootstrap-v1.1.2-2016feb.js"></script>
-    <!-- <script src="lib/js/ui-bootstrap-tpls.js"></script> -->
+    <script src="lib/js/ui-bootstrap-tpls.js"></script>
     <script src="lib/js/angular-route.min.js"></script>
     <script src="lib/js/angular-ui-router.min.js"></script>
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="lib/js/ng-inifinite-scroll.js"></script>
 
+    <!--Angular Aside-->
+    <script src="bower_components/angular-aside/dist/js/angular-aside.min.js"></script>
+
+    <link rel="stylesheet" href="bower_components/angular-aside/src/styles/animate.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="bower_components/angular-aside/dist/css/angular-aside.min.css" media="screen" title="no title" charset="utf-8">
+
+    <!--Angular auto complete for search--->
+
+    <script src="bower_components/angucomplete-alt/dist/angucomplete-alt.min.js"></script>
+
+    <!--Angular slider-->
+    <link rel="stylesheet" href="bower_components/angular-awesome-slider/dist/css/angular-awesome-slider.min.css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" src="bower_components/angular-awesome-slider/dist/angular-awesome-slider.min.js"></script>
 
 
     <!-- SPA routing configuration -->
@@ -73,8 +88,11 @@
     <script type="text/javascript" src="app/customer/customer.routes.js"></script>
     <script type="text/javascript" src="app/customer/customer.controllers.js"></script>
     <script type="text/javascript" src="app/customer/customer.services.js"></script>
+    <script type="text/javascript" src="app/customer/customer.directives.js"></script>
+    <link rel="stylesheet" href="app/customer/customer.css" media="screen" title="no title" charset="utf-8">
 
     <!--Landing-->
+    <link rel="stylesheet" href="app/customer/customer_home/customer_home.css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" src="app/customer/customer_home/customer_home.controllers.js"></script>
     <script type="text/javascript" src="app/customer/customer_home/customer_home.services.js"></script>
 
@@ -82,12 +100,18 @@
     <script type="text/javascript" src="app/customer/product_listing/product_listing.controllers.js"></script>
     <script type="text/javascript" src="app/customer/product_listing/product_listing.services.js"></script>
 
+    <!--Collection-->
+    <script type="text/javascript" src="app/customer/collection/collection.controllers.js"></script>
+    <script type="text/javascript" src="app/customer/collection/collection.services.js"></script>
+
+
     <!--Product detail-->
     <script type="text/javascript" src="app/customer/product_detail/product_detail.controllers.js"></script>
     <script type="text/javascript" src="app/customer/product_detail/product_detail.services.js"></script>
 
     <script type="text/javascript" src="app/customer/cart/cart.controller.js"></script>
     <script type="text/javascript" src="app/customer/cart/cart.services.js"></script>
+    <link rel="stylesheet" href="app/customer/cart/cart.css" media="screen" title="no title" charset="utf-8">
 
     <script type="text/javascript" src="app/customer/checkout/checkout-address.controller.js"></script>
     <script type="text/javascript" src="app/customer/checkout/checkout-delivery.controller.js"></script>
@@ -95,6 +119,16 @@
 
     <script type="text/javascript" src="app/customer/invoices/invoice.controller.js"></script>
     <script type="text/javascript" src="app/customer/invoices/invoice.service.js"></script>
+
+
+    <script type="text/javascript" src="app/customer/customer_auth/customer_auth.controller.js"></script>
+    <script type="text/javascript" src="app/customer/customer_auth/customer_auth.services.js"></script>
+
+    <script type="text/javascript" src="app/customer/my_account/my_account.controller.js"></script>
+    <script type="text/javascript" src="app/customer/my_account/my_account.services.js"></script>
+
+    <script type="text/javascript" src="app/customer/attribute_detail/attribute_controller.js"></script>
+
 
 
     <!--Customer facing ends-->
@@ -134,6 +168,10 @@
 
     <!--File upload for html5 browsers-->
     <script src="lib/js/angular-file-upload.min.js"></script>
+
+    <!--File Upload new 160316-->
+    <!-- <script src="lib/js/angular-file-upload-160316.js"></script> -->
+
 
     <!--md5 Encryption-->
     <script src="lib/js/md5.js"></script>
@@ -259,6 +297,20 @@
     <!-- *************************** -->
     <script src="app/filter/filter1.controller.js" charset="utf-8"></script>
     <!-- <script src="app/filter/filter.controller.js" charset="utf-8"></script> -->
+
+    <!-- luxire properties routing-->
+    <script src="app/admin/luxireProperties/luxirePropertiesHome.controller.js"></script>
+    <script src="app/admin/luxireProperties/addLuxireProperties.controller.js"></script>
+    <script src="app/admin/luxireProperties/editLuxireProperties.controller.js"></script>
+    <script src="app/admin/luxireProperties/luxireProperties.services.js"></script>
+
+    <!--Taxonomies -->
+    <script type="text/javascript" src="app/admin/taxonomy/taxonomy.controller.js"></script></script>
+    <script type="text/javascript" src="app/admin/taxonomy/taxonomy.service.js"></script>
+
+    <script type="text/javascript" src="app/admin/standard_sizes/standard_size.controller.js"></script>
+    <script type="text/javascript" src="app/admin/standard_sizes/standard_size.services.js"></script>
+
 
   </body>
 </html>
