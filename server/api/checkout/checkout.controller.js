@@ -85,6 +85,23 @@ exports.checkout_payment  = function(req, res){
 exports.checkout_gateway_response = function (req, res){
   console.log(req.body);
   console.log(path.resolve('server/views'));
+  http.post({
+    uri: 'http://54.169.41.36:3000/receive_ebs_responses/ebs_response.json',
+    body: JSON.stringify(req.body),
+    headers: {
+      'content-type': 'application/json',
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    }
+  },function(error, response, body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      console.log('payment response', body);
+      res.status(200).render(path.join(path.resolve('server/views')+'/payment_response.ejs'),{ txn_res: JSON.parse(body)});
+//      res.status(response.statusCode).send(body);
+    };
+});  
   // var txn_res = {
   // "ResponseCode":"0",
   // "ResponseMessage":"Transaction Successful","DateCreated":"2016-01-29 15:11:17",
@@ -98,7 +115,7 @@ exports.checkout_gateway_response = function (req, res){
   //  "IsFlagged":"NO","TransactionID":"127442933","PaymentMethod":"1001",
   //  "RequestID":"11283982","SecureHash":"35fcb0df939b3ad05f6d0b8faec44b70"};
   // res.status(200).send(req.body);
-  res.status(200).render(path.join(path.resolve('server/views')+'/payment_response.ejs'),{ txn_res: req.body });
+  //res.status(200).render(path.join(path.resolve('server/views')+'/payment_response.ejs'),{ txn_res: req.body });
 };
 
 /*Apply coupon code*/
