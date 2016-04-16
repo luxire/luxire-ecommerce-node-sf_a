@@ -7,6 +7,9 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
     </div>
   </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
   <div class="row" style="height: 93vh;margin-left: 0px; margin-right: 0px">
     <div class="container-fluid admin-console-content">
       <script type="text/ng-template" id="nodes_renderer.html">
@@ -50,6 +53,7 @@
           <ul>
             <li>Name and Image are  mandatory fields.</li>
             <li>Description should not contain '#'</li>
+            <li>Where ever we need selection, against the key add two child options and defaults.Option contain available options and default has default option.</li>
             <li>Categories of Measurement Types: customize, personalize, measurement</li>
             <li>Sub categories of Measurement Types: 'std' for standard measurement attributes</li>
             <li>Sub categories of Measurement Types: 'body' for body measurement attributes</li>
@@ -64,9 +68,14 @@
             <img id="parent_image" src="" alt="" /><br>
           </div>
 
-          <div class="placard">
+          <div class="placard" ng-init="image_size='64x64'">
             <h4 style="font-size: 20px;">Image Upload</h4>
-            Url extractor
+            Url extractor <br>
+
+            Size<br>
+            <input type="radio" ng-model="image_size" value="64x64" name="small">small &nbsp;
+            <input type="radio" ng-model="image_size" value="128x128" name="medium" >medium
+
             <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value=""><br>
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
             <img id="attr_image" src="" alt="" /><br><br>
@@ -86,9 +95,10 @@
     </div>
   </div>
 </div>
-<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
-  <img src="lib/assets/loader.gif"/>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
+
 
 <!-- <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">

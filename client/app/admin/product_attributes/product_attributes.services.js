@@ -31,11 +31,14 @@ angular.module('luxire')
      });
   };
 
-  this.add_image = function(image){
+  /*Custom image*/
+  this.add_image = function(image, size){
     console.log('image', image);
+    console.log('size', size);
     var fd = new FormData();
     fd.append('source', 'measurement type');
     fd.append('image', image);
+    fd.append('size', size+'#');
     console.log('fd', fd);
     return $http.post('api/v1/admin/measurement_types/images', fd, {
         transformRequest: angular.identity,

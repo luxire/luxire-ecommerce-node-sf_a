@@ -6,6 +6,9 @@
     <button type="button" style="margin-right: 2%" class="btn btn-primary" ui-sref="admin.product_attributes_new">Add New</button>
   </div>
 </div>
+<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+  <img src="lib/assets/loader.gif"/>
+</div>
 <div class="container-fluid admin-console-content">
     <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;margin-bottom: 10%">
       <div class="row" style="margin:0px; background-color: white;">
@@ -16,7 +19,11 @@
         </div>
       </div>
       <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-        <div class="input-group">
+        <div class="left-inner-addon">
+          <i class="fa fa-search"></i>
+          <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for product attributes...">
+        </div>
+        <!-- <div class="input-group">
           <div class="input-group-btn">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span></button>
           <ul class="dropdown-menu">
@@ -26,10 +33,19 @@
             <li role="separator" class="divider"></li>
             <li><a href="#">Separated link</a></li>
           </ul>
-          </div><!-- /btn-group -->
+          </div>
           <input type="text" class="form-control" aria-label="...">
-        </div>
+        </div> -->
       </div>
+
+      <div class="row " style="margin:0px; background-color: white; padding: 20px;">
+        <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;">
+          <div class="" style="color:black; font-size:120%;">
+            <center>Data not Found</center>
+          </div>
+        </div>
+        <div ng-show="!(filteredResults.length == 0)">
+
       <div class="row" style="margin:0px; background-color: white;text-align: left;">
         <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1">
           <input type="checkbox">
@@ -45,25 +61,28 @@
         </div>
       </div>
       <hr style="margin: 5px 2%">
-      <div ng-repeat="product_attribute in product_attributes" class="row" style="margin:0px; background-color: white;text-align: left;padding: 1% 0%;">
+      <div ng-repeat="product_attribute in product_attributes  | filter: { name: searchText } as filteredResults" class="row" style="margin:0px; background-color: white;text-align: left;padding: 1% 0%;">
         <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="margin-top: 2%">
           <input type="checkbox">
         </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
           <img ng-src="{{getImage(product_attribute.image)}}" alt="" />
         </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" >
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
           <a href="#" ng-click="edit_product_attribute($event, product_attribute.id)">{{product_attribute.name}}</a>
         </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" >
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
           {{product_attribute.category}}
         </div>
 
-        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" >
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="margin-top: 2%">
           <i href="#" class="fa fa-pencil-square-o" ng-click="edit_product_attribute($event, product_attribute.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
           <i class="fa fa-trash-o" ng-click="delete_product_attribute(product_attribute.id, $index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
         </div>
       </div>
+    </div>
+  </div>
+
     </div>
   </div>
 </div>

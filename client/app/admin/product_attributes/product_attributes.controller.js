@@ -1,16 +1,29 @@
 angular.module('luxire')
-.controller('ProductAttributesController', function($scope, ProductAttributes, $state, ImageHandler){
+.controller('ProductAttributesController', function($scope, $rootScope, ProductAttributes, $state, ImageHandler, $timeout){
   $scope.product_attributes = [];
+
+  //Alerts to display the message
+  $scope.alerts = [];
+  var alert = function(){
+    this.type = '';
+    this.message = '';
+  };
+  $scope.close_alert = function(index){
+    console.log(index);
+    $scope.alerts.splice(index, 1);
+  };
 
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   }
+  $scope.loading = true;
   ProductAttributes.index().then(function(data){
     // $scope.product_attributes = data.data.customization_attributes;
     angular.forEach(data.data, function(val, key){
       angular.forEach(val, function(value, key){
         $scope.product_attributes.push(value);
       });
+      $scope.loading = false;
     });
     // console.log(data.data);
     // angular.forEach(data.data, function(val,key){
@@ -31,10 +44,13 @@ angular.module('luxire')
     ProductAttributes.delete(delete_id).then(function(data){
       $scope.product_attributes.splice(index,1);
       console.log(data);
-      alert('Deleted successful');
+      $scope.alerts.push({type: 'success', message: 'Deleted successfuly!'});
+
     },function(error){
       console.log(error);
-      alert('Failed to delete');
+      // alert('Failed to delete');
+      $scope.alerts.push({type: 'danger', message: 'Deletion Failed!'});
+
     });
   };
 
@@ -44,7 +60,9 @@ angular.module('luxire')
     $state.go('admin.product_attributes_edit',{id: product_attribute_id});
   };
 })
-.controller('AddProductAttributesController',function($scope, ProductAttributes){
+
+
+.controller('AddProductAttributesController',function($scope, $state, ProductAttributes, $rootScope, $timeout){
   $scope.remove = function (scope) {
     scope.remove();
   };
@@ -63,7 +81,7 @@ angular.module('luxire')
   };
 
 
-  /*Image attr image*/
+  /*Image attr image for[custom image that returns url]*/
   $scope.upload_image = function(files){
     console.log('attr image', files[0]);
     if (files && files.length) {
@@ -73,7 +91,7 @@ angular.module('luxire')
            $('#attr_image').attr('src', e.target.result);
        }
        reader.readAsDataURL(files[0]);
-       ProductAttributes.add_image(files[0])
+       ProductAttributes.add_image(files[0], $scope.image_size)
        .then(function(data){
          $scope.image_url = data.data.image;
          console.log(data);
@@ -83,6 +101,8 @@ angular.module('luxire')
       console.log('files to upload',files[0]);
     }
   }
+
+
 
 
 
@@ -107,7 +127,9 @@ angular.module('luxire')
       });
     }
     else{
-      alert('key can\'t be empty');
+      // alert('key can\'t be empty');
+      $scope.alerts.push({type: 'danger', message: 'key can\'t be empty'});
+
     }
 
   };
@@ -128,7 +150,10 @@ angular.module('luxire')
       {'key': 'description', 'value': ''},
       {'key': 'value', 'value': ''},
       {'key': 'category', 'value': ''},
-      {'key': 'sub_category', 'value': ''}
+      {'key': 'sub_category', 'value': ''},
+      {'key': 'help', 'value': ''},
+      {'key': 'help_url', 'value': ''}
+
 
       // [{
       //   'key': '',
@@ -186,10 +211,15 @@ angular.module('luxire')
         ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
         .then(function(data){
           console.log(data);
-          alert('created successfuly');
+          $scope.alerts.push({type: 'success', message: 'created successfuly!'});
+          $timeout(function(){
+            $state.go('admin.product_attributes');
+          }, 3000)
+          // $state.go('admin.product_attributes');
+          // alert('created successfuly');
         }, function(error){
           console.error(error);
-          alert('creation failed');
+          $scope.alerts.push({type: 'danger', message: 'failed to create!'});
 
         });
         console.log(data);
@@ -200,7 +230,7 @@ angular.module('luxire')
       });
     }
     else{
-      alert('Fill mandatory fields');
+      $scope.alerts.push({type: 'danger', message: 'Fill mandatory fields!'});
     }
   };
 
@@ -224,7 +254,7 @@ angular.module('luxire')
     return false;
   };
 })
-.controller('EditProductAttributesController',function($scope, ProductAttributes, $state, $stateParams, ImageHandler){
+.controller('EditProductAttributesController',function($scope, $rootScope, ProductAttributes, $state, $stateParams, ImageHandler, $timeout){
   console.log('stateParams', $stateParams);
   $scope.data = [{
     'key': 'Add Attributes',
@@ -256,7 +286,7 @@ angular.module('luxire')
            $('#attr_image').attr('src', e.target.result);
        }
        reader.readAsDataURL(files[0]);
-       ProductAttributes.add_image(files[0])
+       ProductAttributes.add_image(files[0], $scope.image_size)
        .then(function(data){
          $scope.image_url = data.data.image;
          console.log(data);
@@ -316,11 +346,13 @@ angular.module('luxire')
     return $scope.data;
   };
 
+  $scope.loading = true;
   ProductAttributes.show($stateParams.id).then(function(data){
     delete data.data.id;
     $('#parent_image').attr('src', ImageHandler.url(data.data.image));
     delete data.data.image;
     object_to_array($scope.data[0]['value'], $scope.data[0]['key'], data.data)
+    $scope.loading = false;
     console.log(data);
   },
    function(error){
@@ -369,7 +401,10 @@ angular.module('luxire')
       });
     }
     else{
-      alert('key can\'t be empty');
+      // alert('key can\'t be empty');
+      $scope.alerts.push({type: 'danger', message: 'key can\'t be empty'});
+
+
     }
 
   };
@@ -427,28 +462,43 @@ angular.module('luxire')
 
   $scope.save = function(){
     var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
-    if(measurement_type['name'] && $scope.prod_attr_image && $scope.prod_attr_image.length){
+    if(measurement_type['name']){
       ProductAttributes.update(measurement_type, $stateParams.id)
       .then(function(data){
         console.log('data after create', data);
-        ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
-        .then(function(data){
-          console.log(data);
-          alert('Updated successfuly');
-        }, function(error){
-          console.error(error);
-          alert('Update failed');
+        if($scope.prod_attr_image && $scope.prod_attr_image.length){
+          ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
+          .then(function(data){
+            console.log(data);
+            // alert('Updated successfuly');
 
-        });
+          }, function(error){
+            console.error(error);
+            // alert('Update failed');
+
+
+          });
+
+        }
         console.log(data);
         console.log('updated successfuly');
+        $scope.alerts.push({type: 'success', message: 'updated successfully'});
+        $timeout(function(){
+          $state.go('admin.product_attributes');
+        }, 3000)
+
+
       }, function(error){
         console.log(error);
         console.log('update failed');
+        $scope.alerts.push({type: 'danger', message: 'update failed'});
+
       });
     }
     else{
-      alert('Fill mandatory fields');
+      // alert('Fill mandatory fields');
+      $scope.alerts.push({type: 'danger', message: 'Fill mandatory fields'});
+
     }
 
 
