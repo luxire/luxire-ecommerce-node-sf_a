@@ -1,0 +1,96 @@
+<style>
+  .ProductType-checkboxColumn{
+      display: inline-block;
+      width:30%;
+  }
+  .productType-DivAlign{
+      width: 50%;
+      /* Set the margin-left and margin-right automatically set */
+      margin-left:50%;
+      margin-right: 10%;
+      margin-top: 10%;
+      margin-bottom: 10%;
+      position: relative;
+  }
+  .productTypePlacard{
+
+      background-color: white;
+      border: 1px solid #D3DBE2;
+      border-radius: 4px;
+      padding: 4% !important;
+      margin-bottom: 15px;
+
+  }
+  p.capitalize {
+      text-transform: capitalize;
+  }
+</style>
+
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.taxonomy">Taxonomies </a> <span style="font-weight:100;color:#928CA2;">/{{taxonomyData}}</span>
+    </div>
+    <div class="col-lg-5 col-md-5">
+    </div>
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
+      <button type="button" class="btn btn-default" ng-click="updateTaxonomy()">Update</button>
+
+    </div>
+  </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" >
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <div class="productTypePlacard" >
+              <span style="font-size: 1.2em; font-weight: 900;">Name</span>
+              <br>
+              <input type="text" ng-model="taxonomyData" class="form-control" placeholder="Taxonomy">
+              <br>
+
+
+              <table>
+                  <thead>
+                    <!--if else condition for adding taxons-->
+                    <tr ng-if="taxons.length > 0">
+                      <th  style="font-size: 1.2em; font-weight: 900;">Taxons</th>
+                    </tr>
+                    <tr ng-if="taxons.length == 0">
+                      <th>
+                        <a class="required" ui-sref="admin.addCollections" style="font-size: 1.2em;">Create Taxons</a>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat= "taxon in taxons">
+                      <td style="padding-top:2%;width:15%;">
+                        <a ui-sref="admin.editCollections" ng-click="showEditCollections(taxon.id)" >{{taxon.name}}</a>
+                      </td>
+                    </tr>
+
+                  <tbody>
+              </table>
+
+              <br/><br/>
+              <div class="pull-right">
+                <button type="button" class="btn btn-default" ui-sref="admin.taxonomy">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="updateTaxonomy()">Update</button>
+              </div><br></div>
+              <br>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="6000">{{alert.message}}</uib-alert>
+</div>

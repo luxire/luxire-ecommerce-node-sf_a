@@ -1,0 +1,67 @@
+<style>
+  .ProductType-checkboxColumn{
+      display: inline-block;
+      width:30%;
+  }
+  .productType-DivAlign{
+      width: 50%;
+      /* Set the margin-left and margin-right automatically set */
+      margin-left:50%;
+      margin-right: 10%;
+      margin-top: 10%;
+      margin-bottom: 10%;
+      position: relative;
+  }
+  .productTypePlacard{
+
+      background-color: white;
+      border: 1px solid #D3DBE2;
+      border-radius: 4px;
+      padding: 4% !important;
+      margin-bottom: 15px;
+
+  }
+  p.capitalize {
+      text-transform: capitalize;
+  }
+</style>
+
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.taxonomy">Taxonomies </a> <span style="font-weight:100;color:#928CA2;">/{{new_taxonomy_name}}</span>
+    </div>
+    <div class="col-lg-5 col-md-5">
+    </div>
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
+    </div>
+  </div>
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" >
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <div class="productTypePlacard" >
+            <span class="required" style="font-size: 1.2em; font-weight: 900;">Name</span>
+            <br>
+            <input id="name" type="text" ng-model="new_taxonomy_name" class="form-control" placeholder="Taxonomy" autofocus>
+            <br>
+            <br/><br/>
+            <div class="pull-right">
+              <button type="button" class="btn btn-default" ui-sref="admin.taxonomy">Cancel</button>
+              <button type="button" class="btn btn-primary" ng-click="createTaxonomy()">Save</button>
+            </div>
+            <br/>
+          </div>
+          <br>
+        </div>
+      </div>
+      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+      </div>
+    </div>
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="6000">{{alert.message}}</uib-alert>
+</div>
