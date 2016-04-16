@@ -9,7 +9,7 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
-      <button type="button" class="btn btn-primary" ui-sref="admin.styleMasterCreate">Add Style Master</button>
+      <button type="button" class="btn btn-default" ui-sref="admin.styleMasterCreate">Add Style Master</button>
     </div>
   </div>
 
@@ -31,7 +31,11 @@
 
 
         <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <div class="input-group col-md-12 col-xs-12">
+
+          <!-- start: 17th march change-7 commented dropdown   :rajib -->
+
+
+          <!-- <div class="input-group col-md-12 col-xs-12">
             <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Conditions <span class="caret"></span></button>
                   <ul class="dropdown-menu">
@@ -48,9 +52,23 @@
                 </span>
                 <input type="text" ng-model="searchText.$" class="form-control" aria-label="..." placeholder="Start typing to search for collections...">
             </div>
+          </div> -->
+          <div class="left-inner-addon ">
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for style master...">
           </div>
         </div>
+        <!-- end:  17th march change-7 commented dropdown  -->
+
                   <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+                    <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+                      <div class="" style="color:red; font-size:120%;">
+                          <center>Warning!</center>
+                          <center>No Results Found.</center>
+                          <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
+                      </div>
+                    </div>
+                    <div ng-show="!(filteredResults.length == 0)">  <!--  18th march chnage: add this extra outer div   @rajib -->
                     <table class="table table-hover admin-product-list">
                       <thead>
                         <tr>
@@ -72,30 +90,34 @@
                         </tr>
                       </thead>
                       <tbody style="padding:5%;">
-                        <tr ng-repeat="type in allStyleMasterType | filter:searchText">
+                        <tr ng-repeat="type in allStyleMasterType | filter: { name:searchText } as filteredResults"> <!-- 18th march change in this line  @rajib-->
                             <td style="padding-right:0%;">
                               <div>
                                 <input <input type="checkbox" name="selectAll" value=""></input>
-                                <img src={{getImage(type.image)}} style="margin-left:2%;"></img>
+                                <img src={{getImage(type.image)}} style="padding-left:20%;"></img>
                               </div>
                             </td><td></td><td></td>
-                            <td>
+                            <td style="width:20%;">
                               <a ui-sref="admin.styleMasterEdit" ng-click="editStyleMaster(type.id)">{{ type.name }}</a>
                             </td>
-                            <td style="padding-right:60%;"> </td>
+                            <td style="padding-right:20%;"> </td>
                             <td>
-                              <button type="button" class="btn btn-info" ng-click="editStyleMaster(type.id)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
-                              <button type="button" class="btn btn-danger" ng-click="deleteStyleMaster(type.id,$index)"><i class="fa fa-trash-o"></i></button>
+                              <i class="fa fa-pencil-square-o" ng-click="editStyleMaster(type.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <i class="fa fa-trash-o" ng-click="deleteStyleMaster(type.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer;"></i>
                             </td>
                         </tr>
 
                       </tbody>
                     </table>
                   </div>
+                  </div>
         </div>
 
       </div>
     </div>
+  </div>
+  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
   </div>
 </div>
 <!-- end -->
