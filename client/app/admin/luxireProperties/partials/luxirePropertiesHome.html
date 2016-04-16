@@ -1,0 +1,116 @@
+<div class="container-fluid" style="height:100%" >
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-8 col-md-8" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Properties</span>
+    </div>
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+      <div class="btn-group" role="group" aria-label="...">
+      </div>
+      <button type="button" class="btn btn-default" ui-sref="admin.addluxireProperties" >Add Property</button>
+    </div>
+  </div>
+
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+
+  <div class="row" style="height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
+        <div class="row" style="margin:0px; background-color: white;"> <!--  17th march  changes-10 changes col val  in this div  @rajib-->
+          <div  class="col-lg-2 col-md-2" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+            <span style="font-size: 12px;">All Product Properties</span>
+          </div>
+          <div  class="col-lg-10 col-md-10" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+
+          </div>
+        </div>
+
+
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+          <!-- <div class="input-group col-md-12 col-xs-12">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Conditions <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">collection</a></li>
+                    <li><a href="#">collection</a></li>
+                    <li><a href="#">collection</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">collection</a></li>
+                  </ul>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+                <input type="text" ng-model="searchText.$" class="form-control" aria-label="..." placeholder="Start typing to search for collections...">
+            </div>
+          </div> -->
+
+          <div class="left-inner-addon "> <!--  17tha march changes-12  only in this div   @rajib-->
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for product propertie..." >
+          </div>
+        </div>
+                  <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+                    <!--  18th march change: add the next div to show no results     @rajib   -->
+                    <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+                      <div class="" style="color:red; font-size:120%;">
+                          <center>Warning!</center>
+                          <center>No Results Found.</center>
+                          <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
+                      </div>
+                    </div>
+                    <div ng-show="!(filteredResults.length == 0)"><!-- 18th march change : add this extra outer div    @rajib-->
+                    <table class="table table-hover admin-product-list">
+                      <thead>
+                        <tr>
+                          <th>
+                             <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
+                          </th><th></th><th></th>
+                          <th>
+                            Name
+                          </th>
+                          <th>
+
+                          </th>
+                          <th>
+
+                          </th>
+                          <th>
+
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody style="padding:5%;">
+                        <tr ng-repeat="property in propertiesJson | filter: { name:searchText } as filteredResults">
+                            <td style="padding-right:0%;">
+                              <div>
+                                <input <input type="checkbox" name="selectAll" value=""></input>
+                                <img src={{getImage(property.image)}} style="margin-left:2%;"></img>
+                              </div>
+                            </td><td></td><td></td>
+                            <td style="width:20%;">
+                              <a ui-sref="admin.editluxireProperties" ng-click="goToeditProperties(property.id)">{{ property.name }}</a>
+                            </td>
+                            <td style="padding-right:20%;"> </td>
+                            <td>
+                              <i class="fa fa-pencil-square-o" ng-click="goToeditProperties(property.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <i class="fa fa-trash-o" ng-click="deleteProperty(property.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer;"></i>
+                            </td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+  </div>
+</div>
+<!-- end -->

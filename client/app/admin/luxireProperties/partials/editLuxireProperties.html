@@ -1,0 +1,105 @@
+<!--style>
+   .aligning{
+     margin-left: 50px;
+     margin-right: 50px;
+     margin-bottom: 500px;
+
+
+   }
+   div.sm {
+     display: block;
+     float: left;
+     width: 35%;
+     margin-bottom: 10px;
+   }
+div.sm:last-child:after {
+ clear: both;
+ content: " ";
+ display: block;
+ height: 10px;
+ overflow: hidden;
+ }
+</style-->
+<style>
+.ProductType-checkboxColumn{
+   display: inline-block;
+   width:30%;
+}
+.productType-DivAlign{
+   width: 50%;
+   /* Set the margin-left and margin-right automatically set */
+   /*margin-left:10%;
+   margin-right: 10%;
+   margin-top: 10%;
+   margin-bottom: 10%;*/
+   position: relative;
+}
+.productTypePlacard{
+
+   background-color: white;
+   border: 1px solid #D3DBE2;
+   border-radius: 4px;
+   padding: 4% !important;
+   margin-bottom: 15px;
+
+}
+
+
+</style>
+<div class="container-fluid" style="height:100%">
+ <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+   <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+     <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Properties </span>
+   </div>
+   <div class="col-lg-5 col-md-5">
+   </div>
+   <div class="col-lg-3 col-md-3" style="text-align: right;">
+     <!--<button type="button" class="btn btn-default" ng-click="activeButton('products')">Cancel</button>-->
+     <button type="button" class="btn btn-default" ng-click="saveProperty()" >Save Property</button>
+     <button type="button" class="btn btn-default" ui-sref="admin.luxirePropertiesHome" >Cancel</button>
+
+   </div>
+ </div>
+ <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+   <img src="lib/assets/loader.gif"/>
+ </div>
+ <div class="row" style="margin-left: 0px;height: 93vh;">
+   <div class="container-fluid admin-console-content">
+     <div class="row" >
+      <div class="col-lg-2 col-md-2"> </div>
+       <div class="col-lg-8 col-md-8">
+         <div class="row" style="margin-top:10%;">
+           <div class="col-lg-2 col-md-2"> </div>
+
+           <!-- -->
+           <div class="productTypePlacard col-lg-8 col-md-8" ng-init="emptyNameMsg=false; emptyValueMsg=false;">
+             <span style="font-size: 13px;" class="required" >Property Name</span>
+             <br>
+             <input id="name" type="text" ng-model="propertyValue.name" ng-blur="checkStyleMasterName(propertyValue.name)" class="form-control" placeholder="" autofocus>
+             <span ng-show="emptyNameMsg" style="color:red;">Name Can Not Be Empty</span>
+
+             <br><br>
+             <span style="font-size: 13px;" class="required">Property Value</span>
+             <br>
+             <input id="value" type="text" ng-model="propertyValue.value" ng-blur="checkStyleMasterValue(property.value)" class="form-control" placeholder="">
+             <span ng-show="emptyValueMsg"><span  style="color:red;">Property Value Can Not Be Empty</span><br></span>
+             <span style="font-size: 80%; color: #808080;">Property value should be comma separated values<span>
+             <div class="row" style="margin-top:5%;">
+                <center> <button type="button" class="btn btn-default" ng-click="saveProperty()" >Save Property</button></center>
+             </div>
+           </div>
+           <div class="col-lg-2 col-md-2"> </div>
+
+         </div>
+
+       </div>
+       <div class="col-lg-2 col-md-2"> </div>
+     </div>
+   </div>
+
+ </div>
+ <!-- 16th march updated angular alert   -->
+ <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+   <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+ </div>
+</div>
