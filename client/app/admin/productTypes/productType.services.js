@@ -19,18 +19,8 @@ angular.module('luxire')
 
 
   this.updateProductType = function(id,productType) {
-    console.log(productType);
-    var fd = new FormData();
-    // fd.append('image', productType.image);
-    angular.forEach(productType, function(val, key){
-      fd.append(key, val);
-    })
-    console.log('form in service', fd);
-    return $http.put(AdminConstants.api.product_types+"/"+id, fd, {
-        transformRequest: angular.identity,
-        headers: {'Content-Type': undefined}
-     });
-		// return $http.put(AdminConstants.api.product_types+"/"+id, angular.toJson(productType));
+    console.log("productType",productType);
+		 return $http.put(AdminConstants.api.product_types+"/"+id, angular.toJson(productType));
 	}
 
   this.getMeasurementTypes = function(){
@@ -39,4 +29,22 @@ angular.module('luxire')
   this.getProductTypeById= function(id){
     return $http.get(AdminConstants.api.product_types+"/"+id);
   }
+  /*upload image*/
+
+  this.update_image = function(image, id){
+    console.log("update image service");
+    console.log("image value passed",image);
+    console.log("id passed",id);
+  //  console.log('image', image);
+   var fd = new FormData();
+   fd.append('image', image);
+   console.log("value appended");
+   return $http.put(AdminConstants.api.product_types+'/'+id+'/images', fd, {
+       transformRequest: angular.identity,
+       headers: {'Content-Type': undefined}
+    });
+    console.log("end of update service");
+ };
+
+ /*-------*/
 })

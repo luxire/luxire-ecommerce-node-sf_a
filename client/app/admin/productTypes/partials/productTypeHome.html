@@ -4,25 +4,20 @@
 }
 </style>
 
-
 <div class="container-fluid" style="height:100%" >
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types</span>
     </div>
     <div class="col-lg-2 col-md-2">
-
     </div>
     <div class="col-lg-4 col-md-4" style="text-align: right;">
-
       <button type="button" class="btn btn-primary" ui-sref="admin.new_productTypes">Add a productType</button>
     </div>
   </div>
-
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
     <img src="lib/assets/loader.gif"/>
   </div>
-
   <div class="row" style="margin-left: 0px;height: 93vh;">
     <div class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
@@ -31,114 +26,58 @@
             <span style="font-size: 12px;">All Product Types</span>
           </div>
           <div  class="col-lg-10 col-md-10" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
-
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <div class="input-group">
-            <div class="input-group-btn">
-
+        <div class="row" style="margin:0px; background-color: white; padding: 20px; padding-left:2%;">
+          <div class="left-inner-addon">
+            <i class="fa fa-search"></i>
+            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for product types...">
           </div>
         </div>
         <div class="row " style="margin:0px; background-color: white; padding: 20px;">
-          <table class="table table-hover admin-productType-list">
-            <thead>
-              <tr>
-                <th>
-                  <input type="checkbox" name="selectAll" value="">
-                </th>
-                <th>
-                </th>
-                <th>
-                  Product Type
-                </th>
-                <th>
-                  Description
-                </th>
-                <!--th>
-                  Attributes
-                </th-->
-
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="x in productTypeJsonResponse.data track by $index">
-                <td>
-                  <input type="checkbox" name="selectAll" value="">
-                </td>
-                <td>
-                  <img src="{{getImage(x.image)}}" alt="" />
-                </td>
-                <td>
-                    <a ui-sref="admin.editProductType" ng-click="showEditProdTypes(x.id)" >{{x.product_type}}</a>
-                </td>
-                <td>
-                  {{x.description}}
-                </td>
-                <!--td>
-                  <select onmousedown="if(this.options.length>3){this.size=5;}" onchange='this.size=0;' onblur="this.size=0;" id="select-button-width-change">
-                    <option ng-repeat="attribute in measurementTypeJson.data" value="attribute.name" size="2">{{attribute.name}}</option>
-                  </select-->
-
-
-
-                  <!--button class="btn btn-primary " uib-dropdown-toggle type="button" data-toggle="uib-dropdown" aria-haspopup="true" aria-expanded="true" >{{selectedAttribute}}
-                    <span class="caret">
-                    </span></button>
-                    <ul class="uib-dropdown-menu" aria-labelledby="dropdownMenu1">
-                      <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxitemselected(attribute)">{{attribute.name}}</a></li></ul>-->
-                  <!--    <div class="btn-group">
-                        <button type="button" class="btn btn-default">Action</button>
-                        <button type="button" class="btn btn-default uib-dropdown-toggle" data-toggle="uib-dropdown" aria-haspopup="true">
-                          <span class="caret"></span>
-                          <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="uibdropdown-menu" role="menu" aria-expanded="false">
-                          <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxitemselected(attribute)">{attribute.name}}</a></li>
-
-                        </ul>
-                      </div>-->
-
-
-
-<!--
-                  <div class="uib-dropdown">
-                        <button class="btn btn-default uib-dropdown-toggle" type="button" id="uib-dropdownMenu1" data-toggle="uib-dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{selectedItem}}
-                            <span class="caret"></span>
-                            <ul class="uib-dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li ng-repeat="attribute in productAttributes"><a ng-click="dropboxAttributeselected(attribute)">{{attribute.name}}</a></li>
-                            </ul>
-                        </button>
-
-                    </div>
--->
-
-
-
-
-
-                </td>
-
-                <td>
-                  <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
-                    <i href="#" class="fa fa-pencil-square-o" ng-click="showEditProdTypes(x.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>
-                </td>
-                <td>
-                    <i class="fa fa-trash-o" ng-click="deleteProductTypes(x.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
-                  </div>
-                  <!--button type="button" class="btn btn-danger" ng-click="deleteProductTypes(x.id,$index)">X</button-->
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;">
+            <div class="" style="color:black; font-size:120%;">
+              <center>Data not Found</center>
+            </div>
+          </div>
+          <div ng-show="!(filteredResults.length == 0)">
+            <div class="row" style="margin:0px; background-color: white;text-align: left;">
+              <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1">
+                <input type="checkbox">
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                Image
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                Product Type
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              </div>
+            </div>
+            <hr style="margin: 5px 2%">
+            <div ng-repeat="productType in productTypeJsonResponse.data   | filter: { product_type: searchText } as filteredResults" class="row" style="margin:0px; background-color: white;text-align: left;padding: 1% 0%;">
+              <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="margin-top: 2%">
+                <input type="checkbox">
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                <img style="max-width: 30%" ng-src="{{getImage(productType.image)}}" alt="" />
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+                <a ui-sref="admin.editProductType" ng-click="showEditProdTypes(productType.id)" >{{productType.product_type}}</a>
+              </div>
+              <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+              </div>
+              <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="margin-top: 2%">
+                <i href="#" class="fa fa-pencil-square-o" ng-click="showEditProdTypes(productType.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="fa fa-trash-o" ng-click="deleteProductTypes(productType.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+              </div>
+            </div>
+          </div>
         </div>
-        <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
-          <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
-        </div>
-
       </div>
     </div>
   </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>

@@ -1,136 +1,84 @@
-
-
-  <!--style>
-    .aligning{
-      margin-left: 50px;
-      margin-right: 50px;
-      margin-bottom: 500px;
-
-
-    }
-    div.sm {
-      display: block;
-      float: left;
-      width: 35%;
-      margin-bottom: 10px;
-    }
-div.sm:last-child:after {
-  clear: both;
-  content: " ";
-  display: block;
-  height: 10px;
-  overflow: hidden;
-  }
-</style-->
 <style>
-.ProductType-checkboxColumn{
-    display: inline-block;
-    width:30%;
-}
-.productType-DivAlign{
-    width: 50%;
-    /* Set the margin-left and margin-right automatically set */
-    margin-left:50%;
-    margin-right: 10%;
-    margin-top: 10%;
-    margin-bottom: 10%;
-    position: relative;
-}
-.productTypePlacard{
+  .ProductType-checkboxColumn{
+      display: inline-block;
+      width:30%;
+  }
+  .productType-DivAlign{
+      width: 50%;
+      /* Set the margin-left and margin-right automatically set */
+      margin-left:50%;
+      margin-right: 10%;
+      margin-top: 10%;
+      margin-bottom: 10%;
+      position: relative;
+  }
+  .productTypePlacard{
 
-    background-color: white;
-    border: 1px solid #D3DBE2;
-    border-radius: 4px;
-    padding: 4% !important;
-    margin-bottom: 15px;
+      background-color: white;
+      border: 1px solid #D3DBE2;
+      border-radius: 4px;
+      padding: 4% !important;
+      margin-bottom: 15px;
 
-}
-p.capitalize {
-    text-transform: capitalize;
-}
-
-
+  }
+  p.capitalize {
+      text-transform: capitalize;
+  }
 </style>
+
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: center;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types / <span style="color: black;">Edit</span></span>
+    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.productTypes">Product Types </a> <span style="font-weight:100;color:#928CA2;">/{{productTypeData.product_type}}</span>
     </div>
     <div class="col-lg-5 col-md-5">
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
-      <!--<button type="button" class="btn btn-default" ng-click="activeButton('products')">Cancel</button>-->
       <button type="button" class="btn btn-default" ng-click="updateProductType()">Update</button>
     </div>
+  </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
   </div>
   <div class="row" style="margin-left: 0px;height: 93vh;">
     <div class="container-fluid admin-console-content">
       <div class="row" >
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
           <div class="productTypePlacard" >
-              <span style="font-size: 15px;font-weight: 900;">Name</span>
-              <br>
-              <input type="text" ng-model="productTypeData.product_type" class="form-control" placeholder="Product Type">
-              <br>
-              <span style="font-size: 15px;font-weight: 900;">Description</span>
-              <br>
-              <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
-              <input ng-file-select ng-file-change="uploadFile($files)" type="file" name="choose file">
-              <br>
-              <!-- <img  alt="" /> -->
-              {{productTypeData.image}}
-              <img src="{{getImage(productTypeData.image)}}" alt="" />
-              <img id="product_type_image"  src="" alt="" />
-              <p style="font-size: 15px;font-weight: 900;">Attributes</p>
-<!--          working code
-
-              <input type="text" placeholder="search" class="form-control" ng-model="search_attr.$">
-              <br>
-
-                <div class="ProductType-checkboxColumn" ng-repeat="attribute in measurementTypeJson.data | filter: search | orderBy:'name'" >
-                    <input type="checkbox" ng-model="attribute.selected"  value="{{attribute.name}}" >&nbsp;&nbsp;&nbsp;{{attribute.name}}<br/></div><br/><br/>
-
-
-
-<div ng-repeat="(key, value) in measurementTypeJson.data">
-{{key}}
-<>
-</div>
--->
-
-                <div  ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
-                <p class="capitalize" style="font-size: 15px;font-weight: 500;" >{{requiredAttributeName}}</p>
-                  <div class="ProductType-checkboxColumn" ng-repeat="v in value" >
-                    <input type="checkbox" ng-model="v.selected"  value="{{v.name}}"  >&nbsp;&nbsp;&nbsp;{{v.name}}<br/></div><br/><br/></div><br/><br/><br/>
-
-
-
-
-
-
-              <div class="pull-right">
-                <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="updateProductType1()">Update</button>
-              </div><br></div>
-              <br>
+            <span class="required" style="font-size: 1.2em;font-weight: 900;">Name</span>
+            <br>
+            <input id="name" type="text" ng-model="productTypeData.product_type" class="form-control" placeholder="Product Type" autofocus>
+            <br>
+            <span style="font-size: 1.2em;font-weight: 900;">Description</span>
+            <br>
+            <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
+            <span class="required" style="font-size: 1.2em;">Image</span><br/>
+            <input id="prod_input_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus><br/>
+            <img id="product_type_image" src=""/></br><br/>
+            <p style="font-size: 1.2em;font-weight: 900;">Attributes</p>
+            <div  ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
+              <p class="capitalize" style="font-size: 15px;font-weight: 900;" >{{requiredAttributeName}}</p>
+              <div class="ProductType-checkboxColumn" ng-repeat="v in value" >
+                  <input type="checkbox" ng-model="v.selected"  value="{{v.name}}"  >&nbsp;&nbsp;&nbsp;{{v.name}}<br/>
+              </div>
+              <br/><br/>
+            </div>
+            <br/><br/><br/>
+            <div class="pull-right">
+              <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
+              <button type="button" class="btn btn-primary" ng-click="updateProductType()">Update</button>
+            </div><br>
           </div>
-
-        </div>
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-
+          <br>
         </div>
       </div>
-
+      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+      </div>
     </div>
   </div>
 </div>
 <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
-  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="1000">{{alert.message}}</uib-alert>
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
-
-   <!--</div>
-  </div>
-</div>-->
