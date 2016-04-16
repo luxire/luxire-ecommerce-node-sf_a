@@ -1,11 +1,13 @@
 angular.module('luxire')
 .service('AdminConstants',function(){
 	this.api = {
-		host: 'http://54.169.41.36:3000',
+		host: 'http://104.215.254.150:3000/',
 		products: '',
 		product_types: '/api/v1/admin/product_types',
 		measurement_types: '/api/v1/admin/measurement_types',//product attributes
-		style_masters: '/api/v1/admin/style_masters'
+		style_masters: '/api/v1/admin/style_masters',
+		standard_size: '/api/v1/admin/standard_size',
+		allTaxons: '/api/v1/admin/allTaxons'
 	};
 })
 .service('prototypeObject',function(){
@@ -134,8 +136,4 @@ angular.module('luxire')
 		});
 		return deferred.promise;
 	}
-})
-//For demo
-.run(function(products) {
-	products.getProductByID(17);
 })
