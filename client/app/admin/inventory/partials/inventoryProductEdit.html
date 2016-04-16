@@ -12,7 +12,7 @@
         <!--<button type="button" class="btn btn-default">Export</button>-->
         <!--<button type="button" class="btn btn-default" ng-click="importModal('md')">Import</button>-->
       </div>
-      <button type="button" class="btn btn-danger" ui-sref="admin.inventory">Cancel</button>
+      <button type="button" class="btn btn-default" ui-sref="admin.inventory">Cancel</button>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-3" style="float-right;">
               <!-- <button type="button" class="btn btn-default" ui-sref="admin.inventory">Home</button> -->
-              <button type="button" class="btn btn-default" ng-click="showEditInventory(parentSku)">Add products</button>
+              <!--<button type="button" class="btn btn-default" ng-click="showEditInventory(parentSku)">Add products</button>--> <!--  30th march  -->
 
               <!-- <button class="btn-default" ui-sref="admin.inventory">Inventory Home</button> -->
               <!-- <button class="btn-default" ng-click="showEditInventory(parentSku)" >Ad</button> -->
@@ -89,22 +89,26 @@
                     <td>
                       <input type="checkbox" name="selectAll" value="">
                     </td>
-                    <td style="width:15%;">
-                      <span ng-if="product.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{product.master.images[0].mini_url}}" style="width:40px; height:40px;"></span>
+                    <td style="width:15%; padding-left:2%;">
+                      <!-- <span ng-if="product.master.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.master.images[0].mini_url}}" style="width:40px; height:40px;"></span> -->
+                      <span ng-if="product.master.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.master.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
+                      <span ng-if="product.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
                     </td>
-                    <td style="width:15%;">
+                    <td style="width:40%;">
                       <a  ng-click="showEditProducts(product)">{{product.name}}</a>
                     </td>
-                    <td style="width:15%;">
+                    <td style="width:10%;">
                       Shirts
                     </td>
-                    <td style="width:15%;">
+                    <td style="width:10%;">
                       Luxire
                     </td>
-                    <td style="width:25%;"></td>
+                    <td style="width:5%;"></td>
                     <td>
-                      <button type="button" class="btn btn-info" ng-click="showEditProducts(x)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
-                      <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)"><i class="fa fa-trash"></i></button>
+                      <!-- <button type="button" class="btn btn-info" ng-click="showEditProducts(x)"><i class="fa fa-pencil-square-o" style="color:blue;"></i></button>
+                      <button type="button" class="btn btn-danger" ng-click="deleteProducts(x.id,$index)"><i class="fa fa-trash"></i></button> -->
+                      <i class="fa fa-pencil-square-o" ng-click="showEditProducts(product)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-trash-o" ng-click="deleteProducts(product.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer;"></i>
                     </td>
                   </tr>
                 </tbody>

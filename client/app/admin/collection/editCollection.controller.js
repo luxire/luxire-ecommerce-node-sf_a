@@ -44,19 +44,19 @@ angular.module('luxire')
     }
 
     $scope.loadItems = function(query){
-      var product_ids=[];
-      var x = products.searchProducts(query);
-      console.log("-----------------------");
-      tagIdsObj.push(x);
-      console.log("query\n\n",tagIdsObj);
-      console.log("rule :",$scope.rule);
-      console.log("rule id: ",$scope.rule.id);
-      angular.forEach($scope.rule, function (product, key) {
-        console.log('angularforeach val', product);
-        product_ids.push(product.id);
-      })
-      console.log("ids \n",product_ids);
-      console.log("-----------------------");
+      // var product_ids=[];
+      // var x = products.searchProducts(query);
+      // console.log("-----------------------");
+      // tagIdsObj.push(x);
+      // console.log("query\n\n",tagIdsObj);
+      // console.log("rule :",$scope.rule);
+      // console.log("rule id: ",$scope.rule.id);
+      // angular.forEach($scope.rule, function (product, key) {
+      //   console.log('angularforeach val', product);
+      //   product_ids.push(product.id);
+      // })
+      // console.log("ids \n",product_ids);
+      // console.log("-----------------------");
       return products.searchProducts(query);
     };
 

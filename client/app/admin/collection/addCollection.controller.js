@@ -12,9 +12,10 @@ angular.module('luxire')
   $scope.manualCon=false;
   $scope.rule=[];
   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  $scope.save_collection_btn=true;
+  $scope.save_collection_btn=false;
   $scope.tagtitle='';
   $scope.tagdesc='';
+  $scope.taxonomieJson = '';
   // ------------------------------------------
   $scope.activeSaveCollectionBtn=function(){
       $scope.save_collection_btn=false;
@@ -173,7 +174,8 @@ $scope.$on('$destroy', function() {
 
          collections.getCollections().then(function(data) {
            console.log(' from admin collection response is: ');
-           console.log(data);
+           $scope.taxonomieJson = data.data;
+           console.log("*******   all taxonomie value is: \n\n",$scope.taxonomieJson);
 
          }, function(err){
            console.log(err);
@@ -186,7 +188,7 @@ $scope.$on('$destroy', function() {
              console.log(' from admin collection response is: ');
              console.log(data);
          		//$scope.collectionResponse = data;
-            console.timeEnd("taxonTime: ");
+              console.timeEnd("taxonTime: ");
              //console.log($scope.collectionResponse);
          	}, function(err){
          		console.log(err);
@@ -303,6 +305,10 @@ $scope.$on('$destroy', function() {
           }
 
           // create a taxons
+          $scope.selectedTaxonomieOption = function(taxonomie_id){
+            console.log("selected taxonomie id is: ",taxonomie_id);
+            $scope.selectedTaxonomieId = taxonomie_id;
+          }
 
           $scope.createTaxons = function() {
             $scope.id=1;
@@ -319,13 +325,12 @@ $scope.$on('$destroy', function() {
                     "pretty_name": $scope.tagdesc,
                     "description": $scope.tagdesc,
                     "product_ids": product_ids,
-                    "parent_id": 1,
-                    "taxonomy_id": 1
+                    "taxonomy_id": $scope.selectedTaxonomieId
 
                   }
               }
             console.log($scope.tid,$scope.taxonObj);
-           collections.createTaxons($scope.id,$scope.taxonObj).then(function(data){
+           collections.createTaxons($scope.selectedTaxonomieId,$scope.taxonObj).then(function(data){
               alert('taxon created successfully....');
               //$scope.activeButton('products')
             }, function(info) {

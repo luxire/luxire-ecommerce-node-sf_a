@@ -23,16 +23,16 @@
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
           <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
-            <span style="font-size: 12px;">All Variants</span>
+            <span style="font-size: 12px;">All Inventory</span> <!-- 17th march change the name   @rajib -->
           </div>
           <div  class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
 
           </div>
         </div>
 
-
+        <!-- 17th march changes-13  below one div commented and added one div    @rajib-->
         <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <div class="input-group col-md-12 col-xs-12">
+          <!-- <div class="input-group col-md-12 col-xs-12">
             <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Variants <span class="caret"></span></button>
             <ul class="dropdown-menu">
@@ -49,110 +49,127 @@
                 </span>
                 <input type="text" ng-model="searchText.$" class="form-control" aria-label="..." placeholder="Start typing to search for variants...">
             </div>
+          </div> -->
+
+          <div class="left-inner-addon ">
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for Inventory..." >
           </div>
         </div>
 
                   <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-                    <table class="table table-hover admin-product-list">
-                      <thead>
-                        <tr>
-                          <th>
-                             <div><button type="button"><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></button></div>
-                          </th>
+                      <div class="row" ng-show="filteredResult.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+                        <div class="" style="color:red; font-size:120%;">
+                            <center>Warning!</center>
+                            <center>No Results Found.</center>
+                            <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
+                        </div>
+                      </div>
+                      <div ng-show="!(filteredResult.length == 0)"> <!--  18th march changes: add this outer div   @rajib -->
+                      <table class="table table-hover admin-product-list">
+                        <thead>
+                          <tr>
+                            <th>
+                              <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
+                            </th>
 
-                          <th>
-                            Parent sku
-                          </th>
+                            <th>
+                              Parent sku
+                            </th>
 
-                          <th>
-                            Threshold
-                          </th>
-                          <th>
-                            Rack
-                          </th>
+                            <th>
+                              Threshold
+                            </th>
+                            <th>
+                              Rack
+                            </th>
 
-                          <th>
-                            Backorderable
-                          </th>
+                            <th>
+                              Backorderable
+                            </th>
 
-                          <th>
-                            <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;font-size:100%;"class="glyphicon glyphicon-triangle-bottom"></span>
+                            <th>
+                              <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;font-size:100%;"class="glyphicon glyphicon-triangle-bottom"></span>
 
-                          </th>
+                            </th>
 
-                        </tr>
-                      </thead>
-                      <tbody ng-init="set=false;add=true;variant.setInitial;" style="">
-                        <tr ng-repeat="variant in inventoryObj|filter:searchText | orderBy:predicate:reverse track by variant.id">
-                            <td >
-                              <div><input <input type="checkbox" name="selectAll" value=""> </input></div>
-                            </td>
-                            <td style="width:15%;">
-                              <a ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
-                            </td>
-                            <td style="width:10%;">
-                              <span style="text-align:center" ng-if="variant.threshold">{{variant.threshold}}</span>
-                              <span style="text-align:center" ng-if="variant.threshold == null">N/A</span>
-                            </td>
-                            <td style="width:10%;">
-                              <span style="text-align:center" ng-if="variant.rack">{{variant.rack}}</span>
-                              <span style="text-align:center" ng-if="variant.rack == null">N/A</span>
-                            </td>
-                            <td style="width:15%;">
-                              <span style="text-align:center" ng-if="variant.backorderable">{{variant.backorderable}}</span>
-                              <span style="text-align:center" ng-if="variant.backorderable == null">N/A</span>
-                            </td>
-                            <td style="width:20%;">
-                              <span style="text-align:center" ng-if="variant.physical_count_on_hands">{{variant.physical_count_on_hands}}</span>
-                              <span style="text-align:center" ng-if="variant.physical_count_on_hands == null">N/A</span>
+                          </tr>
+                        </thead>
+                        <tbody ng-init="set=false;add=true;variant.setInitial;" style="">
+                          <tr ng-repeat="variant in inventoryObj | filter: { parent_sku:searchText } as filteredResult"> <!-- 17th march change the filteration in this line  @rajib-->
+                              <td >
+                                <div><input <input type="checkbox" name="selectAll" value=""> </input></div>
+                              </td>
+                              <td style="width:20%;">
+                                <a ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
+                              </td>
+                              <td style="width:8%;">
+                                <span style="text-align:center" ng-if="variant.threshold">{{variant.threshold}}</span>
+                                <span style="text-align:center" ng-if="variant.threshold == null">N/A</span>
+                              </td>
+                              <td style="width:8%;">
+                                <span style="text-align:center" ng-if="variant.rack">{{variant.rack}}</span>
+                                <span style="text-align:center" ng-if="variant.rack == null">N/A</span>
+                              </td>
+                              <td style="width:10%;">
+                                <span style="text-align:center" ng-if="variant.backorderable">{{variant.backorderable}}</span>
+                                <span style="text-align:center" ng-if="variant.backorderable == null">N/A</span>
+                              </td>
+                              <td style="width:20%;">
+                                <span style="text-align:center" ng-if="variant.physical_count_on_hands">{{variant.physical_count_on_hands}}</span>
+                                <span style="text-align:center" ng-if="variant.physical_count_on_hands == null">N/A</span>
 
-                              <span ng-hide="variant.set_value==0||variant.set_value==undefined">
-                                <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                                <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.set_value}}</span>
-                              </span>
-                              <span ng-hide="variant.setInitial==0||variant.setInitial==undefined">
-                                <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                                <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.setInitial}}</span>
-                              </span>
-                            </td>
-                            <td>
-                                <form class="no-wrap">
-                                  <div class="btn-group" style="float:left;height:35px; ">
-                                      <div class="col-lg-2 col-md-2" style="padding:0%;">
-                                        <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#4293C2;margin-right:0%;" ng-click="add=true;set=false;">add</button>
-                                      </div>
-                                      <div class="col-lg-2 col-md-2" style="padding-left:0%;padding-right:0%;">
-                                        <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#4293C2; margin-right:0%;" ng-click="add=false;set=true;">set</button>
-                                      </div>
-                                      <div class="col-lg-2 col-md-2" style="margin-top:2%; padding-left:0%;margin-left:-1%;">
-                                        <span ng-if="add" style="">
-                                          <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;width:200%;line-height:30px;">
-                                        </span>
-                                        <span ng-if="set">
-                                          <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px; width:200%;line-height:30px;">
-                                        </span>
-                                      </div>
-                                      <div class="no-wrap col-lg-2 col-md-2" style="padding-left:6%;">
-                                        <span ng-if="add">
-                                          <button type="button" ng-disabled="(variant.set_value==0||variant.set_value==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="updateQuantityValue(variant)" data-toggle="modal" data-target="#myModal"  >save</button>
-                                        </span>
-                                        <span ng-if="set">
-                                          <button type="button" ng-disabled="(variant.setInitial==0||variant.setInitial==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="setQuantityValue(variant)" data-toggle="modal" data-target="#myModal" >save</button>
-                                        </span>
-                                      </div>
-                                      <div class="col-lg-4 col-md-4">
+                                <span ng-hide="variant.set_value==0||variant.set_value==undefined">
+                                  <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                                  <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.set_value}}</span>
+                                </span>
+                                <span ng-hide="variant.setInitial==0||variant.setInitial==undefined">
+                                  <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                                  <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.setInitial}}</span>
+                                </span>
+                              </td>
+                              <td style="width:40%;">
+                                  <form class="no-wrap">
+                                    <div class="btn-group" style="float:left;height:35px; ">
+                                        <div class="col-lg-2 col-md-2" style="padding:0%;">
+                                          <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#4293C2;margin-right:0%;" ng-click="add=true;set=false;">add</button>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2" style="padding-left:0%;padding-right:0%;">
+                                          <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#4293C2; margin-right:0%;" ng-click="add=false;set=true;">set</button>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2" style="margin-top:2%; padding-left:0%;margin-left:-1%;">
+                                          <span ng-if="add" style="">
+                                            <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;width:200%;line-height:30px;">
+                                          </span>
+                                          <span ng-if="set">
+                                            <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px; width:200%;line-height:30px;">
+                                          </span>
+                                        </div>
+                                        <div class="no-wrap col-lg-2 col-md-2" style="padding-left:6%;">
+                                          <span ng-if="add">
+                                            <button type="button" ng-disabled="(variant.set_value==0||variant.set_value==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="updateQuantityValue(variant)" data-toggle="modal" data-target="#myModal"  >save</button>
+                                          </span>
+                                          <span ng-if="set">
+                                            <button type="button" ng-disabled="(variant.setInitial==0||variant.setInitial==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="setQuantityValue(variant)" data-toggle="modal" data-target="#myModal" >save</button>
+                                          </span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
 
-                                      </div>
-                                </div>
+                                        </div>
+                                  </div>
 
-                                </form>
+                                  </form>
 
-                            </td>
+                              </td>
+                              <td ng-if="filteredResult.length == 0">
+                                  <span>No results found..</span>
+                              </td>
 
-                        </tr>
+                          </tr>
 
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                     <!-- start modal section -->
 
                     <div id="myModal" class="modal fade" role="dialog">

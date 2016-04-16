@@ -9,7 +9,7 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
-      <button type="button" class="btn btn-primary" ui-sref="admin.addCollections">Add Collections</button>
+      <button type="button" class="btn btn-default" ui-sref="admin.addCollections">Add Collections</button>
     </div>
   </div>
 
@@ -74,25 +74,17 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="x in allTaxonomies.data.taxonomies[0].root.taxons">
+                        <tr ng-repeat="x in allTaxonsJson">
                             <td>
                               <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></div>
                             </td>
-                            <td>
+                            <td style="width:20%;">
                               <a ui-sref="admin.editCollections" ng-click="showEditTaxons(x.id)">{{ x.name }}</a>
                             </td>
+                            <td style="width:50%;"></td>
                             <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-
-                            <td>
-                              <button type="button" class="btn btn-danger" ng-click="deleteTaxons(x.id,$index)">X</button>
+                              <i class="fa fa-pencil-square-o" ng-click="showEditTaxons(x.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <i class="fa fa-trash" ng-click="deleteTaxons(x.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
                             </td>
                         </tr>
 

@@ -3,6 +3,7 @@ angular.module('luxire')
 $scope.hideAdd=true;
 //$scope.hideSave=true;
 $scope.reverse=false;
+$scope.loading = true;
 var count=0;
 $scope.example={
   "value": 0
@@ -84,13 +85,26 @@ $scope.productVariantObj=[
     }
 ];
 //*******  start inventory update part ***********
-$scope.inventoryObj=[];
+$scope.inventoryObj = [];
+$scope.noInventoryMsg = false;
+//$scope.loading= false;
 luxireStocks.luxireStocksIndex().then(function(data) {
+  $scope.loading= true;
   console.log(' from admin inventory home  response is: ');
-  console.log(data);
+  console.log("inventory object: ",data.data);
   $scope.inventoryObj=data.data;
+  if(data.data.length == 0){  // 18th march
+    console.log("inventory length:",data.data.length);
+    $scope.noInventoryMsg = true;
+  }else{
+    $scope.noInventoryMsg = false;
+  }
+  $scope.loading= false;
+
 }, function(err){
  console.log(err);
+ $scope.loading= true;
+
 })
 
 $scope.sortQuantity=function(){

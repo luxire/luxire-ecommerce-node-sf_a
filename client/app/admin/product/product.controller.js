@@ -1,9 +1,85 @@
 angular.module('luxire')
 
-.controller('ProductController',function($scope, products, luxireProperties, luxireVendor, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
+.controller('ProductController',function($scope, products, allTaxons, luxireProperties, luxireVendor, fileReader, prototypeObject, $uibModal, $log, createProductModalService, $state, CSV){
+
+  // --------------------------   START GET ALL PRODUCTS TO SHOW    -------------------------
+  $scope.loading = true;
+  products.getProducts().then(function(data) {
+    $scope.jsonresponse = data;
+    $scope.loading = false;
+  }, function(info){
+    console.log(info);
+  })
+
+  var totalTaxons;
+  allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
+    $scope.taxonsJson = data.data;
+    console.log("all taxons per page: ",$scope.taxonsJson);
+    $scope.loading = false;
+    totalTaxons = data.data.count;
+    allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
+      $scope.allTaxonsJson = data.data.taxons;
+      console.log("total taxons are: ",$scope.allTaxonsJson);
+      $scope.loading = false;
+    }, function(info){
+      console.log(info);
+    })
+  }, function(info){
+    console.log(info);
+  })
+
+
+
+  // --------------------------   END GET ALL PRODUCTS TO SHOW    -------------------------
+
+
 
   $scope.productData  = new prototypeObject.product();
 
+  // var post_url = window.localStorage.luxire_token ? window.localStorage.luxire_token : window.sessionStorage.luxire_token;
+  // console.log('post_url', post_url);
+  // var uploader = $scope.uploader = new FileUploader({
+  //          url: '/api/v1/admin/products/'+24+'/variants/'+34+'/images?token='+post_url
+  //        });
+  //
+  //        // CALLBACKS
+  //
+  //              uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+  //                  console.info('onWhenAddingFileFailed', item, filter, options);
+  //              };
+  //              uploader.onAfterAddingFile = function(fileItem) {
+  //                  console.info('onAfterAddingFile', fileItem);
+  //              };
+  //              uploader.onAfterAddingAll = function(addedFileItems) {
+  //                  console.info('onAfterAddingAll', addedFileItems);
+  //              };
+  //              uploader.onBeforeUploadItem = function(item) {
+  //                  console.info('onBeforeUploadItem', item);
+  //              };
+  //              uploader.onProgressItem = function(fileItem, progress) {
+  //                  console.info('onProgressItem', fileItem, progress);
+  //              };
+  //              uploader.onProgressAll = function(progress) {
+  //                  console.info('onProgressAll', progress);
+  //              };
+  //              uploader.onSuccessItem = function(fileItem, response, status, headers) {
+  //                  console.info('onSuccessItem', fileItem, response, status, headers);
+  //              };
+  //              uploader.onErrorItem = function(fileItem, response, status, headers) {
+  //                  console.info('onErrorItem', fileItem, response, status, headers);
+  //              };
+  //              uploader.onCancelItem = function(fileItem, response, status, headers) {
+  //                  console.info('onCancelItem', fileItem, response, status, headers);
+  //              };
+  //              uploader.onCompleteItem = function(fileItem, response, status, headers) {
+  //                  console.info('onCompleteItem', fileItem, response, status, headers);
+  //              };
+  //              uploader.onCompleteAll = function() {
+  //                  console.info('onCompleteAll');
+  //              };
+  //
+  //              console.info('uploader', uploader);
+  //
 
   $scope.upload_product_image = function(files){
     console.log('product image', files[0]);
@@ -28,23 +104,6 @@ angular.module('luxire')
       console.error(error);
     });
   };
-
-
-  /*Loading all products*/
-  $scope.loading = true;
-  products.getProducts().then(function(data) {
-    console.log('admin');
-    console.log(data);
-    $scope.jsonresponse = data;
-    $scope.loading = false;
-    console.log($scope.jsonresponse);
-  }, function(info){
-    console.log(info);
-  })
-
-  $scope.colorTags = []
-  $scope.seasonTags = []
-
   $scope.disabled = function(date, mode) {
     return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
   };
@@ -103,54 +162,7 @@ angular.module('luxire')
     return '';
   };
 
-  $scope.dummyColors = [
-    {"text": "Red"},
-    {"text": "White"},
-     {"text": "Black"},
-     {"text": "Gray"},
-     {"text": "Powder Blue"},
-     {"text": "Navy Blue"},
-     {"text": "Royal Blue"},
-     {"text": "Green"},
-     {"text": "Light Green"},
-     {"text": "Yellow"},
-     {"text": "Orange"},
-     {"text": "Crimson"},
-     {"text": "Vermilion"},
-     {"text": "Dark Red"},
-     {"text": "Light Gray"},
-     {"text": "Light Blue"}
-  ]
-
-  $scope.dummySeasons = [
-    {"text": "Summer"},
-    {"text": "Winter"},
-    {"text": "Spring"},
-    {"text": "Autumn"},
-    {"text": "Monsoon"}
-  ]
-
-  $scope.loadTags = function(query) {
-    if (query == 'color') {
-      return $scope.dummyColors;
-    } else if (query == 'season') {
-      return $scope.dummySeasons;
-    }
-   return {};
- }
-
-  $scope.getAllProducts = function (data) {
-    $scope.loading = true;
-    products.getProducts().then(function(data) {
-  		console.log('admin');
-      console.log(data);
-  		$scope.jsonresponse = data;
-      $scope.loading = false;
-      console.log($scope.jsonresponse);
-  	}, function(info){
-  		console.log(info);
-  	})
-  }
+    // --------------------------   START GET ALL PRODUCTS TO SHOW    -------------------------
 
 
   //controller function for file reader
@@ -181,10 +193,11 @@ angular.module('luxire')
       console.log(info);
     })
   }
+  // --------------------------   START GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
 
-  luxireProperties.getAllLuxireProperties().then(function(data) {
+  luxireProperties.luxirePropertiesIndex().then(function(data) {
     console.log('admin luxire properties values are ...');
-    console.log(data);
+    //console.log(data);
     $scope.luxireProperties = data.data;
     //$scope.loading = false;
     console.log($scope.luxireProperties);
@@ -194,6 +207,10 @@ angular.module('luxire')
   }, function(info){
     console.log(info);
   })
+
+    // --------------------------   END GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
+
+    // --------------------------   START GET ALL LUXIRE VENDORS  TO SHOW    -------------------------
 
   luxireVendor.getAllLuxireVendor().then(function(data) {
     console.log('admin luxire vendor values are ...\n\n');
@@ -205,6 +222,9 @@ angular.module('luxire')
     console.log(info);
   })
 
+  // --------------------------   END GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
+
+  // --------------------------   START ANGULAR ALERT FUNCTIONALITY    -------------------------
   $scope.alerts = [];
   var alert = function(){
     this.type = '';
@@ -215,7 +235,8 @@ angular.module('luxire')
     $scope.alerts.splice(index, 1);
   };
 
-  // ******************* start inventory modal part *****************
+  // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
+
 
   $scope.swatchPrice=1;
 	$scope.modalCount=0;
@@ -229,6 +250,8 @@ angular.module('luxire')
 	$scope.parentSkuFalseCount=0;
 	var productTypeId='';
 	var parentSkuObj='';
+  // --------------------------   START GET ALL PRODUCT TYPES TO SHOW    -------------------------
+
 	products.allProductType().then(function(data) {
 		//$scope.loading= false;
 		console.log("values of all product type \n\n");
@@ -240,13 +263,16 @@ angular.module('luxire')
 	})
 
 	$scope.showProductType=function(){
-		console.log("select product type is calling..");
-		 console.log("selected product type is "+$scope.newProductType.type);
+		 //console.log("select product type is calling..");
+		 //console.log("selected product type is "+$scope.newProductType.type);
 		 productTypeId=$scope.newProductType.type;
-		 console.log("selected product type id: "+productTypeId);
+		 //console.log("selected product type id: "+productTypeId);
 
 	}
 
+  // --------------------------   END GET ALL PRODUCT TYPES TO SHOW    -------------------------
+
+  // --------------------------   START CHECK PARENT SKU STATUS   -------------------------
 
   $scope.checkParentSku=function(sku){
     console.log("checkParentSku fun is calling 1...");
@@ -258,12 +284,15 @@ angular.module('luxire')
        $scope.parentSkuStatus=res.msg;
        if($scope.parentSkuStatus == "false") {
            console.log("parent sku false part");
+            // $scope.alerts.push({type: 'success', message: 'Inventory Not Exists!\nCreate The Inventory! '});
+            alert("inventory is not exists\n create the inventory!!");
 					 console.log("sku status: ",$scope.parentSkuStatus);
 					 parentSkuObj = parentSku;
 					 $scope.parentSkuFalseCount=0;
 					 console.log("perentskuObj: ",parentSkuObj);
-					 //$scope.parentSkuFalseCount++;
-					 //$scope.luxireStock={};
+           $scope.alerts.push({type: 'success', message: 'Create the inventory first..!'});
+           delete window.alert;
+           alert("create the inventory first..");
 
        }else{
 				 console.log("parent sku true part..");
@@ -281,118 +310,28 @@ angular.module('luxire')
      })
 
   }
-	function bytesToSize(bytes) {
-	 var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	 if (bytes == 0) return '0 Byte';
-	 var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-	 return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-	};
-	function CSVToArray(strData, strDelimiter) {
-    // Check to see if the delimiter is defined. If not,
-    // then default to comma.
-    strDelimiter = (strDelimiter || ",");
-    // Create a regular expression to parse the CSV values.
-    var objPattern = new RegExp((
-    // Delimiters.
-    "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
-    // Quoted fields.
-    "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-    // Standard fields.
-    "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
-    // Create an array to hold our data. Give the array
-    // a default empty first row.
-    var arrData = [[]];
-    // Create an array to hold our individual pattern
-    // matching groups.
-    var arrMatches = null;
-    // Keep looping over the regular expression matches
-    // until we can no longer find a match.
-    while (arrMatches = objPattern.exec(strData)) {
-        // Get the delimiter that was found.
-        var strMatchedDelimiter = arrMatches[1];
-        // Check to see if the given delimiter has a length
-        // (is not the start of string) and if it matches
-        // field delimiter. If id does not, then we know
-        // that this delimiter is a row delimiter.
-        if (strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
-            // Since we have reached a new row of data,
-            // add an empty row to our data array.
-            arrData.push([]);
-        }
-        // Now that we have our delimiter out of the way,
-        // let's check to see which kind of value we
-        // captured (quoted or unquoted).
-        if (arrMatches[2]) {
-            // We found a quoted value. When we capture
-            // this value, unescape any double quotes.
-            var strMatchedValue = arrMatches[2].replace(
-            new RegExp("\"\"", "g"), "\"");
-        } else {
-            // We found a non-quoted value.
-            var strMatchedValue = arrMatches[3];
-        }
-        // Now that we have our value string, let's add
-        // it to the data array.
-        arrData[arrData.length - 1].push(strMatchedValue);
-    }
-    // Return the parsed data.
-    return (arrData);
-}
-	function CSV2JSON(csv) {
-	    var array = CSVToArray(csv);
-	    var objArray = [];
-	    for (var i = 1; i < array.length; i++) {
-	        objArray[i - 1] = {};
-	        for (var k = 0; k < array[0].length && k < array[i].length; k++) {
-	            var key = array[0][k];
-	            objArray[i - 1][key] = array[i][k]
-	        }
-	    }
+  // --------------------------   END CHECK PARENT SKU STATUS   -------------------------
 
-	    var json = JSON.stringify(objArray);
-	    var str = json.replace(/},/g, "},\r\n");
+  // --------------   START OF OPEN MODAL FUNCTIONALITY TO UPLOAD CSV FILE    ---------------
 
-	    return str;
-	}
 	$scope.importModal=function(size){
 		var importCsvModalInstance = $uibModal.open({
 			animation: $scope.animationsEnabled,
 			templateUrl: 'importCsvModal.html',
 			controller: 'importCsvModalController',
-			size: size,
-			resolve: {
-				importValue: function () {
-					return {name: "rajib" };
-				}
-			}
+			size: 'lg'
 		});
 		importCsvModalInstance.result.then(function (res) {
-		$scope.importModalValue = res;
-
-		//console.log("modal return value is : \n\n",$scope.importModalValue);
-		var len=JSON.stringify($scope.importModalValue).length;
-		console.log("length: "+$scope.importModalValue.length);
-		console.log("len: "+bytesToSize(len));
-		var csvToJsonData = CSV2JSON($scope.importModalValue);
-		console.log("csv to json file is: \n\n"+typeof(csvToJsonData));
-		//console.log("file content: ",csvToJsonData);
-		console.log("csv to json file is: \n\n"+typeof(JSON.parse(csvToJsonData)));
-		var data=JSON.parse(csvToJsonData);
-
-		csvFileUpload.uploadCsvFile(res).then(function(data) {
-	    console.log("in import modal controller response is: ",data);
-
-	  }, function(info){
-	    console.log(info);
-	  })
-
+  
 
 	}, function () {
 		$log.info('Modal dismissed at: ' + new Date());
 	});
 
 	}
+  // --------------   END OF OPEN MODAL FUNCTIONALITY TO UPLOAD CSV FILE    ---------------
 
+  // --------------   START OF OPEN MODAL FUNCTIONALITY TO SHOW THE INVENTORY    ---------------
 
   $scope.openModal = function (size) {
     $scope.modalCount++;
@@ -437,119 +376,201 @@ angular.module('luxire')
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
+  // --------------   END OF OPEN MODAL FUNCTIONALITY TO SHOW THE INVENTORY    ---------------
+
+  // --------------   START OF TAGS INPUT DECLARATION   ---------------
+
+  $scope.colorTags = [];
+  $scope.seasonTags = [];
+  $scope.tagsarr = [];
+  $scope.colorTagsArr = [];
+
+  $scope.dummySeasons = [
+    {"text": "Summer"},
+    {"text": "Winter"},
+    {"text": "Spring"},
+    {"text": "Autumn"},
+    {"text": "Monsoon"}
+  ]
+
+  $scope.loadSeason = function(query) {
+    if (query == 'color') {
+      return $scope.dummyColors;
+    } else if (query == 'season') {
+      return $scope.dummySeasons;
+    }
+   return {};
+ }
+
+ // --------------   END OF TAGS INPUT DECLARATION   ---------------
+
+ // start of bind the all taxons value
+ $scope.rule=[];
+ $scope.taxon_ids=[];
+
+ $scope.loadItems = function(query){
+   console.log('load items query', query);
+   return $scope.allTaxonsJson;
+ };
 
 
-	$scope.createProduct = function() {
-    console.log("in fun create product : \nproduct object:\n",$scope.product);
-		console.log("luxire_product object: \n",$scope.luxireProduct);
-		console.log("luxire stock obj:\n",$scope.luxireStock);
 
-		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
-		if($scope.parentSkuStatus==true){
-				console.log("create product true part...");
-				$scope.postProductData={};
-				$scope.product["luxire_product_attributes"] = {};
-				$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
-				$scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
-				$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
-				$scope.postProductData["product"]=$scope.product;
-				console.log("inventory id: "+$scope.luxireStock.id);
-				console.log(" create product true part\n before posting the product data is: ",$scope.postProductData);
-				products.createProduct($scope.postProductData).then(function(data){
-          //$scope.alerts.push({type: 'success', message: 'Product created successfully!'});
-          products.add_variant_image(data.data.id, data.data.master.id, $scope.product_image)
-          .then(function(data){
-            console.log(data);
+ // end of bind the all taxons value
+
+
+ // --------------   START OF CREATING THE PRODUCT STRUCTURE TO POST    ---------------
+
+  	$scope.createProduct = function() {
+        console.log("inventory obj length: "+(JSON.stringify($scope.luxireStock).length));
+        var tagarr=[];
+        if( $scope.tagsArr == undefined || $scope.tagsArr.length == 0 ){
+
+        }else{
+          for(i=0;i<$scope.tagsarr.length;i++){
+            tagarr[i]=$scope.tagsarr[i].text;
+          }
+          console.log("color tags arr values are: \n",tagarr.toString());
+        }
+
+        var colorArr=[];
+        if($scope.colorTagsArr == undefined || $scope.colorTagsArr.length == 0 ){
+
+        }else{
+          for(i=0;i<$scope.colorTagsArr.length;i++){
+            colorArr[i]=$scope.colorTagsArr[i].text;
+          }
+          console.log("color tags arr values are: \n",colorArr.toString());
+        }
+
+        var seasonArr=[];
+        if( $scope.seasonTagsArr == undefined || $scope.seasonTagsArr.length == 0){
+
+        }else{
+          for(i=0;i<$scope.seasonTagsArr.length;i++){
+            seasonArr[i]=$scope.seasonTagsArr[i].text;
+          }
+          console.log("color tags arr values are: \n",seasonArr.toString());
+        }
+        for(var i=0;i<$scope.rule.length;i++){
+          $scope.taxon_ids[i]=$scope.rule[i].id;
+        }
+  		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
+      $scope.luxireProduct["product_tags"]=tagarr.toString(); // storing the tags input values entered
+      $scope.luxireProduct["product_color"]=colorArr.toString();  // storing the color tags input values entered
+      $scope.luxireProduct["suitable_climates"]=seasonArr.toString(); // storing the seasons tags input values entered
+
+
+  		if($scope.parentSkuStatus==true){   // creating product for existing parent_sku
+  				console.log("create product true part...");
+          // merge all the three product structure
+  				$scope.postProductData={};
+  				$scope.product["luxire_product_attributes"] = {};
+          $scope.product["taxon_ids"] = $scope.taxon_ids;
+  				$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
+  				$scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
+  				$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
+  				$scope.postProductData["product"]=$scope.product;
+  				console.log("inventory id: "+$scope.luxireStock.id);
+  				console.log(" create product true part\n before posting the product data is: ",$scope.postProductData);
+          // first create product functionality is invoked
+        	products.createProduct($scope.postProductData).then(function(data){
             //$scope.alerts.push({type: 'success', message: 'Product created successfully!'});
-          }, function(error){
-            console.error(error);
-          });
 
-          console.log("\n\ncreated product  is: \n\n",data);
-          console.log("\n\ncreated product  id is: \n\n",data.id);
-          $scope.pid=data.id;
-          var variants = {
-              "variant":{
-              "sku": "swt_"+$scope.product.sku,
-              "price": $scope.swatchPrice
+            console.log("\n\ncreated product with id is: \n\n",data.id);
+            // creating structure of adding the variants
+            $scope.pid=data.id;
+            var variants = {
+                "variant":{
+                "sku": "swt_"+$scope.product.sku,
+                "price": $scope.swatchPrice
+              }
+            };
+
+            console.log("variant object is: ",variants);
+            console.log("pid: ",$scope.pid);
+            // creating the swatch variant
+            products.createVariants(data.id,variants).then(function(data){
+              // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
+
+              //alert('variant is  successfully added');
+              $scope.activeButton('products')
+            }, function(info) {
+              console.log(info);
+            });
+
+            var UpdatedVariantObj = {
+              "variant": {
+                "track_inventory": true
+              }
             }
-          };
-          // variants["variant"]["sku"] = "swt_"+$scope.product.sku;
-          // variants["variant"]["price"] = $scope.swatchPrice;
-          console.log("variant object is: ",variants);
-          console.log("pid: ",$scope.pid);
-          products.createVariants(data.id,variants).then(function(data){
-            // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
+            console.log("product id: ",data.id);
+            console.log("master id: ",data.master.id);
+            products.updateVariants(data.id, data.master.id,UpdatedVariantObj).then(function(data){
+              // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
+              alert('variant is  successfully updated');
+              $scope.activeButton('products');
+            }, function(info) {
+              console.log(info);
+            });
 
-            //alert('variant is  successfully added');
-            $scope.activeButton('products')
-          }, function(info) {
-            console.log(info);
-          })
 
-		      alert('Product successfully added');
-		      $scope.activeButton('products')
-		    }, function(info) {
-		      console.log("creating product error:\n\n",info);
-		    })
+  		      alert('Product successfully added');
+  		      $scope.activeButton('products')
+  		    }, function(info) {
+  		      console.log("creating product error:\n\n",info);
+  		    })
+          // updating the inventory
+  				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
+            // $scope.alerts.push({type: 'success', message: 'Stock updated successfully!'});
 
-				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
-          // $scope.alerts.push({type: 'success', message: 'Stock updated successfully!'});
-
-		      //alert('inventory successfully updated');
-		      $scope.activeButton('products')
-		    }, function(info) {
-		      console.log(info);
-		    })
+  		      //alert('inventory successfully updated');
+  		      $scope.activeButton('products')
+  		    }, function(info) {
+  		      console.log(info);
+  		    })
 
 
 
 
-		}else{
+  		}else{ // creating product for non existing parent_sku
+      console.log("product creation false part is calling...");
+      console.log("parent sku: ",$scope.luxireProduct.parent_sku);
+      console.log("luxire stock obj: ",$scope.luxireStock);
+      $scope.luxireStock["parent_sku"]=$scope.luxireProduct.parent_sku;
+      if (JSON.stringify($scope.luxireStock).length === 2) {
+              console.log("luxire stock is empty...");
+              //$scope.alerts.push({type: 'success', message: 'Create the inventory first..!'});
+              alert("luxire stock is empty...");
+      }else{
+  		$scope.postProductData={};
+  		// merge all the three product structure
+  		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
+  		$scope.product["luxire_product_attributes"] = {};
+      $scope.product["taxon_ids"] = $scope.taxon_ids;
+  		$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
+  		$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = $scope.luxireStock;
+  		$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
 
-		$scope.postProductData={};
-		//$scope.postProductData["product"]={};
-		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
-		$scope.product["luxire_product_attributes"] = {};
-		$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
-		//$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = {};
-		$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = $scope.luxireStock;
-		$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
+  		$scope.postProductData["product"]=$scope.product;
 
-		$scope.postProductData["product"]=$scope.product;
+  		$scope.modalCount=0;
+      var data=angular.toJson($scope.postProductData);
+      console.log("*******product data is : \n\n"+data);
+      console.log(" create product false part \nbefore posting the product data is: ",$scope.postProductData);
 
-		$scope.modalCount=0;
-    console.log(" create product false part \nbefore posting the product data is: ",$scope.postProductData);
-    products.createProduct($scope.postProductData).then(function(data){
-      products.add_variant_image(data.data.id, data.data.master.id, $scope.product_image)
-      .then(function(data){
-        console.log(data);
-      }, function(error){
-        console.error(error);
-      });
-      console.log("after creation the product is ",data);
-      $scope.alerts.push({type: 'success', message: 'Product created successfully!'});
-
-      //alert('Product successfully added');
-      $scope.activeButton('products')
-    }, function(info) {
-      console.log(info);
-    })
-
+      }
+    }
 
   }
-}
 
-	$scope.showEditProducts=function(id){
+  // --------------     END OF CREATING THE PRODUCT STRUCTURE TO POST    ---------------
+
+
+	$scope.showEditProducts=function(id){    // function redirect to product edit page
 	  console.log("selected inventory id:  "+id);
 	  $state.go("admin.edit_product",{id :id});
 	}
 
 
-  /*$scope.toggleAnimation = function () {
-    $scope.animationsEnabled = !$scope.animationsEnabled;
-  };*/
-
-  // ******************* end inventory modal part *****************
 
 });

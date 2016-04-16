@@ -1,48 +1,30 @@
 angular.module('luxire')
-.directive("fileread", [function () {
-    return {
-        scope: {
-            fileread: "="
-        },
-        link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
-                var reader = new FileReader();
-                reader.onload = function (loadEvent) {
-                    scope.$apply(function () {
-                        scope.fileread = loadEvent.target.result;
-                        var fileObj=changeEvent.target.files[0];
-                        scope.$emit("fileSelected",fileObj);
-                    });
-                }
-                reader.readAsDataURL(changeEvent.target.files[0]);
-                //scope.fileObj= changeEvent.target.files[0];
-                //scope.fileread = changeEvent.target.files[0];
+.controller('importCsvModalController',function($scope, $uibModalInstance,$rootScope, CSV, $sce){
+  $scope.upload_file = function(files){
+    if (files && files.length) {
+      $scope.product_csv = files[0];
+      console.log('product csv', $scope.product_csv);
+      console.log('file type', $scope.product_csv.type);
 
-                console.log("file object is: ",changeEvent.target.files[0]);
-            });
-        }
     }
-}])
-.controller('importCsvModalController',function($scope, $uibModalInstance, importValue, $http){
-  console.log("csv file content : \n\n",$scope.fileContent);
-  console.log("csv file content : \n\n",$scope.fileContent);
- $scope.fileObj='';
- $scope.$on('fileSelected', function(event, fetchFile) {
-       //Receive the object from another scope with emit
-        $scope.fileObj = fetchFile;
-       console.log("fetch file: ",$scope.fileObj);
-       var reader = new FileReader();
+  }
+  $scope.upload = function () {
+    if($scope.product_csv && $scope.product_csv.type==='text/csv'){
+      $scope.loading = true;
+      CSV.upload($scope.product_csv)
+      .then(function(data){
+        $scope.loading = false;
+        $scope.getUploadStatus = $sce.trustAsHtml(data.data);
+        console.log('uploaded',data);
+      }, function(error){
+        console.error(error);
+      })
 
-       reader.onloadend = function () {
-           //Put the object/image in page html with scope
-           $scope.content = reader.fetchFile;
-           console.log("content: \n",$scope.content);
-       };
-  });
-
-  $scope.ok = function () {
-    console.log("within ok file object is: ",$scope.fileObj);
-    $uibModalInstance.close($scope.fileObj);
+    }
+    else{
+      $rootScope.alerts.push({type: 'danger', message: 'Please upload a valid csv file!'});
+    }
+        // $uibModalInstance.close($scope.product_csv);
   };
 
   $scope.cancel = function () {

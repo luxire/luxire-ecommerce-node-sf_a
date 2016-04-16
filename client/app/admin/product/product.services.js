@@ -1,6 +1,5 @@
 angular.module('luxire')
 .service('products', function($http, $q, restApiService){
-	// autocomplete
 
 	this.createVariants = function(productId,variant) {
 		console.log("create variants in client service is calling...");
@@ -16,6 +15,23 @@ angular.module('luxire')
   			deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
   		});
   		return deferred.promise;
+	}
+
+	this.updateVariants = function(productId,variantId,variantObj) {
+		console.log("update variants is calling..");
+		var deferred = $q.defer();
+		console.log("product id: "+productId);
+		console.log("variant id: ",variantId);
+		console.log("variant obj: ",variantObj);
+
+		$http.put("/api/products/"+productId+'/variants/'+variantId, angular.toJson(variantObj)).success(function(data) {
+			deferred.resolve(data);
+			})
+			.error(function(errData, errStatus, errHeaders, errConfig) {
+				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+				deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+			});
+			return deferred.promise;
 	}
 
 	this.allProductType= function(){
@@ -55,8 +71,7 @@ angular.module('luxire')
 	return deferred.promise;
 	}
 
-	//---------------
-	//Get all products
+
 	this.getProducts = function(){
 		var deferred = $q.defer();
 		$http.get('/api/products').then(function(data){
@@ -139,13 +154,13 @@ angular.module('luxire')
   		return deferred.promise;
 	}
 })
-.service('fileUpload', function($http){
+.service('CSV', function($http){
 
 	this.upload = function(file){
 		var fd = new FormData();
 		fd.append('file', file);
 		console.log('file in service', file);
-		$http.post('/files/csv', fd, {
+		return $http.post('/api/v1/admin/products/csv', fd, {
 	      transformRequest: angular.identity,
 	      headers: {'Content-Type': undefined}
 	   })
@@ -157,19 +172,20 @@ angular.module('luxire')
 	   });
 	};
 })
-.service('luxireProperties', function($http,$q){
-	this.getAllLuxireProperties= function(){
-    console.log("get all product  properties is calling...");
-    var deferred = $q.defer();
-    $http.get('/api/luxire_properties.json').then(function(data){
-      deferred.resolve(data)
-      console.log(data);
-    },function(errData, errStatus, errHeaders, errConfig){
-      deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
-    });
-    return deferred.promise;
-  }
+.service('allTaxons', function($http,AdminConstants){
 
+	this.getTaxonsPerPage= function(totalTaxons){
+		if(totalTaxons == undefined){
+			return $http.get(AdminConstants.api.allTaxons+'?without_children=true');
+		}else{
+			return $http.get(AdminConstants.api.allTaxons+'?without_children=true&per_page='+totalTaxons);
+		}
+	}
+
+
+	this.getAllTaxons= function(){
+		return $http.get(AdminConstants.api.allTaxons);
+	}
 
 })
 .service('luxireVendor', function($http,$q){
@@ -242,45 +258,7 @@ angular.module('luxire')
             readAsDataUrl: readAsDataURL
         };
     }])
-		.service('csvFileUpload', function($http, $q){
-				this.uploadCsvFile = function(fileContent){
-					console.log("csv file upload service is calling with ...\n",fileContent);
-					var fd=new FormData();
-					fd.append('file',fileContent);
-					var deferred = $q.defer();
-					console.log('______________________________________');
-					//console.log('fileContent', {data : fileContent});
-					console.log('______________________________________');
-					$http.post("/csvUploadFile", fd,{
-		             transformRequest: angular.identity,
-		             headers: {'Content-Type': undefined}
-		        }).success(function(res) {
-								console.log("response from node in csv file upload : ",res);
-						deferred.resolve(res.data);
-						})
-						.error(function(errData, errStatus, errHeaders, errConfig) {
-							console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-							deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-						});
-						return deferred.promise;
-				}
-		})
 		.service('editModalService', function($http, $q ){
-			//Get all products
-			/*this.checkParentSku = function(parentSku) {
-				var deferred = $q.defer();
-				console.log("check parent sku fun is calling...");
-				$http.post("/luxire_stocks/validate_stocks_sku", angular.toJson(parentSku)).success(function(res) {
-					console.log("parent sku :",res);
-					deferred.resolve(res);
-					})
-					.error(function(errData, errStatus, errHeaders, errConfig) {
-						console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
-						deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
-					});
-					return deferred.promise;
-			}*/
-
 			this.updateStock = function(id,inventoryObj) {
 				var deferred = $q.defer();
 				$http.put("/luxire_stocks/"+id, angular.toJson(inventoryObj)).success(function(data) {

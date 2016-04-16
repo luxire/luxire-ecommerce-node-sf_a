@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('collectionHomeController',function($scope, collections,fileReader,products,$http,$interval,$state,$stateParams){
+.controller('collectionHomeController',function($scope, collections,allTaxons,fileReader,products,$http,$interval,$state,$stateParams){
 $scope.loading= true;
 $scope.allTaxonomies='';
 
@@ -7,12 +7,28 @@ $scope.allTaxonomies='';
 
 
 
-  collections.getCollections().then(function(data) {
-    $scope.loading= false;
-    console.log("values of all taxonomies\n\n");
-    $scope.allTaxonomies=data;
-    console.log(data.data.taxonomies[0].root.taxons);
-
+  // collections.getCollections().then(function(data) {
+  //   $scope.loading= false;
+  //   console.log("values of all taxonomies\n\n");
+  //   $scope.allTaxonomies=data;
+  //   console.log(data.data.taxonomies[0].root.taxons);
+  //
+  // }, function(info){
+  //   console.log(info);
+  // })
+  var totalTaxons;
+  allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
+    $scope.taxonsJson = data.data;
+    console.log("all taxons per page: ",$scope.taxonsJson);
+    $scope.loading = false;
+    totalTaxons = data.data.count;
+    allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
+      $scope.allTaxonsJson = data.data.taxons;
+      console.log("total taxons are: ",$scope.allTaxonsJson);
+      $scope.loading = false;
+    }, function(info){
+      console.log(info);
+    })
   }, function(info){
     console.log(info);
   })

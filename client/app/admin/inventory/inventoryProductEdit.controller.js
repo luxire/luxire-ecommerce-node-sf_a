@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('inventoryProductEditController',function($scope, $state, $stateParams, luxireStocks, products){
+.controller('inventoryProductEditController',function($scope, $state, $timeout, $stateParams, luxireStocks, products){
 
     //console.log("params id: "+$stateParams.id);
     $scope.noProductMsg=false;
@@ -46,10 +46,22 @@ angular.module('luxire')
       }
       return '';
     }*/
-    $scope.showEditInventory=function(parentSku){
-      console.log("no product parent sku is: ",parentSku);
-      $state.go("admin.inventoryNewProduct",{sku: parentSku});
+    $scope.deleteProducts = function(id,index) {
+      products.deleteProduct(id).then(function(data){
+        $scope.alerts.push({type: 'success', message: 'Product Deleted successfully!'});
+  			$scope.allInventoryRelatedProducts.product.splice(index,1);
+        $timeout(function() {
+          console.log("timeout functionality...");
+          $state.go("admin.inventoryProductEdit");
+
+        }, 3000);
+        //alert('Product deleted successfully');
+        $scope.activeButton('products')
+      }, function(info) {
+        console.log(info);
+      })
     }
+
     $scope.showEditProducts=function(inventory){
       console.log("selected inventory id:  "+inventory.id);
         $state.go("admin.edit_product",{id :inventory.id});

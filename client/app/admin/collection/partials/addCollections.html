@@ -7,8 +7,8 @@
 
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
-      <button type="button" class="btn btn-default" >Cancel</button>
-      <button type="button" class="btn btn-primary" ng-click="showDate(); createTaxons()" ng-disabled="save_collection_btn" >Save Collection</button>
+      <button type="button" class="btn btn-default" ui-sref="admin.collectionHome">Cancel</button>
+      <button type="button" class="btn btn-default" ng-click="showDate(); createTaxons()" ng-disabled="save_collection_btn" >Save Collection</button>
     </div>
   </div>
 
@@ -25,7 +25,7 @@
           <span style="font-size: 13px;">Description</span>
           <br>
           <div class="panel panel-default">
-            <div class="panel-heading" style="padding: 5px;" ng-hide="false">
+            <!--<div class="panel-heading" style="padding: 5px;" ng-hide="false">
               <div class="btn-group" role="group" aria-label="...">
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -92,9 +92,22 @@
                 </button>
 
               </div>
-            </div>
+            </div>-->
             <div class="panel-body">
               <textarea class="description" ng-model="tagdesc" rows="9" cols="40"></textarea>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="">
+                <span>Select Taxonomies</span>
+            </div>
+            <div class="" id="select_options_taxonomie">
+              <select class="form-control" ng-model="selectedTaxonomie"  ng-change="selectedTaxonomieOption(selectedTaxonomie)" >
+                <option value = "0" label = " ------- Please Select -------"></option>
+                <option ng-repeat="taxonomie  in taxonomieJson.taxonomies" value=" {{ taxonomie.id }}" >
+                    {{ taxonomie.name }}
+                </option>
+              </select>
             </div>
           </div>
         </div>
@@ -112,10 +125,10 @@
 
               <div class="row product-panel">
                 <div class="col-lg-5 col-md-5" style="margin-left: 1%;">
-                  <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
+                  <!-- <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
                         on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                           <auto-complete  source="loadItems($query)"></auto-complete>
-                  </tags-input>
+                  </tags-input> -->
                   <!--<div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-search"></i></span>
                       <input type="text" class="form-control" aria-label="..." placeholder="Add product...">

@@ -7,10 +7,11 @@
 
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
-      <button type="button" class="btn btn-default" >
-        <span class="glyphicon glyphicon-new-window"></span>view</button>
-      </button>
-      <button type="button" class="btn btn-primary" ng-click="editTaxon(); showUpdatedTaxon()">Save</button>
+      <!-- <button type="button" class="btn btn-default" >
+        <span class="glyphicon glyphicon-new-window"></span>view</button>   TO DO
+      </button> -->
+      <button type="button" class="btn btn-default" ui-sref="admin.collectionHome">Cancel</button>
+      <button type="button" class="btn btn-default" ng-click="editTaxon(); showUpdatedTaxon()">Save</button>
     </div>
   </div>
 
@@ -190,10 +191,7 @@
                       on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                         <auto-complete  source="loadItems($query)"></auto-complete>
               </tags-input>
-                <!--<div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control" aria-label="..." placeholder="Add product...">
-                </div> -->
+
               </div>
 
               <div class=" col-lg-1 col-md-1"></div>

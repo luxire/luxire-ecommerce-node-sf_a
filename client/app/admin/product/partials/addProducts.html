@@ -1,3 +1,20 @@
+<!--style for canvas thumbnail-->
+      <style>
+          .my-drop-zone { border: dotted 3px lightgray; }
+          .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+          .another-file-over-class { border: dotted 3px green; }
+          html, body { height: 100%; }
+          canvas {
+              background-color: #f3f3f3;
+              -webkit-box-shadow: 3px 3px 3px 0 #e3e3e3;
+              -moz-box-shadow: 3px 3px 3px 0 #e3e3e3;
+              box-shadow: 3px 3px 3px 0 #e3e3e3;
+              border: 1px solid #c3c3c3;
+              height: 100px;
+              margin: 6px 0 0 6px;
+          }
+      </style>
+<!---->
 <script type="text/ng-template" id="createProductInventoryModal.html">
         <div class="modal-header">
             <center><h3 class="modal-title">ADD A INVENTORY</h3></center>
@@ -51,6 +68,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
                           <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
+                          <span style="padding-left:4%; padding-right: 2%;"><input type="checkbox" ng-model="luxireStock.in_house" name="inhouse"></span><span>Inhouse</span>
                         </div>
                     </div>
                     <div class="row" style="margin-top:3%;">
@@ -76,604 +94,722 @@
                 <div class="row">
                     <center>
                       <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
-                      <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Cancel</button>
                     </center>
                 </div>
             </div>
         </div>
 </script>
+<form class="" >
+  <div class="container-fluid" style="height:100%">
+    <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+      <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+        <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Products / <span style="color: black;">Add a product</span></span>
+      </div>
+      <div class="col-lg-5 col-md-5">
 
-<div class="container-fluid" style="height:100%">
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Products / <span style="color: black;">Add a product</span></span>
+      </div>
+      <div class="col-lg-3 col-md-3" style="text-align: right;">
+        <!--<button type="button" class="btn btn-default btn-info" ui-sref="admin.product">Home</button>-->
+        <button type="button" class="btn btn-default" ui-sref="admin.product" ng-click="activeButton('products')">Cancel</button>
+        <button type="button" class="btn btn-default" ng-click="createProduct()" ui-sref="admin.product">Create product</button>
+      </div>
     </div>
-    <div class="col-lg-5 col-md-5">
 
-    </div>
-    <div class="col-lg-3 col-md-3" style="text-align: right;">
-      <!--<button type="button" class="btn btn-default btn-info" ui-sref="admin.product">Home</button>-->
-      <button type="button" class="btn btn-default" ui-sref="admin.product" ng-click="activeButton('products')">Cancel</button>
-      <button type="button" class="btn btn-default" ng-click="createProduct()" ui-sref="admin.product">Create product</button>
-    </div>
-  </div>
-
-  <div class="row" style="height: 93vh;">
-    <div class="container-fluid admin-console-content">
-      <div class="row">
-        <div class="col-lg-8 col-md-8">
-          <div class="placard">
-            <span style="font-size: 13px;">Title</span>
-            <br>
-            <input type="text" ng-model="product.name" class="form-control" placeholder="Short Sleeve T-Shirt">
-            <br>
-            <span style="font-size: 13px;">Parent sku</span>
-            <br>
-            <input type="text" ng-model="luxireProduct.parent_sku" ng-blur="checkParentSku(luxireProduct.parent_sku)" class="form-control" placeholder="Parent SKU..">
-            <br>
-            <span style="font-size: 13px;">Handle</span>
-            <br>
-            <input type="text" ng-model="luxireProduct.slug"  class="form-control" placeholder="handle..">
-            <br>
-            <span style="font-size: 13px;">Shipping category id</span>
-            <br>
-            <input type="text" ng-model="product.shipping_category_id"  class="form-control" placeholder="shipping category id..">
-            <br>
-            <span style="font-size: 13px;">Description</span>
-            <br>
-            <div class="panel panel-default">
-              <div class="panel-heading" style="padding: 5px;display: none">
-                <div class="btn-group" role="group" aria-label="...">
-                  <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="fa fa-font"></span>
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Paragraph</a></li>
-                      <li><a href="#">Heading 1</a></li>
-                      <li><a href="#">Heading 2</a></li>
-                      <li><a href="#">Heading 3</a></li>
-                      <li><a href="#">Heading 4</a></li>
-                      <li><a href="#">Heading 5</a></li>
-                      <li><a href="#">Heading 6</a></li>
-                      <li><a href="#">Blockquote</a></li>
-                    </ul>
+    <div class="row" style="height: 93vh;">
+      <div class="container-fluid admin-console-content">
+        <div class="row">
+          <div class="col-lg-8 col-md-8">
+            <div class="placard">
+              <span style="font-size: 13px;" class="required">Title</span>
+              <br>
+              <input type="text" ng-model="product.name" class="form-control" placeholder="Short Sleeve T-Shirt" required>
+              <br>
+              <span style="font-size: 13px;" class="required">Parent sku</span>
+              <br>
+              <input type="text" ng-model="luxireProduct.parent_sku" ng-blur="checkParentSku(luxireProduct.parent_sku)" class="form-control" placeholder="Parent SKU..">
+              <br>
+              <span style="font-size: 13px;">Handle</span>
+              <br>
+              <input type="text" ng-model="luxireProduct.slug"  class="form-control" placeholder="handle..">
+              <br>
+              <span style="font-size: 13px;" class="required">Shipping category id</span>
+              <br>
+              <input type="text" ng-model="product.shipping_category_id"  class="form-control" placeholder="shipping category id..">
+              <br>
+              <span style="font-size: 13px;">Description</span>
+              <br>
+              <div class="panel panel-default">
+                <div class="panel-heading" style="padding: 5px;display: none">
+                  <div class="btn-group" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="fa fa-font"></span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Paragraph</a></li>
+                        <li><a href="#">Heading 1</a></li>
+                        <li><a href="#">Heading 2</a></li>
+                        <li><a href="#">Heading 3</a></li>
+                        <li><a href="#">Heading 4</a></li>
+                        <li><a href="#">Heading 5</a></li>
+                        <li><a href="#">Heading 6</a></li>
+                        <li><a href="#">Blockquote</a></li>
+                      </ul>
+                    </div>
+                    <button type="button" class="btn btn-default"><span class="fa fa-bold"></span></button>
+                    <button type="button" class="btn btn-default"><span class="fa fa-italic"></span></button>
                   </div>
-                  <button type="button" class="btn btn-default"><span class="fa fa-bold"></span></button>
-                  <button type="button" class="btn btn-default"><span class="fa fa-italic"></span></button>
+                  <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" aria-label="Unordered List">
+                      <span class="fa fa-list-ul" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Ordered List">
+                      <span class="fa fa-list-ol" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Indent">
+                      <span class="fa fa-indent" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Outdent">
+                      <span class="fa fa-outdent" aria-hidden="true"></span>
+                    </button>
+                  </div>
                 </div>
-                <div class="btn-group" role="group" aria-label="...">
-                  <button type="button" class="btn btn-default" aria-label="Unordered List">
-                    <span class="fa fa-list-ul" aria-hidden="true"></span>
-                  </button>
-                  <button type="button" class="btn btn-default" aria-label="Ordered List">
-                    <span class="fa fa-list-ol" aria-hidden="true"></span>
-                  </button>
-                  <button type="button" class="btn btn-default" aria-label="Indent">
-                    <span class="fa fa-indent" aria-hidden="true"></span>
-                  </button>
-                  <button type="button" class="btn btn-default" aria-label="Outdent">
-                    <span class="fa fa-outdent" aria-hidden="true"></span>
-                  </button>
+                <div class="panel-body">
+                  <textarea class="description" ng-model="product.description" rows="9" cols="40"></textarea>
                 </div>
               </div>
-              <div class="panel-body">
-                <textarea class="description" ng-model="product.description" rows="9" cols="40"></textarea>
-              </div>
             </div>
-          </div>
 
-          <!-- previous images field -->
+            <!-- previous images field -->
 
-          <div class="placard">
-            <span style="font-size: 20px;">Pricing</span>
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Price</span>
+            <div class="placard">
+              <span style="font-size: 20px;">Pricing</span>
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;" class="required">Price</span>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;">Compare at price</span>
+                </div>
               </div>
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Compare at price</span>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <input type="text" class="form-control" ng-model="product.price">
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <input type="text" class="form-control" ng-model="luxireProduct.product_compare_at_price">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="product.display_price">
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="luxireProduct.product_compare_at_price">
-              </div>
-            </div>
-            <br>
-            <input type="checkbox" ng-model="luxireProduct.product_charge_taxes_flag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Charge taxes on this product</span>
-            <hr>
-            <span style="font-size: 20px;">Inventory</span>
-            <div style="float:right;"><button type="button" class="btn btn-default" ng-click="openModal('lg')">Add Inventory</button></div>
+              <br>
+              <input type="checkbox" ng-model="luxireProduct.product_charge_taxes_flag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Charge taxes on this product</span>
+              <hr>
+              <span style="font-size: 20px;">Inventory</span>
+              <div style="float:right;"><button type="button" class="btn btn-default" ng-click="openModal('lg')">Add Inventory</button></div>
 
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Inventory Policy</span></span>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Barcode <span style="color:#95A7B7;">(ISBN, UPC, etc.)</span></span>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <select class="form-control" ng-model="luxireProduct.product_inventory_policy" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[6].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="luxireProduct.barcode">
-              </div>
-
-            </div>
-            <!--<div class="row">
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">SKU <span style="color:#95A7B7;">(Stock keeping unit)</span></span>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Barcode <span style="color:#95A7B7;">(ISBN, UPC, etc.)</span></span>
-              </div>
-            </div>
-            <div class="row">
-
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Inventory Policy</span></span>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="productData.barcode">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="productData.sku">
-              </div>
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;"></span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <select class="form-control" name="">
-                  <option value="1">Don't track inventory</option>
-                  <option value="2">Spree tracks this product's inventory</option>
-                </select>
-              </div>
-              <div class="col-lg-6 col-md-6">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;">Inventory Policy</span></span>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;">Barcode <span style="color:#95A7B7;">(ISBN, UPC, etc.)</span></span>
+                </div>
 
               </div>
-            </div>-->
-            <hr>
-            <span style="font-size: 20px;">Shipping</span>
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Weight</span></span>
-              </div>
-              <div class="col-lg-6 col-md-6">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <div class="form-group">
-                  <div class="input-group" style="width:90%;">
-                    <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="product.weight">
-                    <div class="input-group-btn" style="width:30%;">
-                      <select class="form-control" ng-model="luxireProduct.product_shipping_weight_unit" >
+              <div class="row">
+                <div class="col-lg-6 col-md-6" >
+                  <div ng-repeat="type in luxireProperties">
+                      <select ng-if="type.name == 'inventory-policy'" class="form-control" ng-model="luxireProduct.product_inventory_policy" >
                         <option value = "0" label = "Please Select"></option>
-                        <option ng-repeat="type in luxireProperties[7].value.split(',')" value="{{type}}">
-                            {{type}}
+                        <option ng-repeat="val in type.value.split(',')" value="{{ val }}">
+                            {{ val }}
                         </option>
                       </select>
-                    </div>
                   </div>
-                </div><!-- /input-group -->
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <input type="text" class="form-control" ng-model="luxireProduct.product_barcode">
+                </div>
+
               </div>
-              <div class="col-lg-6 col-md-6">
-                <div class="form-group">
+              <hr>
+              <span style="font-size: 20px;">Shipping</span>
+              <br>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;">Weight</span></span>
+                </div>
+                <div class="col-lg-6 col-md-6">
                 </div>
               </div>
-            </div>
-            <input type="checkbox" ng-model="luxireProduct.product_requires_shipping" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">This product requires shipping</span>
-            <hr>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <div class="input-group" style="width:90%;">
+                      <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="product.weight">
+                      <div class="input-group-btn" style="width:30%;" >
+                        <div ng-repeat="type in luxireProperties">
+                          <select ng-if="type.name == 'shipping-weight-unit'" class="form-control" ng-model="luxireProduct.product_shipping_weight_unit" >
+                            <option value = "0" label = "Please Select"></option>
+                            <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                                {{val}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- /input-group -->
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <div class="form-group">
+                  </div>
+                </div>
+              </div>
+              <input type="checkbox" ng-model="luxireProduct.product_requires_shipping" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">This product requires shipping</span>
+              <hr>
 
-          </div>
-          <div class="placard">
-            <h4 style="font-size: 20px;">Images</h4>
-            Add New Image
-            <input type="file" name="name" ng-file-select ng-file-change="upload_product_image($files)" value="">
-            <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
-            <img id="product_image" src="" alt="" />
+            </div>
+            <div class="placard">
+              <h4 style="font-size: 20px;">Images</h4>
+              Add New Image
+              <br>
+              <input type="file" nv-file-select="" uploader="uploader" />
+
+              <h3>Upload queue</h3>
+                      <p>Queue length: {{ uploader.queue.length }}</p>
+
+                      <table class="table">
+                          <thead>
+                              <tr>
+                                  <th width="50%">Name</th>
+                                  <th ng-show="uploader.isHTML5">Size</th>
+                                  <th ng-show="uploader.isHTML5">Progress</th>
+                                  <th>Status</th>
+                                  <th>Actions</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr ng-repeat="item in uploader.queue">
+                                  <td><strong>{{ item.file.name }}</strong></td>
+                                  <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                  <td ng-show="uploader.isHTML5">
+                                      <div class="progress" style="margin-bottom: 0;">
+                                          <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                      </div>
+                                  </td>
+                                  <td class="text-center">
+                                      <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                      <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                      <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                  </td>
+                                  <td nowrap>
+                                      <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                          <span class="glyphicon glyphicon-upload"></span> Upload
+                                      </button>
+                                      <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                          <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                      </button>
+                                      <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                          <span class="glyphicon glyphicon-trash"></span> Remove
+                                      </button>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                      <button type="button" name="button" ng-click="uploader.uploadAll()">Upload All</button>
+
+              <!-- <input type="file" name="name" ng-file-select ng-file-change="upload_product_image($files)" value=""> -->
+
+              <!-- <img id="product_image" src="" alt="" /> -->
+              <!-- <br> -->
+              <!-- <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label> -->
               <!-- <label style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload Product Image</label> -->
               <!-- <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label> -->
-            <br>
-            <!-- <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label> -->
+              <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
 
-            <div class="drag-drop">
-              <img ng-src="{{productImage}}" style="margin: 30px;">
-            </div>
-          </div>
-
-          <!-- <div class="placard">
-            <span style="font-size: 20px;">Images</span>
-              <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label>
-            <br>
-            <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label>
-
-            <div class="drag-drop">
-              <img ng-src="{{productImage}}" style="margin: 30px;">
-            </div>
-          </div> -->
-          <div class="placard" ng-show="true">
-            <span style="font-size: 20px;">Swatch</span>
-            <br>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <span style="font-size: 13px;">Price</span>
-              </div>
-              <div class="col-lg-6 col-md-6">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6">
-                <input type="number" class="form-control" ng-model="swatchPrice" ng-init="swatchPrice">
-              </div>
-              <div class="col-lg-6 col-md-6">
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-lg-4 col-md-4">
-          <div class="placard-grey" ng-init="calFlag = true">
-            <span style="font-size: 20px;">
-              Visibility
-            </span>
-            <hr>
-            <div class="row">
-              <div class="col-lg-10 col-md-10">
-                <input type="checkbox" ng-model="luxireProduct.product_visibility" value="true"> <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;Online store</span>
-              </div>
-              <div class="col-lg-2 col-md-2" style="text-align: right;">
-                <i class="fa fa-calendar-o" style="color: #479CCF; float: right;cursor: pointer;" tooltip="Set a publish date" ng-click="calFlag = !calFlag"></i>
-              </div>
-            </div>
-            <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Publish on this date</span>
-                <datetimepicker data-ng-model="luxireProduct.product_publish_date"></datetimepicker>
-              </div>
-            </div>
-          </div>
-          <div class="placard-grey">
-            <span style="font-size: 20px;">
-              Organization
-            </span>
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Product type</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="newProductType.type"  ng-change="showProductType()" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in allproductType" value="{{type.id}}">
-                      {{type.product_type}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Vendor</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.luxire_vendor_master_id" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireVendor" value="{{type.id}}">
-                      {{type.name}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">SKU</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" class="form-control" aria-label="..." ng-model="product.sku" placeholder="product sku...">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Collections</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" class="form-control" placeholder="Search for collections" ng-model="luxireProduct.collections">
-              </div>
-            </div>
-            <br>
-            <span style="font-size: 13px; color: #798C9E;">Add this product to a collection so it's easy to find in your store.</span>
-            <br>
-            <hr>
-            <div class="row">
-              <div class="col-lg-8 col-md-8">
-                <span style="font-size: 13px;">Tags</span>
-              </div>
-              <div class="col-lg-4 col-md-4" style="text-align: right;">
-                <a href="" style="font-size: 13px">View all tags</a>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <!-- <input type="text" class="form-control" ng-model="luxireProduct.product_tags" placeholder="Vintage, cotton, summer"> -->
-                <tags-input ng-model="luxireProduct.product_tags"></tags-input>
-                <p>
-                  {{luxireProduct.product_tags}}
-                </p>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">No of color</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxireProduct.noOfColor" class="form-control">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Colors</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-              <!--  <tags-input ng-model="luxireProduct.product_color" display-property="text" key-property="text">
-                  <auto-complete source="loadTags('color')"></auto-complete>
-                  {{luxireProduct.product_color}}
-              </tags-input>-->
-                  <input type="text" ng-model="luxireProduct.product_color" class="form-control">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Weave Type</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.product_weave_type" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[0].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Thread Count</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxireProduct.thread_count" class="form-control">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Material</span>
+              <div class="drag-drop">
+                <img ng-src="{{productImage}}" style="margin: 30px;">
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.material" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[1].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
+            <!-- <div class="placard">
+              <span style="font-size: 20px;">Images</span>
+                <label ng-file-select ng-file-change="uploadSponsorLogo($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload image</label>
+              <br>
+              <label ng-file-select ng-file-change="uploadFile($files)" style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload File</label>
+
+              <div class="drag-drop">
+                <img ng-src="{{productImage}}" style="margin: 30px;">
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Wash Care</span>
+            </div> -->
+            <div class="placard" ng-show="true">
+              <span style="font-size: 20px;">Swatch</span>
+              <br>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <span style="font-size: 13px;">Price</span>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.wash_care" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[2].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Stiffness</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <div class="form-group">
-                  <div class="input-group">
-                    <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="luxireProduct.stiffness">
-                    <div class="input-group-btn" style="width:30%;">
-                      <select class="form-control" ng-model="luxireProduct.stiffness_unit" >
-                        <option value = "0" label = "Please Select"></option>
-                        <option ng-repeat="type in luxireProperties[8].value.split(',')" value="{{type}}">
-                            {{type}}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <input type="number" class="form-control" ng-model="swatchPrice" ng-init="swatchPrice">
+                </div>
+                <div class="col-lg-6 col-md-6">
                 </div>
               </div>
             </div>
 
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Ounces</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxireProduct.ounces" class="form-control">
-              </div>
-            </div>
+          </div>
 
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">GSM</span>
+          <div class="col-lg-4 col-md-4">
+            <div class="placard-grey" ng-init="calFlag = true">
+              <span style="font-size: 20px;">
+                Visibility
+              </span>
+              <hr>
+              <div class="row">
+                <div class="col-lg-10 col-md-10">
+                  <input type="checkbox" ng-model="luxireProduct.product_visibility" value="true"> <span style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;Online store</span>
+                </div>
+                <div class="col-lg-2 col-md-2" style="text-align: right;">
+                  <i class="fa fa-calendar-o" style="color: #479CCF; float: right;cursor: pointer;" tooltip="Set a publish date" ng-click="calFlag = !calFlag"></i>
+                </div>
+              </div>
+              <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Publish on this date</span>
+                  <datetimepicker data-ng-model="luxireProduct.product_publish_date"></datetimepicker>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxireProduct.gsm" class="form-control">
+            <div class="placard-grey">
+              <span style="font-size: 20px;">
+                Organization
+              </span>
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="required">Product type</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Shrinkage</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <select  class="form-control" ng-model="luxire_product.luxire_product_type_id">
+                      <option value="">--- Select an option ---</option>
+                      <option ng-selected= "value.id == luxire_product.luxire_product_type_id" ng-repeat="value in allproductType"
+                              value="{{value.id}}">{{value.product_type}}
+                      </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxireProduct.shrinkage" class="form-control">
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="required">Vendor</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Pitch Sales</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <select class="form-control" ng-model="luxireProduct.luxire_vendor_master_id" >
+                    <option value="">--- Select an option ---</option>
+                    <option ng-repeat="type in luxireVendor" value="{{type.id}}">
+                        {{type.name}}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxireProduct.pitchSales" class="form-control">
+              <hr>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="required">SKU</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Composition</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <input type="text" class="form-control" aria-label="..." ng-model="product.sku" placeholder="product sku...">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxireProduct.composition" class="form-control">
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Collections</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Pattern</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <tags-input ng-model="rule" display-property="pretty_name" key-property="id" add-from-autocomplete-only="true"
+                        replace-spaces-with-dashes="false"     ng-blur="showMeasurementType(keyToWord,key,rule)" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
+                            <auto-complete  load-on-down-arrow="true" max-results-to-show="100"   select-first-match="true" source="loadItems($query)"></auto-complete>
+                  </tags-input>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.pattern" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[3].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
+              <br>
+              <span style="font-size: 13px; color: #798C9E;">Add this product to a collection so it's easy to find in your store.</span>
+              <br>
+              <hr>
+              <div class="row">
+                <div class="col-lg-8 col-md-8">
+                  <span style="font-size: 13px;">Tags</span>
+                </div>
+                <div class="col-lg-4 col-md-4" style="text-align: right;">
+                  <!-- <a href="" style="font-size: 13px">View all tags</a>    TO DO-->
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Transparency</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                   <tags-input ng-model="tagsarr"></tags-input>
+                  <!-- <p>
+                    {{tagsarr}}
+                  </p> -->
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.transparency" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[4].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">No of color</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Wrinkle Resistant</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="text" ng-model="luxireProduct.no_of_color" class="form-control">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <select class="form-control" ng-model="luxireProduct.wrinkle_resistance" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option ng-repeat="type in luxireProperties[5].value.split(',')" value="{{type}}">
-                      {{type}}
-                  </option>
-                </select>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Colors</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Thickness</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                     <tags-input ng-model="colorTagsArr"></tags-input>
+                    <!-- <p>
+                      {{tagsarr}}
+                    </p> -->
+                    <!-- <input type="text" ng-model="luxireProduct.product_color" class="form-control"> -->
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxireProduct.thickness" class="form-control">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="">Usage</span>
+                </div>
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;">Season</span>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <!-- <select class="form-control" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option >
+                    </option>
+                  </select> -->
+                  <input type="text" ng-model="luxireProduct.usage" class="form-control">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <tags-input ng-model="luxireProduct.season">
-                  <auto-complete source="loadTags('season')"></auto-complete>
-                </tags-input>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="">Mill</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <!-- <select class="form-control" ng-model="luxireProduct.mill">
+                    <option value = "0" label = "Please Select"></option>
+                    <option >
+                    </option>
+                  </select> -->
+                  <input type="text" ng-model="luxireProduct.mill" class="form-control">
+
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Country Of Origin</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <!-- <select class="form-control" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option >
+                    </option>
+                  </select> -->
+                  <input type="text" ng-model="luxireProduct.country_of_origin" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="">GLM</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="text" ng-model="luxireProduct.glm" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="">Technical Description</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <textarea class="description" ng-model="luxireProduct.technical_description" rows="3" cols=""></textarea>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;" class="">Variant Fullfillment Service</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <!-- <select class="form-control" ng-model="luxireProduct.variant_fullfillment_service">
+                    <option value = "0" label = "Please Select"></option>
+                    <option >
+                    </option>
+                  </select> -->
+                  <input type="text" ng-model="luxireProduct.fullfillment_service" class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Weave Type</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'weave-type'"class="form-control" ng-model="luxireProduct.product_weave_type" >
+                      <option value="">--- Select an option ---</option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Thread Count</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxireProduct.thread_count" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Material</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                  <select ng-if="type.name == 'material'" class="form-control" ng-model="luxireProduct.material" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                        {{val}}
+                    </option>
+                  </select>
+                </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Wash Care</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'wash-care'" class="form-control" ng-model="luxireProduct.wash_care" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+                </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Stiffness</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="luxireProduct.stiffness">
+                      <div class="input-group-btn" style="width:30%;">
+                        <div ng-repeat="type in luxireProperties">
+                          <select ng-if="type.name == 'stiffness-unit'" class="form-control" ng-model="luxireProduct.stiffness_unit" >
+                            <option value = "0" label = "Please Select"></option>
+                            <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                                {{val}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Ounces</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="text" ng-model="luxireProduct.ounces" class="form-control">
+                </div>
+              </div>
+
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">GSM</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="text" ng-model="luxireProduct.gsm" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Shrinkage</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="text" ng-model="luxireProduct.shrinkage" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Pitch Sales</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxireProduct.pitch_sales" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Composition</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxireProduct.composition" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Pattern</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'pattern'" class="form-control" ng-model="luxireProduct.pattern" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+                </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Transparency</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'transparency'" class="form-control" ng-model="luxireProduct.transparency" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+                </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Wrinkle Resistant</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'wrinkle-resistant'" class="form-control" ng-model="luxireProduct.wrinkle_resistance" >
+                      <option value = "" label = "Please Select"></option>
+                      <option  value = "true" >Yes</option>
+                      <option  value = "false" >No</option>
+                      <!-- <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option> -->
+                    </select>
+                </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Thickness</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxireProduct.thickness" class="form-control">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <span style="font-size: 13px;">Season</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <tags-input ng-model="seasonTagsArr">
+                    <auto-complete source="loadSeason('season')"></auto-complete>
+                  </tags-input>
+                </div>
               </div>
             </div>
           </div>
@@ -681,4 +817,5 @@
       </div>
     </div>
   </div>
-</div>
+
+</form>
