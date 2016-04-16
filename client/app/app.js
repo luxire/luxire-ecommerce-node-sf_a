@@ -6,17 +6,16 @@
 angular.module('luxire', ['ui.router','ngRoute',
 													'ui.bootstrap','angularFileUpload',
 													'ui.bootstrap.datetimepicker','ngTagsInput',
-													'ngAnimate', 'ngMessages',
+													 'ngMessages', 'ngAnimate',
 													 'AngularPrint', 'monospaced.qrcode',
-												   'ui.tree','infinite-scroll'])
+												   'ui.tree','infinite-scroll', 'ngAside',
+													  'angucomplete-alt', 'angularAwesomeSlider'])
 
 .run(function($location,$rootScope, $state){
-	$rootScope.spree_host = 'http://localhost:3000';
 	// $location.path('/collections');
 	$rootScope.alerts = [];
 
   $rootScope.close_alert = function(index){
-    console.log(index);
     $rootScope.alerts.splice(index, 1);
   };
 	$rootScope.page = {
@@ -65,70 +64,73 @@ angular.module('luxire', ['ui.router','ngRoute',
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 	$httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
+	/*Set Default route*/
+	$urlRouterProvider.otherwise('/');
+
 	$urlRouterProvider.otherwise('/');
 	$stateProvider
-	.state('test',{
-		url:'/test/:id',
-		templateUrl: 'app/test/test.html',
-		controller: 'testController',
-		params: {id: null},
-		data: {
-			require_auth: false
-		}
-	})
-	.state('filter',{
-		url: '/filter',
-		params: {filterObject: {}},
-		templateUrl: 'app/filter/partials/filter1.html',
-		controller: 'filterController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('productDetails',{
-		url: '/productdetails/:id',
-		templateUrl: 'app/productDetails/productDetails.html',
-		controller: 'productDetailsController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('customize',{
-		url: '/customize',
-		params: {cartObject: {}},
-		templateUrl: 'app/customizeGarments/customizeGarments.html',
-		controller: 'customizeGarmentsController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('personalize',{
-		url: '/personalize',
-		params: {cartObject: {}},
-		templateUrl: 'app/personaliseGarments/personaliseGarments.html',
-		controller: 'personaliseGarmentsController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('measurement',{
-		url: '/measurement',
-		params: {cartObject: {}},
-		templateUrl: 'app/measurementGarments/measurementGarments.html',
-		controller: 'measurementGarmentsController',
-		data: {
-			require_auth: false
-		}
-	})
-	.state('collection',{
-		url: '/collections',
-		templateUrl: 'app/collection/collection.html',
-		controller: 'collectionController',
-		data: {
-			require_auth: false
-		}
-	})
-
+	// .state('test',{
+	// 	url:'/test/:id',
+	// 	templateUrl: 'app/test/test.html',
+	// 	controller: 'testController',
+	// 	params: {id: null},
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('filter',{
+	// 	url: '/filter',
+	// 	params: {filterObject: {}},
+	// 	templateUrl: 'app/filter/partials/filter1.html',
+	// 	controller: 'filterController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('productDetails',{
+	// 	url: '/productdetails/:id',
+	// 	templateUrl: 'app/productDetails/productDetails.html',
+	// 	controller: 'productDetailsController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('customize',{
+	// 	url: '/customize',
+	// 	params: {cartObject: {}},
+	// 	templateUrl: 'app/customizeGarments/customizeGarments.html',
+	// 	controller: 'customizeGarmentsController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('personalize',{
+	// 	url: '/personalize',
+	// 	params: {cartObject: {}},
+	// 	templateUrl: 'app/personaliseGarments/personaliseGarments.html',
+	// 	controller: 'personaliseGarmentsController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('measurement',{
+	// 	url: '/measurement',
+	// 	params: {cartObject: {}},
+	// 	templateUrl: 'app/measurementGarments/measurementGarments.html',
+	// 	controller: 'measurementGarmentsController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	// .state('collection',{
+	// 	url: '/collections',
+	// 	templateUrl: 'app/collection/collection.html',
+	// 	controller: 'collectionController',
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	//
 
 	/*Invoices*/
 	.state('invoices',{
