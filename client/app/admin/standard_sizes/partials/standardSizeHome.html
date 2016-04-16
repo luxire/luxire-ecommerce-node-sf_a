@@ -1,0 +1,171 @@
+<style>
+#select-button-width-change{
+  width: 32%;
+}
+</style>
+
+
+<div class="container-fluid" style="height:100%" >
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Standard Sizes</span>
+    </div>
+
+    <div class="col-lg-2 col-md-2">
+
+    </div>
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+
+      <button type="button" class="btn btn-primary" ui-sref="admin.addStandardSize">Add a Standard Size</button>
+    </div>
+    <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+      <img src="lib/assets/loader.gif"/>
+    </div>
+  </div>
+
+
+
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
+        <div class="row" style="margin:0px; background-color: white;">
+          <div  class="col-lg-2 col-md-2" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+            <span style="font-size: 12px;">All Standard Sizes</span>
+          </div>
+          <div  class="col-lg-10 col-md-10" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+
+          </div>
+        </div>
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;  padding-left:2%;">
+          <div class="left-inner-addon">
+            <i class="fa fa-search"></i>
+            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for Standard Sizes..." >
+
+          </div>
+        </div>
+        <!-- Changes made on 24/03/16 -->
+        <div class="row " style="margin:0px; background-color: white; padding: 20px;">
+          <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+             <div class="" style="color:black; font-size:120%;">
+                 <center>Data not Found</center>
+                 <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
+               </div>
+            </div>
+        <div ng-show="!(filteredResults.length == 0)">
+          <!------------------------>
+          <div class="row" style="margin:0px; background-color: white;text-align: left;">
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1">
+              <input type="checkbox">
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              Standard Size
+
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+
+            </div>
+          </div>
+          <hr style="margin: 5px 2%">
+          <div ng-repeat="standardSize in standardSizeData  | filter: { fit_type: searchText } as filteredResults" class="row" style="margin:0px; background-color: white;text-align: left;padding: 1% 0%;">
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="margin-top: 2%">
+              <input type="checkbox">
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+              <a ui-sref="admin.editStandardSize" ng-click="showEditStandardSize(standardSize.id)" >{{standardSize.fit_type}}</a>
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" >
+
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+
+            </div>
+
+            <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="margin-top: 2%">
+              <i href="#" class="fa fa-pencil-square-o" ng-click="showEditStandardSize(standardSize.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+              <i class="fa fa-trash-o" ng-click="deleteStandardSize(standardSize.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+            </div>
+          </div>
+
+          <!-- Changes made on 24/03/16 -->
+        </div>
+        </div>
+
+
+    </div>
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<table class="table table-hover admin-productType-list">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" name="selectAll" value="">
+      </th>
+      <th>
+        Standard Size
+      </th>
+      <th>
+      </th>
+      <th>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    Changes made on 24/03/16
+    <tr ng-repeat="standardSize in standardSizeData  | filter: { fit_type: searchText } as filteredResults">
+      <td style="padding-top:3%;">
+        width=10%;
+        <input type="checkbox" name="selectAll" value="">
+      </td>
+
+      <td style="padding-top:3%;width:15%;">
+        <a ui-sref="admin.editStandardSize" ng-click="showEditStandardSize(standardSize.id)" >{{standardSize.fit_type}}</a>
+      </td>
+
+      <td style="width:70%;"></td>
+      <td>
+        <i class="fa fa-pencil-square-o" ng-click="showEditStandardSize(standardSize.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-trash-o" ng-click="deleteStandardSize(standardSize.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer;"></i>
+      </td>
+
+
+
+    </tr>
+  </tbody>
+</table> -->

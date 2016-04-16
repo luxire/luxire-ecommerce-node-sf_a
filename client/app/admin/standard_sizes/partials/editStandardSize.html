@@ -1,0 +1,131 @@
+<style>
+
+.ProductType-checkboxColumn{
+    display: inline-block;
+    width:30%;
+}
+.productType-DivAlign{
+    width: 50%;
+    /* Set the margin-left and margin-right automatically set */
+    margin-left:50%;
+    margin-right: 10%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    position: relative;
+}
+.productTypePlacard{
+
+    background-color: white;
+    border: 1px solid #D3DBE2;
+    border-radius: 4px;
+    padding: 4% !important;
+    margin-bottom: 15px;
+
+}
+.capitalize {
+    text-transform: capitalize;
+}
+</style>
+
+<div class="container-fluid" style="height:100%">
+  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+    <div class="col-lg-8 col-md-8" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.standard_sizes">Standard Sizes </a> <span style="font-weight:100;color:#928CA2;">/{{fit_type}}</span>
+    </div>
+
+    <div class="col-lg-4 col-md-4" style="text-align: right;">
+      <button type="button" class="btn btn-default" ng-click="updateStandardSize()">Update</button>
+
+    </div>
+  </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+  <div class="row" style="margin-left: 0px;height: 93vh;">
+    <div class="container-fluid admin-console-content">
+      <div class="row" >
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <div class="productTypePlacard" >
+              <span style="font-size: 1.2em; font-weight: 900;">Fit Type</span>
+              <br>
+              <input type="text" ng-model="fit_type" class="form-control" placeholder="Fit Type">
+              <br>
+              <span style="font-size: 1.2em; font-weight: 900;">Neck</span>
+              <br>
+              <input type="number"   ng-model="neck" class="form-control" placeholder="Neck">
+              <span ng-show="neck < 0 " style="color:red;">Neck measurement value can not be negetive..</span>
+              <span ng-show="neck == 0 " style="color:red;">Invalid Neck measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Chest</span>
+              <input type="number"   ng-model="chest" class="form-control" placeholder="Chest">
+              <span ng-show="chest < 0 " style="color:red;">Chest measurement value can not be negetive..</span>
+              <span ng-show="chest == 0 " style="color:red;">Invalid Chest measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">waist</span>
+              <input type="number"  ng-model="waist" class="form-control" placeholder="waist">
+              <span ng-show="waist < 0 " style="color:red;">Waist measurement value can not be negetive..</span>
+              <span ng-show="waist == 0 " style="color:red;">Invalid Waist measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Bottom</span>
+              <input type="number"   ng-model="bottom" class="form-control" placeholder="Bottom">
+              <span ng-show="bottom < 0 " style="color:red;">Bottom measurement value can not be negetive..</span>
+              <span ng-show="bottom == 0 " style="color:red;">Invalid Bottom measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Yoke</span>
+              <input type="number"   ng-model="yoke" class="form-control" placeholder="Yoke">
+              <span ng-show="yoke < 0 " style="color:red;">Yoke measurement value can not be negetive..</span>
+              <span ng-show="yoke == 0 " style="color:red;">Invalid Yoke measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Biceps</span>
+              <input type="number"   ng-model="biceps" class="form-control" placeholder="Biceps">
+              <span ng-show="biceps < 0 " style="color:red;">Biceps value can not be negetive..</span>
+              <span ng-show="biceps == 0 " style="color:red;">Invalid Biceps value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Wrist</span>
+              <input type="number"   ng-model="wrist" class="form-control" placeholder="Wrist">
+              <span ng-show="wrist < 0 " style="color:red;">Wrist measurement value can not be negetive..</span>
+              <span ng-show="wrist == 0 " style="color:red;">Invalid Wrist measurement value</span>
+
+              <br/>
+              <span style="font-size: 1.2em; font-weight: 900;">Shirt Length</span>
+              <input type="number"   ng-model="shirt_length" class="form-control" placeholder="Shirt Length">
+              <span ng-show="shirt_length < 0 " style="color:red;">Shirt Length can not be negetive..</span>
+              <span ng-show="shirt_length == 0 " style="color:red;">Invalid Shirt Length</span>
+
+              <br/>
+              <span class="required" style="font-size: 1.2em; font-weight: 900;">Product Type</span>
+
+              <select id="productTypeSelect"  class="form-control" ng-model="luxire_product_type_id" style="margin-left:; width: 100%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;" autofocus>{{luxire_product_type_id}}
+
+                  <option ng-selected= "value.id == luxire_product_type_id" ng-repeat="value in allproductType"
+                          value="{{value.id}}">{{value.product_type}}
+                  </option>
+              </select>
+
+
+              <br/><br/>
+              <div class="pull-right">
+                <button type="button" class="btn btn-default" ui-sref="admin.standard_sizes">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="updateStandardSize()">Update</button>
+              </div><br/></div>
+              <br>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+</div>
