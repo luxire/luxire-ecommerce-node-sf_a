@@ -79,14 +79,14 @@ function printDiv(divName) {
 		<tr>
       <td>{{invoiceDetailedJson.bill_address.full_name}}<br/>
         {{invoiceDetailedJson.bill_address.address1}}<br/>
-        {{invoiceDetailedJson.bill_address.address2}}<br/>
+        {{invoiceDetailedJson.bill_address.address2}}
         {{invoiceDetailedJson.bill_address.city}} {{invoice.bill_address.state_text}} {{invoice.bill_address.zipcode}}<br/>
         {{invoiceDetailedJson.bill_address.country.iso_name}}<br/>
         Phone {{invoiceDetailedJson.bill_address.phone}}<br/>
       </td>
       <td>{{invoiceDetailedJson.ship_address.full_name}}<br/>
         {{invoiceDetailedJson.ship_address.address1}}<br/>
-        {{invoiceDetailedJson.ship_address.address2}}<br/>
+        {{invoiceDetailedJson.ship_address.address2 ? ','+invoiceDetailedJson.ship_address.address2: ''}}
         {{invoiceDetailedJson.ship_address.city}} {{invoice.ship_address.state_text}} {{invoice.ship_address.zipcode}}<br/>
         {{invoiceDetailedJson.ship_address.country.iso_name}}<br/>
         Phone {{invoiceDetailedJson.ship_address.phone}}<br/>
@@ -98,9 +98,11 @@ function printDiv(divName) {
         </div-->
         {{shipment.selected_shipping_rate.name}}
       </td>
-      <td ng-repeat="payment in invoiceDetailedJson.payments">
+      <td ng-if="invoiceDetailedJson.payments.length>0" ng-repeat="payment in invoiceDetailedJson.payments">
         {{payment.payment_method.name}}
-
+      </td>
+      <td ng-if="invoiceDetailedJson.payments.length==0">
+        Payment due
       </td>
 		</tr>
 
@@ -162,7 +164,7 @@ function printDiv(divName) {
   </table>
 </div>
 </div>
-<div ><h4>Thank you for your business. Please print out a copy of this confirmation page for your records.
+<!-- <div ><h4>Thank you for your business. Please print out a copy of this confirmation page for your records. -->
 </h4></div>
 
 <input type="button" class="btn btn-primary" onclick="printDiv('printableArea')" value="Print" />
