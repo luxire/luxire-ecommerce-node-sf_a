@@ -1,4 +1,163 @@
-<div class="row" style="margin-left: 0px; margin-right: 0px">
+<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 5%">
+  <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style=" padding-top: 3%;padding-bottom: 2%">
+    <form name="customer-form" css="customer-form-css">
+      <div class="row col col-xs-11 col-xs-offset-1 col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1 col-lg-11 col-lg-offset-1">
+        <div  class="row">
+          <div class="row">
+            <img style="max-width: 4%; margin-left: 2.5%" src="assets/images/customer/icon-shipping.png" alt="" />
+          </div>
+          <div id="shipping_text"  style="font-size: 150%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            Shipping Details
+          </div>
+        </div>
+        <hr style="border-top: solid 1px #B0B0B0">
+        <div class="row">
+          <div id="shipping_text"  style="font-size: 100%; font-weight: 600; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            Based on Delivery Location:
+          </div>
+          <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            {{shipping_address.full_name}}
+            {{', '+shipping_address.address1}}{{shipping_address.address2 ? shipping_address.address2:''}}
+            {{', '+shipping_address.city}}{{', '+shipping_address.state_text}}
+            {{', '+shipping_address.country.iso_name}}{{', '+shipping_address.zipcode}}
+            {{', '+shipping_address.phone}}
+          </div>
+        </div>
+        <hr style="border-top: solid 1px #B0B0B0">
+        <div class="row">
+          <div id="shipping_options_text"  style="font-size: 100%; font-weight: 600;font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            Select Shipping Option:
+          </div>
+          <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            <div class="row" ng-repeat="shipping_rate in shipments.shipping_rates" style="padding: 1% 0%">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border-right: solid 1px #B0B0B0">
+                <input type="radio" ng-model="$parent.selected_shipping_rate_id" ng-change="change_shipping_rate(shipping_rate)" ng-value="shipping_rate.id" >
+                <span style="font-size: 150%; margin: 5%">{{shipping_rate.name}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-right: solid 1px #B0B0B0">
+                <span style="font-size: 150%; margin: 5%">{{shipping_rate.display_cost}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 ">
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div  id="luxire-checkout-address-footer" style="margin-top: 2%" class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left">
+            <div class=" row" style="text-align: right">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
+                <!-- <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart"><i style="margin-left:5%;"class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Return to cart</i></button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
+            <div class=" row" style="text-align: right">
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+              </div>
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+                <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_checkout_payment()">Continue<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+        <!-- <uib-alert style="margin-top: 5%" ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert> -->
+      </div>
+
+    </form>
+
+  </div>
+  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: solid 2px #DFDFDF;background: #F8F8F8; padding-top: 4.5%; padding-right: 5%">
+    <div class="row" style="margin-left: 0px;margin-right: 0px">
+      <div class="row" style="margin-left: 0px;margin-right: 0px" ng-repeat="line_item in luxire_cart.line_items">
+        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
+          <img src="{{getImage(line_item.variant.images[0].small_url)}}" style="max-width: 85%;border: solid 2px #E2E2E2" alt="" />
+        </div>
+        <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -13%; margin-top: -2%">
+          <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
+        </div>
+        <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align: left;">
+          {{line_item.variant.name}}
+        </div>
+        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right">
+          {{line_item.display_amount}}
+        </div>
+      </div>
+      <hr style="border-bottom: solid 2px #DDDDDD">
+      <!-- <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <input class="form-control" ng-model="discount" placeholder="Coupon code">
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          <button class="btn btn-default" style="border-radius: 0px; color: white; background: #7F0E6E" name="button">Apply</button>
+        </div>
+      </div>
+      <hr style="border-bottom: solid 2px #DDDDDD"> -->
+
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Subtotal
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_item_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Shipping
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_ship_total=="$0.00" ? '-' : luxire_cart.display_ship_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Taxes
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_tax_total=="$0.00" ? '-' : luxire_cart.display_tax_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Discount
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.adjustment_total=="0.0" ? '-' : '-$'+luxire_cart.adjustment_total.split('-')[1]}}
+        </div>
+      </div>
+      <hr style="border-bottom: solid 2px #DDDDDD">
+      <div class="row" style="margin-bottom: 80%">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Total
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center; font-size: 140%">
+          {{luxire_cart.display_total}}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+<!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
   <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div id="luxire-logo">
       <img src="lib/assets/Luxire_logo_collection_page.png" >
@@ -42,14 +201,6 @@
             </div>
           </div>
           <hr style="margin-top: 2%">
-            <!-- <div class="row">
-              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
-                <input type="text" placeholder="Gift card or Coupon code" class="form-control" ng-model="coupon_code">
-              </div>
-              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-                <button class="btn-primary" ng-click="apply_coupon_code()">Apply</button>
-              </div>
-            </div> -->
           <hr style="margin-top: 5%;margin-bottom: 2%">
           <div class="row">
             <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
@@ -93,8 +244,8 @@
 
     </div>
 
-</div>
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+</div> -->
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">

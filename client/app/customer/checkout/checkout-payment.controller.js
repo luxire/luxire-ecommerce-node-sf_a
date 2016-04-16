@@ -1,14 +1,16 @@
   angular.module('luxire')
-  .controller('CustomerCheckoutPaymentController',function($scope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders){
+  .controller('CustomerCheckoutPaymentController',function($scope, $state, $window, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders){
+    $window.scrollTo(0, 0);
+
     $scope.getImage = function(url){
       return ImageHandler.url(url);
     };
-    CustomerOrders.create_payment($rootScope.luxire_cart).then(function(data){
-      
-      console.log(data);
-    }, function(error){
-      console.error(error);
-    });
+    // CustomerOrders.create_payment($rootScope.luxire_cart).then(function(data){
+    //
+    //   console.log(data);
+    // }, function(error){
+    //   console.error(error);
+    // });
 
 
     $scope.name_on_card = 'Test';
@@ -56,6 +58,18 @@
     card_expiry: $scope.card_expiry,
     card_cvv: $scope.card_cvv,
     secure_hash: $rootScope.luxire_cart.secure_hash
+  };
+
+  $scope.selected_payment_method_id = -1;
+
+  $scope.proceed_to_paypal_payment = function(){
+    CustomerOrders.checkout_payment_pay_pal($scope.selected_payment_method_id, $rootScope.luxire_cart)
+    .then(function(data){
+      console.log(data);
+      $window.location.href = data.data;
+    }, function(error){
+      console.error(error);
+    });
   };
 
 

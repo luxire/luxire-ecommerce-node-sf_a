@@ -1,16 +1,71 @@
 angular.module('luxire')
-.controller('CustomerCheckoutAddressController',function($scope, $state, orders, $rootScope, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams){
-  $scope.billing = {};
-  $scope.shipping = {};
-  $scope.states = [];
-  $scope.countries = [];
+.controller('CustomerCheckoutAddressController',function($scope, $state, orders, $rootScope, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams, CustomerAuthentication, $window){
+  window.scrollTo(0, 0);
   countries.all().then(function(data){
     console.log('countries',data);
     $scope.countries = data.data;
-    $scope.states = $scope.shipping.country_id == null ? [] : $scope.countries[$scope.shipping.country_id-1].states
   },function(error){
     console.log('error',error);
   });
+  $scope.customer_email = $rootScope.luxire_cart.email;
+  $scope.states = [];
+  $scope.countries = [];
+  $scope.billing = {};
+  $scope.shipping = {};
+  var address_prototype = {
+    firstname: '',
+    lastname: '',
+    address1: '',
+    city: '',
+    phone: '',
+    zipcode: '',
+    state_id: 0,
+    country_id: 0
+  };
+
+  $scope.populate_states = function(country_id, addr_type){
+    console.log(country_id);
+    if(addr_type == 'ship'){
+      $scope.shipping_states = $scope.countries[country_id -1].states;
+      $scope.shipping.country_id = country_id;
+    }
+    else if(addr_type == 'bill'){
+      $scope.billing_states = $scope.countries[country_id -1].states;
+      $scope.billing.country_id = country_id;
+    }
+  };
+
+  if($rootScope.luxire_cart.bill_address && $rootScope.luxire_cart.bill_address!={}){
+    angular.forEach(address_prototype, function(val, key){
+      $scope.billing[key] = $rootScope.luxire_cart.bill_address[key];
+    });
+    $scope.selected_billing_country = $rootScope.luxire_cart.bill_address.country;
+    console.log('bill country', $scope.selected_billing_country);
+    // $scope.populate_states($scope.selected_billing_country.id, 'bill');
+    $scope.selected_billing_state = $rootScope.luxire_cart.bill_address.state;
+  };
+
+  if($rootScope.luxire_cart.ship_address && $rootScope.luxire_cart.ship_address!={}){
+    angular.forEach(address_prototype, function(val, key){
+      $scope.shipping[key] = $rootScope.luxire_cart.ship_address[key];
+    });
+    $scope.selected_shipping_country = $rootScope.luxire_cart.ship_address.country;
+    // $scope.populate_states($scope.selected_shipping_country.id, 'ship');
+    $scope.selected_shipping_state = $rootScope.luxire_cart.ship_address.state;
+  };
+
+
+
+  $scope.go_to_delivery = function(event){
+    event.preventDefault();
+  };
+
+  $scope.isLoggedIn = CustomerAuthentication.isLoggedIn();
+  console.log($scope.isLoggedIn);
+
+
+
+
 
   $scope.same_address  = function(){
     console.log($scope.same);
@@ -20,9 +75,16 @@ angular.module('luxire')
   };
 
 
-  $scope.populate_states = function(country_id){
-    console.log(country_id);
-    $scope.states = $scope.countries[country_id -1].states;
+
+
+  $scope.select_state = function(state_id, addr_type){
+    console.log(state_id);
+    if(addr_type == 'ship'){
+      $scope.shipping.state_id = state_id;
+    }
+    else if(addr_type == 'bill'){
+      $scope.billing.state_id = state_id;
+    }
   };
 
   $scope.getImage = function(url){
@@ -57,32 +119,27 @@ angular.module('luxire')
   };
   var coupon_status = ''
   $scope.apply_coupon_code = function(){
-    orders.apply_coupon_code($rootScope.luxire_cart.number, $rootScope.luxire_cart.token, $scope.coupon_code).then(
-      function(data){
-        console.log(data);
-        coupon_status = data.data;
-        if(data.data.successful == true){
-          orders.get_order_by_id($stateParams.checkoutObject.number,$stateParams.checkoutObject.token).then(function(data){
-            $rootScope.luxire_cart = data.data.body;
-            // $scope.line_items = data.data.line_items;
-            // $scope.display_item_total = data.data.display_item_total;
-            // $scope.display_total = data.data.display_total;
-            // $scope.adjustment_total = '-$'+data.data.adjustment_total.split('-')[1];
-            // $scope.shipping_total = data.data.display_ship_total;
-            alert(coupon_status.success);
-            console.log(data);
-          },function(error){
-            console.error(data);}
-          );
-        }
-        else{
-          alert(data.data.success);
-        };
-      },function(error){
-        alert(error.data.error);
-        console.error(error);
+    CustomerOrders.apply_coupon_code($rootScope.luxire_cart, $scope.discountCode)
+    .then(function(data){
+      console.log(data);
+      if(data.data.successful == true){
+        CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+          $rootScope.luxire_cart = data.data;
+          $rootScope.alerts.push({type: 'success', message: 'Coupon code applied successfully'});
+        }, function(error){
+          $rootScope.alerts.push({type: 'danger', message: 'error fetching order after appying coupon code'});
+          console.error(error);
+        });
       }
-    );
+      else{
+        $rootScope.alerts.push({type: 'danger', message: data.data.error});
+
+      }
+
+    }, function(error){
+      console.log(error);
+      $rootScope.alerts.push({type: 'danger', message: error.data.error});
+    });
   };
 
   // alert('hello');

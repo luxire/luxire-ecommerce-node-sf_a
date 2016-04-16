@@ -1,4 +1,104 @@
-<div class="row" style="margin-left: 0px; margin-right: 0px">
+<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 8.8%">
+  <form name="customer-form" css="customer-form-css">
+    <div class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+      <div class="row">
+        <img style="max-width: 4%; margin-left: 2.5%" src="assets/images/customer/payment_image.png" alt="" />
+      </div>
+      <div  class="row">
+        <div id="shipping_text"  style="font-size: 150%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+          Payment Method
+        </div>
+      </div>
+      <hr style="border-top: solid 1px #B0B0B0">
+      <div class="row">
+        <div id="payment_options_text"  style="font-size: 100%; font-weight: 600;font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+          Select Payment Option:
+        </div>
+        <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+          <div class="row" ng-repeat="payment_method in luxire_cart.payment_methods" style="padding: 1% 0%">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-right: solid 1px #B0B0B0">
+              <input type="radio" ng-model="$parent.selected_payment_method_id" ng-value="payment_method.id" >
+              <span style="font-size: 150%; margin: 5%">{{payment_method.method_type}}</span>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+              <span style="font-size: 150%; margin: 5%">{{payment_method.name}}</span>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div  id="luxire-checkout-address-footer" style="margin-top: 2%" class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left">
+          <div class=" row" style="text-align: right">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
+              <!-- <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                  <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart"><i style="margin-left:5%;"class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Return to cart</i></button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
+          <div class=" row" style="text-align: right">
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                  <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_paypal_payment()">Complete Order</button>
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+      <!-- <uib-alert style="margin-top: 5%" ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert> -->
+    </div>
+
+  </form>
+
+</div>
+<div style="margin-top: 30%">
+</div>
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>
+
+<!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
   <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div id="luxire-logo">
       <img src="lib/assets/Luxire_logo_collection_page.png" >
@@ -9,7 +109,7 @@
           <h4>Payment method</h4>
           <!-- <div class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%">
 
-          </div> -->
+          </div>
           <div class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%">
             <input type="radio" ng-model="selected_payment_method" ng-change="change_payment_method(selected_payment_method)" value="cc" >
             Credit Card [EBS]
@@ -56,7 +156,7 @@
           </div>
           <div ng-show="selected_payment_method == 'pp'" class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%">
             Pay Pal Flow
-          </div> -->
+          </div>
         </div>
         <div style="text-align: left;padding-right: 4%" class="col-md-7 col-sm-7 col-lg-7 col-xs-7">
           <div class="row" ng-repeat="line_item in luxire_cart.line_items">
@@ -81,7 +181,7 @@
               <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
                 <button class="btn-primary" ng-click="apply_coupon_code()">Apply</button>
               </div>
-            </div> -->
+            </div>
           <hr style="margin-top: 5%;margin-bottom: 2%">
           <div class="row">
             <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
@@ -153,7 +253,7 @@
     <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
   </div>
 
-</div>
+</div> -->
 
 
 
@@ -188,4 +288,4 @@
 
 
 
-<!-- </div> --> -->
+<!-- </div> -->

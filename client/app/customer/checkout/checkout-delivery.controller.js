@@ -1,5 +1,6 @@
 angular.module('luxire')
-.controller('CustomerCheckoutDeliveryController',function($scope, $rootScope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders){
+.controller('CustomerCheckoutDeliveryController',function($scope, $rootScope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $window){
+  $window.scrollTo(0, 0);
   console.log($rootScope.luxire_cart);
   $scope.line_items = $rootScope.luxire_cart.line_items;
   $scope.display_item_total = $rootScope.luxire_cart.display_item_total;
@@ -12,6 +13,7 @@ angular.module('luxire')
   $scope.shipments = $rootScope.luxire_cart.shipments[0];
   $scope.shipment_id = $scope.shipments.id;
   $scope.selected_shipping_rate = $scope.shipments.selected_shipping_rate;
+  $scope.selected_shipping_rate_id = $scope.shipments.selected_shipping_rate.id;
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
@@ -20,10 +22,11 @@ angular.module('luxire')
   $scope.total_cost = $scope.item_price;
   console.log($scope.shipments);
   $scope.change_shipping_rate = function(selected_shipping_rate){
-    $scope.shipping_cost = selected_shipping_rate.cost;
-    $scope.total_cost = parseFloat($scope.item_price)+parseFloat($scope.shipping_cost);
-    $scope.selected_shipping_rate_id = selected_shipping_rate.id;
+    // $scope.shipping_cost = selected_shipping_rate.cost;
+    // $scope.total_cost = parseFloat($scope.item_price)+parseFloat($scope.shipping_cost);
+    // $scope.selected_shipping_rate_id = selected_shipping_rate.id;
     console.log(selected_shipping_rate);
+    console.log($scope.selected_shipping_rate_id);
   };
   $scope.proceed_to_checkout_payment = function(){
     CustomerOrders.proceed_to_checkout_payment($rootScope.luxire_cart, $scope.shipment_id, $scope.selected_shipping_rate_id)
