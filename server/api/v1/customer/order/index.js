@@ -10,8 +10,10 @@ router.get('/incomplete', controller.incomplete_order);
 router.get('/:number', controller.show);//order_token passed as query param
 router.post('/', controller.create);
 router.post('/new', controller.create_blank_order);
+router.post('/:number/apply_coupon_code/:code', controller.checkout_apply_coupon_code);
+router.put('/:number', controller.update);//order_token passed as query param
 router.put('/:number/empty', controller.empty_cart);//order_token passed as query param
-// router.put('/:number', controller.update);
+
 
 /**Line Items**/
 router.post('/:number/line_items', controller.add_line_item);//order_token passed as query param
@@ -24,6 +26,6 @@ router.post('/:number/payments', controller.create_payment);
 router.post('/:number/payments/complete', controller.complete_payment);
 
 
-router.put('/', controller.update);
+// router.put('/', controller.update);
 
 module.exports = router;

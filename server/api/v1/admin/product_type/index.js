@@ -9,4 +9,8 @@ router.get('/:id/edit',controller.editProductTypeById);
 router.patch('/:id',controller.productTypesShowById);
 router.put('/:id',controller.updateProductTypeById);
 router.delete('/:id',controller.deleteProductTypeById);
+/*upload image*/
+router.put('/:id/images',controller.update_image);
+/*----*/
+
 module.exports = router;

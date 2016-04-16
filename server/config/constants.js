@@ -3,7 +3,7 @@
 module.exports = {
   /*spree api constants*/
   spree:{
-    host: 'http://54.169.41.36:3000', //Spree store-Host Url
+    host: 'http://104.215.254.150:3000', //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
     users: '/luxire-users',
@@ -23,7 +23,7 @@ module.exports = {
     parentSku: '/luxire_stocks/validate_stocks_sku',
     updateStock: '/luxire_stocks',
     myAccount: '/my_account',
-    luxireProperties: '/luxire_properties.json',
+    luxireProperties: '/luxire_properties',
     luxireVendor: '/luxire_vendor_masters'
   },
   payment: {

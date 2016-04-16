@@ -144,20 +144,19 @@ exports.add_variant_image = function(req, res){
   console.log('form', form);
   form.parse(req, function(err, fields, files) {
     console.log("fields", fields);
-    console.log("file object in node is: ",files);
-    console.log("files", files.image);
+    console.log("file object in node is: ",files.file.Filepath);
     var formDataToPost = {};
-    formDataToPost.product_id = req.params.product_id;
-    formDataToPost["image[viewable_id]"] = req.params.variant_id;
-    if(files && files.image){
-      formDataToPost["image[attachment]"] = {
-        value:  fs.createReadStream(files.image.path),
-        options: {
-          filename: files.image.name,
-          contentType: files.image.type
-        }
-      }
-    };
+    // formDataToPost.product_id = req.params.product_id;
+    // formDataToPost["image[viewable_id]"] = req.params.variant_id;
+    // if(files){
+    //   formDataToPost["image[attachment]"] = {
+    //     value:  fs.createReadStream(files.file.Filepath),
+    //     options: {
+    //       filename: files.file.File.Filename,
+    //       contentType: files.file.File.File.type
+    //     }
+    //   }
+    // };
     http.post({
       uri: constants.spree.host+'/customized_images',
       headers: {'X-Spree-Token': req.headers['X-Spree-Token']},
@@ -175,7 +174,7 @@ exports.add_variant_image = function(req, res){
 
 }
 
-
+//TODO needs to be tested
 exports.createVariants = function(req, res){
   console.log("create variants fun in node is calling...");
   console.log("variant id is: ",req.params.id);
@@ -196,3 +195,33 @@ exports.createVariants = function(req, res){
     };
   })
 };
+
+exports.csv_import = function(req,res){
+  console.log('file uploading to node...');
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    console.log("file object in node is: ",files.file);
+    console.log("file path in node is: ",files.file.path);
+    console.log("file name in node is: ",files.file.name);
+    var formDataToPost = {
+      file: {
+        value:  fs.createReadStream(files.file.path),
+        options: {
+          filename: files.file.name,
+          contentType: files.file.type
+        }
+      }
+    };
+    http.post({
+      uri: constants.spree.host+constants.spree.product_csv_import,
+      formData: formDataToPost},
+       function (err, response, body) {
+         if(err){
+           res.status(500).send(err.syscall);
+         }
+         else{
+           res.status(response.statusCode).send(body);
+         };
+    });
+  });
+}

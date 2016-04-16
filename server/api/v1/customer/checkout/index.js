@@ -8,6 +8,8 @@ var router = express.Router();
 router.post('/:number/address', controller.checkout_address);
 router.post('/:number/delivery', controller.checkout_delivery);
 router.post('/:number/payment', controller.checkout_payment);
+router.post('/:number/pay_pal_payment', controller.checkout_pay_pal_payment);
+
 // router.post('/:number/:token/gateway', controller.checkout_gateway);
 router.post('/:number/apply_coupon_code/:code', controller.checkout_apply_coupon_code);
 router.post('/gateway_Response', controller.checkout_gateway_response);

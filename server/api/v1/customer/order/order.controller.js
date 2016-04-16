@@ -22,8 +22,10 @@ exports.index = function(req, res){
 
 /*My account needs to be tested*/
 exports.my_account = function(req, res){
+  console.log('my account url', constants.spree.host+constants.spree.my_account);
+  console.log('user token', req.headers['X-Spree-Token']);
   http.post({
-    uri: constants.spree.host+constants.spree.my_account,
+    uri: constants.spree.host+constants.spree.my_account+'?token='+req.headers['X-Spree-Token'],
     body: '',
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   },function(error, response, body){
@@ -134,36 +136,12 @@ exports.empty_cart = function(req, res){
   })
 };
 
-
-
-/*Update quantity of item in cart*/
-/*Todo change order_number to params*/
-// exports.update = function(req, res){
-//   console.log(req.params);
-//   console.log(req.body);
-//   console.log(req.query);
-//   // console.log(req.body);
-//   // console.log(constants.spree.host+constants.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token);
-//   // //localhost:3000/api/orders/R187211063/line_items/114?line_item[variant_id]=29&line_item[quantity]=4&order_token=EBCe8QS2YnLBnVUYZk37Ug
-//   http.put({
-//     uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'?order_token='+req.body.order_token,
-//     headers:{'content-type': 'application/json'},
-//     body: JSON.stringify(req.body)
-//   },function(error,response,body){
-//     if(error){
-//       res.status(500).send(error.syscall);
-//     }
-//     else{
-//       res.status(response.statusCode).send(body);
-//     };
-//   })
-// };
 exports.update = function(req, res){
-  console.log(req.body);
-  console.log(constants.spree.host+constants.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token);
-  //localhost:3000/api/orders/R187211063/line_items/114?line_item[variant_id]=29&line_item[quantity]=4&order_token=EBCe8QS2YnLBnVUYZk37Ug
+  console.log('params', req.params);
+  console.log('query', req.query);
+  console.log('body', req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token,
+    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
@@ -204,7 +182,7 @@ exports.add_line_item = function(req, res){
 /*Update line item*/
 exports.update_line_item = function(req, res){
   http.put({
-    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json',
+    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
@@ -223,7 +201,7 @@ exports.update_line_item = function(req, res){
 /*Delete line item to cart*/
 exports.delete_line_item = function(req, res){
   http.del({
-    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json',
+    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
@@ -238,6 +216,31 @@ exports.delete_line_item = function(req, res){
     };
   })
 };
+
+
+/**Discount**/
+exports.checkout_apply_coupon_code = function (req, res){
+  console.log('apply coupon code', req.params);
+  console.log(req.params);
+  console.log('query params',  req.query);
+  console.log('req url', constants.spree.host+constants.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.query.order_token);
+  http
+    .put({
+      uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.query.order_token,
+      headers:{'content-type': 'application/x-www-form-urlencoded'},
+      body: 'coupon_code='+req.params.code
+    }, function(error, response, body){
+        console.log('res error', error);
+        console.log('res body', body);
+        if(error == null){
+          res.status(response.statusCode).send(body);
+        }else{
+          res.status(500).send("Rails Server Not Responding");
+        };
+    });
+};
+
+
 
 /**Payments**/
 exports.new_payment = function(req, res){

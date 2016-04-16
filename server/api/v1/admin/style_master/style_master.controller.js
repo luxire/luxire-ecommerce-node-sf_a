@@ -36,52 +36,19 @@ exports.getStyleMastersById = function(req, res) {
 
 };
 exports.styleMastersCreate = function(req, res) {
-  console.log('params', req.params);
-  var form = new formidable.IncomingForm();
-  console.log('form', form);
-  form.parse(req, function(err, fields, files) {
-    console.log("fields", fields);
-    console.log("file object in node is: ",files);
-    var formDataToPost = {};
-    for (var key in fields){
-      console.log('key', key);
-      console.log('value', JSON.stringify(fields[key]));
-      formDataToPost[key] = JSON.stringify(fields[key]);
+  console.log('style master create', req.body);
+  http.post({
+    uri: constants.spree.host+constants.spree.style_masters+'?token='+req.headers['X-Spree-Token'],
+    headers:{'content-type': 'application/json'},
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error);
     }
-    if(files && files.image){
-      formDataToPost.image = {
-        value:  fs.createReadStream(files.image.path),
-        options: {
-          filename: files.image.name,
-          contentType: files.image.type
-        }
-      }
+    else{
+      res.status(response.statusCode).send(body);
     };
-    http
-      .post({
-        uri: constants.spree.host+constants.spree.style_masters+'?token='+req.headers['X-Spree-Token'],
-        formData: formDataToPost
-      }, function(error, response, body){
-        if(error){
-          res.status(500).send(error);
-        }
-        else{
-          res.status(response.statusCode).send(body);
-        };
-      });
-  });
-//   http.post({
-//     uri: constants.spree.host+constants.spree.style_masters+'?token='+req.headers['X-Spree-Token'],
-//     headers:{'content-type': 'application/json'},
-//     body:JSON.stringify(req.body)
-//   },function(error,response,body){
-//     if(error){
-//       res.status(500).send(error);
-//     }
-//     else{
-//       res.status(response.statusCode).send(body);
-//     };
-// });
+});
 
 };
 
@@ -124,44 +91,23 @@ exports.styleMastersShowById = function(req, res) {
   });
 
 };
+
 exports.styleMastersUpdateById = function (req, res){
-  console.log('params', req.params);
-  var form = new formidable.IncomingForm();
-  console.log('form', form);
-  form.parse(req, function(err, fields, files) {
-    console.log("fields", fields);
-    console.log("file object in node is: ",files);
-    var formDataToPost = {};
-    for (var key in fields){
-      console.log('key', key);
-      console.log('value', JSON.stringify(fields[key]));
-      formDataToPost[key] = JSON.stringify(fields[key]);
-    }
-    if(files && files.image){
-      formDataToPost.image = {
-        value:  fs.createReadStream(files.image.path),
-        options: {
-          filename: files.image.name,
-          contentType: files.image.type
-        }
-      }
-    };
-    http
-      .put({
-        uri: constants.spree.host+constants.spree.style_masters+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
-        formData: formDataToPost
-      }, function(error, response, body){
-        if(error){
-          res.status(500).send(error);
-        }
-        else{
-          res.status(response.statusCode).send(body);
-        };
-      });
-  });
-
-};
-
+        http
+          .put({
+            uri: constants.spree.host+constants.spree.style_masters+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
+            headers:{'content-type': 'application/json'},
+            body:JSON.stringify(req.body)
+          }, function(error, response, body){
+            if(error){
+              res.status(500).send(error);
+            }
+            else{
+              res.status(response.statusCode).send(body);
+              console.log("Body",body);
+            };
+          });
+  };
 
 exports.styleMastersDeleteById = function(req, res) {
   var styleMastersDeleteId='';
@@ -176,3 +122,49 @@ exports.styleMastersDeleteById = function(req, res) {
   });
 
 };
+
+
+
+
+
+/*Utility to update image of style master*/
+exports.update_image = function(req, res){
+  console.log("req params:",req.params);
+  // console.log('request to update image', req.params.id);
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    // console.log("fields", fields);
+    console.log("file object in node is: ",files);
+    var formDataToPost = {};
+    for (var key in fields){
+      // console.log('key', key);
+      // console.log('value', fields[key]);
+      formDataToPost[key] = fields[key];
+    }
+    if(files && files.image){
+      formDataToPost.image = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    console.log('formDataToPost', formDataToPost);
+    http
+      .put({
+      uri: constants.spree.host+constants.spree.style_masters+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
+        formData: formDataToPost
+      }, function(error, response, body){
+        if(error){
+          res.status(500).send(error);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        };
+      });
+  });
+
+};
+
+/*----------*/

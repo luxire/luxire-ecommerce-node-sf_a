@@ -77,41 +77,21 @@ exports.productTypesShowById= function(req, res) {
 };
 
 exports.updateProductTypeById = function(req, res){
-  console.log('file uploading to node...');
-  var form = new formidable.IncomingForm();
-  var data;
-  console.log('form', form);
-  form.parse(req, function(err, fields, files) {
-    console.log("fields", fields);
-    console.log("file object in node is: ",files);
-    console.log("files", files.image);
-    var formDataToPost = {};
-    formDataToPost.product_type = fields.product_type || '';
-    formDataToPost.description = fields.description || '';
-    formDataToPost.measurement_type_ids = fields.measurement_type_ids || '';
-    if(files && files.image){
-      formDataToPost.image = {
-        value:  fs.createReadStream(files.image.path),
-        options: {
-          filename: files.image.name,
-          contentType: files.image.type
+  console.log("Params",req.params);
+    http
+      .put({
+        uri: constants.spree.host+constants.spree.product_types+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
+        headers:{'content-type': 'application/json'},
+        body:JSON.stringify(req.body)
+      }, function(err, response, body){
+        if(err){
+          res.status(500).send(error.syscall);
         }
-      }
-
-    }
-    http.put({
-      uri: constants.spree.host+constants.spree.product_types+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
-      formData: formDataToPost
-     }, function (err, response, body) {
-       if(err){
-         res.status(500).send(error.syscall);
-       }
-       else{
-         res.status(response.statusCode).send(body);
-       };
-    });
-  })
-};
+        else{
+          res.status(response.statusCode).send(body);
+        };
+      });
+  };
 
 exports.deleteProductTypeById= function(req, res) {
   http
@@ -122,6 +102,45 @@ exports.deleteProductTypeById= function(req, res) {
       else{
         res.status(response.statusCode).send(body);
       };
+  });
+
+};
+/*Utility to update image of style master*/
+exports.update_image = function(req, res){
+  console.log("req params:",req.params);
+  // console.log('request to update image', req.params.id);
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    // console.log("fields", fields);
+    console.log("file object in node is: ",files);
+    var formDataToPost = {};
+    for (var key in fields){
+      // console.log('key', key);
+      // console.log('value', fields[key]);
+      formDataToPost[key] = fields[key];
+    }
+    if(files && files.image){
+      formDataToPost.image = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    console.log('formDataToPost', formDataToPost);
+    http
+      .put({
+      uri: constants.spree.host+constants.spree.product_types+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
+        formData: formDataToPost
+      }, function(error, response, body){
+        if(error){
+          res.status(500).send(error);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        };
+      });
   });
 
 };

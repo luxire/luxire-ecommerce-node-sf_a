@@ -104,10 +104,12 @@
       headers:{'content-type': 'application/json'},
       body:JSON.stringify(req.body)
     },function(error,response,body){
-      console.log('body'+body);
+      // console.log('body'+body);
       if(body !== undefined){
+        console.log(body);
         var resp = JSON.parse(body)
         if(resp.statusCode == 201){
+          
           console.log('New user created with ID: '+resp.user_id);
           res.status(201).send(resp);
         }

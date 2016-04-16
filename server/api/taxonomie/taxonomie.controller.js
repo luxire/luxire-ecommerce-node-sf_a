@@ -4,52 +4,10 @@ var _ = require('lodash');
 var http = require('request');
 var env = require('../../config/constants');
 
-// Get list of all taxonomies
-
-/*exports.taxonomie_index = function(req, res) {
-  //req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-  //var params = querystring.stringify(req.params);
-
-
-  var token_id="99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
-  client.exists('taxonomie', function(err,reply){
-    if(reply === 1){
-      client.get("taxonomie",function(err,data){
-        if(err == null){
-          console.log("taxonomie value is exists...");
-          //console.log("taxonomy value\n\n"+data);
-          res.status(200).send(data);
-        }
-      });
-
-    }else{
-
-  http
-    .get(env.spree.host+env.spree.taxonomie, function(error, response, body){
-      if(error==null){
-            console.log("\n\nget : /api/taxonomie   response are as follows: \n\n");
-            res.status(response.statusCode).send(body);
-            client.set("taxonomie", body, function(err, reply){
-              console.log("taxonomie is set in redis server");
-            });
-
-            console.log(body);
-      }
-      else{
-        console.log("/api/taxonomie  error :"+error);
-        res.status(500).send("Rails server not responding");
-      };
-  });
-}// end of else
-  });
-};*/
 
 exports.taxonomies_index = function(req, res) {
-  //req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-  //var params = querystring.stringify(req.params);
-
-
   var token_id="99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
+
   http
     .get(env.spree.host+env.spree.taxonomie+"?token="+token_id, function(error, response, body){
       if(error==null){
@@ -101,12 +59,11 @@ exports.taxonomie_search = function(req, res) {
 // Get taxonomies by taxonomie ID
 
 exports.taxonomie_show = function(req, res) {
-  //req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-  //var params = querystring.stringify(req.params);
+  console.log(env.spree.host+env.spree.taxonomie+'/'+req.params.id);
   var token_id="99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
   var taxonomie_id=9;
   http
-    .get(env.spree.host+env.spree.taxonomie+"/"+taxonomie_id, function(error, response, body){
+    .get(env.spree.host+env.spree.taxonomie+"/"+req.params.id, function(error, response, body){
       if(error==null){
             console.log("\n\nget : /api/taxonomie/id   response are as follows: \n\n");
             res.status(response.statusCode).send(body);
@@ -223,14 +180,10 @@ exports.taxon_index = function(req, res) {
 // Get taxonomie taxons by taxon id
 
 exports.taxonby_taxonid = function(req, res) {
-      //req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
-      //var params = querystring.stringify(req.params);
-      var token_id="99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
-      var taxonomie_id=1;
-      var taxon_id=1;
+
       console.log("taxon by id:  \n\n"+req.params.id+"  "+req.params.tid);
       http
-        .get(env.spree.host+env.spree.taxonomie+'/'+req.params.id+'/taxons/'+req.params.tid+'?token='+token_id, function(error, response, body){
+        .get(env.spree.host+env.spree.taxonomie+'/'+req.params.id+'/taxons/'+req.params.tid, function(error, response, body){
           if(error==null){
                 console.log("\n\nget : /api/taxonomies/taxons/taxonid  response: \n\n");
                 res.status(response.statusCode).send(body);

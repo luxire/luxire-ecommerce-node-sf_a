@@ -26,7 +26,7 @@ module.exports = function(app) {
   app.use('/api/orders', require('./api/order'));
   app.use('/api/checkouts', require('./api/checkout'));
   app.use('/api/search', require('./api/search'));
-
+  app.use('/api/luxire_properties', require('./api/luxireProperties'));
 
   /*API with versioning namespace*/
   app.use('/api/v1', require('./api/v1'));
@@ -58,49 +58,6 @@ module.exports = function(app) {
         }
       })
     });
-    app.post('/files/csv',function(req,res){
-      console.log('file uploading to node...');
-      console.log("another node server is calling....");
-      var form = new formidable.IncomingForm();
-      // form.uploadDir = 'tmp/';
-      var data;
-      console.log("data:\n\n",req.body);
-      form.parse(req, function(err, fields, files) {
-      console.log("file object in node is: ",files.file);
-      console.log("file path in node is: ",files.file.path);
-      console.log("file name in node is: ",files.file.name);
-      res.write('received upload:\n\n');
-      var formDataToPost = {
-        file: {
-          value:  fs.createReadStream(files.file.path),
-          options: {
-            filename: files.file.name,
-            contentType: files.file.type
-          }
-        }
-      };
-      http.post({uri:'http://192.168.1.25:3000/luxire_product_data/imports', formData: formDataToPost}, function (err, response, body) {
-        if (err) {
-          return console.error('upload failed:', err);
-        }
-        console.log('Upload successful!  Server responded with:', body);
-      });
-      // http.get({uri:'http://192.168.1.103:3000/api/products'}, function (err, response, body) {
-      //   if (err) {
-      //     return console.error('upload failed:', err);
-      //   }
-      //   console.log('Upload successful!  Server responded with:', body);
-      // });
-      res.end(util.inspect({fields: fields, files: files}));
-      data=files.file;
-      console.log("file is: ",data);
-      console.log("file path is  : ",data.path);
-      console.log("bytes received: ",form.bytesReceived);
-      // var jsonObject = JSON.parse(fs.readFileSync(data.path, 'utf8'));
-      // console.log("file content is: ",jsonObject);
-    });
-    });
-
   // app.use('/api/variants', require('./api/variants'));
 
   // All undefined asset or api routes should return a 404

@@ -3,9 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Payment response</title>
-    <script type="text/javascript">
-      window.location = "http://www.google.com";
-    </script>
+    
     <style>
       ::-moz-selection {
         background: #b3d4fc;
@@ -142,14 +140,19 @@
       }
     </style>
   </head>
-
   <body>
+    <h2 style="display: none" id="resp_obj"><%= txn_res %></h2>
+    <script>
+      var res = <%-JSON.stringify(txn_res)%>
+      window.location = "http://localhost:9000/#/invoice/"+res["number"]+"?token="+res["guest_token"]
+    </script>
+
     <div class="container">
       <div style="text-align: center">
         <h3>Transaction Summary</h3>
       </div>
-      <p>Status: <%= txn_res.ResponseMessage %></p>
-      <p>TxnId: <%= txn_res.TransactionID %></p>
+      <p>Order: <%= txn_res.number %></p>
+      
       <button type="button" name="button" href="www.google.com"><a href="https://test.luxire.com">Go Back To Store</a></button>
   </body>
 </html>

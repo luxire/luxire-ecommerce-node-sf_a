@@ -11,7 +11,7 @@ module.exports = {
     }
   },
   spree:{
-    host: 'http://54.169.41.36:3000', //Spree store-Host Url
+    host: 'http://104.215.254.150:3000', //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
     users: '/luxire-users',
@@ -27,14 +27,18 @@ module.exports = {
     zones: '/api/zones',
     shipping_methods: '/customized_shipping_methods',
     taxes: '/customized_tax_rates',
-    taxonomie: '/api/taxonomies',
+    taxonomy: '/api/taxonomies',
     search: '/api/search',
     measurement_types: '/measurement_types',
     product_types: '/luxire_product_types',
     style_masters: '/luxire_style_masters',
     incomplete_order: '/get_order',
-
-
+    luxireProperties: '/luxire_properties.json',
+    alltaxons: '/api/taxons',
+    standard_sizes: '/standard_sizes',
+    json: '.json',
+    product_csv_import: '/luxire_product_data/imports',
+    collections: '/customized_taxons/get_taxon_details.json'
   },
   payment: {
     ebs: {

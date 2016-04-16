@@ -41,6 +41,24 @@ exports.updateStock = function (req, res){
     });
 
   };
+  exports.luxireStocks_byId = function(req, res) {
+
+      var token_id="99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058";
+      http
+        .get(env.spree.host+env.spree.updateStock+'/'+req.params.id+'?token='+token_id, function(error, response, body){
+          if(error==null){
+                console.log("\n\nget : /luxire_stocks by id   response are as follows: \n\n");
+                res.status(response.statusCode).send(body);
+                console.log(body);
+          }
+          else{
+            console.log(" /luxire_stocks error :"+error);
+            res.status(500).send("Rails server not responding");
+          };
+      });
+
+    };
+
 
   exports.luxireStocks_addQuantity= function(req, res){
         console.log("add quantity is calling...");

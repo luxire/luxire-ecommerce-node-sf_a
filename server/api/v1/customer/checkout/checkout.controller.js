@@ -64,6 +64,8 @@ exports.checkout_delivery  = function(req, res){
 /*proceed to checkout payment, Shipping Methods --> Payment*/
 exports.checkout_payment  = function(req, res){
   console.log('shipments', req.body);
+  console.log(constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token);
+
   http.put({
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
     headers:{
@@ -90,6 +92,34 @@ exports.checkout_payment  = function(req, res){
   });
 
 };
+
+/*proceed to checkout paypal payment*/
+exports.checkout_pay_pal_payment  = function(req, res){
+  console.log('pay pal', req.body);
+  console.log(constants.spree.host+'/paypal?payment_method_id='+req.body.payment_method_id+'&order_id='+req.body.order_id);
+
+  http.post({
+    uri: constants.spree.host+'/paypal?payment_method_id='+req.body.payment_method_id+'&order_id='+req.body.order_id,
+    headers:{
+      'content-type': 'application/json',
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    },
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error == null){
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+    }
+    else{
+      res.status(500).send("Internal Server Error");
+      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+    }
+  });
+
+};
+
+
+
 
 
 /*Return url for EBS*/

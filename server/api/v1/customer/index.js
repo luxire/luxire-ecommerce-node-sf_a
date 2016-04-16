@@ -50,6 +50,7 @@ app.use(function(req, res, next){
 
 });
 
+// app.use('/auth', require('./auth'));
 app.use('/products', require('./product'));
 app.use('/product_types', require('./product_type'));
 app.use('/style_masters', require('./style_master'));

@@ -11,6 +11,10 @@ router.get('/new',controller.styleMastersNew);
 router.get('/:id/edit',controller.styleMastersEditById);
 router.patch('/:id',controller.styleMastersShowById);
 router.put('/:id',controller.styleMastersUpdateById);
+/*upload image*/
+router.put('/:id/images',controller.update_image);
+/*----*/
+
 router.delete('/:id',controller.styleMastersDeleteById);
 
 
