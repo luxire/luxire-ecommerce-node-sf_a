@@ -1,0 +1,241 @@
+.carousel-collection{
+  position: absolute;
+  top:45%;
+  left: 20%;
+  font-size: 400%;
+  width: 30%;
+  text-align:left;
+  font-weight: 100;
+  color: #000000;
+  font-family: Roboto;
+}
+a.right.carousel-control, a.left.carousel-control{
+  background: transparent !important;
+}
+#viewCollectionButton{
+  border-radius: 0px;
+  color: white;
+  background-color: #8A247C;
+  font-family: Roboto;
+  font-weight: 100;
+  width: 80%;
+  font-size: 60%;
+  border: none;
+}
+/*.click-baits{
+  height: 1000px;
+  background: linear-gradient(-90deg, #BFBFBF, #E2E2E2),
+  url(../../../assets/images/customer/click-bait-model.png) no-repeat ;
+
+  }*/
+.click-baits{
+  height: 200vh;
+  position: relative;
+  /*margin-top: -6%;*/
+  background: url(../../../assets/images/customer/click-bait-image.png) no-repeat center !important;
+}
+.click-bait-collar{
+  position: absolute;
+  top: 23%;
+  left: 48.5%;
+  color: white;
+  display: block;
+}
+@keyframes pulse_animation {
+	0% { transform: scale(1); }
+	30% { transform: scale(1); }
+	40% { transform: scale(1.08); }
+	50% { transform: scale(1); }
+	60% { transform: scale(1); }
+	70% { transform: scale(1.05); }
+	80% { transform: scale(1); }
+	100% { transform: scale(1); }
+}
+@-webkit-keyframes pulse_animation {
+  0% { transform: scale(0.85); }
+  30% { transform: scale(0.90); }
+  40% { transform: scale(0.95); }
+  50% { transform: scale(1); }
+  60% { transform: scale(1.05); }
+  70% { transform: scale(1.10); }
+  80% { transform: scale(1.15); }
+  100% { transform: scale(1.20); }
+}
+.click-bait-outer-circle{
+  position: relative;
+  display: block;
+  top: 0%;
+  left: 0%;
+  width: 25px;
+  height: 25px;
+  border: solid 1px white;
+  border-radius: 100%;
+  animation-name: pulse_animation;
+	animation-duration: 2000ms;
+	transform-origin:70% 70%;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+.click-bait-inner-circle{
+  position: absolute;
+  display: block;
+  top: 20%;
+  left: 20%;
+  width: 15px;
+  height: 15px;
+  border: solid 1px white;
+  border-radius: 100%;
+  animation-name: pulse_animation;
+	animation-duration: 2000ms;
+	transform-origin:70% 70%;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+.click-bait-pointer{
+  cursor: pointer;
+  position:absolute;
+  display: block;
+  top: 0px;
+  left: 0px
+}
+.line{
+  position: absolute;
+  display: block;
+  top: 10px;
+  left: 7px;
+}
+.click-bait-info-section{
+  position: absolute;
+  top: 10%;
+  left: 33vh;
+  display: block;
+}
+.click-bait-text{
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 75%;
+
+  font-family: Roboto;
+  color: #000000;
+  font-size: 100%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: left;
+}
+
+.view-collection-title{
+  font-family: Roboto;
+  color: #000000;
+  font-size: 300%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: center;
+}
+.taxonomy-name{
+  font-family: Roboto;
+  color: #000000;
+  font-weight: 100;
+  font-size: 100%; /* Approximation due to font substitution */
+  text-align: center;
+}
+.taxonomyCard:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px 2px #D3D3D3;
+}
+.taxonomyCard{
+  padding: 1%;
+  z-index: 99;
+  background-color: #FDFDFD;
+  box-shadow: 1px 1px 1px 1px #E1D9D4;
+  margin-top: 5%;
+}
+.taxonomyCards{
+  margin-left: 4%;
+}
+.taxonomy-name{
+  padding-top: 3%;
+}
+.product-collections{
+  margin-top: 2%;
+}
+.customer-reviews{
+  margin-top: 7%;
+  background: #F6F7F6;
+  position: relative;
+  background: -webkit-linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* Standard syntax */
+}
+.row.customer-review-section{
+  width: 53%;
+  position: absolute;
+  top: 15%;
+  left: 40%
+}
+.customer-speak-text{
+  margin-top: 8%;
+  font-family: Roboto;
+  color: #000000;
+  font-size: 300%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: left;
+}
+.customer-review-quote{
+  margin-top: 8%;
+  font-family: Roboto;
+  color: #000000;
+  font-size: 150%; /* Approximation due to font substitution */
+  font-weight: 300;
+  text-align: left;
+}
+.customer-name{
+  margin-top: 4%;
+  font-family: Roboto;
+  color: #000000;
+  font-size: 112.5%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: left;
+}
+.customer-review-source{
+  margin-top: 2%;
+  font-family: Roboto;
+  color: #000000;
+  font-size: 75%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: left;
+}
+.review-indexes, #review_index{
+  text-align: center;
+  margin-top: 5%;
+  font-family: Roboto;
+  color: #000000;
+  font-size: 150%; /* Approximation due to font substitution */
+  font-weight: 100;
+  font-family: Roboto;
+  cursor: pointer;
+
+}
+.active-review-index{
+  color: #8A247C;
+  font-weight: 300;
+}
+.collection-caption{
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  font-weight: 300;
+  font-size: 300%;
+  text-align: center;
+}
+
+.collection-features-circle{
+  padding-top: 15%;
+	width: 100px;
+	height: 100px;
+	background: black;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+  color: white;
+  font-size: 50%;
+}
