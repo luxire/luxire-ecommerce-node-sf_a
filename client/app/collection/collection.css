@@ -25,7 +25,7 @@
   border-right: solid 1px #C7BD98;
 }
 a.right.carousel-control, a.left.carousel-control{
-  display: none;
+  /*display: none;*/
 }
 #luxire-carousel-container{
   padding-top: 2%;
