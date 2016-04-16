@@ -1,6 +1,155 @@
-<div class="" style="">
+<!-- <div class="" style="">
   <h1>Customer Landing Page</h1>
 
-  <button ng-click="go_to_product_listing('shirts','casual')">Move to (shirts,casuals)</button>
+  <button ng-click="go_to_product_listing()">Move to listing</button>
+
+</div> -->
+<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 5.7%; display: block">
+  <div class="" >
+    <uib-carousel active="0" interval="5000" style="width: 100%">
+      <uib-slide ng-cloak ng-repeat="slide in product_type_carousels" style="width: 100%">
+        <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%; height: 89vh"/>
+        <div class="carousel-caption">
+
+        </div>
+        <div class="carousel-collection">
+          {{slide.text}} <br>
+          <button id="viewCollectionButton" type="button" ng-click="go_to_collection(slide.permalink)" class="btn btn-default" name="button">
+            View Collection
+          </button>
+        </div>
+      </uib-slide>
+    </uib-carousel>
+  </div>
+  <div class="click-baits" ng-init="show_suit_bait=false">
+    <div class="click-bait-collar">
+      <div class="click-bait-pointer" ng-mouseover="show_suit_bait=true;beginLineAnimation()">
+        <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
+        </span>
+        <span class="click-bait-inner-circle">
+        </span>
+      </div>
+      <svg ng-show="show_suit_bait" class="" style="margin-top: 4%;margin-left: 2%">
+        <line x1="20" y1="0" x2="200" y2="0" style="stroke: white;stroke-width:2" >
+          <animateTransform id="animateLine" attributeName="transform" attributeType="XML"
+                      type="scale"
+                      from="0" to="1"
+                      begin="indefinite" dur="1.5s"
+                      repeatCount="0"
+                      />
+        </line>
+
+      </svg>
+      <div ng-show="show_suit_bait" class="click-bait-text" style="display: block; position: absolute;width: 100%">
+        <span style="display: block;">
+          <img src="assets/images/customer/luxire_icon.png" alt="" />
+          <span style="margin-left: 2%">Suit style</span>
+        </span>
+
+      </div>
+      <!-- <div class="click-bait-info-section">
+        <div class="click-bait-luxire-image" style="display: block">
+          <span>
+            <span class="click-bait-text" style="display: block">
+              Suit Style
+            </span>
+          </span>
+        </div>
+
+      </div> -->
+
+    </div>
+  </div>
+  <div class="product-collections">
+    <div class="view-collection-title">
+      View Men’s Collection
+    </div>
+    <div class="taxonomyCards" >
+      <div class="taxonomyCard" ng-click="go_to_collection(taxonomy.root.permalink)" ng-repeat="taxonomy in product_taxonomies" style="display: inline-block;border: solid 0.5px grey;margin-left: 3%" >
+        <div class="">
+          <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: 128px"alt="" />
+        </div>
+        <div class="taxonomy-name" >
+          {{taxonomy.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="customer-reviews">
+    <div class="customer-review-image">
+      <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width: 100%" alt="" />
+    </div>
+    <div class="row customer-review-section" style="">
+      <div class="col col-sm-8 col-md-8 col-lg-8 col-xs-8">
+        <div class="customer-speak-text">
+          Customers Speak
+        </div>
+        <div class="customer-review-quote">
+          "{{customer_reviews[active_customer_review_index].review}}"
+        </div>
+        <div class="customer-name">
+          {{customer_reviews[active_customer_review_index].name}}
+        </div>
+        <div class="customer-review-source">
+          {{customer_reviews[active_customer_review_index].source}}
+        </div>
+      </div>
+      <div class="col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="border-right: solid 1px grey; height: 50vh">
+
+      </div>
+      <div class="review-indexes col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="">
+        <div class="" ng-click="change_active_review_index(review_index)" ng-class="{'active-review-index': review_index==active_customer_review_index}" ng-repeat="review_index in review_indexes">
+          <p style="margin-bottom: 5%">{{review_index+1}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="collection-uniqueness">
+    <uib-carousel active="0" interval="2000" style="width: 100%">
+      <uib-slide ng-cloak ng-repeat="slide in unique_collections" style="width: 100%">
+        <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%;"/>
+        <div class="collection-caption">
+          <div class="">
+            {{slide.uniqueness_text}}
+          </div>
+          <div class="" ng-repeat="option in slide.unique_features" style="display: inline-block; margin-left: 2%;margin-top: 5%">
+            <div class="collection-features-circle">
+              {{option.count}}<br>
+              {{option.feature}}
+            </div>
+          </div>
+        </div>
+
+      </uib-slide>
+    </uib-carousel>
+
+  </div>
+</div>
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
 
 </div>
