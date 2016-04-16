@@ -2326,7 +2326,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       element = stripCommentsFromElement(element);
       if (element) {
         node = getDomNode(element);
-        parent = element.parent();
+        // parent = element.parent();commented for luxire
       }
 
       options = prepareAnimationOptions(options);
