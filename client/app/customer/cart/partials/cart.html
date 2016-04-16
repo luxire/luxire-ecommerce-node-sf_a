@@ -1,5 +1,225 @@
-<div class="row" style="margin-left: 0px; margin-right: 0px">
-  <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 8.8%">
+  <div class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+    <div id="luxire-cart-header" class="row">
+      <div id="my_order_text" class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+        My Orders
+      </div>
+      <div class="col cart-header col-lg-5 col-md-5 col-sm-5 col-xs-5">
+        Product
+      </div>
+      <div class="col cart-header col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        Price
+      </div>
+      <div class="col cart-header col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        Qty
+      </div>
+      <div class="col cart-header col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        Total
+      </div>
+      <div class="col cart-header col-lg-1 col-md-1 col-sm-1 col-xs-1">
+      </div>
+    </div>
+    <div id="luxire-cart-body" ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" class="row row-eq-height" ng-repeat="line_item in luxire_cart.line_items">
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border-right: solid 1px #D4D4D4">
+        <img style="max-width: 100%;border: solid 1px #B4B5B8; margin: 5% 0%" src="{{getImage(line_item.variant.images[0].product_url)}}">
+      </div>
+      <div class="col cart-body col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        {{line_item.variant.name}}<br>
+        <span popover-placement="right" popover-append-to-body="false" style="color: #BFBFBF; cursor: pointer "
+          popover-trigger="none" popover-is-open="line_item.popoverIsOpen" ng-click="line_item.popoverIsOpen = !line_item.popoverIsOpen"
+         uib-popover-template="dynamicPopover.templateUrl"
+         style="color: #BFBFBF; cursor: pointer " >
+          <i class="fa fa-search"></i>
+          <label style="cursor: pointer">Details</label>
+        </span>
+        <!-- <button uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-default">Popover With Template new</button> -->
+        <!-- <script type="text/ng-template" id="myPopoverTemplate.html">
+            <div>{{dynamicPopover.content}}</div>
+            <div class="form-group">
+              <label>Popup Title:</label>
+              <input type="text" ng-model="dynamicPopover.title" class="form-control">
+            </div>
+        </script> -->
+        <!-- <button uib-popover-html="popover_html" ng-mouseover="trigger_popover(line_item)" popover-placement="right" class="btn btn-default">HTML Popover</button> -->
+
+
+        <!-- <span uib-popover-html="popover_html" popover-trigger="none" ng-mouseover="trigger_popover(line_item)" popover-trigger="none" popover-is-open="line_item.popoverIsOpen" ng-click="line_item.popoverIsOpen = !line_item.popoverIsOpen" popover-placement="right" popover-append-to-body="false" style="color: #BFBFBF; cursor: pointer " >
+          <i class="fa fa-search"></i>
+          <label style="cursor: pointer">Details</label>
+        </span> -->
+      </div>
+      <div class="col cart-body col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        {{line_item.single_display_amount}}
+      </div>
+      <div class="col cart-body col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        {{line_item.quantity}}
+          <i class="fa fa-plus" ng-click="update_cart(line_item, line_item.quantity+1);line_item.quantity_changed=true" style="font-size: 70%; background-color: #CBCBCB; padding: 5%; cursor: pointer"></i><i class="fa fa-minus" ng-click="update_cart(line_item, line_item.quantity-1);line_item.quantity_changed=true" style="font-size: 70%; background-color: #E4E4E4; padding: 5%; cursor: pointer"></i>
+          <i ng-class="{'update-cart': line_item.quantity_changed==true}" class="fa fa-check-circle" style="padding: 5%; color: green"></i>
+      </div>
+      <div class="col cart-body col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        {{line_item.display_amount}}
+      </div>
+      <div class="col cart-body col-lg-1 col-md-1 col-sm-1 col-xs-1" style="border: none;">
+        <i class="fa fa-minus-circle" style="cursor: pointer" ng-click="delete_line_item(line_item.id, $index)"></i>
+      </div>
+    </div>
+    <div id="luxire-cart-total" ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" class="row row-eq-height">
+      <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="text-align:right; padding-right: 1%">
+        Total Amount:
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align:left; padding-left: 0px">
+        {{luxire_cart.display_total}}
+      </div>
+    </div>
+    <uib-alert style="margin-top: 5%" ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert>
+
+    <div id="luxire-cart-footer"  class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left">
+        <div class=" row" style="text-align: right">
+          <!-- <div ng-if="luxire_cart != {} && luxire_cart.line_items.length >0" class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="empty_cart()">Empty Cart</i></button>
+            </div>
+          </div> -->
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
+            <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="go_to_product_listing()">Continue Shopping</button>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+      <div ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
+        <div class=" row" style="text-align: right">
+          <div  class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            <!-- <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="update_cart(luxire_cart.line_items)">Update</i></button>
+            </div> -->
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
+                <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="checkout()">Checkout<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<div style="margin-top: 30%">
+</div>
+
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>
+<script type="text/ng-template" id="line_item_detail.html">
+  <div class="row" style="text-align: right; font-size: 150%; margin-top: -4%; margin-right: -3%;cursor:pointer" ng-click="line_item.popoverIsOpen=false">
+    X
+  </div>
+  <div class="row" style="">
+    <div class="row" style="margin-left: 0px; margin-right: 0px; margin: 3%">
+      <div class="col col-md-4 col-sm-4 col-lg-4">
+        <div class="row">
+          <img style="max-width: 100%; border: solid 1px #888282" src="{{getImage(line_item.variant.images[0].product_url)}}">
+        </div>
+      </div>
+      <div class="col col-md-8 col-sm-8 col-lg-8" style="padding-right: 0px; font-family: Arial; font-weight:600;font-size: 90%; margin-top: 5%">
+        <p>{{line_item.variant.name}}</p>
+        <p style="font-size: 150%; margin-top: 5%">{{line_item.display_amount}}</p>
+      </div>
+    </div>
+    <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.customized_data" class="row" style="margin-left: 0px; margin-right: 0px; background: #F8F8F8">
+      <div class="col col-md-12 col-sm-12 col-lg-12 col-xs-12" style="padding-right: 0px; font-family: Arial; font-weight:600;font-size: 100%;">
+        <h4>Selected Options</h4>
+      </div>
+      <div  class="row" style="background: #F8F8F8; padding-left: 5%; margin-left: 0px;  margin-right: 0px">
+        <p ng-if="val.value!=''" ng-repeat="(key, val) in line_item.luxire_line_item.customized_data" style="font-size: 100%; margin-bottom: 0px">{{key}}: {{val.value}}</p>
+      </div>
+    </div>
+
+    <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.personalize_data" class="row" style="background: #F8F8F8; padding-left: 3%; margin-left:0px; margin-right: 0px;font-family: Arial; font-weight:400;">
+      <div ng-repeat="(key, val) in line_item.luxire_line_item.personalize_data">
+        <div ng-if="object_keys_length(val)!=0">
+          <h5 style="margin-bottom: 0px">{{key}}
+          </h5>
+          <div ng-if="key.toLowerCase()=='monogram'">
+            <div ng-repeat="(monogram_key, monogram_value) in val">
+              &nbsp;&nbsp;<p style="font-size: 90%; margin-bottom: 0px">{{monogram_key}}: {{monogram_value}}</p>
+            </div>
+          </div>
+          <p ng-if="key.toLowerCase()!='monogram'" ng-repeat="(k, v) in val" style="margin-bottom: 0px">
+            &nbsp;&nbsp;<span ng-if="v.hasOwnProperty('fabric')" style="font-size: 100%; margin-bottom: 0px">{{k}}: {{v.fabric}}</span>
+            &nbsp;&nbsp;<span ng-if="!v.hasOwnProperty('fabric')" style="font-size: 100%; margin-bottom: 0px">{{k}}</span>
+
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data && line_item.luxire_line_item.measurement_data.standard_measurement_attributes" class="row" style="margin-left: 0px; margin-right: 0px;background: #F0F0F0; padding-left: 3.5%">
+      <h5>Custom Measurements</h5>
+      <div class="measurement row" style="padding-left: 5%">
+        <div style="display: block">
+          <p ng-if="val.value!=''" style="margin-bottom: 0px" ng-repeat="(key, val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
+            {{key}}: {{val.value}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data && line_item.luxire_line_item.measurement_data.body_measurement_attributes" class="row" style="margin-left: 0px; margin-right: 0px;background: #F0F0F0; padding-left: 3.5%">
+      <h5>Body Measurements</h5>
+      <div class="measurement row" style="padding-left: 5%">
+        <div style="display: block">
+          <p ng-if="val.value!=''" style="margin-bottom: 0px" ng-repeat="(key, val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
+            {{key}}: {{val.value}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</script>
+
+<!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
+  <div id="luxire-cart" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div id="luxire-logo">
       <img src="lib/assets/Luxire_logo_collection_page.png" >
     </div>
@@ -44,9 +264,7 @@
             <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2" style="padding-left: 0%;margin-top: 2%">
               {{line_item.display_amount}}
             </div>
-            <!-- <div class="col-md-1 col-lg-1 col-sm-1 col-xs-1"> -->
-              <!-- <i class="fa fa-minus-square-o"></i> -->
-            <!-- </div> -->
+
           </div>
           <hr style="width: 100%">
           <div class="row" style="font-size: 125%;">
@@ -80,92 +298,4 @@
   <div style="margin-top: 30%">
   </div>
 
-</div>
-
-
-
-
-
-</div>
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
-  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
-    <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
-    </div>
-    <div style="margin-top:2%;">
-        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
-    </div>
-
-  </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
-    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
-    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
-  </div>
-
-</div>
-
-<!-- <h6 ng-if="cartItem.product_price_after_personalisation"><i>{{item_count}} items (${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}})</i></h6>
-<h6 ng-if="cartItem.product_price_after_personalisation == undefined"><i>{{item_count}} items (${{(cartItem.product_price * product_quantity).toFixed(2)}})</i></h6>
-<!--  -->
-<!--h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
-<h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3> -->
-
-
-
-<!-- <div class="row" style="" ng-repeat="cartItem in cartItems">
-  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
-    <img style="max-width: 100%" src="{{cartItem.product_img}}">
-  </div>
-  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-    <h4>{{cartItem.product_name}}</br></h4>
-    <h6 ng-if="cartItem.style != ''">&nbsp;&nbsp;&nbsp;style: {{cartItem.style}}</br></h6>
-    <h6 ng-if="cartItem.fits != ''">&nbsp;&nbsp;&nbsp;fits: {{cartItem.fits}}</br></h6>
-    <h6 ng-if="cartItem.Collar != ''">&nbsp;&nbsp;&nbsp;collar: {{cartItem.Collar}}</br></h6>
-    <h6 ng-if="cartItem.Sleeves != ''">&nbsp;&nbsp;&nbsp;Sleeves: {{cartItem.Sleeves}}</br></h6>
-    <h5 ng-if="cartItem.Customize != undefined">Customize</h5>
-    <div ng-repeat="(key,value) in cartItem.Customize"><h5 ng-if="value != ''">&nbsp;&nbsp;&nbsp;{{key}}:{{value}}</br></h5></div>
-    <h6 ng-if="cartItem.Personalize != undefined">Personalize</h6>
-    <h6 ng-if="cartItem.Personalize.Monogram">Monogram</h6>
-    <div ng-repeat="(key,value) in cartItem.Personalize.Monogram"><h6 ng-if="value != ''">{{key}}:{{value}}</br></h6></div>
-    <h6 ng-if="cartItem['Personalize']['Additional Options'] != undefined">Additional Optional</h5>
-    <div ng-repeat="addOption in cartItem['Personalize']['Additional Options']"><h6 ng-if="addOption.selected == true">{{addOption.name}}</br></h6></div>
-    <h6 ng-if="cartItem['Personalize']['Contrast'] != undefined">Contrast</h6>
-    <div ng-repeat="contrast in cartItem['Personalize']['Contrast']"><h6 ng-if="contrast.selected == true">{{contrast.name}}</br></h6></div>
-    <!-- <h4>Measurement</h4>
-    <h5 ng-repeat="(key,value) in cartItem.Measurement">{{key}}</h5>
-    <div ><h6 >{{value}}</br></h6></div> -->
-  <!--/div>
-  <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
-    <!-- <h3>Quantity</h3> -->
-    <!--input class="form-control" ng-model="$parent.product_quantity" style="width: 50px">
-  </div>
-  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-    <h4 ng-if="cartItem.product_price_after_personalisation">${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h4>
-    <h4 ng-if="cartItem.product_price_after_personalisation == undefined">${{(cartItem.product_price * product_quantity).toFixed(2)}}</h4>
-
-    <!-- <h2>Order summary</h2>
-    <h3>Item price: ${{cartItem.product_price}}</h3>
-    <h3 ng-if="cartItem.product_price_after_personalisation">Customisation cost: ${{getCustomisationCost(cartItem.product_price_after_personalisation, cartItem.product_price)}}</h3>
-    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Customisation cost: ${{0*0}}</h3>
-
-    <hr>
-    <h3 ng-if="cartItem.product_price_after_personalisation">Total: ${{(cartItem.product_price_after_personalisation * product_quantity).toFixed(2)}}</h3>
-    <h3 ng-if="cartItem.product_price_after_personalisation == undefined">Total: ${{(cartItem.product_price * product_quantity).toFixed(2)}}</h3>
-
-    <br><br>ng-repeat="line_item in luxire_cart[0].line_items"
-    <button class="btn btn-primary" ng-click="go_to_checkout_address(product_quantity)">Checkout</button> -->
-  <!--/div>
-
-</div-->
+</div> -->

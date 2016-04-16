@@ -1,0 +1,71 @@
+#my_order_text{
+  font-family: HelveticaNeue;
+  color: #000000;
+  font-weight: 300;
+  text-align: center;
+  font-size: 150%
+}
+#luxire-cart-header{
+  border-bottom: solid 1px #AEAEAE;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+#luxire-cart-body{
+  border-bottom: solid 1px #AEAEAE;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+#luxire-cart-total{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.col.cart-header{
+  font-family: Arial;
+  color:  #33312f;
+  font-size: 110%;
+  font-weight: 400;
+  text-align: center;
+  line-height: 230%;
+}
+.col.cart-body{
+  font-family: Arial;
+  color:  #33312f;
+  font-size: 100%;
+  font-weight: 600;
+  text-align: left;
+  line-height: 230%;
+  padding-top: 2%;
+  border-right: solid 1px #D4D4D4;
+  padding-right: 0px !important;
+}
+.row-eq-height{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+#luxire-cart-total{
+  font-family: Arial;
+  color:  #33312f;
+  font-size: 150%;
+  font-weight: 600;
+}
+#luxire-cart-footer{
+  margin-top: 5%
+}
+.popover{
+  width: 100%;
+  max-width: 80% !important;
+}
+.measurement.row{
+  width: 100%;
+}
+.measurement.row tr:nth-child(odd){
+  background: #F8F8F8;
+}
+.measurement.row tr:nth-child(even){
+  background: #F3F3F3;
+}
+.update-cart{
+  color: grey !important;
+}
