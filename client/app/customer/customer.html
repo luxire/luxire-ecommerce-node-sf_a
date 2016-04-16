@@ -1,86 +1,101 @@
-<div class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #FFFFFF;width: 100%">
-  <div class="row" style="margin-left: 0.2%; margin-right: 1%;padding-top: 2%;z-index: 10">
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"  style="">
-      <img src="assets/images/customer/luxire_logo.png" style="max-width: 80%;">
+<div class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #F5F5F5;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4">
+  <div class="row" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%; ">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
+      <img src="assets/images/customer/luxire_logo.png" ui-sref="customer.home" style="max-width: 100%;cursor: pointer">
     </div>
-    <div id="top-navbar"class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: .5%;">
-      <div class="fixed" style="">
-          <nav class="navbar navbar top-bar" data-topbar style="margin-bottom: 0px">
-            <div class="container-fluid">
-              <ul class="nav navbar-nav" style="background-color:white;cursor: pointer">
-                  <li class="active"><a href="#" style="font-size:90%;color:#B8B8B8">HOME</a></li>
-                  <li><a href="#" style="font-size:90%;color:#6D032B">SHIRTS</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">PANTS</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">JACKETS & COATS</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">ACCESSORIES</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">QUALITY</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">MEASUREMENTS</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">LOG IN</a></li>
-                  <li><a href="#" style="font-size:90%;color:#B8B8B8">CONTACT</a></li>
-                  <li>
-                    <!-- <input class="form-control" id="ex2" type="text" placeholder="search..." style="height:10%;padding: 2% 0% 2% 0%;border-radius:6px;width: 125%"> -->
-                  </li>
-              </ul>
-              <!-- <ul class="nav navbar-nav navbar-right">
-
-                <li><a href="#" ng-click="showTopSearchBar()"><span class="glyphicon glyphicon-search " style="color:#7A012E"></span></a></li>
-              </ul> -->
-            </div>
-          </nav>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left; font-size: 92%; font-weight: 200; margin-top: 1.4%">
+          Luxury Bespoke Mens Wear. Home Delivered.
         </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+
+        </div>
+        <div ng-init="show_search_panel=false" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: right; margin-top: 0.5%">
+          <div class="" style="display: inline-block">
+            <angucomplete-alt id="products" ng-if="show_search_panel" style="height: 25px; position: absolute; top:0; left:0; z-index: 100"
+                placeholder="Search products"
+                pause="400"
+                selected-object="select_product"
+                remote-url="{{search_products_url}}"
+                remote-url-data-field="products"
+                title-field="name"
+                template-url="search_template_product.html"
+                input-class=""/>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: right; margin-top: 0.5%">
+          <i class="fa fa-search" style="margin-right: 1%; cursor: pointer" ng-click="show_search_panel=!show_search_panel"></i>&nbsp;&nbsp;
+          <i ui-sref="customer.cart" class="fa fa-shopping-cart" style="color: #8A247C;font-size:170%;cursor: pointer">
+            <span class = "badge" style="color: white">
+              ({{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}})
+            </span>
+          </i>&nbsp;&nbsp;
+          <span style="margin-right: 1%; color: #D4D4D4">
+            |
+          </span>
+          <span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="open_side_menu()">
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #696969;color: transparent;border-radius: 50%"></i>
+            <i class="fa fa-bars fa-stack-1x" style="color: white"></i>
+          </span>
+
+        </div>
+
+
+
+      </div>
+
     </div>
-
-  </div>
-  <div class="row" style="border-top: solid 1.5px #5A0526;margin-top: 1%;z-index: 10">
-    <nav class="navbar" data-topbar style="margin-bottom: 0px">
-          <ul class="nav-items " style="text-align:center;cursor: pointer;height: 2%;border-bottom: solid 1.5px #5A0526;padding-bottom: 0.4%">
-            <li class="shirts " style="color:#6D032B;font-size:90%;margin-left:30%;" ng-click="showCasual()">Casual</li>
-            <li class="pants" style="color:#7F7F7F;font-size:90%;" ng-click="showFormal()">Formal</li>
-            <li class="jackets" style="color:#7F7F7F;font-size:90%;" ng-click="showDress()">Dress</li>
-            <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
-            <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
-            <!-- <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
-            <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
-            <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li>
-            <li class="jackets" style="color:#7F7F7F;font-size:80%;"></li> -->
-            <li class="jackets" ui-sref="customer.cart"><i class="fa fa-shopping-cart" style="background-color:#7A012E;color:white;width:70%;font-size:170%;margin-top:5%;margin-left: 4%"><span class = "badge" style="background-color: #7A012E">({{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}})</span></i></li>
-          </ul>
-          <!--<ul class="nav navbar-nav navbar-right" style="margin-left:-10%;">
-            <li class="jackets" ><i class="fa fa-shopping-cart" style="background-color:#7A012E;color:white;width:70%;font-size:170%;"></i></li>
-          </ul>-->
-    </nav>
-
   </div>
 </div>
-<div ui-view="customer" autoscroll="true" style="width: 100%; height: 100%;padding-top: 13%"></div>
-<div style="position: fixed;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+<div ui-view="customer" autoscroll="false" style="width: 100%; height: 100%;font-family: Roboto;"></div>
+<div style="position: fixed;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3;font-family: Roboto;">
   <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
-<!-- <div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
-  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
-    <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
-    </div>
-    <div style="margin-top:2%;">
-        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
-    </div>
+<script type="text/ng-template" id="customer_side_menu.html" style="background: transparent">
 
-  </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
-    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
-    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
-  </div>
+  <div class="row" style="margin-left: 0px; margin-right: 0px; background: #717171; color: #E1E1E1; font-family: Arial;height: 100%">
+    <div class="row" style="margin-left: 0px; margin-right: 0px; background: #717171; color: #E1E1E1; font-family: Arial;text-align: right; font-size: 150%;">
+      <span style=" cursor: pointer; margin-right: 5%" ng-click="close_side_menu()">X<span>
+    </div>
+    <div class="row">
+      <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1">
+      </div>
+      <div class="col col-xs-10 col-sm-10 col-md-10 col-lg-10" style="cursor: pointer">
+        <h6 style="margin-top: 5%">HOME</h6>
+        <h6 style="margin-top: 5%">QUALITY</h6>
+        <h6 style="margin-top: 5%" ng-repeat="taxonomy in taxonomies" >
+          <span ng-click="go_to_collection(taxonomy.root.permalink)" >{{taxonomy.name}}</span>
+          &nbsp;&nbsp;<p style="margin-top: 5%;margin-left: 5%" ng-repeat="taxon in taxonomy.root.taxons" ng-click="go_to_collection(taxon.permalink)">{{taxon.name}}</p>
+        <!--//p style="margin-top: 5%;margin-left: 5%" ng-repeat="taxon in taxonomy.root.taxons" ng-click="go_to_listing(taxonomy.name, taxonomy.id, taxon.name, taxon.id)">{{taxon.name}}</p-->
+        </h6>
+        <h6 style="margin-top: 5%">MEASUREMENTS</h6>
+        <h6 ng-if="!isLoggedIn" style="margin-top: 5%" ng-click="go_to_login()">LOG IN</h6>
+        <h6 ng-if="!isLoggedIn" style="margin-top: 5%" ng.click="go_to_signup()">SIGN UP</h6>
+        <h6 ng-if="isLoggedIn"style="margin-top: 5%" ng-click="go_to_my_account()">MY ACCOUNT</h6>
+        <h6 ng-if="isLoggedIn" style="margin-top: 5%" ng-click="go_to_logout()">LOG OUT</h6>
+        <h6 style="margin-top: 5%">CONTACT</h6>
 
-</div> -->
+      </div>
+
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="search_template_product.html">
+    <div class="angucomplete-holder" style="z-index: 10000; cursor: pointer" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+      <input ng-model="searchStr"
+        type="text"
+        placeholder="Search Product.."
+        class="form-control input-sm"
+        ng-change="inputChangeHandler(searchStr)"/>
+      <div class="angucomplete-dropdown" ng-show="showDropdown" >
+        <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
+        <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
+        <div class="angucomplete-row" style="border-bottom: solid 1px black; " ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
+          <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
+          <div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div>
+        </div>
+
+      </div>
+    </div>
+</script>

@@ -17,18 +17,39 @@ angular.module('luxire')
 	.state('customer.home',{
 		url:'/',
 		views: {
-			"customer": { templateUrl: "app/customer/customer_home/partials/customer_home.html", controller: "CustomerHomeController"},
+			"customer": {
+				templateUrl: "app/customer/customer_home/partials/customer_home.html",
+				controller: "CustomerHomeController"
+			},
 		},
 		data: {
 			require_auth: false
 		}
 	})
-	.state('customer.product_listing',{
-		url:'/products/:taxonomy_name/:taxon_name',
+	// .state('customer.product_listing',{
+	// 	url:'/products/:taxonomy_name/:taxon_name',
+	// 	views: {
+	// 		"customer": { templateUrl: "app/customer/product_listing/partials/product_listing.html",
+	// 		 controller: "ProductListingController"},
+	// 		 params: {taxonomy_name: null,taxon_name: null,taxonomy_id: null, taxon_id: null}
+	// 	},
+	// 	params: {taxonomy_name: null,taxon_name: null,taxonomy_id: null, taxon_id: null},
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+	.state('customer.collection',{
+		url:'/collections/*collection_name',
 		views: {
-			"customer": { templateUrl: "app/customer/product_listing/partials/product_listing.html",
-			 controller: "ProductListingController"},
-			 params: {taxonomy_name: null,taxon_name: null}
+			"customer": {
+				templateUrl: "app/customer/collection/partials/collection.html",
+			  controller: "CollectionController"},
+			 params: {
+				 collection_name: null
+			 }
+		},
+		params: {
+			collection_name: null
 		},
 		data: {
 			require_auth: false
@@ -46,20 +67,36 @@ angular.module('luxire')
 	// 		require_auth: false
 	// 	}
 	// })
-
-	// .state('customer.productListing',{
-	// 	url: '/product-listing',
-	// 	params: {filterObject: {}},
-	// 	templateUrl: 'app/customer/newProduct/partials/productListing.html',
-	// 	controller: 'productListingController',
-	// 	css: 'app/customer/newProduct/css/productListing.css'
-	// 	})
+	// .state('customer.product_detail',{
+	// 	url:'/products/:taxonomy_name/:taxon_name/:product_name',
+	// 	views: {
+	// 		"customer": { templateUrl: "app/customer/product_detail/partials/product_detail.html",
+	// 		 controller: "ProductDetailController"},
+	// 		 params: {taxonomy_name: null,taxon_name: null,product_name: null}
+	// 	},
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
 	.state('customer.product_detail',{
-		url:'/products/:taxonomy_name/:taxon_name/:product_name',
+		url:'/products/:product_name',
 		views: {
 			"customer": { templateUrl: "app/customer/product_detail/partials/product_detail.html",
 			 controller: "ProductDetailController"},
-			 params: {taxonomy_name: null,taxon_name: null,product_name: null}
+			 params: {
+				 product_name: null
+			 }
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.attribute_detail',{
+		url:'/attributes/:attribute_name',
+		views: {
+			"customer": { templateUrl: "app/customer/attribute_detail/partials/attribute_detail.html",
+			 controller: "AttributeController"},
+			 params: {attribute_name: null}
 		},
 		data: {
 			require_auth: false
@@ -107,15 +144,68 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
-	// .state('customer.checkout_gateway',{
-	// 	url: '/checkout/gateway',
-	// 	params: {gatewayObject: {}},
-	// 	templateUrl: 'app/checkout/partials/checkoutGateway.html',
-	// 	controller: 'checkoutGatewayController',
-	// 	data: {
-	// 		require_auth: false
-	// 	}
-	// })
+	.state('customer.login',{
+		url: '/customer/login',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/customer_auth/partials/customer_login.html',
+				controller: 'CustomerLoginController'
+			}
+		},
+		params: {nav_to_state: null},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.signup',{
+		url: '/customer/signup',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/customer_auth/partials/customer_signup.html',
+				controller: 'CustomerSignupController'
+			}
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.forgot_password',{
+		url: '/customer/forgot_password',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/customer_auth/partials/customer_forgot_password.html',
+				controller: 'CustomerForgotPasswordController'
+			}
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.reset_password',{
+		url: '/customer/reset_password?token',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/customer_auth/partials/customer_reset_password.html',
+				controller: 'CustomerResetPasswordController'
+			}
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.my_account',{
+		url: '/my_account',
+		views: {
+			"customer": {
+				templateUrl: 'app/customer/my_account/partials/my_account.html',
+				controller: 'MyAccountController'
+			}
+		},
+		params: {nav_to_state: null},
+		data: {
+			require_auth: true
+		}
+	})
 
 
 
