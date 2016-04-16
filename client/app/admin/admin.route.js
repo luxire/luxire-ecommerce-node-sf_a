@@ -460,6 +460,91 @@ angular.module('luxire')
 		}
 	})
 
+	/*Luxire properties*/
+	.state('admin.luxirePropertiesHome',{
+		url:'/product_properties',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+		"mainContent": { templateUrl: 'app/admin/luxireProperties/partials/luxirePropertiesHome.html',controller: 'luxirePropertiesHomeController'}
+		}
+	})
+	.state('admin.addluxireProperties',{
+		url:'/product_properties/new',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+		"mainContent": { templateUrl: 'app/admin/luxireProperties/partials/addLuxireProperties.html',controller: 'addluxirePropertiesController'}
+		}
+	})
+	.state('admin.editluxireProperties',{
+		url:'/product_properties/:id/edit',
+		views: {
+		"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+		"mainContent": { templateUrl: 'app/admin/luxireProperties/partials/editLuxireProperties.html',controller: 'editLuxirePropertiesController'}
+		}
+	})
+	.state('admin.taxonomy',{
+		url:'/taxonomy',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/taxonomy/partials/taxonomyHome.html',controller: 'TaxonomyController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.addTaxonomy',{
+		url:'/taxonomy/new',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/taxonomy/partials/addTaxonomy.html',controller: 'TaxonomyController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.editTaxonomy',{
+		url:'/taxonomy/:id/edit',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/taxonomy/partials/editTaxonomy.html',controller: 'editTaxonomyController'}
+		},
+		data: {
+			require_auth: true
+		}
+	})
+	.state('admin.standard_sizes',{
+		url:'/standard_sizes',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/standard_sizes/partials/standardSizeHome.html',controller: 'standardSizeController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.addStandardSize',{
+		url:'/standard_sizes/new',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/standard_sizes/partials/addStandardSize.html',controller: 'standardSizeController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+	.state('admin.editStandardSize',{
+		url:'/standard_sizes/:id/edit',
+		views: {
+			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
+			"mainContent": { templateUrl: 'app/admin/standard_sizes/partials/editStandardSize.html',controller: 'editStandardSizeController'},
+			data: {
+				require_auth: true
+			}
+		}
+	})
+
+
+
 	// .state('admin',{
 	// 	url:'/admin',
 	// 	templateUrl: 'app/admin/admin.html',
