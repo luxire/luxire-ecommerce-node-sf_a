@@ -2,7 +2,7 @@ angular.module('luxire')
 .service('AdminConstants',function(){
 	this.api = {
 		host: 'http://104.215.254.150:3000/',
-		products: '',
+		products: '/api/v1/admin/products',
 		product_types: '/api/v1/admin/product_types',
 		measurement_types: '/api/v1/admin/measurement_types',//product attributes
 		style_masters: '/api/v1/admin/style_masters',
