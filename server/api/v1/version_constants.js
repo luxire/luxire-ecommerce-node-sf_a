@@ -14,6 +14,7 @@ module.exports = {
     host: 'http://104.215.254.150:3000', //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
+    adminProducts: '/api/admin/products',
     users: '/luxire-users',
     countries: '/api/countries',
     orders: '/api/orders',
