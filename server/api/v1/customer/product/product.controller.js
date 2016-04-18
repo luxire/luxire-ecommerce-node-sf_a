@@ -70,9 +70,14 @@ exports.show = function(req, res){
           res.status(500).send(error.syscall);
         }
         else{
-          spree_cookie = response.headers['set-cookie'][0].split(';');
+          console.log('response cookies', response.headers['set-cookie']);
           if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
-            res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+            for(var i=0; i<response.headers['set-cookie'].length; i++){
+              spree_cookie = response.headers['set-cookie'][i].split(';');
+              if(spree_cookie[0].split('=')[0]==='guest_token'){
+                res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+              }
+            }
           }
           res.status(response.statusCode).send(body);
         };
@@ -100,12 +105,11 @@ exports.productVariants = function(req, res) {
 exports.taxonomy_index = function(req, res){
   http
     .get(constants.spree.host+constants.spree.taxonomy, function(error, response, body){
-      if(error==null){
-            res.status(response.statusCode).send(body);
-            console.log(body);
+      if(error){
+        res.status(500).send(error.syscall);
       }
       else{
-        res.status(500).send(error);
+        res.status(response.statusCode).send(body);
       };
   });
 };
@@ -113,12 +117,19 @@ exports.taxonomy_index = function(req, res){
 exports.collections = function(req, res){
   http
     .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
-      if(error==null){
-        res.status(response.statusCode).send(body);
-        console.log(body);
+      if(error){
+        res.status(500).send(error.syscall);
       }
       else{
-        res.status(500).send(error);
+        if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
+          for(var i=0; i<response.headers['set-cookie'].length; i++){
+            spree_cookie = response.headers['set-cookie'][i].split(';');
+            if(spree_cookie[0].split('=')[0]==='guest_token'){
+              res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+            }
+          }
+        }
+        res.status(response.statusCode).send(body);
       };
   });
 };
@@ -127,12 +138,11 @@ exports.collections = function(req, res){
 exports.taxonomy_show = function(req, res){
   http
     .get(constants.spree.host+constants.spree.taxonomy+'/'+req.params.taxonomy_id+'/taxons', function(error, response, body){
-      if(error==null){
-            res.status(response.statusCode).send(body);
-            console.log(body);
+      if(error){
+        res.status(500).send(error.syscall);
       }
       else{
-        res.status(500).send(error);
+        res.status(response.statusCode).send(body);
       };
   });
 };
@@ -140,12 +150,11 @@ exports.taxonomy_show = function(req, res){
 exports.taxon_show = function(req, res) {
     http
       .get(constants.spree.host+constants.spree.taxonomy+'/'+req.params.taxonomy_id+'/taxons/'+req.params.taxon_id, function(error, response, body){
-        if(error==null){
-          res.status(response.statusCode).send(body);
-          console.log(body);
+        if(error){
+          res.status(500).send(error.syscall);
         }
         else{
-          res.status(500).send(error);
+          res.status(response.statusCode).send(body);
         };
     });
 };
