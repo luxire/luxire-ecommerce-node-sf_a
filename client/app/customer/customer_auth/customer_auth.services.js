@@ -23,6 +23,7 @@ angular.module('luxire')
     else{
       window.sessionStorage.luxire_token = token;
     }
+    $http.defaults.headers.common['x-luxire-token'] = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
     console.log('login successful');
   };
   this.signup = function(user){
@@ -35,6 +36,7 @@ angular.module('luxire')
     else if(window.sessionStorage.luxire_token != undefined){
       window.sessionStorage.removeItem('luxire_token');
     }
+    delete $http.defaults.headers.common['x-luxire-token'];
   };
   this.isLoggedIn = function(){
     if(window.localStorage.luxire_token || window.sessionStorage.luxire_token){
