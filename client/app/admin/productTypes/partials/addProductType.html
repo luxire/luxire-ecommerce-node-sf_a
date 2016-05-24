@@ -36,6 +36,8 @@
     <div class="col-lg-5 col-md-5">
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
+      <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
+      <button type="button" class="btn btn-primary" ng-click="createProductType()">Save</button>
     </div>
   </div>
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
@@ -56,6 +58,10 @@
             <br>
             <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea>
             <br/>
+            <span class="required" style="font-size: 1.2em; font-weight: 900;">Length Required</span>
+            <br>
+            <input id="length" type="text" ng-model="productTypeData.length_required" class="form-control" placeholder="Length Required" autofocus>
+            <br>
             <span class="required" style="font-size: 1.2em;font-weight: 900;">Image</span>
             <br>
             <input id="prod_input_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus>
@@ -75,7 +81,6 @@
             <br/>
             <br/>
             <div class="pull-right">
-              <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
               <button type="button" class="btn btn-primary" ng-click="createProductType()">Save</button>
             </div>
             <br>

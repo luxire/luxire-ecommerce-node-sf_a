@@ -91,14 +91,23 @@ $scope.productTypeData = {};
 //function to create a product type
 $scope.createProductType = function() {
   if( $scope.productTypeData.product_type == undefined ||
-      $scope.productTypeData.product_type == '' ||
-      $scope.product_type_image == undefined ||
-      $scope.product_type_image == ''
-    ){
+      $scope.productTypeData.product_type == ''){
       document.getElementById("name").focus();
+      $scope.alerts.push({type: 'danger', message: 'name can not be empty!'});
+    }
+    else if($scope.product_type_image == undefined ||
+    $scope.product_type_image == ''){
       document.getElementById("prod_input_image").focus();
-      $scope.alerts.push({type: 'danger', message: 'mandatory fields should not be empty!'});
-    }else{
+      $scope.alerts.push({type: 'danger', message: 'image can not be empty!'});
+
+    }
+    // else if$scope.length_required == undefined ||
+    // $scope.length_required == ''){
+    //   document.getElementById("length").focus();
+    //   $scope.alerts.push({type: 'danger', message: 'length can not be empty!'});
+    //
+    // }
+    else{
           $scope.selectedAttributes = [];
           angular.forEach($scope.measurementTypeJson.data, function(attribute){
             if (attribute.selected == true){
@@ -198,13 +207,16 @@ $scope.createProductType = function() {
 //update function to updtae the product type
   $scope.updateProductType = function(id) {
     console.log("name:",$scope.productTypeData.product_type);
-    if( $scope.productTypeData.product_type == '' ||
-        $scope.product_type_image == ''
-      ){
+    if( $scope.productTypeData.product_type == ''){
         document.getElementById("name").focus();
+
+        $scope.alerts.push({type: 'danger', message: 'name cannot be empty!'});
+      }
+      else if($scope.product_type_image == ''){
         document.getElementById("prod_input_image").focus();
-        $scope.alerts.push({type: 'danger', message: 'mandatory fields should not be empty!'});
-      }else{
+        $scope.alerts.push({type: 'danger', message: 'image cannot be empty!'});
+      }
+      else{
     $scope.selectedAttributes = [];
     angular.forEach($scope.measurementTypeJson.data, function(val, key){
       angular.forEach(val, function(attribute){

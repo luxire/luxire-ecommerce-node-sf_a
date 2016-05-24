@@ -72,6 +72,8 @@ angular.module('luxire')
     $rootScope.alerts.splice(index, 1);
   };
 
+
+
   $scope.showEditCollections = function(id) {
     console.log("Id of Taxon: " + id);
     $state.go("admin.editCollections", {taxonomie_id:$stateParams.id, taxons_id: id});
@@ -91,15 +93,20 @@ angular.module('luxire')
       "name": $scope.taxonomyData
     }
 
-
-    TaxonomyService.updateTaxonomy($stateParams.id, updatedTaxonomyObj).then(function(data) {
-      $rootScope.alerts.push({type: 'success', message: 'Taxonomy updated successfully!'});
-      $timeout(function(){
-        $state.go('admin.taxonomy');
-      }, 3000)
-    }, function(error) {
-      console.log(error);
-      $rootScope.alerts.push({type: 'danger', message: 'Taxonomy updation Failed!'});
-    })
+    console.log("Taxons",$scope.taxons.length);
+    if($scope.taxons.length == 0){
+      $rootScope.alerts.push({type: 'danger', message: 'Create at least one taxon!'});
+    }
+    else{
+      TaxonomyService.updateTaxonomy($stateParams.id, updatedTaxonomyObj).then(function(data) {
+        $rootScope.alerts.push({type: 'success', message: 'Taxonomy updated successfully!'});
+        $timeout(function(){
+          $state.go('admin.taxonomy');
+        }, 3000)
+      }, function(error) {
+        console.log(error);
+        $rootScope.alerts.push({type: 'danger', message: 'Taxonomy updation Failed!'});
+      })
+    }
   }
 })

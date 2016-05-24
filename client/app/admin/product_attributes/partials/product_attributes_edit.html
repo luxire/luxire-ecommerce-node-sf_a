@@ -20,8 +20,9 @@
             <span>
             <input style="font-size: medium;" type="text" contenteditable="true" ng-hide="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value' || node.key=='category' || node.key=='sub_category' || node.key=='image'" ng-model="node.key"/>
             <label style="width: 36%" ng-show="node.key=='Add Attributes' || node.key=='name' || node.key=='description' || node.key=='value'  || node.key=='category' || node.key=='sub_category' || node.key=='image'">{{node.key}}</label>
+            <label ng-if="node.key == 'name' || node.key == 'category'" class="required"></label>
             </span><span>&nbsp;&nbsp;
-            <input style="font-size: medium;" type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
+            <input  style="font-size: medium;" type="text" ng-if="checkIsString(node.value)" ng-model="node.value"/></span>
             <a ng-hide="node.key == 'name' || node.key == 'description' || node.key.indexOf('category') !== -1 || node.key.indexOf('help') !== -1 || node.key == 'image'" class="pull-right btn btn-danger btn-xs" data-nodrag ng-if="node.key!=data[0]['key']" ng-click="remove(this)"><span
                 class="glyphicon glyphicon-remove"></span></a>
             <a ng-hide="node.key == 'name' || node.key == 'description' || node.key.indexOf('category') !== -1 || node.key.indexOf('help') !== -1 || node.key == 'image'" class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
@@ -59,7 +60,7 @@
             <li>Use help field to add help text</li>
           </ul>
           <div class="placard">
-            <h4 style="font-size: 20px;">Image Upload</h4>
+            <h4 style="font-size: 20px;" class="required">Image Upload</h4>
             Add Product Attribute Image
             <input type="file" name="name" ng-file-select ng-file-change="upload_prod_attr_image($files)" value=""><br>
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
@@ -71,11 +72,11 @@
             Url extractor<br>
 
             Size<br>
-            <input type="radio" ng-model="image_size" value="64x64" name="small">small &nbsp;
-            <input type="radio" ng-model="image_size" value="128x128" name="medium" >medium
+            <input type="radio" ng-model="image_size" value="64x64" name="small">&nbsp;&nbsp;small &nbsp;
+            <input type="radio" ng-model="image_size" value="128x128" name="medium" >&nbsp;&nbsp;medium
             <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value=""><br>
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
-            <img id="attr_image" src="" alt="" /><br><br>
+            <img style="max-width: 100%" id="attr_image" src="" alt="" /><br><br>
 
             <textarea name="name" ng-model="image_url" rows="2" cols="40"></textarea>
               <!-- <label style="float: right; color: #479ccf;cursor: pointer;" id="uploadImage">Upload Product Image</label> -->

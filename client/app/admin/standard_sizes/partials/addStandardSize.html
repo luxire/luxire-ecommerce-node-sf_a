@@ -34,6 +34,9 @@ p.capitalize {
     </div>
 
     <div class="col-lg-4 col-md-4" style="text-align: right;">
+        <button type="button" class="btn btn-default" ui-sref="admin.standard_sizes">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+
     </div>
   </div>
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
@@ -100,7 +103,7 @@ p.capitalize {
               </select>
               <br/><br/>
               <div class="pull-right">
-                <button type="button" class="btn btn-default" ui-sref="admin.standard_sizes">Cancel</button>
+              
                 <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
               </div><br/></div>
               <br>

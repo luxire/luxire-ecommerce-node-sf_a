@@ -64,3 +64,9 @@ tr.angular-ui-tree-empty {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+/* Class for denoting required field added by Ashwini 19/05/16*/
+.required:after{
+ content:"*";
+ color:grey;
+}

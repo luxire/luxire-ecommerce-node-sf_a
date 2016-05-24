@@ -1,11 +1,9 @@
 <div class="container-fluid" style="height:100%" >
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-2 col-md-2" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Style Master</span>
+    <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
+      &nbsp;&nbsp;<i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Style Master</span>
     </div>
-    <div class="col-lg-6 col-md-6">
-
-    </div>
+    
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
@@ -73,34 +71,34 @@
                       <thead>
                         <tr>
                           <th>
-                             <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
-                          </th><th></th><th></th>
+                             <input type="checkbox" name="selectAll" value="">
+                          </th>
+                          <th>
+                            &nbsp;&nbsp;Image
+                          </th>
                           <th>
                             Name
                           </th>
                           <th>
 
                           </th>
-                          <th>
 
-                          </th>
-                          <th>
-
-                          </th>
                         </tr>
                       </thead>
-                      <tbody style="padding:5%;">
+                      <tbody>
                         <tr ng-repeat="type in allStyleMasterType | filter: { name:searchText } as filteredResults"> <!-- 18th march change in this line  @rajib-->
                             <td style="padding-right:0%;">
-                              <div>
+
                                 <input <input type="checkbox" name="selectAll" value=""></input>
-                                <img src={{getImage(type.image)}} style="padding-left:20%;"></img>
-                              </div>
-                            </td><td></td><td></td>
-                            <td style="width:20%;">
+
+                            </td>
+                            <td>
+                              <img src={{getImage(type.image)}} style="padding-left:20%;"></img>
+                            </td>
+                            <td style="width:60%;">
                               <a ui-sref="admin.styleMasterEdit" ng-click="editStyleMaster(type.id)">{{ type.name }}</a>
                             </td>
-                            <td style="padding-right:20%;"> </td>
+                            <!-- <td style="padding-right:20%;"> </td> -->
                             <td>
                               <i class="fa fa-pencil-square-o" ng-click="editStyleMaster(type.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
                               <i class="fa fa-trash-o" ng-click="deleteStyleMaster(type.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer;"></i>

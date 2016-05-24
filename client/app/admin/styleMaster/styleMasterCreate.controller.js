@@ -84,10 +84,10 @@ angular.module('luxire')
       var id=$scope.luxire_product_type_id;
       $scope.selectedProductType=$scope.luxire_product_type_id;
         console.log('prod type change', $scope.newProductType);
-
+        $scope.loading= true;
         styleMasterService.getProductTypeById(id).then(function(data) {
         var tempContrast=[];
-        $scope.loading= true;
+        // $scope.loading= true;
         $scope.allMeasurementType = data.data.luxire_product_attributes;
         $scope.bodyMeasurement = data.data.luxire_product_attributes.body_measurement_attributes; // 28th march add this line
         if(data.data.luxire_product_attributes.personalization_attributes[1].value == undefined){
@@ -193,7 +193,13 @@ angular.module('luxire')
         if($scope.newProductType.name == undefined || $scope.newProductType.name == '' || $scope.newProductType.name == 0){
             $scope.alerts.push({type: 'danger', message: 'Name Field Can Not Be Empty !'});
             document.getElementById("name").focus();
-        }else{
+        }
+        else if($scope.style_image == '' || $scope.style_image == undefined){
+          $scope.alerts.push({type: 'danger', message: 'Image Field Can Not Be Empty !'});
+          document.getElementById("mandatory_image").focus();
+        }
+
+        else{
            $scope.default_values["customization_attributes"]=customization_attributes;
            $scope.default_values["personalization_attributes"]=personalization_attributes;
            $scope.default_values["standard_measurement_attributes"]=standard_measurement_attributes;

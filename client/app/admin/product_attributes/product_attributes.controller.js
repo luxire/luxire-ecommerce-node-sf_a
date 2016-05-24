@@ -230,7 +230,22 @@ angular.module('luxire')
       });
     }
     else{
-      $scope.alerts.push({type: 'danger', message: 'Fill mandatory fields!'});
+      if(measurement_type['name'] == '' || measurement_type['name'] == undefined){
+        $scope.alerts.push({type: 'danger', message: 'Name is mandatory field!'});
+        document.getElementById("mandatory_field").focus();
+        return;
+    }
+    else if(measurement_type['category'] == '' || measurement_type['category'] == undefined ){
+      $scope.alerts.push({type: 'danger', message: 'Category is mandatory field!'});
+      document.getElementById("mandatory_field").focus();
+      return;
+    }
+    else if($scope.prod_attr_image == undefined){
+      $scope.alerts.push({type: 'danger', message: 'image is mandatory field!'});
+      document.getElementById("mandatory_field").focus();
+      return;
+    }
+      // $scope.alerts.push({type: 'danger', message: 'Fill mandatory fields!'});
     }
   };
 

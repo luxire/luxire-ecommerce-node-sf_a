@@ -49,10 +49,13 @@
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
           <div class="productTypePlacard" >
               <span style="font-size: 1.2em; font-weight: 900;">Name</span>
+
               <br>
               <input type="text" ng-model="taxonomyData" class="form-control" placeholder="Taxonomy">
               <br>
-
+              <!-- <p>
+                Note: Taxonomy Should have at least one Taxon
+              </p> -->
 
               <table>
                   <thead>
@@ -62,7 +65,7 @@
                     </tr>
                     <tr ng-if="taxons.length == 0">
                       <th>
-                        <a class="required" ui-sref="admin.addCollections" style="font-size: 1.2em;">Create Taxons</a>
+                        <a class="required"  ui-sref="admin.addCollections" style="font-size: 1.2em;">Create Taxons</a>
                       </th>
                     </tr>
                   </thead>

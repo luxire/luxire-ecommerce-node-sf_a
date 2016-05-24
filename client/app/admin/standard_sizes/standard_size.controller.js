@@ -54,16 +54,19 @@ $scope.close_alert = function(index){
         console.log($scope.standardSizeData);
         if($scope.new_fit_type == '' ||
             $scope.new_fit_type == 0 ||
-            $scope.new_fit_type == undefined ||
-            $scope.new_luxire_product_type_id == '' ||
-            $scope.new_luxire_product_type_id == 0 ||
-            $scope.new_luxire_product_type_id == undefined){
+            $scope.new_fit_type == undefined){
 
           document.getElementById("FitType").focus();
-          document.getElementById("productTypeSelect").focus();
-          $scope.alerts.push({type: 'danger', message: 'mandatory fields are empty!'});
+
+          $scope.alerts.push({type: 'danger', message: 'Fit type can not be  empty!'});
 
         }
+        // else if($scope.luxire_product_type_id == '' ||
+        // $scope.luxire_product_type_id == 0 ||
+        // $scope.luxire_product_type_id == undefined){
+        //   document.getElementById("productTypeSelect").focus();
+        //   $scope.alerts.push({type: 'danger', message: 'Product Type can not be empty!'});
+        // }
         else{
             // console.log("new_luxire_product_type_id: ",$scope.new_luxire_product_type_id);
             // console.log("typeof new_luxire_product_type_id: ",typeof(parseInt($scope.new_luxire_product_type_id)));
@@ -150,13 +153,13 @@ $scope.close_alert = function(index){
     console.log("data.data.luxire_product_type_id ",data.data.luxire_product_type_id );
     $scope.fit_type = data.data.fit_type;
      $scope.neck = parseFloat(data.data.neck);
-     $scope.chest = parseInt(data.data.chest);
-     $scope.waist = parseInt(data.data.waist);
-     $scope.bottom = parseInt(data.data.bottom);
-     $scope.yoke = parseInt(data.data.yoke);
-     $scope.biceps = parseInt(data.data.biceps);
-    $scope.wrist = parseInt(data.data.wrist);
-    $scope.shirt_length = parseInt(data.data.shirt_length);
+     $scope.chest = parseFloat(data.data.chest);
+     $scope.waist = parseFloat(data.data.waist);
+     $scope.bottom = parseFloat(data.data.bottom);
+     $scope.yoke = parseFloat(data.data.yoke);
+     $scope.biceps = parseFloat(data.data.biceps);
+    $scope.wrist = parseFloat(data.data.wrist);
+    $scope.shirt_length = parseFloat(data.data.shirt_length);
      $scope.luxire_product_type_id = data.data.luxire_product_type_id ;
      $scope.loading = false;
     console.log("in getStandardSizeById  function");
@@ -169,27 +172,29 @@ $scope.close_alert = function(index){
   $scope.updateStandardSize = function(id) {
     if($scope.fit_type == '' ||
         $scope.fit_type == 0 ||
-        $scope.fit_type == undefined ||
-        $scope.luxire_product_type_id == '' ||
-        $scope.luxire_product_type_id == 0 ||
-        $scope.luxire_product_type_id == undefined){
+        $scope.fit_type == undefined ){
 
       document.getElementById("FitType").focus();
-      document.getElementById("productTypeSelect").focus();
-      $scope.alerts.push({type: 'danger', message: 'mandatory fields are empty!'});
 
+      $scope.alerts.push({type: 'danger', message: 'Fit Type can not be empty!'});
+
+    } else if($scope.luxire_product_type_id == '' ||
+    $scope.luxire_product_type_id == 0 ||
+    $scope.luxire_product_type_id == undefined){
+      document.getElementById("productTypeSelect").focus();
+      $scope.alerts.push({type: 'danger', message: 'Product Type can not be empty!'});
     }
     else{
     var updatedStandardSizeObj ={
       "fit_type": $scope.fit_type,
-      "neck" : parseInt($scope.neck),
-      "chest" : parseInt($scope.chest),
-      "waist" : parseInt($scope.waist),
-      "bottom" : parseInt($scope.bottom),
-      "yoke" : parseInt($scope.yoke),
-      "biceps" : parseInt($scope.biceps),
-      "wrist" : parseInt($scope.wrist),
-      "shirt_length" : parseInt($scope.shirt_length),
+      "neck" : parseFloat($scope.neck),
+      "chest" : parseFloat($scope.chest),
+      "waist" : parseFloat($scope.waist),
+      "bottom" : parseFloat($scope.bottom),
+      "yoke" : parseFloat($scope.yoke),
+      "biceps" : parseFloat($scope.biceps),
+      "wrist" : parseFloat($scope.wrist),
+      "shirt_length" : parseFloat($scope.shirt_length),
       "luxire_product_type_id":$scope.luxire_product_type_id
 
     }
