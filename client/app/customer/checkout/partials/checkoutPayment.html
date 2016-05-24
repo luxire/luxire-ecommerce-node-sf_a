@@ -1,10 +1,10 @@
-<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
+<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;color: #7F0E6E">
   <span class="fa fa-spinner fa-spin fa-4x"></span>
   <br /><br />
   Loading, please wait...
 </p>
-<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 8.8%">
-  <form name="customer-form" css="customer-form-css">
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 4.6%">
+  <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style=" padding-top: 3%;padding-bottom: 2%">
     <div class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
       <div class="row">
         <img style="max-width: 4%; margin-left: 2.5%" src="assets/images/customer/payment_image.png" alt="" />
@@ -21,22 +21,22 @@
         </div>
         <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
           <div class="row" ng-repeat="payment_method in luxire_cart.payment_methods" style="padding: 1% 0%">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-right: solid 1px #B0B0B0">
-              <input type="radio" ng-model="$parent.selected_payment_method_id" ng-value="payment_method.id" >
-              <span style="font-size: 150%; margin: 5%">{{payment_method.method_type}}</span>
-            </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+              <input type="radio" ng-model="$parent.selected_payment_method_id" ng-value="payment_method.id" >
+              <span style="font-size: 150%; margin: 5%">{{payment_method.name}}</span>
+            </div>
+            <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
               <span style="font-size: 150%; margin: 5%">{{payment_method.name}}</span>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 
-            </div>
+            </div> -->
 
           </div>
         </div>
 
       </div>
-      <div  id="luxire-checkout-address-footer" style="margin-top: 2%" class="row">
+      <div  id="luxire-checkout-address-footer" style="margin-top: 15%" class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left">
           <div class=" row" style="text-align: right">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
@@ -48,9 +48,9 @@
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
           <div class=" row" style="text-align: right">
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:0%;">
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="margin:0%;padding:0%;">
               <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
                   <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_paypal_payment()">Complete Order</button>
               </div>
@@ -64,12 +64,88 @@
       <!-- <uib-alert style="margin-top: 5%" ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert> -->
     </div>
 
-  </form>
+  </div>
+  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: solid 2px #DFDFDF;background: #F8F8F8; padding-top: 4.5%; padding-right: 5%; margin-top: 1%">
+    <div class="row">
+      <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <input class="form-control" ng-model="gift_card_code" placeholder="Gift card code">
+      </div>
+      <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+        <button class="btn btn-default" ng-click="apply_gift_card()" style="border-radius: 0px; color: white; background: #7F0E6E" name="button">Apply</button>
+      </div>
+    </div>
+    <hr style="border-bottom: solid 2px #DDDDDD">
+    <div class="row" style="margin-left: 0px;margin-right: 0px">
+      <div class="row" style="margin-left: 0px;margin-right: 0px" ng-repeat="line_item in luxire_cart.line_items">
+        <div class="col col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 0px !important;padding-right: 0px !important">
+          <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0px !important">
+            <img src="{{getImage(line_item.variant.images[0].mini_url)}}" style="border: solid 2px #E2E2E2" alt="" />
+          </div>
+          <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -12%; margin-top: -2%">
+            <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
+          </div>
+          <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;padding-right: 0px !important">
+            {{line_item.variant.name}}
+          </div>
+        </div>
+        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right;padding-right: 7%">
+          {{line_item.display_amount}}
+        </div>
+
+      </div>
+      <hr style="border-bottom: solid 2px #DDDDDD">
+
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Subtotal
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_item_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Shipping
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_ship_total=="$0.00" ? '-' : luxire_cart.display_ship_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Taxes
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.display_tax_total=="$0.00" ? '-' : luxire_cart.display_tax_total}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Discount
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+          {{luxire_cart.adjustment_total=="0.0" ? '-' : '-$'+luxire_cart.adjustment_total.split('-')[1]}}
+        </div>
+      </div>
+      <hr style="border-bottom: solid 2px #DDDDDD">
+      <div class="row" style="margin-bottom: 100%">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
+          Total
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center; font-size: 140%">
+          {{luxire_cart.display_total}}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
 
 </div>
-<div style="margin-top: 30%">
-</div>
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+<!--
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white; padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
@@ -96,7 +172,7 @@
     <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
   </div>
 
-</div>
+</div> -->
 
 <!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
   <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">

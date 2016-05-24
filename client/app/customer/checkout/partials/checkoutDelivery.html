@@ -1,9 +1,9 @@
-<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
-  <span class="fa fa-spinner fa-spin fa-4x"></span>
+<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x" ></span>
   <br /><br />
   Loading, please wait...
 </p>
-<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 5%">
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 4.7%">
   <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style=" padding-top: 3%;padding-bottom: 2%">
     <form name="customer-form" css="customer-form-css">
       <div class="row col col-xs-11 col-xs-offset-1 col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1 col-lg-11 col-lg-offset-1">
@@ -20,7 +20,7 @@
           <div id="shipping_text"  style="font-size: 100%; font-weight: 600; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             Based on Delivery Location:
           </div>
-          <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+          <div if-loading="hide" id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             {{shipping_address.full_name}}
             {{', '+shipping_address.address1}}{{shipping_address.address2 ? shipping_address.address2:''}}
             {{', '+shipping_address.city}}{{', '+shipping_address.state_text}}
@@ -81,32 +81,26 @@
     </form>
 
   </div>
-  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: solid 2px #DFDFDF;background: #F8F8F8; padding-top: 4.5%; padding-right: 5%">
+  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: solid 2px #DFDFDF;background: #F8F8F8; padding-top: 4.5%; padding-right: 5%; margin-top: 1%">
     <div class="row" style="margin-left: 0px;margin-right: 0px">
       <div class="row" style="margin-left: 0px;margin-right: 0px" ng-repeat="line_item in luxire_cart.line_items">
-        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
-          <img src="{{getImage(line_item.variant.images[0].small_url)}}" style="max-width: 85%;border: solid 2px #E2E2E2" alt="" />
+        <div class="col col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 0px !important;padding-right: 0px !important">
+          <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0px !important">
+            <img src="{{getImage(line_item.variant.images[0].mini_url)}}" style="border: solid 2px #E2E2E2" alt="" />
+          </div>
+          <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -12%; margin-top: -2%">
+            <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
+          </div>
+          <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;padding-right: 0px !important">
+            {{line_item.variant.name}}
+          </div>
         </div>
-        <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -13%; margin-top: -2%">
-          <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
-        </div>
-        <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align: left;">
-          {{line_item.variant.name}}
-        </div>
-        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right">
+        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right;padding-right: 7%">
           {{line_item.display_amount}}
         </div>
+
       </div>
       <hr style="border-bottom: solid 2px #DDDDDD">
-      <!-- <div class="row">
-        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8">
-          <input class="form-control" ng-model="discount" placeholder="Coupon code">
-        </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
-          <button class="btn btn-default" style="border-radius: 0px; color: white; background: #7F0E6E" name="button">Apply</button>
-        </div>
-      </div>
-      <hr style="border-bottom: solid 2px #DDDDDD"> -->
 
       <div class="row">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
@@ -141,7 +135,7 @@
         </div>
       </div>
       <hr style="border-bottom: solid 2px #DDDDDD">
-      <div class="row" style="margin-bottom: 80%">
+      <div class="row" style="margin-bottom: 100%">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
           Total
         </div>
@@ -156,96 +150,7 @@
 
 
 </div>
-
-<!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
-  <div id="luxire-container" class="row col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
-    <div id="luxire-logo">
-      <img src="lib/assets/Luxire_logo_collection_page.png" >
-    </div>
-    <div style="border: solid 2px #AD7984;border-radius: 10px;margin-top: 3%;padding-bottom: 2%">
-      <div class="row" style="margin-left: 2%;margin-top: 2%">
-        <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-            <h4>Shipping address</h4>
-            {{shipping_address.full_name}}<br>
-            {{shipping_address.address1}}<br>
-            {{shipping_address.address2}}<br>
-            {{shipping_address.city}}, {{shipping_address.state_text}}, {{shipping_address.zipcode}}<br>
-            {{shipping_address.country.iso_name}}<br>
-            {{shipping_address.phone}}<br><br><br>
-
-            <h4>Shipping Methods</h4>
-            <div class="row" style="border: solid 1px grey; padding: 2% 0% 2% 2%" ng-repeat="shipping_rate in shipments.shipping_rates">
-              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
-                <input type="radio" ng-model="$parent.selected_shipping_rate" ng-change="change_shipping_rate($parent.selected_shipping_rate)" ng-value="shipping_rate" >
-                {{shipping_rate.name}}
-              </div>
-              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-                {{shipping_rate.display_cost}}
-              </div>
-
-            </div>
-        </div>
-        <div style="text-align: left;padding-right: 4%" class="col-md-7 col-sm-7 col-lg-7 col-xs-7">
-          <div class="row" ng-repeat="line_item in luxire_cart.line_items">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              <img src="{{getImage(line_item.variant.images[0].small_url)}}">
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-              <span class="badge">{{line_item.quantity}}</span>
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-              <p style="font-size: 12px">{{line_item.variant.name}}<p>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{line_item.display_amount}}
-            </div>
-          </div>
-          <hr style="margin-top: 2%">
-          <hr style="margin-top: 5%;margin-bottom: 2%">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              Subtotal:<br>
-              Coupon Discount:<br>
-              Shipping Cost:<br>
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{luxire_cart.display_item_total}}<br>
-              {{luxire_cart.adjustment_total}}<br>
-              {{luxire_cart.display_ship_total}}
-            </div>
-          </div>
-          <hr style="margin-top: 2%;margin-bottom: 2%">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              Total:
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{luxire_cart.display_total}}
-            </div>
-          </div>
-          <br>
-          <br>
-          <button class="btn btn-primary" ng-click="proceed_to_checkout_payment()">Continue to payment method</button>
-        </div>
-      </div>
-
-    </div>
-    <div>
-      Luxire Custom Clothing process all orders in USD. While the content of your cart is currently displayed in , you will checkout using USD at the most current exchange rate.
-    </div>
-
-    </div>
-
-</div> -->
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
+<!-- <div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
@@ -271,36 +176,5 @@
     <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
     <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
   </div>
-
-</div>
-
-
-
-
-<!-- <header><h2>Delivery</h2></header>
-<div class="row" style="margin-left: 5%" >
-  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-    <h2>Shipping Methods</h2>
-    <li ng-repeat="shipping_rate in shipments.shipping_rates">
-        <input type="radio" ng-model="$parent.selected_shipping_rate" ng-change="change_shipping_rate($parent.selected_shipping_rate)" ng-value="shipping_rate" >
-        {{shipping_rate.name}} [{{shipping_rate.display_cost}}]</br>
-    </li>
-
-    <!-- {{selected_shipping_rate}} -->
-  <!-- </div>
-  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"> -->
-
-  <!-- </div>
-  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-    <h2>Order summary</h2>
-    <h3>Item Price: ${{item_price}}</h3>
-    <h3>Shipping Cost: ${{shipping_cost}}</h3>
-    <hr>
-    <h3>Total: ${{total_cost}}</h3>
-
-    <button class="btn btn-success" ng-click="proceed_to_checkout_payment()">save & continue</button>
-  </div>
-
-
 
 </div> -->

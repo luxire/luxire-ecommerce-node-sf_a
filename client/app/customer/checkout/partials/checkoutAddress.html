@@ -1,11 +1,20 @@
-<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: absolute; top: 30%;left: 50%; z-index: 99">
-  <span class="fa fa-spinner fa-spin fa-4x"></span>
+<style media="screen">
+  .address-form input.form-control.ng-invalid.ng-touched input.form-control.ng-invalid.ng-pristine,.address-form  select.form-control.ng-invalid.ng-touched select.form-control.ng-invalid.ng-pristine{
+    border: solid 1px red;
+  }
+  .customer-form-invalid input.form-control.ng-invalid, .customer-form-invalid select.form-control.ng-invalid{
+    border-color: red;
+  }
+
+</style>
+<p class="text-center text-muted" ng-if="load_address||load_countries" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99; color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x" ></span>
   <br /><br />
   Loading, please wait...
 </p>
 <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 5%">
   <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-top: 3%;padding-bottom: 2">
-    <form name="customer-form" css="customer-form-css">
+    <form name="customer_form" ng-class="{'customer-form-invalid': customer_form.submitted == true}" >
       <div class="row col col-xs-11 col-xs-offset-1 col-sm-11 col-sm-offset-1 col-md-11 col-md-offset-1 col-lg-11 col-lg-offset-1">
         <div  class="row">
           <div id="checkout_text"  style="font-size: 150%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
@@ -27,58 +36,54 @@
         </div>
         <hr style="border-top: solid 1px #B0B0B0">
         <div id="luxire-checkout-address-body">
-          <form class="" >
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="shipping.firstname" style="margin-top: 2%">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="shipping.lastname" style="margin-top: 2%">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Company" class="form-control" name="company" autocomplete="company" ng-model="shipping.company" style="margin-top: 2%">
-              </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="shipping.firstname" style="margin-top: 2%" required>
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1" name="address1" autocomplete="address-line1">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2" name="address2" autocomplete="address-line2">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City" name="city" autocomplete="city">
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="shipping.lastname" style="margin-top: 2%" required>
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <select style="margin-top: 2%" ng-model="selected_shipping_country" ng-change="populate_states(selected_shipping_country.id, 'ship')" class="form-control" ng-options="country as country.name for country in countries track by country.id" ></select>
-
-                <!-- <select style="margin-top: 2%"  class="form-control" ng-model="shipping.country_id" ng-change="populate_states(shipping.country_id)"name="country" autocomplete="country" >
-                  <option ng-repeat="country in countries" ng-value="country.id">{{country.name}}</option>
-                </select> -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <select style="margin-top: 2%" ng-model="selected_shipping_state" ng-change="select_state(selected_shipping_state.id, 'ship')" class="form-control" ng-options="state as state.name for state in shipping_states track by state.id" ></select>
-
-                <!-- <select style="margin-top: 2%" class="form-control" ng-model="shipping.state_id" name="state" autocomplete="state">
-                  <option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
-                </select> -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode" name="zip code" autocomplete="zip code">
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Company(optional)" class="form-control" name="company" autocomplete="company" ng-model="shipping.company" style="margin-top: 2%" >
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="shipping.phone" name="phone" autocomplete="phone">
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1" name="address1" autocomplete="address-line1" required>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2(optional)" name="address2" autocomplete="address-line2">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City" name="city" autocomplete="city" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <select style="margin-top: 2%"
+                ng-model="shipping.country"
+                class="form-control" ng-options="country as country.name for country in countries track by country.id" required>
+              </select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <select
+               style="margin-top: 2%"
+               ng-model="shipping.state"
+               class="form-control" ng-options="state as state.name for state in countries[shipping.country.id -1].states track by state.id" required >
+             </select>
 
-          </form>
-
-
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode" name="zip code" autocomplete="zip code" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="shipping.phone" name="phone" autocomplete="phone" required>
+            </div>
+          </div>
         </div>
+        <br>
         <input type="checkbox" name="name" ng-model="same" ng-change="same_address()">Same address
 
         <div ng-hide="same" id="luxire-checkout-address-bill" class="row">
@@ -88,56 +93,53 @@
         </div>
         <hr ng-hide="same" style="border-top: solid 1px #B0B0B0">
         <div ng-hide="same" id="luxire-checkout-address-body">
-          <form class="" >
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="billing.firstname" style="margin-top: 2%">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="billing.lastname" style="margin-top: 2%">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input placeholder="Company" class="form-control" name="company" autocomplete="company" ng-model="billing.company" style="margin-top: 2%">
-              </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="billing.firstname" style="margin-top: 2%" required>
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="billing.address1" placeholder="Address 1" name="address1" autocomplete="address-line1">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="billing.address2" placeholder="Address 2" name="address2" autocomplete="address-line2">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" class="form-control" ng-model="billing.city" placeholder="City" name="city" autocomplete="city">
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="billing.lastname" style="margin-top: 2%" required>
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <select style="margin-top: 2%" ng-model="selected_billing_country" ng-change="populate_states(selected_billing_country.id, 'bill')" class="form-control" ng-options="country as country.name for country in countries track by country.id" ></select>
-                <!-- <select style="margin-top: 2%" class="form-control" ng-model="billing.country_id" ng-change="populate_states(shipping.country_id)"name="country" autocomplete="country" >
-                  <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id==shipping.country_id">{{country.name}}</option>
-                </select> -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <select style="margin-top: 2%" ng-model="selected_billing_state" ng-change="select_state(selected_billing_state.id, 'bill')" class="form-control" ng-options="state as state.name for state in billing_states track by state.id" ></select>
-
-                <!-- <select style="margin-top: 2%" class="form-control" ng-model="billing.state_id" name="state" autocomplete="state">
-                  <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
-                </select> -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="billing.zipcode" name="zip code" autocomplete="zip code">
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input placeholder="Company(optional)" class="form-control" name="company" autocomplete="company" ng-model="billing.company" style="margin-top: 2%">
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="billing.phone" name="phone" autocomplete="phone">
-              </div>
+          </div>
+           <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="billing.address1" placeholder="Address 1" name="address1" autocomplete="address-line1" required>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="billing.address2" placeholder="Address 2(optional)" name="address2" autocomplete="address-line2">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" class="form-control" ng-model="billing.city" placeholder="City" name="city" autocomplete="city" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <select style="margin-top: 2%"
+                ng-model="billing.country"
+                class="form-control"
+                ng-options="country as country.name for country in countries track by country.id" required>
+              </select>
 
-          </form>
-
-
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <select
+               style="margin-top: 2%"
+               ng-model="billing.state"
+               class="form-control" ng-options="state as state.name for state in countries[billing.country.id -1].states track by state.id" required>
+             </select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="billing.zipcode" name="zip code" autocomplete="zip code" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="billing.phone" name="phone" autocomplete="phone" required>
+            </div>
+          </div>
         </div>
 
         <div ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" id="luxire-checkout-address-footer" style="margin-top: 2%" ng-show="luxire_cart != {} && luxire_cart.line_items.length >0" class="row">
@@ -156,7 +158,7 @@
               </div>
               <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
                 <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
-                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_checkout_delivery()">Continue<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
+                    <button type="submit" form="customer-form" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_checkout_delivery()">Continue<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
                 </div>
               </div>
 
@@ -177,24 +179,27 @@
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8">
           <input class="form-control" ng-model="discountCode" placeholder="Coupon code">
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
           <button class="btn btn-default" ng-click="apply_coupon_code()" style="border-radius: 0px; color: white; background: #7F0E6E" name="button">Apply</button>
         </div>
       </div>
       <hr style="border-bottom: solid 2px #DDDDDD">
-      <div class="row" style="margin-left: 0px;margin-right: 0px" ng-repeat="line_item in luxire_cart.line_items">
-        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="">
-          <img src="{{getImage(line_item.variant.images[0].small_url)}}" style="max-width: 85%;border: solid 2px #E2E2E2" alt="" />
+      <div class="row" style="margin-left: 0px;margin-right: 0px; margin-top: 1%" ng-repeat="line_item in luxire_cart.line_items">
+        <div class="col col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 0px !important;padding-right: 0px !important">
+          <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0px !important">
+            <img src="{{getImage(line_item.variant.images[0].mini_url)}}" style="border: solid 2px #E2E2E2" alt="" />
+          </div>
+          <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -12%; margin-top: -2%">
+            <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
+          </div>
+          <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;padding-right: 0px !important">
+            {{line_item.variant.name}}
+          </div>
         </div>
-        <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -13%; margin-top: -2%">
-          <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
-        </div>
-        <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align: left;">
-          {{line_item.variant.name}}
-        </div>
-        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right">
+        <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right;padding-right: 7%">
           {{line_item.display_amount}}
         </div>
+
       </div>
       <hr style="border-bottom: solid 2px #DDDDDD">
 
@@ -245,170 +250,9 @@
   </div>
 
 </div>
-
+<!--
 
 <div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
-  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
-    <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
-    </div>
-    <div style="margin-top:2%;">
-        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
-    </div>
-
-  </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
-    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
-    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
-  </div>
-
-</div>
-
-<!-- <div class="row" style="margin-left: 0px; margin-right: 0px">
-  <div id="luxire-container" class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
-    <div id="luxire-logo">
-      <img src="lib/assets/Luxire_logo_collection_page.png" >
-    </div>
-
-    <div style="border: solid 2px #AD7984;border-radius: 10px;margin-top: 3%;padding-bottom: 2%">
-      <div class="row" style="margin-left: 2%">
-        <h4>Customer information</h4>
-        <input type="email" name="email" autocomplete="email" style="width: 35%" class="form-control" ng-model="customer_email" placeholder="Email">
-        <input type="checkbox" name="name" ng-model="same" ng-change="same_address()">Same address
-      </div>
-      <div class="row" style="margin-left: 2%;margin-top: 4%">
-        <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-          <h4>Shipping address</h4>
-          <form autocomplete="on">
-            <input placeholder="Firstname" class="form-control" name="fname" autocomplete="fname" ng-model="shipping.firstname" style="width: 86%;margin-top: 2%">
-            <input placeholder="Lastname" class="form-control" name="lname" autocomplete="lname" ng-model="shipping.lastname" style="width: 86%;margin-top: 2%">
-
-            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1">
-            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2">
-            <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City">
-
-            <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.country_id" ng-change="populate_states(shipping.country_id)">
-              <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id==shipping.country_id">{{country.name}}</option>
-            </select>
-
-            <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="shipping.state_id">
-              <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
-            </select>
-            <input style="width: 86%;margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode">
-            <input style="width: 86%;margin-top: 2%" class="form-control" placeholder="phone" ng-model="shipping.phone">
-
-
-
-          </form>
-        </div>
-        <div ng-show="same" class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-
-        </div>
-        <div ng-hide="same" class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-          <h4>Billing address</h4>
-          <input placeholder="Firstname" class="form-control" ng-model="billing.firstname" style="width: 86%">
-          <input placeholder="Lastname" class="form-control" ng-model="billing.lastname" style="width: 86%;margin-top: 2%" >
-
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="billing.address1" placeholder="Address 1">
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="billing.address2" placeholder="Address 2">
-          <input style="width: 86%;margin-top: 2%" class="form-control" ng-model="billing.city" placeholder="City">
-
-          <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="billing.country_id" ng-change="populate_states(shipping.country_id)">
-            <option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id==billing.country_id">{{country.name}}</option>
-          </select>
-
-          <select style="width: 86%;margin-top: 2%" class="form-control" ng-model="billing.state_id">
-            <option ng-repeat="state in states" ng-selected="state.id==shipping.state_id" value="{{state.id}}">{{state.name}}</option>
-          </select>
-          <input style="width: 86%;margin-top: 2%" placeholder="Postal Code" class="form-control" ng-model="billing.zipcode">
-          <input style="width: 86%;margin-top: 2%" class="form-control" placeholder="phone" ng-model="billing.phone">
-
-        </div>
-        <div style="text-align: left;padding-right: 4%" class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-          <div class="row" ng-repeat="line_item in luxire_cart.line_items">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              <img src="{{getImage(line_item.variant.images[0].small_url)}}">
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-              <span class="badge">{{line_item.quantity}}</span>
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-              <p style="font-size: 12px">{{line_item.variant.name}}<p>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{line_item.display_amount}}
-            </div>
-          </div>
-          <hr style="margin-top: 2%">
-            <div class="row">
-              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8">
-                <input type="text" placeholder="Gift card or Coupon code" class="form-control" ng-model="coupon_code">
-              </div>
-              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-                <button class="btn-primary" ng-click="apply_coupon_code()">Apply</button>
-              </div>
-            </div>
-          <hr style="margin-top: 5%;margin-bottom: 2%">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              Subtotal:
-              Coupon Discount:
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{luxire_cart.display_item_total}}
-              {{'-$'+luxire_cart.adjustment_total.split('-')[1]}}
-            </div>
-          </div>
-          <hr style="margin-top: 2%;margin-bottom: 2%">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
-              Total:
-            </div>
-            <div style="margin-left: -15%" class="col-md-1 col-sm-1 col-lg-1 col-xs-1">
-            </div>
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-5">
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">
-              {{luxire_cart.display_total}}
-            </div>
-          </div>
-          <br>
-          <br>
-          <button class="btn btn-primary" ng-click="proceed_to_checkout_delivery()">Continue to shipping method</button>
-        </div>
-      </div>
-
-    </div>
-    <div>
-      Luxire Custom Clothing process all orders in USD. While the content of your cart is currently displayed in , you will checkout using USD at the most current exchange rate.
-    </div>
-
-</div>
-
-</div>
-
-
-
-
-
-</div>
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
