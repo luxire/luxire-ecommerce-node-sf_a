@@ -1,33 +1,44 @@
-<div class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #F5F5F5;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4">
-  <div class="row" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%; ">
+<div ng-if="show_header" class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #F5F5F5;width: 100%;font-family: Roboto;">
+  <div class="row" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%;">
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
       <img src="assets/images/customer/luxire_logo.png" ui-sref="customer.home" style="max-width: 100%;cursor: pointer">
     </div>
     <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left; font-size: 92%; font-weight: 200; margin-top: 1.4%">
-          Luxury Bespoke Mens Wear. Home Delivered.
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: left; font-size: 92%; font-weight: 200; margin-top: 1.4%">
+          Luxury Bespoke Mens Wear
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-
-        </div>
-        <div ng-init="show_search_panel=false" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: right; margin-top: 0.5%">
+        <!-- Home Delivered. -->
+        <div ng-init="show_search_panel=false" class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right; margin-top: 0.5%">
           <div class="" style="display: inline-block">
-            <angucomplete-alt id="products" ng-if="show_search_panel" style="height: 25px; position: absolute; top:0; left:0; z-index: 100"
+            <angucomplete-alt ng-if="show_search_panel" style="height: 25px; position: absolute; top:0; left:0; z-index: 100;width: 100%"
+              placeholder="Search products"
+              pause="400"
+              selected-object="select_product"
+              remote-url="{{search_products_url}}"
+              remote-url-data-field=""
+              title-field="name"
+              template-url="search_template_product.html"
+              match-class="highlight"
+              input-class="form-control form-control-small"
+              minlength="1"
+              clear-selected="true"/>
+            <!-- <angucomplete-alt id="products_search" ng-if="show_search_panel" style="height: 25px; position: absolute; top:0; left:0; z-index: 100;width: 100%"
                 placeholder="Search products"
                 pause="400"
-                selected-object="select_product"
+                selected-object="selected_search_product"
                 remote-url="{{search_products_url}}"
-                remote-url-data-field="products"
+                remote-url-data-field=""
                 title-field="name"
                 template-url="search_template_product.html"
-                input-class=""/>
+                match-class="highlight"
+                input-class="" /> -->
           </div>
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: right; margin-top: 0.5%">
-          <i class="fa fa-search" style="margin-right: 1%; cursor: pointer" ng-click="show_search_panel=!show_search_panel"></i>&nbsp;&nbsp;
-          <i ui-sref="customer.cart" class="fa fa-shopping-cart" style="color: #8A247C;font-size:170%;cursor: pointer">
-            <span class = "badge" style="color: white">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: right; margin-top: 0.5%">
+          <i class="fa fa-search" style="margin-right: 1%; cursor: pointer;color: #8A247C;" ng-click="show_search_panel=!show_search_panel;setFocusOnSearch(show_search_panel)"></i>&nbsp;&nbsp;
+          <i ui-sref="customer.cart" class="fa fa-shopping-cart" style="color: #8A247C;font-size:130%;cursor: pointer">
+            <span class = "badge" style="color: white;background: #8A247C">
               ({{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}})
             </span>
           </i>&nbsp;&nbsp;
@@ -35,7 +46,7 @@
             |
           </span>
           <span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="open_side_menu()">
-            <i class="fa fa-circle-thin fa-stack-2x" style="background: #696969;color: transparent;border-radius: 50%"></i>
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
             <i class="fa fa-bars fa-stack-1x" style="color: white"></i>
           </span>
 
@@ -47,7 +58,42 @@
 
     </div>
   </div>
+  <div class="row" style="border-bottom: solid 1px #E4E4E4;border-top: solid 1px #E4E4E4;text-align: center;padding: 0.5% 1%" >
+    <span class="taxonomy-dropdown" ng-init="is_open=false" is-open="is_open" ng-mouseover="is_open=true" ng-mouseleave="is_open=false" uib-dropdown ng-repeat="taxonomy in taxonomies" >
+      <div class="taxonomy-menu" ng-click="go_to_collection($event, taxonomy.root.permalink)" style="display: inline-block;padding: 0.25% 0.5%;border-radius: 2px;margin-left: 0.5%;cursor: pointer;text-align: center" uib-dropdown-toggle>
+        {{taxonomy.name}}&nbsp;&nbsp;<i style="font-size: 80%" ng-if="taxonomy.root.taxons.length" class="fa fa-chevron-down" aria-hidden="true"></i>
+      </div>
+      <!-- <a href id="simple-dropdown" >
+        {{taxonomy.name}}
+      </a> -->
+      <ul ng-if="taxonomy.root.taxons.length" class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+        <li ng-repeat="taxon in taxonomy.root.taxons">
+          <a href ng-click="go_to_collection($event, taxon.permalink)">{{taxon.name}}</a>
+        </li>
+      </ul>
+    </span>
+  </div>
 </div>
+<div ng-if="!show_header" class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #F5F5F5;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4">
+  <div class="row" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%; ">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
+      <img src="assets/images/customer/luxire_logo.png" style="max-width: 100%;">
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
+      <div class="row" >
+        <div  style="text-align: left; font-family: Roboto;margin-top: 0.9%">
+          <div ng-repeat="(checkout_step_name, checkout_step_val) in checkout_steps" style="display: inline-block;width: 10%;text-align: center;">
+            <p ng-class="{'complete-state-font': luxire_cart && checkout_steps[luxire_cart.state].id>checkout_step_val.id}" style="font-size: 85%; color: grey" ng-click="go_to_checkout_state(checkout_step_val)">{{checkout_step_val.name}}</p>
+            <div ng-class="{'completed-state': luxire_cart && checkout_steps[luxire_cart.state].id>checkout_step_val.id}" class="" style="width: 100%;border-bottom: solid 4px grey;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div ui-view="customer" autoscroll="false" style="width: 100%; height: 100%;font-family: Roboto;"></div>
 <div style="position: fixed;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3;font-family: Roboto;">
   <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
@@ -61,19 +107,25 @@
     <div class="row">
       <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1">
       </div>
-      <div class="col col-xs-10 col-sm-10 col-md-10 col-lg-10" style="cursor: pointer">
-        <h6 style="margin-top: 5%">HOME</h6>
-        <h6 style="margin-top: 5%">QUALITY</h6>
-        <h6 style="margin-top: 5%" ng-repeat="taxonomy in taxonomies" >
-          <span ng-click="go_to_collection(taxonomy.root.permalink)" >{{taxonomy.name}}</span>
-          &nbsp;&nbsp;<p style="margin-top: 5%;margin-left: 5%" ng-repeat="taxon in taxonomy.root.taxons" ng-click="go_to_collection(taxon.permalink)">{{taxon.name}}</p>
+      <div class="col col-xs-10 col-sm-10 col-md-10 col-lg-10" >
+        <h6 style="margin-top: 3%;cursor: pointer">HOME</h6>
+        <h6 style="margin-top: 3%;cursor: pointer">QUALITY</h6>
+        <h6 style="margin-top: 3%;cursor: pointer" ng-repeat="taxonomy in taxonomies" >
+          <span>
+            <span>
+              <i ng-if="taxonomy.root.permalink!==visible_taxonomy_permalink" ng-click="change_active_taxonomy(taxonomy.root.permalink)" class="fa fa-chevron-right" aria-hidden="true"></i>
+              <i ng-if="taxonomy.root.permalink===visible_taxonomy_permalink" ng-click="change_active_taxonomy('')" class="fa fa-chevron-down" aria-hidden="true"></i>
+            </span>
+            <span ng-click="go_to_collection(taxonomy.root.permalink)">{{taxonomy.name}}</span>
+          </span>
+          &nbsp;&nbsp;<p uib-collapse="taxonomy.root.permalink!==visible_taxonomy_permalink" style="margin-top: 3%;margin-left: 8%" ng-repeat="taxon in taxonomy.root.taxons" ng-click="go_to_collection(taxon.permalink)">{{taxon.name}}</p>
         <!--//p style="margin-top: 5%;margin-left: 5%" ng-repeat="taxon in taxonomy.root.taxons" ng-click="go_to_listing(taxonomy.name, taxonomy.id, taxon.name, taxon.id)">{{taxon.name}}</p-->
         </h6>
-        <h6 style="margin-top: 5%">MEASUREMENTS</h6>
-        <h6 ng-if="!isLoggedIn" style="margin-top: 5%" ng-click="go_to_login()">LOG IN</h6>
-        <h6 ng-if="!isLoggedIn" style="margin-top: 5%" ng.click="go_to_signup()">SIGN UP</h6>
-        <h6 ng-if="isLoggedIn"style="margin-top: 5%" ng-click="go_to_my_account()">MY ACCOUNT</h6>
-        <h6 ng-if="isLoggedIn" style="margin-top: 5%" ng-click="go_to_logout()">LOG OUT</h6>
+        <h6 style="margin-top: 3%;cursor: pointer">MEASUREMENTS</h6>
+        <h6 ng-if="!isLoggedIn" style="margin-top: 3%;cursor: pointer" ng-click="go_to_login()">LOG IN</h6>
+        <h6 ng-if="!isLoggedIn" style="margin-top: 3%;cursor: pointer" ng-click="go_to_signup()">SIGN UP</h6>
+        <h6 ng-if="isLoggedIn"style="margin-top: 3%;cursor: pointer" ng-click="go_to_my_account()">MY ACCOUNT</h6>
+        <h6 ng-if="isLoggedIn" style="margin-top: 3%;cursor: pointer" ng-click="go_to_logout()">LOG OUT</h6>
         <h6 style="margin-top: 5%">CONTACT</h6>
 
       </div>
@@ -82,20 +134,115 @@
   </div>
 </script>
 <script type="text/ng-template" id="search_template_product.html">
-    <div class="angucomplete-holder" style="z-index: 10000; cursor: pointer" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+    <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
       <input ng-model="searchStr"
         type="text"
         placeholder="Search Product.."
-        class="form-control input-sm"
+        ng-focus="onFocusHandler()"
+        class="form-control"
+        ng-focus="resetHideResults()"
+        ng-blur="hideResults($event)"
         ng-change="inputChangeHandler(searchStr)"/>
-      <div class="angucomplete-dropdown" ng-show="showDropdown" >
-        <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
-        <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
-        <div class="angucomplete-row" style="border-bottom: solid 1px black; " ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
-          <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
-          <div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div>
+        <div class="angucomplete-dropdown" ng-show="showDropdown" style="background: #FDFDFD; border: solid 1px grey">
+          <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
+          <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
+          <div class="angucomplete-row" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: left;color: #8A247C;font-weight: 500;cursor: pointer" ng-repeat="result in results | limitTo: 10"
+           ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" >
+            <div style="width: 10%;display: inline-block">
+              <img id="fabric-image" style="max-width: 100%" src="{{result.originalObject.variant.spree_assets[0].small_url.indexOf('http')>-1?result.originalObject.variant.spree_assets[0].small_url:'http://104.215.254.150:3000'+result.originalObject.variant.spree_assets[0].small_url}}"/>
+            </div>
+            <div style="width: 85%;display: inline-block;vertical-align: top">
+              <div style="display: inline-block" class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
+              <span style="color: grey" ng-if="matchClass"> in </span>
+              <span ng-if="matchClass">{{result.originalObject.product_type.product_type}}</span>
+              <div class="angucomplete-title" ng-if="!matchClass">{{result.title}}</div>
+            </div>
+          </div>
         </div>
+    </div>
+</script>
+<script type="text/ng-template" id="quickViewContent.html" ng-cloak>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
+    <div >
+      <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
+    </div>
+  </div>
+  <div class="row" style="margin-left: 0px; margin-right: 0px; font-family: Roboto">
+    <div class="row" style="margin: 3% 7%;">
+      <div class="row" style="text-align: right">
+      </div>
+      <div class="row" style="text-align: left; font-size: 150%; padding: 2% 0%; font-weight: 300">
+        {{quickViewProduct.name}}
+      </div>
+      <div class="row">
+        <div class="productImage col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px; padding-right: 0px">
+          <uib-carousel active="active" interval="3000" >
+            <uib-slide ng-repeat="slideImage in quickViewProduct.master.images track by slideImage.id" index="slideImage.id">
+              <img src="{{getImage(slideImage.large_url)}}" style="max-width: 100%">
+            </uib-slide>
+          </uib-carousel>
+          <!--//img src="{{getImage(quickViewProduct.master.images[0].large_url)}}" style="max-width: 100%" alt="" /-->
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
+          <div ng-if="fabric_taxonomy">
+            <div>
+              <span>
+                <img style="max-width: 14%" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(quickViewProduct.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
+                {{quickViewProduct.luxire_product.gsm}}&nbsp;gsm
+              </span>
+            </div>
+            <div style="margin-top: 4%">
+              <span>
+                <img style="max-width: 16%; margin-left: -1%" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(quickViewProduct.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                {{quickViewProduct.luxire_product.thickness.split('mm')[0]+' mm'}}&nbsp;
+              </span>
+            </div>
+            <div style="margin-top: 4%">
+              <span>
+                <img style="max-width: 16%; margin-left: -1%" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(quickViewProduct.luxire_product.stiffness, quickViewProduct.luxire_product.stiffness_unit)}}.png" alt="" />&nbsp;&nbsp;
+                {{quickViewProduct.luxire_product.stiffness}}&nbsp;
+              </span>
+            </div>
+            <div ng-if="quickViewProduct.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || quickViewProduct.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 " style="margin-top: 4%">
+              <span style="width: 30%">
+                <img style="max-width: 20%;margin-left: -3%" src="assets/images/customer/luxire-wash-icons/{{wash_care(quickViewProduct.luxire_product.wash_care)}}.png" alt="" />&nbsp;&nbsp;
+              </span>
+              <span style="width: 60%">
+                {{quickViewProduct.luxire_product.wash_care}}
 
+              </span>
+            </div>
+
+          </div>
+          <hr style="border-top: solid 1px #CACACA">
+          <div style="display: block; font-size: 170%; color: rgba(0, 0, 0, 0.5);">
+            {{quickViewProduct.display_price}}
+          </div>
+          <hr style="border-top: solid 1px #CACACA">
+        </div>
+      </div>
+      <div class="row" style="padding-top: 2%">
+        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px;padding-right: 0px; rgba(0, 0, 0, 0.5);text-align: justify">
+          <p ng-if="fabric_taxonomy" style="font-weight: 300">
+              <span>
+                <span ng-if="quickViewProduct.luxire_product.mill!=='NA'">&#9899 Fabric by {{quickViewProduct.luxire_product.mill}} </span>
+                <span ng-if="quickViewProduct.luxire_product.composition!=='NA'">&#9899 {{quickViewProduct.luxire_product.composition}} </span>
+                <span ng-if="quickViewProduct.luxire_product.technical_description!=='NA'">&#9899 {{quickViewProduct.luxire_product.technical_description}} </span>
+                <span ng-if="quickViewProduct.luxire_product.suitable_climates!=='NA'">&#9899 Ideal for {{quickViewProduct.luxire_product.suitable_climates}} </span>
+                <span ng-if="quickViewProduct.luxire_product.gsm!='NA'">&#9899 {{quickViewProduct.luxire_product.gsm}}g/{{get_ounce_weight(quickViewProduct.luxire_product.gsm)}}Oz in weight </span>
+                <span ng-if="quickViewProduct.luxire_product.thickness!='NA'&&quickViewProduct.luxire_product.stiffness!='NA'">&#9899 {{quickViewProduct.luxire_product.thickness}} thickness and softness rated at {{quickViewProduct.luxire_product.stiffness}} </span>
+                <span ng-if="quickViewProduct.luxire_product.wash_care!='NA'">&#9899 {{quickViewProduct.luxire_product.wash_care}} </span>
+                <span ng-if="quickViewProduct.luxire_product.sales_pitch!='NA'">&#9899 {{quickViewProduct.luxire_product.sales_pitch}}</span>
+              </span>
+          </p>
+        </div>
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
+          <div style="padding: 0% 0% 4% 0%;border:1px solid #DDDCDA;margin-left:4%;">
+            <button type="button" class="btn btn-default" ng-click="go_to_product_detail(quickViewProduct.slug)" style="margin-left:5%; margin-top:4%;width:90%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 </script>
