@@ -29,6 +29,7 @@
     <script src="lib/js/angular-ui-router.min.js"></script>
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="lib/js/ng-inifinite-scroll.js"></script>
+    <script src="bower_components/angular-cache/dist/angular-cache.min.js"></script>
 
     <!--Angular Aside-->
     <script src="bower_components/angular-aside/dist/js/angular-aside.min.js"></script>
@@ -44,6 +45,13 @@
     <link rel="stylesheet" href="bower_components/angular-awesome-slider/dist/css/angular-awesome-slider.min.css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" src="bower_components/angular-awesome-slider/dist/angular-awesome-slider.min.js"></script>
 
+    <!--Slick carousel-->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick-theme.css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" src="bower_components/slick-carousel/slick/slick.js"></script>
+
 
     <!-- SPA routing configuration -->
     <script src="app/app.js"></script>
@@ -57,6 +65,7 @@
       body{
         width: 100%;
         height: 100%;
+        overflow: auto
       }
       .modal-open{
         overflow-y: auto !important;
@@ -109,26 +118,33 @@
     <script type="text/javascript" src="app/customer/product_detail/product_detail.controllers.js"></script>
     <script type="text/javascript" src="app/customer/product_detail/product_detail.services.js"></script>
 
+    <!--Cart-->
     <script type="text/javascript" src="app/customer/cart/cart.controller.js"></script>
     <script type="text/javascript" src="app/customer/cart/cart.services.js"></script>
     <link rel="stylesheet" href="app/customer/cart/cart.css" media="screen" title="no title" charset="utf-8">
 
+    <!--Checkout-->
     <script type="text/javascript" src="app/customer/checkout/checkout-address.controller.js"></script>
     <script type="text/javascript" src="app/customer/checkout/checkout-delivery.controller.js"></script>
     <script type="text/javascript" src="app/customer/checkout/checkout-payment.controller.js"></script>
 
+    <!--Invoice-->
     <script type="text/javascript" src="app/customer/invoices/invoice.controller.js"></script>
     <script type="text/javascript" src="app/customer/invoices/invoice.service.js"></script>
 
-
+    <!--Customer Auth-->
     <script type="text/javascript" src="app/customer/customer_auth/customer_auth.controller.js"></script>
     <script type="text/javascript" src="app/customer/customer_auth/customer_auth.services.js"></script>
 
+    <!--My Account-->
     <script type="text/javascript" src="app/customer/my_account/my_account.controller.js"></script>
     <script type="text/javascript" src="app/customer/my_account/my_account.services.js"></script>
 
+    <!--Attribute-->
     <script type="text/javascript" src="app/customer/attribute_detail/attribute_controller.js"></script>
 
+    <!--Pre cart-->
+    <script type="text/javascript" src="app/customer/pre_cart/pre_cart.controller.js"></script>
 
 
     <!--Customer facing ends-->
@@ -246,7 +262,9 @@
     <script src="app/admin/product/editModalInstance.controller.js"></script>
     <script src="app/admin/product/product.services.js"></script>
     <script src="app/admin/product/importCsvModalController.js"></script>
-    <script src="app/admin/product/product.controller.js"></script>
+    <script src="app/admin/product/addProducts.controller.js"></script>
+    <script src="app/admin/product/productsHome.controller.js"></script>
+
     <script src="app/admin/product/editProducts.controller.js"></script>
 
 
