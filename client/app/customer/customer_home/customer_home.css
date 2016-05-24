@@ -2,7 +2,7 @@
   position: absolute;
   top:45%;
   left: 20%;
-  font-size: 400%;
+  font-size: 300%;
   width: 30%;
   text-align:left;
   font-weight: 100;
@@ -34,32 +34,117 @@ a.right.carousel-control, a.left.carousel-control{
   /*margin-top: -6%;*/
   background: url(../../../assets/images/customer/click-bait-image.png) no-repeat center !important;
 }
+.click-baits-new{
+  position: relative;
+  width: 100%;
+}
 .click-bait-collar{
   position: absolute;
-  top: 23%;
-  left: 48.5%;
+  /*top: 26%;
+  left: 48.5%;*/
   color: white;
   display: block;
 }
-@keyframes pulse_animation {
-	0% { transform: scale(1); }
-	30% { transform: scale(1); }
-	40% { transform: scale(1.08); }
-	50% { transform: scale(1); }
-	60% { transform: scale(1); }
-	70% { transform: scale(1.05); }
-	80% { transform: scale(1); }
-	100% { transform: scale(1); }
+.click-bait-attributes{
+  position: absolute;
+  color: white;
+  display: block;
 }
-@-webkit-keyframes pulse_animation {
-  0% { transform: scale(0.85); }
-  30% { transform: scale(0.90); }
+@keyframes pulse_animation_inner {
+  /*0% { transform: scale(0.75); }
+  10% { transform: scale(0.8); }
+  20% { transform: scale(0.85); }
+  30% { transform: scale(0.9); }
   40% { transform: scale(0.95); }
-  50% { transform: scale(1); }
+  50% { transform: scale(1.0); }
   60% { transform: scale(1.05); }
   70% { transform: scale(1.10); }
   80% { transform: scale(1.15); }
-  100% { transform: scale(1.20); }
+  90% { transform: scale(1.20); }
+  100% { transform: scale(1.25); }*/
+  0% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1.1); }
+  30% { transform: scale(1.15); }
+  40% { transform: scale(1.2); }
+  50% { transform: scale(1.25); }
+  60% { transform: scale(1.2); }
+  70% { transform: scale(1.15); }
+  80% { transform: scale(1.1); }
+  90% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@-webkit-keyframes pulse_animation_inner {
+  /*0% { transform: scale(0.75); }
+  10% { transform: scale(0.8); }
+  20% { transform: scale(0.85); }
+  30% { transform: scale(0.9); }
+  40% { transform: scale(0.95); }
+  50% { transform: scale(1.0); }
+  60% { transform: scale(1.05); }
+  70% { transform: scale(1.10); }
+  80% { transform: scale(1.15); }
+  90% { transform: scale(1.20); }
+  100% { transform: scale(1.25); }*/
+  0% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1.1); }
+  30% { transform: scale(1.15); }
+  40% { transform: scale(1.2); }
+  50% { transform: scale(1.25); }
+  60% { transform: scale(1.2); }
+  70% { transform: scale(1.15); }
+  80% { transform: scale(1.1); }
+  90% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@keyframes pulse_animation_outer {
+  /*0% { transform: scale(0.75); }
+  10% { transform: scale(0.8); }
+  20% { transform: scale(0.85); }
+  30% { transform: scale(0.9); }
+  40% { transform: scale(0.95); }
+  50% { transform: scale(1.0); }
+  60% { transform: scale(1.05); }
+  70% { transform: scale(1.10); }
+  80% { transform: scale(1.15); }
+  90% { transform: scale(1.20); }
+  100% { transform: scale(1.25); }*/
+  0% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1.1); }
+  30% { transform: scale(1.15); }
+  40% { transform: scale(1.2); }
+  50% { transform: scale(1.25); }
+  60% { transform: scale(1.2); }
+  70% { transform: scale(1.15); }
+  80% { transform: scale(1.1); }
+  90% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@-webkit-keyframes pulse_animation_outer {
+  /*0% { transform: scale(0.75); }
+  10% { transform: scale(0.8); }
+  20% { transform: scale(0.85); }
+  30% { transform: scale(0.9); }
+  40% { transform: scale(0.95); }
+  50% { transform: scale(1.0); }
+  60% { transform: scale(1.05); }
+  70% { transform: scale(1.10); }
+  80% { transform: scale(1.15); }
+  90% { transform: scale(1.20); }
+  100% { transform: scale(1.25); }*/
+  0% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1.1); }
+  30% { transform: scale(1.15); }
+  40% { transform: scale(1.2); }
+  50% { transform: scale(1.25); }
+  60% { transform: scale(1.2); }
+  70% { transform: scale(1.15); }
+  80% { transform: scale(1.1); }
+  90% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 .click-bait-outer-circle{
   position: relative;
@@ -70,27 +155,72 @@ a.right.carousel-control, a.left.carousel-control{
   height: 25px;
   border: solid 1px white;
   border-radius: 100%;
-  animation-name: pulse_animation;
-	animation-duration: 2000ms;
-	transform-origin:70% 70%;
+  animation-name: pulse_animation_outer;
+	animation-duration: 3000ms;
+	transform-origin:50% 50%;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 }
 .click-bait-inner-circle{
   position: absolute;
+  background-color: #8A247C;
+
+  /*background-color: #F7F7F7;*/
   display: block;
-  top: 20%;
-  left: 20%;
+  top: 21.4%;
+  left: 23.1%;
   width: 15px;
   height: 15px;
   border: solid 1px white;
   border-radius: 100%;
-  animation-name: pulse_animation;
-	animation-duration: 2000ms;
-	transform-origin:70% 70%;
+  animation-name: pulse_animation_inner;
+	animation-duration: 3000ms;
+	transform-origin:50% 50%;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 }
+@keyframes type{
+  from { width: 0; }
+}
+.click-bait-connection{
+  color: white;
+  font-family: "Courier";
+  font-size: 75%;
+  margin: 0 ;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: 10%;
+  width: 100%;
+  animation: type 2s steps(60, end);
+}
+.click-bait-connection:hover{
+  animation: type 4s steps(60, end);
+}
+.click_bait-details{
+  background-color: #FDFDFD;
+  padding: 1%;
+  color: black;
+  text-align: center
+}
+
+/*p:nth-child(2){
+  animation: type2 8s steps(60, end);
+}*/
+
+
+
+@keyframes type{
+  from { width: 0; }
+}
+/*
+@keyframes type2{
+  0%{width: 0;}
+  50%{width: 0;}
+  100%{ width: 100; }
+}*/
+
+
+
 .click-bait-pointer{
   cursor: pointer;
   position:absolute;
@@ -114,7 +244,7 @@ a.right.carousel-control, a.left.carousel-control{
   position: absolute;
   display: block;
   top: 0;
-  left: 75%;
+  left: 110%;
 
   font-family: Roboto;
   color: #000000;

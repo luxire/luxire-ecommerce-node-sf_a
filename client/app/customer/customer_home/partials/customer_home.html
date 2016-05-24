@@ -4,7 +4,7 @@
   <button ng-click="go_to_product_listing()">Move to listing</button>
 
 </div> -->
-<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 5.7%; display: block">
+<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 7%; display: block">
   <div class="" >
     <uib-carousel active="0" interval="5000" style="width: 100%">
       <uib-slide ng-cloak ng-repeat="slide in product_type_carousels" style="width: 100%">
@@ -21,7 +21,49 @@
       </uib-slide>
     </uib-carousel>
   </div>
-  <div class="click-baits" ng-init="show_suit_bait=false">
+  <div class="click-baits-new" >
+    <img src="assets/images/customer/click-bait-image.png" style="width: 100%" alt="" />
+    <div class="" ng-repeat="click_bait in click_baits" >
+      <div class="click-bait-collar" style="top: {{click_bait.y_pos}}; left: {{click_bait.x_pos}}" >
+        <div class="click-bait-pointer" ng-mouseover="change_active_click_bait(click_bait.id)">
+          <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
+          </span>
+          <span class="click-bait-inner-circle">
+          </span>
+        </div>
+        <div style="transform:rotate(355deg);transform-origin: 0% 0%;" ng-show="active_click_bait.id==click_bait.id" ng-class="{'click-bait-connection': active_click_bait.id==click_bait.id}">
+          {{click_bait.text_line}}&nbsp;&nbsp;
+        </div>
+        <div ng-show="active_click_bait.id==click_bait.id" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top:-10%">
+          <span style="display: block;">
+            <span>
+              <img src="assets/images/customer/luxire_icon.png" style="max-width: 30%;" alt="" />
+            </span>
+            <span style="margin-left: 2%;font-family: Roboto;font-size: 150%">{{click_bait.name}}</span>
+          </span>
+        </div>
+        <div style="transform:rotate(5deg);transform-origin: 0% 0%;" ng-show="active_click_bait.id==click_bait.id" ng-class="{'click-bait-connection': active_click_bait.id==click_bait.id}">
+          {{click_bait.text_line}}&nbsp;&nbsp;
+        </div>
+        <div ng-show="active_click_bait.id==click_bait.id" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top: 12%">
+          <div class="click_bait-details" style="">
+            Details
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <!-- <svg ng-show="show_suit_bait" class="" style="margin-top: 4%;margin-left: 2%">
+    <line x1="0" y1="0" x2="200" y2="0" style="stroke: white;stroke-width:3" transform='rotate(45 200 0)'>
+      <animateTransform id="animateLine" attributeName="transform" attributeType="XML"
+          type="scale" from="0" to="1" begin="indefinite" dur="1.5s" repeatCount="0" />
+    </line>
+
+  </svg> -->
+
+  <!-- <div class="click-baits" ng-init="show_suit_bait=false">
     <div class="click-bait-collar">
       <div class="click-bait-pointer" ng-mouseover="show_suit_bait=true;beginLineAnimation()">
         <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
@@ -47,19 +89,39 @@
         </span>
 
       </div>
-      <!-- <div class="click-bait-info-section">
-        <div class="click-bait-luxire-image" style="display: block">
-          <span>
-            <span class="click-bait-text" style="display: block">
-              Suit Style
-            </span>
-          </span>
-        </div>
-
-      </div> -->
 
     </div>
-  </div>
+  </div> -->
+
+  <!-- <div class="click-baits" ng-init="show_suit_bait=false">
+    <div class="click-bait-collar">
+      <div class="click-bait-pointer" ng-mouseover="show_suit_bait=true;beginLineAnimation()">
+        <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
+        </span>
+        <span class="click-bait-inner-circle">
+        </span>
+      </div>
+      <svg ng-show="show_suit_bait" class="" style="margin-top: 4%;margin-left: 2%">
+        <line x1="20" y1="0" x2="200" y2="0" style="stroke: white;stroke-width:2" >
+          <animateTransform id="animateLine" attributeName="transform" attributeType="XML"
+                      type="scale"
+                      from="0" to="1"
+                      begin="indefinite" dur="1.5s"
+                      repeatCount="0"
+                      />
+        </line>
+
+      </svg>
+      <div ng-show="show_suit_bait" class="click-bait-text" style="display: block; position: absolute;width: 100%">
+        <span style="display: block;">
+          <img src="assets/images/customer/luxire_icon.png" alt="" />
+          <span style="margin-left: 2%">Suit style</span>
+        </span>
+
+      </div>
+
+    </div>
+  </div> -->
   <div class="product-collections">
     <div class="view-collection-title">
       View Men’s Collection
@@ -153,3 +215,13 @@
   </div>
 
 </div>
+<!-- <div class="click-bait-info-section">
+  <div class="click-bait-luxire-image" style="display: block">
+    <span>
+      <span class="click-bait-text" style="display: block">
+        Suit Style
+      </span>
+    </span>
+  </div>
+
+</div> -->

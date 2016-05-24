@@ -60,7 +60,83 @@ angular.module('luxire')
 
   ];
 
-  
+  $scope.active_click_bait = {
+    id: -1
+  }
+
+  $scope.change_active_click_bait = function(id){
+    console.log('mouse over', id);
+    $scope.active_click_bait.id=id;
+  };
+
+  $scope.click_baits = [
+    {
+      id: 1,
+      y_pos: '25%',
+      x_pos: '48.5%',
+      name: 'Suit Style',
+      text_line: 'This is a sample text animation for Suit Style'
+    },
+    {
+      id: 2,
+      y_pos: '28%',
+      x_pos: '48.5%',
+      name: 'Monogram',
+      text_line: 'This is a sample text animation for Monogram'
+    },
+    {
+      id: 3,
+      y_pos: '30.5%',
+      x_pos: '49.5%',
+      name: 'Pocket Squares',
+      text_line: 'This is a sample text animation for Pocket Squares'
+    },
+    {
+      id: 4,
+      y_pos: '37.5%',
+      x_pos: '49.5%',
+      name: 'Fit & Size',
+      text_line: 'This is a sample text animation for Fit & Size'
+    },
+    {
+      id: 5,
+      y_pos: '44%',
+      x_pos: '54.5%',
+      name: 'Shirt Cuff Style',
+      text_line: 'This is a sample text animation for Shirt Cuff Style'
+    },
+    {
+      id: 6,
+      y_pos: '77%',
+      x_pos: '53.5%',
+      name: 'Shoes',
+      text_line: 'This is a sample text animation for Shoes'
+    },
+    {
+      id: 7,
+      y_pos: '56%',
+      x_pos: '51%',
+      name: 'Trousser Fit',
+      text_line: 'This is a sample text animation for Trousser Fit'
+    },
+    {
+      id: 8,
+      y_pos: '40%',
+      x_pos: '45.5%',
+      name: 'Button Colour',
+      text_line: 'This is a sample text animation for Button Colour'
+    },
+    {
+      id: 9,
+      y_pos: '35%',
+      x_pos: '44.5%',
+      name: 'Shirt Placket',
+      text_line: 'This is a sample text animation for Shirt Placket'
+    }
+
+  ]
+
+
 
   $scope.active_customer_review_index = 0;
 
