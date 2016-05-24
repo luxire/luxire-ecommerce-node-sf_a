@@ -48,7 +48,14 @@ module.exports = {
       mode: 'TEST',
       return_url: 'https://test.luxire.com/api/checkouts/gateway_response'
     }
+  },
+  prediction: {
+    host: 'https://137.116.155.7:8000',
+    customer_bought: '/queries.json'
+  },
+  redis: {
+    host: 'http://localhost:9090',
+    products: '/api/redis/products'
   }
-  /*client requests*/
 
 };

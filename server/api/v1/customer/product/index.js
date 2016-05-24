@@ -15,5 +15,6 @@ router.get('/taxonomies/:taxonomy_id', controller.taxonomy_show);
 router.get('/taxonomies/:taxonomy_id/taxons/:taxon_id', controller.taxon_show);
 
 router.post('/custom_image_upload', controller.custom_image_upload);
+router.post('/recommended', controller.recommended);
 
 module.exports = router;

@@ -109,12 +109,22 @@ exports.taxonomy_index = function(req, res){
         res.status(500).send(error.syscall);
       }
       else{
+        if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
+          for(var i=0; i<response.headers['set-cookie'].length; i++){
+            spree_cookie = response.headers['set-cookie'][i].split(';');
+            if(spree_cookie[0].split('=')[0]==='guest_token'){
+              res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+            }
+          }
+        }
+        console.log('collection response code', response.statusCode);
         res.status(response.statusCode).send(body);
       };
   });
 };
 
 exports.collections = function(req, res){
+  console.log('get collection', req.query.permalink);
   http
     .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
       if(error){
@@ -129,6 +139,7 @@ exports.collections = function(req, res){
             }
           }
         }
+        console.log('collection response code', response.statusCode);
         res.status(response.statusCode).send(body);
       };
   });
@@ -160,6 +171,7 @@ exports.taxon_show = function(req, res) {
 };
 
 exports.properties_index = function(req, res){
+  console.log('filter/properties');
   http
   .get(constants.spree.host+constants.spree.luxireProperties, function(error, response, body){
     if(error){
@@ -206,4 +218,47 @@ exports.custom_image_upload = function(req, res){
       });
   });
 
+}
+
+exports.recommended = function(req, res){
+  console.log(req.body);
+  var recommended_product_ids = [];
+  var prediction_response = {};
+  http.post({
+    uri: constants.prediction.host+constants.prediction.customer_bought,
+    body: JSON.stringify({items: [req.body.ref_id], num: 5}),
+    rejectUnauthorized: false,
+      requestCert: true,
+      agent: false,
+  },function(error, response, body){
+    recommended_product_ids = [];
+    if(error){
+      console.log('error', error);
+      res.status(500).send(error.syscall);
+    }
+    else{
+      prediction_response = JSON.parse(body);
+      console.log('prediction response', prediction_response);
+      if(body && prediction_response && prediction_response.itemScores){
+        for(var i=0;i<prediction_response.itemScores.length;i++){
+          recommended_product_ids.push(parseInt(prediction_response.itemScores[i].item));
+        }
+      }
+      if(recommended_product_ids.length){
+        console.log('recommended products req', constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']');
+        http
+          .get({
+            uri: constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']',
+          }, function(error, response, body){
+            if(error){
+              res.status(500).send(error.syscall);
+            }
+            else{
+              console.log('response from redis', body);
+              res.status(response.statusCode).send(body);
+            };
+          });
+      }
+    };
+  });
 }
