@@ -23,7 +23,7 @@ app.use(function(req, res, next){
     token = req.headers['x-luxire-token'];
     delete req.headers['x-luxire-token'];
   }
-  if (token) {
+  if (token && token!=='') {
   // verifies secret and checks exp
     jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
       if (err) {
@@ -32,6 +32,7 @@ app.use(function(req, res, next){
       else {
         if(decoded.spree_api_key != undefined && decoded.spree_api_key != null && decoded.spree_api_key != ''){
           req.headers["X-Spree-Token"] = decoded.spree_api_key;
+          console.log('request from user with: ', req.headers["X-Spree-Token"]);
           next();
         }
         else{
@@ -44,7 +45,7 @@ app.use(function(req, res, next){
 
   }
   else{
-    req.headers["X-Spree-Token"] = '';
+    req.headers["X-Spree-Token"] = undefined;
     next();
   }
 
