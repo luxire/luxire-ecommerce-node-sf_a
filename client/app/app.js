@@ -9,7 +9,8 @@ angular.module('luxire', ['ui.router','ngRoute',
 													 'ngMessages', 'ngAnimate',
 													 'AngularPrint', 'monospaced.qrcode',
 												   'ui.tree','infinite-scroll', 'ngAside',
-													  'angucomplete-alt', 'angularAwesomeSlider'])
+													  'angucomplete-alt', 'angularAwesomeSlider', 'angular-cache'])
+
 
 .run(function($location,$rootScope, $state){
 	// $location.path('/collections');
@@ -19,47 +20,64 @@ angular.module('luxire', ['ui.router','ngRoute',
     $rootScope.alerts.splice(index, 1);
   };
 	$rootScope.page = {
-        setTitle: function(title) {
-            this.title = 'Luxire - ' + title;
-        }
-    }
+      setTitle: function(title) {
+          this.title = 'Luxire - ' + title;
+      }
+  }
+  $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+      $rootScope.page.setTitle(current.$$route.title || 'Home');
+  });
+	$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+			console.log('tostate', toState);
+			console.log('toStateParams', toStateParams);
+			if(toState.name == 'test'){
+				window.sessionStorage.luxire_token = toStateParams.id;
+				console.log('state.go to admin');
+				event.preventDefault();
 
-    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
-        $rootScope.page.setTitle(current.$$route.title || 'Home');
-    });
-		$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-				console.log('tostate', toState);
-				console.log('toStateParams', toStateParams);
-				if(toState.name == 'test'){
-					window.sessionStorage.luxire_token = toStateParams.id;
-					console.log('state.go to admin');
+				$state.go('admin.default');
+			}
+			if(toState.data.require_auth){
+				if(window.localStorage.luxire_token == undefined && window.sessionStorage.luxire_token == undefined ){
 					event.preventDefault();
-
-					$state.go('admin.default');
+					$state.go('login');
 				}
-				if(toState.data.require_auth){
-					if(window.localStorage.luxire_token == undefined && window.sessionStorage.luxire_token == undefined ){
-						event.preventDefault();
-						$state.go('login');
+			}
+			if(toState.name == 'login'){
+				console.log('token', window.sessionStorage.luxire_token);
+				if(window.localStorage.luxire_token != undefined || window.sessionStorage.luxire_token != undefined ){
+					event.preventDefault();
+					$rootScope.alerts.push({type: 'warning', message: 'You are already logged in!'});
+
+				}
+			}
+
+      // // track the state the user wants to go to; authorization service needs this
+      // $rootScope.toState = toState;
+      // $rootScope.toStateParams = toStateParams;
+      // // if the principal is resolved, do an authorization check immediately. otherwise,
+      // // it'll be done when the state it resolved.
+      // if (principal.isIdentityResolved()) authorization.authorize();
+	});
+
+})
+.run(function($http){
+  $http.defaults.headers.common['x-luxire-token'] = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
+})
+.directive("whenScrolled", function(){
+	return {
+		restrict:'A',
+		link: function(scope,elem,attrs){
+			raw = elem[0];
+			elem.bind("scroll", function(){
+					if(raw.scrollTop + raw.offsetHeight + 5 >= raw.scrollHeight){
+				//		scope.loading = true;
+						console.log('Firing next in dir');
+						scope.$apply(attrs.whenScrolled);
 					}
-				}
-				if(toState.name == 'login'){
-					console.log('token', window.sessionStorage.luxire_token);
-					if(window.localStorage.luxire_token != undefined || window.sessionStorage.luxire_token != undefined ){
-						event.preventDefault();
-						$rootScope.alerts.push({type: 'warning', message: 'You are already logged in!'});
-
-					}
-				}
-
-        // // track the state the user wants to go to; authorization service needs this
-        // $rootScope.toState = toState;
-        // $rootScope.toStateParams = toStateParams;
-        // // if the principal is resolved, do an authorization check immediately. otherwise,
-        // // it'll be done when the state it resolved.
-        // if (principal.isIdentityResolved()) authorization.authorize();
-  	});
-
+			});
+		}
+	}
 })
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 	$httpProvider.defaults.useXDomain = true;
