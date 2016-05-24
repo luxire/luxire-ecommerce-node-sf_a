@@ -1,9 +1,10 @@
 angular.module('luxire')
-.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location){
-  console.log('state params in collection controller', $stateParams);
+.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory){
 
-  console.log('location', $location.url().split('/collections/')[1]);
   $scope.active_permalink = $location.url().split('/collections/')[1];
+  console.log('active_permalink', $scope.active_permalink);
+  $scope.active_taxonomy = $scope.active_permalink.indexOf('/') > -1? $scope.active_permalink.split('/')[0] : $scope.active_permalink;
+  $scope.non_fabric_taxonomies = ["accessories", "bags", "shoes", "gift-cards"];
   /*Max permalink array length =2*/
   if($scope.active_permalink != ""){
     $scope.collection_bread_crumbs = [];
@@ -86,6 +87,8 @@ angular.module('luxire')
 
     }
   };
+
+  $scope.loading_filters = true;
   CustomerProducts.filter_properties()
   .then(function(data){
     console.log('Filter Properties', data.data);
@@ -98,8 +101,10 @@ angular.module('luxire')
         $scope.filter_properties.push(val);
       }
     });
+    $scope.loading_filters = false;
   }, function(error){
     console.error(error);
+    $scope.loading_filters = false;
   });
 
   $scope.select_filter_option = function(property, option){
@@ -179,11 +184,14 @@ angular.module('luxire')
 
   $scope.allProductsData=[];
 
+  $scope.loading_products = true;
   CustomerProducts.collections($stateParams.collection_name)
   .then(function(data){
+    $scope.loading_products = false;
     console.log('collections', data);
     $scope.allProductsData = data.data.products;
   }, function(error){
+    $scope.loading_products = false;
     console.error(error);
   });
 
@@ -251,6 +259,7 @@ angular.module('luxire')
           $rootScope.luxire_cart = data.data;
           // $state.go('customer.cart');
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+          $state.go('customer.pre_cart');
         }, function(error){
           console.error(error);
         });
@@ -265,6 +274,7 @@ angular.module('luxire')
         $rootScope.luxire_cart = data.data;
         // $state.go('customer.cart');
         $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        $state.go('customer.pre_cart');
         console.log(data);
       },function(error){
         console.error(error);
@@ -703,9 +713,11 @@ angular.module('luxire')
 
 
     $scope.animationsEnabled = true;
+
     $scope.showQuickView=function(product, size){
       console.log("quick view fun is calling...");
       console.log("product: ",product);
+      console.log('is fabric', $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false);
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: 'quickViewContent.html',
@@ -715,6 +727,9 @@ angular.module('luxire')
         resolve: {
           product: function () {
             return product;
+          },
+          is_fabric_taxonomy: function(){
+            return $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false;
           }
         }
       });
@@ -731,84 +746,6 @@ angular.module('luxire')
 
    //******** end of quick view **********
 })
-.controller('quickViewModalController',function($scope, $uibModalInstance, product, CustomerOrders, $state, ImageHandler){
-  $scope.weight_index = function(variant_weight){
-    console.log('variant_weight', variant_weight);
-    console.log(parseFloat(variant_weight)-50)
-    if((parseFloat(variant_weight)-50)<0){
-      return 1;
-    }
-    else if((parseFloat(variant_weight)-50)>150){
-      return 12;
-    }
-    else{
-      return parseInt((parseFloat(variant_weight)-50)/12.5)+1;
-    };
-  };
-
-  var thickness = 0;
-  /*Get Thickness icon*/
-  $scope.thickness_index = function(variant_thickness){
-    thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-    if(thickness/10 >5){
-      return 6;
-    }
-    else {
-      return Math.ceil(thickness/10);
-    }
-  };
-  /*Get stiffness icon*/
-  $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
-    if(stiffness_unit=='m'){
-      variant_stiffness = parseFloat(variant_stiffness)*100;
-    }
-    else if(stiffness_unit=='cm'){
-      variant_stiffness = parseFloat(variant_stiffness);
-    }
-
-    if(variant_stiffness/1.25 >8){
-      return 8;
-    }
-    else{
-
-
-      return Math.ceil(variant_stiffness/1.25);
-    }
-
-  };
-
-  $scope.wash_care = function(variant_wash_care){
-    if(variant_wash_care.toLowerCase().indexOf('machine')>-1){
-      return 'machine';
-    }
-    else if(variant_wash_care.toLowerCase().indexOf('hand')>-1){
-      return 'hand';
-    }
-  };
-
-  $scope.get_ounce_weight = function(gram_weight){
-    console.log('gram_weight', gram_weight);
-    return (parseFloat(gram_weight)/28.3).toFixed(2);
-  };
-
-
-  $scope.getImage = function(url){
-    console.log('url', url);
-    return ImageHandler.url(url);
-  }
-
-  $scope.quickViewProduct = product;
-  $scope.go_to_product_detail = function (product_name) {
-    $uibModalInstance.close();
-    $state.go('customer.product_detail',{taxonomy_name: $scope.selected_taxonomy_name,taxon_name: $scope.selected_taxon_name,product_name: product_name});
-
-
-  };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss('cancel');
-    };
-});
 
 
 //    $scope.priceTagOption=[

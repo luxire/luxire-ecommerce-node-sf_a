@@ -35,11 +35,19 @@
   color: #7F0E6E !important;
   font-weight: 400 !important;
 }
+.img-middle > *{
+  vertical-align: middle;
+}
 
 
 
 </style>
-<div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 5.7%;z-index: 1">
+<p class="text-center text-muted" ng-if="loading_products||loading_filters" style="margin-top: 10%; position: fixed; top: 20%;left: 45%; z-index: 99;color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+<div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.7%;z-index: 1">
   <div class="row" style="margin: 0.75% 0.25%">
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"  style="color: #7e7d7d">
       <!-- You are at &nbsp;&nbsp;{{stateParams.taxonomy_name}}&nbsp;&nbsp;>&nbsp;&nbsp;Formal&nbsp;&nbsp;|&nbsp;&nbsp;Casual -->
@@ -71,10 +79,10 @@
     </div>
   </div>
 </div>
-<div id="product-body-part" class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 8.7%;background-color: #FDFDFD;font-family: Roboto; ">
+<div id="product-body-part" class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 11.7%;background-color: #FDFDFD;font-family: Roboto; ">
   <div id="main-body" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px">
     <div class="container-fluid">
-        <div id="filter-categories" class="" style="float:left;display:inline-block;width:15%;border-right:1px solid #EAEAEA;text-align: left; padding-top: 1%">
+        <div id="filter-categories" class="" style="float:left;display:inline-block;width:14%;border-right:1px solid #EAEAEA;text-align: left; padding-top: 1%">
           <div class="container-fluid" style="margin: 5% 10%;">
             <div style="">
               <span style="font-size:115%;font-weight: 100;">Filter By</span>
@@ -85,7 +93,7 @@
                 <span style="font-size:115%;font-weight: 100;">COLOR</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
                   <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option)">
-                    <div style="width: 20px;display: inline-block">
+                    <div style="width: 20px;display: inline-block" ng-cloak>
                       <img ng-hide="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_unchecked.png" alt="" />
                       <img ng-show="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
@@ -161,23 +169,23 @@
 
           </div>
         </div>
-        <p class="text-center text-muted" if-loading="show" style="margin-top: 5%">
-          <span class="fa fa-spinner fa-spin fa-4x"></span>
-          <br /><br />
-          Loading, please wait...
-        </p>
-        <div class="" style="display:inline-block;width:82%;margin-left:2.25%;background-color:#FFFFFF;padding-top: 1%">
+
+        <div class="" style="display:inline-block;width:82%;margin-left:3%;background-color:#FFFFFF;">
           <div id="product-type-name-part" class=" container-fluid" style="margin-top: 1%;">
             <div id="product-type-name-part" class="row" >
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
             </div>
           </div>
-          <div class="row">
-            <div style="padding-bottom: 2%;overflow: auto;" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price | filter:filter_with_selections" class="col-xs-4 col-sm-4 col-md-4 col-lg-4" ng-cloak>
+          <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)===-1" class="row" style="display: block">
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price | filter:filter_with_selections" ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
-                <div class="productImage">
-                  <img ng-click="go_to_product_detail(product.id)" src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
+                <!-- <div class="productImage">
+                  <img ng-click="go_to_product_detail(product.slug)" src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
+                </div> -->
+                <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+                  <img ng-click="go_to_product_detail(product.slug)" src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
                 </div>
+
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
                     <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>35? product.name.slice(0,35)+'...' : product.name}}</span></center>
@@ -198,14 +206,14 @@
                   <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
                       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
                         <span>
-                          <img style="max-width: 12%" title="{{product.luxire_product.gsm}} gsm" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%" title="{{product.luxire_product.thickness}} thickness" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%" title="{{product.luxire_product.stiffness}} stiffness" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                          <img style="max-width: 12%; margin-left: 8%" title="{{product.luxire_product.gsm}} gsm" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
+                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.thickness}} thickness" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.stiffness}} stiffness" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
                         </span>
 
                       </div>
                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:2% 1% 1% 1%;">
-                        <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.id)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                        <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
                       </div>
                      </div>
                   </div>
@@ -216,6 +224,38 @@
             </div>
 
           </div>
+          <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1" class="row" style="display: block">
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price | filter:filter_with_selections" ng-cloak>
+              <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
+                <!-- <div class="productImage">
+                  <img ng-click="go_to_product_detail(product.slug)" src="{{getImage(product.master.images[0].product_url)}}" style="max-width: 100%; cursor: pointer"></img>
+                </div> -->
+                <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+                  <img ng-click="go_to_product_detail(product.slug)" src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+                </div>
+                <div class="container-fluid" style="background-color: ">
+                  <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
+                    <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>35? product.name.slice(0,35)+'...' : product.name}}</span></center>
+                    <center><span style="font-size:90%;color:#7F7F7F;">{{product.display_price}}</span></center>
+                  </div>
+                  <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                      <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="showQuickView(product,'md')">
+                        <div style="margin-top:5%;margin-bottom:5%;">
+                          <span style="text-align:center;font-size:80%;">Quick View</span><br>
+                        </div>
+                      </div>
+                      <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" >
+                        <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;margin-top: 3%">SELECT</button>
+                      </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
         <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>-->
         </div>
@@ -254,84 +294,6 @@
 
 </div>
 
-<script type="text/ng-template" id="quickViewContent.html" ng-cloak>
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
-    <div >
-      <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
-    </div>
-  </div>
-  <div class="row" style="margin-left: 0px; margin-right: 0px; font-family: Roboto">
-    <div class="row" style="margin: 3% 7%;">
-      <div class="row" style="text-align: right">
-      </div>
-      <div class="row" style="text-align: left; font-size: 150%; padding: 2% 0%; font-weight: 300">
-        {{quickViewProduct.name}}
-      </div>
-      <div class="row">
-        <div class="productImage col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px; padding-right: 0px">
-          <img src="{{getImage(quickViewProduct.master.images[0].large_url)}}" style="max-width: 100%" alt="" />
-        </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
-          <div>
-            <span>
-              <img style="max-width: 14%" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(quickViewProduct.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
-              {{quickViewProduct.luxire_product.gsm}}&nbsp;gsm
-            </span>
-          </div>
-          <div style="margin-top: 4%">
-            <span>
-              <img style="max-width: 16%; margin-left: -1%" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(quickViewProduct.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-              {{quickViewProduct.luxire_product.thickness.split('mm')[0]+' mm'}}&nbsp;
-            </span>
-          </div>
-          <div style="margin-top: 4%">
-            <span>
-              <img style="max-width: 16%; margin-left: -1%" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(quickViewProduct.luxire_product.stiffness, quickViewProduct.luxire_product.stiffness_unit)}}.png" alt="" />&nbsp;&nbsp;
-              {{quickViewProduct.luxire_product.stiffness}}&nbsp;
-            </span>
-          </div>
-          <div ng-if="quickViewProduct.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || quickViewProduct.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 " style="margin-top: 4%">
-            <span style="width: 30%">
-              <img style="max-width: 20%;margin-left: -3%" src="assets/images/customer/luxire-wash-icons/{{wash_care(quickViewProduct.luxire_product.wash_care)}}.png" alt="" />&nbsp;&nbsp;
-            </span>
-            <span style="width: 60%">
-              {{quickViewProduct.luxire_product.wash_care}}
-
-            </span>
-          </div>
-          <hr style="border-top: solid 1px #CACACA">
-          <div style="display: block; font-size: 170%; color: rgba(0, 0, 0, 0.5);">
-            {{quickViewProduct.display_price}}
-          </div>
-          <hr style="border-top: solid 1px #CACACA">
-        </div>
-      </div>
-      <div class="row" style="padding-top: 2%">
-        <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px;padding-right: 0px; rgba(0, 0, 0, 0.5);text-align: justify">
-        <p style="font-weight: 300">
-            <span>
-              <span ng-if="quickViewProduct.luxire_product.mill!=='NA'">&#9899 Fabric by {{quickViewProduct.luxire_product.mill}} </span>
-              <span ng-if="quickViewProduct.luxire_product.composition!=='NA'">&#9899 {{quickViewProduct.luxire_product.composition}} </span>
-              <span ng-if="quickViewProduct.luxire_product.technical_description!=='NA'">&#9899 {{quickViewProduct.luxire_product.technical_description}} </span>
-              <span ng-if="quickViewProduct.luxire_product.suitable_climates!=='NA'">&#9899 Ideal for {{quickViewProduct.luxire_product.suitable_climates}} </span>
-              <span ng-if="quickViewProduct.luxire_product.gsm!='NA'">&#9899 {{quickViewProduct.luxire_product.gsm}}g/{{get_ounce_weight(quickViewProduct.luxire_product.gsm)}}Oz in weight </span>
-              <span ng-if="quickViewProduct.luxire_product.thickness!='NA'&&quickViewProduct.luxire_product.stiffness!='NA'">&#9899 {{quickViewProduct.luxire_product.thickness}} thickness and softness rated at {{quickViewProduct.luxire_product.stiffness}} </span>
-              <span ng-if="quickViewProduct.luxire_product.wash_care!='NA'">&#9899 {{quickViewProduct.luxire_product.wash_care}} </span>
-              <span ng-if="quickViewProduct.luxire_product.sales_pitch!='NA'">&#9899 {{quickViewProduct.luxire_product.sales_pitch}}</span>
-
-            </span>
-        </p>
-        </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
-          <div style="padding: 0% 0% 4% 0%;border:1px solid #DDDCDA;margin-left:4%;">
-            <button type="button" class="btn btn-default" ng-click="go_to_product_detail(quickViewProduct.id)" style="margin-left:5%; margin-top:4%;width:90%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</script>
 <!--Filter-->
 <!--Material-->
 <!-- <div ng-if="property.name.toLowerCase()=='material'" class="row" style="margin-top: 3%">
