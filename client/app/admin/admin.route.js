@@ -76,7 +76,7 @@ angular.module('luxire')
 		url:'/products',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
-			"mainContent": { templateUrl: 'app/admin/product/partials/productsHome.html',controller: 'ProductController'},
+			"mainContent": { templateUrl: 'app/admin/product/partials/productsHome.html',controller: 'productsHomeController'},
 			data: {
 				require_auth: true
 			}
@@ -86,7 +86,7 @@ angular.module('luxire')
 		url:'/products/new',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
-			"mainContent": { templateUrl: 'app/admin/product/partials/addProducts.html',controller: 'ProductController'},
+			"mainContent": { templateUrl: 'app/admin/product/partials/addProducts.html',controller: 'addProductController'},
 			data: {
 				require_auth: true
 			}
