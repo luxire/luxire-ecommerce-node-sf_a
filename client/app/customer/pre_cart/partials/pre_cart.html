@@ -1,0 +1,137 @@
+<style>
+  .pre-cart-outer-div{
+    border: solid 1px #C9C9C9;
+    background-color: #F4F4F4;
+  }
+  .customer-bought-recommendation{
+    font-family: HelveticaNeue;
+    color: rgba(1, 0, 0, 0.67);
+    font-size: 200%; /* Approximation due to font substitution */
+  }
+  .recommended-products{
+    margin-top: 2%;
+  }
+</style>
+<p class="text-center text-muted" ng-if="loading_cart" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;  color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 10.8%">
+  <div class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+    <div class="pre-cart-outer-div row">
+      <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="border-right: solid 1px #C9C9C9; padding: 1%;background-color: #FDFDFD">
+        <div class="row">
+          <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-top: 10%;text-align: right">
+            <i class="fa fa-check fa-2x" style="color: #7F0E6E" aria-hidden="true"></i>
+          </div>
+          <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <img style="border: solid 1px #7F0E6E;max-width: 100%" src="{{getImage(active_line_item.variant.images[0].product_url)}}" alt="" />
+          </div>
+          <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-top: 2%">
+            <div class="" style="font-weight: 700; text-align: left;font-size: 150%;font-family: HelveticaNeue">
+              Added to Cart
+            </div>
+            <div class="" style="color: #7F0E6E;font-size: 90%">
+              {{active_line_item.variant.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="background-color: #F4F4F4">
+        <div style="padding: 4% 2%">
+          <div>
+            <span style="font-weight: 700;font-size: 110%;font-family: Helvetica">Cart subtotal</span> ({{order.line_items.length}} {{order.line_items.length==1? 'item': 'items'}}): <span style="color: #7F0E6E;font-family: HelveticaNeue;font-size: 125%">&nbsp;&nbsp;{{order.display_total}}</span>
+          </div>
+          <div style="margin-top: 4%">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-left: 0px !important">
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #A5A5A5">
+                  <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;background-color: black;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart">View Cart</button>
+              </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+            </div>
+            <div  class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #D3B7CF">
+                  <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;background-color: #7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.checkout_address">Proceed to Checkout</button>
+              </div>
+            </div>
+            <div  class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+              <div style="padding: 3% 3% 3% 3%;border:1px solid #D3B7CF">
+                  <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;background-color: #7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.home">Continue Shopping</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recommended-products">
+      <!-- <div class="">
+        Recommended for You Based on Your selection:
+      </div> -->
+    </div>
+    <uib-alert style="margin-top: 5%" ng-hide="luxire_cart != {} && luxire_cart.line_items.length >0" type="success">Your cart is empty</uib-alert>
+  </div>
+  <div class="row col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1" style="padding-left: 0px;padding-top: 0.5%">
+    <div class="customer-bought-recommendation">
+      Customers who shopped for this product, also shopped for:
+    </div>
+    <div class="recommended-products">
+      <div class="" style="display: inline-block;width: 20%;margin-left: 2%" ng-repeat="product in recommended_products">
+        <img style="max-width: 100%;border: solid 1px grey" src="{{getImage(product.master.images[0].large_url)}}" alt="" />
+        <div class="" style="margin: 1% 0%">
+          <div class="" style="display: inline-block;text-align: left;width: 49%">
+            <div class="" ng-click="quick_view(product)" style="background: #7F0E6E;color: white;text-align: center;padding:2% 0%;cursor: pointer">
+              Quick View
+            </div>
+          </div>
+          <div class="" style="display: inline-block;text-align: right;width: 49%">
+            <div class="" ng-click="select(product.slug)" style="background: black;color: white;text-align: center;padding:2% 0%;cursor: pointer">
+              Select
+            </div>
+          </div>
+        </div>
+        <div class="" style="text-align: center">
+          {{product.name}}
+        </div>
+        <div class="" style="text-align: center;color: #7F0E6E">
+          {{product.display_price}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div style="margin-top: 30%">
+</div>
+
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>
