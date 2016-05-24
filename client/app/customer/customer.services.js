@@ -41,18 +41,29 @@ angular.module('luxire')
      });
   };
 })
-.service('CustomerProducts', function($http, CustomerConstants){
+.service('CustomerProducts', function($http, CustomerConstants, CacheFactory){
+  if(!CacheFactory.get('ProductCache')){
+    CacheFactory.createCache('ProductCache', {
+        deleteOnExpire: 'aggressive',
+      });
+  }
+  var product_cache = CacheFactory.get('ProductCache');
+
   this.index = function(){
     console.log('products index', CustomerConstants.api.products);
-    return $http.get(CustomerConstants.api.products+'?customer=true');
+    return $http.get(CustomerConstants.api.products);
   };
 
   this.searchProducts = function(search_phrase){
-    return $http.get(CustomerConstants.api.products+'?q[name_cont]='+search_phrase);
+    return $http.get(CustomerConstants.api.products+'?q[name_cont]='+search_phrase, {
+      cache: product_cache
+    });
   };
 
   this.show = function(product_name){
-    return $http.get(CustomerConstants.api.products+'/'+product_name+'?customer=true');
+    return $http.get(CustomerConstants.api.products+'/'+product_name, {
+      cache: product_cache
+    });
   };
 
   this.standard_sizes = function(fit_type, neck_size){
@@ -61,15 +72,20 @@ angular.module('luxire')
 
   /*Taxonomy=>Super Collections*/
   this.taxonomy_index = function(taxonomy_id){
-    return $http.get(CustomerConstants.api.products+'/taxonomies/');
+    return $http.get(CustomerConstants.api.products+'/taxonomies', {
+      cache: product_cache
+    });
   };
 
   this.taxonomy_show = function(taxonomy_id){
     return $http.get(CustomerConstants.api.products+'/taxonomies/'+taxonomy_id);
   };
 
+  //Used for product listing
   this.collections = function(permalink){
-    return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink);
+    return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink, {
+      cache: product_cache
+    });
   };
 
   this.taxon_index = function(taxonomy_id, taxon_id){
@@ -77,18 +93,23 @@ angular.module('luxire')
   };
 
   this.filter_properties = function(){
-    return $http.get(CustomerConstants.api.products+'/properties');
+    return $http.get(CustomerConstants.api.products+'/properties',{
+      cache: product_cache
+    });
   };
   this.product_types = function(){
     return $http.get(CustomerConstants.api.product_types);
   };
+  this.recommended = function(id){
+    console.log('fetch recommended for', id);
+    return $http.post(CustomerConstants.api.products+'/recommended', angular.toJson({ref_id: id}));
+  }
 
 })
 .service('CustomerOrders', function($http, CustomerConstants){
 
   /*Order*/
   this.get_order_by_cookie = function(){
-    console.log('get order by cookie');
     return $http.get(CustomerConstants.api.orders+'/incomplete');
   };
 
@@ -112,12 +133,14 @@ angular.module('luxire')
             variant_id: variant.id,
             quantity: 1,
             luxire_line_item:{
+              total_personalization_cost: cartObject && cartObject.personalization_cost ? parseFloat(cartObject.personalization_cost.split('$')[1]) : 0,
               customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
               personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
               measurement_data: {
                 standard_measurement_attributes: cartObject && cartObject.standard_measurement_attributes ? cartObject.standard_measurement_attributes : {},
                 body_measurement_attributes: cartObject && cartObject.body_measurement_attributes ? cartObject.body_measurement_attributes : {}
               }
+
             }
           }
         ],
@@ -131,16 +154,10 @@ angular.module('luxire')
     return $http.put(CustomerConstants.api.orders+'/'+order.number+'/empty?order_token='+order.token);
   };
 
-  this.update_cart_by_quantity = function(order, line_item_id,variant_id,quantity){
-		var updated_cart = {
-			order_number: order.number,
-			order_token: order.token,
-			line_item_id: line_item_id,
-			variant_id: variant_id,
-			quantity: quantity
-		};
-		return $http.put(CustomerConstants.api.orders+'/'+order.number+'/?order_token='+order.token, angular.toJson(updated_cart));
-	};
+  this.update = function(order, updated_order_object){
+    console.log('update order with', updated_order_object);
+    return $http.put(CustomerConstants.api.orders+'/'+order.number+'?order_token='+order.token, angular.toJson(updated_order_object));
+  };
 
   /*line_items*/
 
@@ -150,6 +167,7 @@ angular.module('luxire')
         variant_id: variant.id,
         quantity: 1,
         luxire_line_item:{
+          total_personalization_cost: cartObject && cartObject.personalization_cost ? parseFloat(cartObject.personalization_cost.split('$')[1]) : 0,
           customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
           personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
           measurement_data: {
@@ -166,6 +184,16 @@ angular.module('luxire')
     return $http.delete(CustomerConstants.api.orders+'/'+order.number+'/line_items/'+line_item_id+'?order_token='+order.token);
   };
 
+  this.update_line_item = function(order, line_item_id,variant_id,quantity){
+		var updated_cart = {
+			order_number: order.number,
+			order_token: order.token,
+			line_item_id: line_item_id,
+			variant_id: variant_id,
+			quantity: quantity
+		};
+		return $http.put(CustomerConstants.api.orders+'/'+order.number+'/line_items/'+line_item_id+'?order_token='+order.token, angular.toJson(updated_cart));
+	};
 
 	this.proceed_to_checkout = function(order){
 		return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/address?order_token='+order.token, '');
@@ -192,6 +220,14 @@ angular.module('luxire')
 		return $http.post(CustomerConstants.api.orders+'/'+order.number+'/apply_coupon_code/'+coupon_code+'?order_token='+order.token, '');
 	};
 
+  this.apply_gift_card = function(order, gift_card_code){
+    var gift_card = {
+      gift_card_code: gift_card_code,
+      order_token: order.token
+    };
+    return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/apply_gift_card', angular.toJson(gift_card));
+  };
+
   this.checkout_payment_pay_pal = function(payment_method_id, order){
     console.log('payment_method_id', payment_method_id);
     console.log('order', order);
@@ -214,3 +250,15 @@ angular.module('luxire')
   };
 
 })
+
+
+  // this.update_cart_by_quantity = function(order, line_item_id,variant_id,quantity){
+	// 	var updated_cart = {
+	// 		order_number: order.number,
+	// 		order_token: order.token,
+	// 		line_item_id: line_item_id,
+	// 		variant_id: variant_id,
+	// 		quantity: quantity
+	// 	};
+	// 	return $http.put(CustomerConstants.api.orders+'/'+order.number+'/?order_token='+order.token, angular.toJson(updated_cart));
+	// };
