@@ -16,14 +16,15 @@
   curl -H 'Content-Type: application/json' -d '{"user":{"email":"spree@example.com","password":"spree123"}}' -X POST http://127.0.0.1:9000/api/userManager/login
   */
   exports.login = function(req, res){
-    console.log(req.body);
     console.log('login user with id: '+req.body.user.email)
-    console.log(req.connection.remoteAddress)
     req.body.userIp = req.connection.remoteAddress
     console.log('request', env.spree.host+env.spree.users+'/login.json');
     http.post({
       uri: env.spree.host+env.spree.users+'/login.json',
-      headers:{'content-type': 'application/json'},
+      headers:{
+        'Cookie': 'guest_token='+req.cookies.guest_token,
+        'content-type': 'application/json'
+      },
       body:JSON.stringify(req.body)
     },function(error,response,body){
       console.error(error);
@@ -109,7 +110,7 @@
         console.log(body);
         var resp = JSON.parse(body)
         if(resp.statusCode == 201){
-          
+
           console.log('New user created with ID: '+resp.user_id);
           res.status(201).send(resp);
         }
