@@ -267,7 +267,9 @@ angular.module('luxire')
 
 .service('countries',function($http, $q){
 	this.all = function(){
-		return $http.get('/api/countries');
+		return $http.get('/api/countries',{
+			cache: true
+		});
 	}
 	this.search = function(search_phrase){
 		console.log(search_phrase);
