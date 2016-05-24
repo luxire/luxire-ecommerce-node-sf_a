@@ -1,6 +1,8 @@
 angular.module('luxire')
-.controller('editCollectionController',function($scope, collections,fileReader,products,$http,$interval,$state,$stateParams){
+.controller('editCollectionController',function($scope,$timeout,taxonImageUpload, ImageHandler, collections,fileReader,products,$http,$interval,$state,$stateParams){
   $scope.imgshow=true;
+  $scope.loading = true;
+
   $scope.datepicker='';
   $scope.rule = [];
   var tagIdsObj=[];
@@ -9,21 +11,67 @@ angular.module('luxire')
   $scope.taxonDesc='';
   $scope.save_collection_button=false;
   $scope.flag=true;
-  $scope.taxonomiesId=1;
+  //$scope.taxonomiesId=1;
   $scope.showTaxonName='';
   //$scope.product_ids=[];
   //
-    console.log("state params: "+$stateParams.id);
-    collections.getTaxonsById($scope.taxonomiesId,$stateParams.id).then(function(res){
+    console.log("state params taxonomie_id: "+$stateParams.taxonomie_id); //18th march changes  @rajib
+    console.log("state params taxons_id: "+$stateParams.taxons_id);  //18th march changes  @rajib
+
+
+    collections.getTaxonsById($stateParams.taxonomie_id,$stateParams.taxons_id).then(function(res){  // //18th march changes in the argument  @rajib
+       $scope.loading = true;
        console.log("edited taxons value is\n\n",res);
+       console.log("image url",ImageHandler.url(res.data.image));
+        $('#style_master_img').attr('src', ImageHandler.url(res.data.icon));
        $scope.showTaxonName=res.data.name;
        $scope.taxonTitle=res.data.name;
        $scope.taxonDesc=res.data.description;
        $scope.rule = res.data.products;
+       $scope.loading = false;
      }, function(info) {
        console.log(info);
+       $scope.loading = true;
      })
+
+
+     // image upload functionality
+     $scope.upload_image = function(files){
+       console.log('typeof', typeof(files[0]));
+       console.log('product image', typeof(files[0]));
+       if (files && files.length) {
+         $scope.style_image = files[0];
+         console.log('files to upload',files[0]);
+         var reader = new FileReader();
+          reader.onload = function (e) {
+              $('#style_master_img').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(files[0]);
+       }
+     }
+
+     $scope.getImage = function(url){
+       console.log(url);
+       console.log(ImageHandler.url(url));
+       return ImageHandler.url(url);
+     };
+
+
+     // end image upload functionality
   //
+  // --------------------------   START ANGULAR ALERT FUNCTIONALITY    -------------------------
+  $scope.alerts = [];
+  var alert = function(){
+    this.type = '';
+    this.message = '';
+  };
+  $scope.close_alert = function(index){
+    console.log(index);
+    $scope.alerts.splice(index, 1);
+  };
+
+  // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
 
   $scope.activeSaveCollectionBtn=function(){
       $scope.save_collection_button=true;
@@ -44,19 +92,7 @@ angular.module('luxire')
     }
 
     $scope.loadItems = function(query){
-      // var product_ids=[];
-      // var x = products.searchProducts(query);
-      // console.log("-----------------------");
-      // tagIdsObj.push(x);
-      // console.log("query\n\n",tagIdsObj);
-      // console.log("rule :",$scope.rule);
-      // console.log("rule id: ",$scope.rule.id);
-      // angular.forEach($scope.rule, function (product, key) {
-      //   console.log('angularforeach val', product);
-      //   product_ids.push(product.id);
-      // })
-      // console.log("ids \n",product_ids);
-      // console.log("-----------------------");
+      console.log("serched products are: ",products.searchProducts(query));
       return products.searchProducts(query);
     };
 
@@ -78,7 +114,7 @@ $scope.editTaxon=function(){
   var product_ids=[];
   var product_name=[];
   angular.forEach($scope.rule, function (product, key) {
-    console.log('angularforeach val', product);
+  //  console.log('angularforeach val', product);
     product_ids.push(product.id);
   })
 
@@ -92,21 +128,36 @@ $scope.editTaxon=function(){
           "name": $scope.taxonTitle,
           "pretty_name": $scope.taxonTitle,
           "description": $scope.taxonDesc,
-          "parent_id": 1,
-          "taxonomy_id": 1,
+          "taxonomy_id": $stateParams.taxonomie_id,
           "product_ids": product_ids
         }
     }
- collections.updateTaxons($scope.id, $scope.tid, updatedTaxonObj).then(function(data){
-    alert('taxons updated successfully..');
+    //delete $scope.newProductType.i;
+
+ collections.updateTaxons($stateParams.taxonomie_id, $stateParams.taxons_id, updatedTaxonObj).then(function(data){
     $scope.showTaxonName=data.name;
     $scope.taxonTitle=data.name;
     $scope.taxonDesc=data.description;
     console.log("updated data: ",data);
-    console.log("-----------------------");
+    // updating image upload functionality
+    taxonImageUpload.update_image($scope.style_image,$stateParams.taxonomie_id,data.id).then(function(data){
+           console.log("update image fun is calling after taxon creation...");
+          console.log("in collection .update image image data:",$scope.style_image);
+          console.log("update image upload"); // 30th march
+    },function(error) {
+       console.log(error);
+
+     });
+
+    $scope.alerts.push({type: 'success', message: 'Taxons Updated successfully!'});
+    $timeout(function() {
+      console.log("timeout functionality...");
+      $state.go("admin.collectionHome");
+    }, 3000);
     //$scope.activeButton('products')
   }, function(info) {
-    alert("error: updating taxons");
+    $scope.alerts.push({type: 'success', message: 'Error Updating Taxons!'});
+    //alert("error: updating taxons");
     console.log(info);
   })
 }

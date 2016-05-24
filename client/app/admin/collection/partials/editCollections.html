@@ -1,10 +1,7 @@
-<div class="container-fluid" style="height:100%" >
+<div class="container-fluid" style="height:100%; overflow:scroll;" >
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Collections / <span style="color: black;">Add a Collection/</span><span style="margin-left:1%;font-weight: normal">{{showTaxonName}}</span></span>
-    </div>
-    <div class="col-lg-5 col-md-5">
-
+    <div class="col-lg-9 col-md-9" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Edit Collections / <span style="color: black;"></span><span style="margin-left:1%;font-weight: normal">{{showTaxonName}}</span></span>
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
       <!-- <button type="button" class="btn btn-default" >
@@ -14,6 +11,9 @@
       <button type="button" class="btn btn-default" ng-click="editTaxon(); showUpdatedTaxon()">Save</button>
     </div>
   </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
 
 <!-- middle card -->
 <div class="row" style="">
@@ -21,14 +21,14 @@
     <div class="row">
       <div class="col-lg-8 col-md-8 middle-card">
         <div class="placard" >
-          <span style="font-size: 13px;">Title</span>
+          <span class="required" style="font-size: 13px;">Title</span>
           <br>
           <input type="text" class="form-control" placeholder="" ng-model="taxonTitle">
           <br>
           <span style="font-size: 13px;">Description</span>
           <br>
           <div class="panel panel-default">
-            <div class="panel-heading" style="padding: 5px;" ng-hide="false">
+            <!--<div class="panel-heading" style="padding: 5px;" ng-hide="false">
               <div class="btn-group" role="group" aria-label="...">
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -95,7 +95,7 @@
                 </button>
 
               </div>
-            </div>
+            </div>-->
             <div class="panel-body">
               <textarea class="description" ng-model="taxonDesc" rows="9" cols="40"></textarea>
             </div>
@@ -186,17 +186,27 @@
                 <span style="font-size: 20px;">Products</span>
             </div>
             <div class="row" style="margin-top: 2%;">
-            <div class="col-lg-5 col-md-5" style="margin-left: 1%;">
-              <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
-                      on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
-                        <auto-complete  source="loadItems($query)"></auto-complete>
-              </tags-input>
+              <div class="col-lg-12 col-md-12" style="margin-left: 1%;" style="overflow:scroll;">
+                <!-- <tags-input ng-model="rule" display-property="name" key-property="master.id" add-from-autocomplete-only="true"
+                        on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)" >
+                          <auto-complete  source="loadItems($query)"></auto-complete>
+                </tags-input> -->
+                <tags-input ng-model="rule"
+                         display-property="name"
+                         key-property="id"
+                         placeholder="Add products..."
+                         replace-spaces-with-dashes="false">
+                      <auto-complete  source="loadItems($query)"
+                            min-length="0">
+                      </auto-complete>
+                </tags-input>
+
 
               </div>
 
-              <div class=" col-lg-1 col-md-1"></div>
-
-                <div class="col-lg-6 col-md-6" style="margin-top:3px;">
+              <!-- <div class=" col-lg-1 col-md-1"></div> -->
+                <!-- 30th march commented the following div-->
+                <!-- <div class="col-lg-6 col-md-6" style="margin-top:3px;">
                   <select class="form-control" name="">
                     <option value="1">Manually </option>
                     <option value="2">By best selling</option>
@@ -205,7 +215,7 @@
                     <option value="1">Oldest to newest</option>
                     <option value="2">newest to oldest</option>
                   </select>
-                </div>
+                </div> -->
 
               </div>
           </div>
@@ -269,14 +279,18 @@
         </div>
         <div class="placard-grey" style="height: 100%; background-color: white;">
               <span style="font-size: 25px;">Collection Image</span>
-              <div style="margin-top: 40%; margin-left: 50%; margin-bottom: 30%;">
+              <div style="">
+                <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="">
+                <!-- <img ng-if="!angular.isObject(newProductType.image)" src="{{getImage(newProductType.image)}}" alt="" />
+                <img ng-if="angular.isObject(newProductType.image)" id="style_master_img" src="" alt="" /><br> -->
+                <div style="padding-top:5%;padding-bottom:5%; max-width:100%;"><img id="style_master_img" src="" style="width:50%; height: 50%;"/></div>
               <!--  <div class="drag-drop" style="height=5%">
                   <img class="img-responsive" ng-src="{{productImage}}" style="height: 5% width:5%">
                 </div>-->
-                  <div style="" ng-show="imgshow" >
+                  <!-- <div style="" ng-show="imgshow" >
                         <span style="text-align: right; font-size: 50px; " ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)" class="glyphicon glyphicon-picture"></span><br>
                         <span style="text-align: center; font-size: 10px;" ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)">Choose image</span>
-                  </div>
+                  </div> -->
               </div>
         </div>
       </div>
@@ -285,7 +299,7 @@
 </div>
 
 <!-- page header -->
-<div class="container-fluid" style="background-color: white;">
+<!-- <div class="container-fluid" style="background-color: white;">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
     </div>
@@ -298,6 +312,8 @@
       <button type="button" class="btn btn-primary" ng-click="">Save</button>
     </div>
   </div>
+</div> -->
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
-
 </div>

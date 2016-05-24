@@ -1,5 +1,5 @@
 angular.module('luxire')
-.service('collections',function($http, $q){
+.service('collections',function($http, $q, AdminConstants){
 
   //Get all products
   this.getCollections= function(){
@@ -125,7 +125,7 @@ angular.module('luxire')
       console.log("create taxons services is calling with collection tid: \n"+id);
   		$http.post("/api/taxonomies/"+id+"/taxons", angular.toJson(taxonsObj)).success(function(res) {
   			console.log(res);
-  			deferred.resolve(res.data);
+  			deferred.resolve(res);
     		})
     		.error(function(errData, errStatus, errHeaders, errConfig) {
   				console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
@@ -168,9 +168,52 @@ angular.module('luxire')
         return deferred.promise;
     }
 
+    this.update_image = function(image, taxonomy_id,taxon_id){
+      console.log("taxon image upload url: ",'/taxonomies/'+taxonomy_id+'/customized_taxons/'+taxon_id);
+     console.log('image', image);
+     var fd = new FormData();
+     fd.append('image', image);
+     console.log("value appended");
+     return $http.put('/api/taxonomies/'+taxonomy_id+'/customized_taxons/'+taxon_id, fd, {
+         transformRequest: angular.identity,
+         headers: {'Content-Type': undefined}
+      });
+      console.log("end of update service");
+    };
 
 
 
+})
 
+.service('taxonImageUpload', function($http, $q){
+
+  this.update_image = function(image, taxonomy_id,taxon_id){
+    console.log("taxon image upload url: ",'/taxonomies/'+taxonomy_id+'/customized_taxons/'+taxon_id);
+   console.log('image', image);
+   var fd = new FormData();
+   fd.append('image', image);
+   console.log("value appended");
+   return $http.put('/taxonomies/'+taxonomy_id+'/customized_taxons/'+taxon_id, fd, {
+       transformRequest: angular.identity,
+       headers: {'Content-Type': undefined}
+    });
+    console.log("end of update service");
+  };
+
+})
+.service('allTaxons', function($http,AdminConstants){
+
+	this.getTaxonsPerPage= function(totalTaxons){
+		if(totalTaxons == undefined){
+			return $http.get(AdminConstants.api.allTaxons+'?without_children=true');
+		}else{
+			return $http.get(AdminConstants.api.allTaxons+'?without_children=true&per_page='+totalTaxons);
+		}
+	}
+
+
+	this.searchTaxons= function(query){
+		return $http.get(AdminConstants.api.allTaxons+'?q[name_cont]='+query);
+	}
 
 })

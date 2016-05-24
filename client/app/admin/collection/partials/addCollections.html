@@ -8,8 +8,11 @@
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
       <button type="button" class="btn btn-default" ui-sref="admin.collectionHome">Cancel</button>
-      <button type="button" class="btn btn-default" ng-click="showDate(); createTaxons()" ng-disabled="save_collection_btn" >Save Collection</button>
+      <button type="button" class="btn btn-default" ng-click="showDate(); createTaxons()" ng-disabled="save_collection_btn" >Create Collection</button>
     </div>
+  </div>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
   </div>
 
 <!-- middle card -->
@@ -17,10 +20,11 @@
   <div class="container-fluid admin-console-content">
     <div class="row">
       <div class="col-lg-8 col-md-8 middle-card">
-        <div class="placard" >
-          <span style="font-size: 13px;">Title</span>
+        <div class="placard" ng-init="emptyNameMsg=false;">
+          <span class="required" style="font-size: 13px;">Title</span>
           <br>
-          <input type="text" class="form-control" placeholder="Add Title" ng-model="tagtitle">
+          <input id="name" type="text" class="form-control" placeholder="Add Title" ng-model="tagtitle" ng-blur="checkCollectionNameStatus(tagtitle)" autofocus>
+          <span ng-show="emptyNameMsg" style="color:red;">Name Can Not Be Empty</span>
           <br>
           <span style="font-size: 13px;">Description</span>
           <br>
@@ -99,20 +103,48 @@
           </div>
           <div class="panel-body">
             <div class="">
-                <span>Select Taxonomies</span>
+                <span class="required">Select Taxonomies</span>
             </div>
-            <div class="" id="select_options_taxonomie">
-              <select class="form-control" ng-model="selectedTaxonomie"  ng-change="selectedTaxonomieOption(selectedTaxonomie)" >
+            <div class="" id="select_options_taxonomie" ng-init="emptyTaxonsMsg=false;">
+              <select id="taxons" class="form-control" ng-model="selectedTaxonomie"  ng-change="selectedTaxonomieOption(selectedTaxonomie)"  ng-blur="checkCollectionTaxonsStatus(selectedTaxonomie)">
                 <option value = "0" label = " ------- Please Select -------"></option>
                 <option ng-repeat="taxonomie  in taxonomieJson.taxonomies" value=" {{ taxonomie.id }}" >
                     {{ taxonomie.name }}
                 </option>
               </select>
+              <span ng-show="emptyTaxonsMsg" style="color:red;"> Select Taxonomies Can Not Be Empty</span>
+
             </div>
           </div>
         </div>
-        <!-- conditions card -->
-        <div class="placard conditions" style="background-color: white;">
+        <!-- start: 30th march add the following div -->
+        <div class="placard" >
+          <div style="margin-left:1.2%;">
+              <span style="font-size: 20px;">Products</span>
+          </div>
+          <div class="row" style="margin-top: 2%;">
+              <div class="col-lg-12 col-md-12" style="margin-left: 1%;">
+                <!-- <tags-input ng-model="rule" display-property="name" key-property="master.id" add-from-autocomplete-only="true"
+                        on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)" placeholder="Add products...">
+                          <auto-complete  source="loadItems($query)"></auto-complete>
+                </tags-input> -->
+                <tags-input ng-model="rule"
+                         display-property="name"
+                         
+                         placeholder="Add products..."
+                         replace-spaces-with-dashes="false">
+                      <auto-complete  source="loadItems($query)"
+                            min-length="0">
+                      </auto-complete>
+                </tags-input>
+
+              </div>
+           </div>
+        </div>
+        <!-- end: 30th march add the following div -->
+
+        <!-- conditions card  need to do -->
+        <!--<div class="placard conditions" style="background-color: white;">
             <span style="font-size: 25px;">Conditions</span><br>
             <div class="radio">
                 <label><input type="radio" ng-model="radio1" ng-value="1" ng-model="manualCondition" ng-click="hideCondition(); activeSaveCollectionBtn()"> Manually select products (you will be able to select products on the next page)</label>
@@ -120,12 +152,11 @@
             <div class="radio">
                 <label><input type="radio" ng-model="radio1" ng-value="2" ng-model="manualCondition" ng-click="showCondition()"> Automatically select products based on conditions</label>
             </div>
-            <!-- Manually select product  -->
             <div class="fluid-container" ng-show="manualCon" style=" margin-top:2%;">
 
               <div class="row product-panel">
                 <div class="col-lg-5 col-md-5" style="margin-left: 1%;">
-                  <!-- <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
+                   <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
                         on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                           <auto-complete  source="loadItems($query)"></auto-complete>
                   </tags-input> -->
@@ -133,7 +164,7 @@
                       <span class="input-group-addon"><i class="fa fa-search"></i></span>
                       <input type="text" class="form-control" aria-label="..." placeholder="Add product...">
                   </div> -->
-                </div>
+                <!--</div>
                 <div class=" col-lg-1 col-md-1"></div>
 
                   <div class="col-lg-6 col-md-6" style="margin-left:">
@@ -147,7 +178,7 @@
                     </select>
                   </div>
 
-              </div>
+              </div>-->
               <!--<div class="row ">
                   <div class="col-lg-3 col-md-3 input-group" style="margin-left:2%;">
                     <span class="input-group-addon">
@@ -171,12 +202,12 @@
                   </div>
 
               </div> -->
-            </div>
-            <!-- Automatically select product -->
+            <!--</div>
+            <! Automatically select product
             <div class="placard hide-show-conditions" ng-show="hidecon">
 
 
-            <!-- Automatically select product -->
+            <! Automatically select product
             <div>
                 <div >
                     <span>Products must match: </span>&nbsp;&nbsp;&nbsp;
@@ -215,7 +246,7 @@
                 </div>
             </div>
             <hr>
-            <!--<div class="row" id="mycon">
+            <div class="row" id="mycon">
                   <div class="col-lg-4 col-md-4" style="margin-left:" ng-repeat="x in addConditionObj track by $index">
                     <select class="form-control" name="" ng-model="x.select1" >
                       <option ng-repeat="xx in addConditionObj.select1 track by $index"
@@ -231,7 +262,7 @@
                   <div class="col-lg-4 col-md-4" style="margin-left:" ng-repeat="x in addConditionObj track by $index">
                     <input type="text" class="form-control" placeholder="">
                   </div>
-            </div> -->
+            </div>
             <div class="row" id="mycon" style="margin-top: 1%;" ng-repeat="x in addConditionArr track by $index">
                   <div class="col-lg-4 col-md-4" style="margin-left: 2%;" >
                     <select class="form-control" name="" ng-model="x.selected1" ng-change="getselect1(x.selected1)">
@@ -262,7 +293,7 @@
               </button>
             </div>
         </div>
-      </div>
+      </div>-->
 
       <div class="placard" style="height: 30%; background-color: white;">
             <div>
@@ -317,7 +348,11 @@
         </div>
         <div class="placard-grey" style="height: 100%; background-color: white;">
               <span style="font-size: 25px;">Collection Image</span>
-              <div style="margin-top: 40%; margin-left: 50%; margin-bottom: 30%;">
+              <div class="">
+                <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="">
+                <div style="padding-top:5%;padding-bottom:5%; max-width:100%;"><img id="style_master_img" src="{{getImage(image)}}" alt=""></div>
+              </div>
+              <!-- <div style="margin-top: 40%; margin-left: 50%; margin-bottom: 30%;">
                 <div class="drag-drop" style="height=5%">
                   <img class="img-responsive" ng-src="{{productImage}}" style="height: 5% width:5%">
                 </div>
@@ -325,7 +360,7 @@
                         <span style="text-align: right; font-size: 50px; " ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)" class="glyphicon glyphicon-picture"></span><br>
                         <span style="text-align: center; font-size: 10px;" ng-click="imgShow()" ng-file-select ng-file-change="uploadSponsorLogo($files)">Choose image</span>
                   </div>
-              </div>
+              </div> -->
         </div>
       </div>
     </div>
@@ -333,7 +368,7 @@
 </div>
 
 <!-- page header -->
-<div class="container-fluid" style="background-color: white;">
+<!-- <div class="container-fluid" style="background-color: white;">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
     </div>
@@ -345,6 +380,9 @@
       <button type="button" class="btn btn-primary" ng-click="" ng-disabled="save_collection_btn">Save Collection</button>
     </div>
   </div>
+</div> -->
+<!--   16TH MARCH UPDATE ANGULAR ALERT  -->
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+  <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
-
 </div>

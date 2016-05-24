@@ -1,8 +1,10 @@
 angular.module('luxire')
-.controller('addCollectionController',function($scope, collections,fileReader,products,$http,$interval){
+.controller('addCollectionController',function($scope, $state, $timeout,taxonImageUpload,ImageHandler, collections,fileReader,products,$http,$interval){
   $scope.hidecon=false;
   $scope.seoform=false;
   $scope.imgshow=true;
+  $scope.loading = true;
+
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   $scope.showdate=false;
@@ -10,12 +12,25 @@ angular.module('luxire')
   $scope.flag=0;
   var flag=0;
   $scope.manualCon=false;
-  $scope.rule=[];
+  $scope.rule=[]; //30th march
   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   $scope.save_collection_btn=false;
   $scope.tagtitle='';
   $scope.tagdesc='';
   $scope.taxonomieJson = '';
+  // --------------------------   START ANGULAR ALERT FUNCTIONALITY    -------------------------
+  $scope.alerts = [];
+  var alert = function(){
+    this.type = '';
+    this.message = '';
+  };
+  $scope.close_alert = function(index){
+    console.log(index);
+    $scope.alerts.splice(index, 1);
+  };
+
+  // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
+
   // ------------------------------------------
   $scope.activeSaveCollectionBtn=function(){
       $scope.save_collection_btn=false;
@@ -69,9 +84,10 @@ $scope.$on('$destroy', function() {
 
 
   $scope.loadItems = function(query){
-    var tempproduct=products.searchProducts(query);
-    console.log("temp producct: \n",tempproduct);
-  return products.searchProducts(query);
+    //var tempproduct=products.searchProducts(query);
+    //console.log("temp producct: \n",tempproduct);
+    console.log("searched products are: ",products.searchProducts(query));
+      return products.searchProducts(query);
 
   }
 
@@ -173,12 +189,15 @@ $scope.$on('$destroy', function() {
          // get all the collections
 
          collections.getCollections().then(function(data) {
+           $scope.loading = true;
            console.log(' from admin collection response is: ');
            $scope.taxonomieJson = data.data;
            console.log("*******   all taxonomie value is: \n\n",$scope.taxonomieJson);
+           $scope.loading = false;
 
          }, function(err){
            console.log(err);
+           $scope.loading = true;
          })
 
          $scope.getCollections = function () {
@@ -310,32 +329,101 @@ $scope.$on('$destroy', function() {
             $scope.selectedTaxonomieId = taxonomie_id;
           }
 
-          $scope.createTaxons = function() {
-            $scope.id=1;
-            var product_ids=[];
-            console.log("title: "+$scope.tagtitle);
-            console.log("title: "+$scope.tagdesc);
-            angular.forEach($scope.rule, function (product, key) {
-              console.log('angularforeach val', product);
-              product_ids.push(product.id);
-            })
-            $scope.taxonObj={
-              "taxon":{
-                    "name": $scope.tagtitle,
-                    "pretty_name": $scope.tagdesc,
-                    "description": $scope.tagdesc,
-                    "product_ids": product_ids,
-                    "taxonomy_id": $scope.selectedTaxonomieId
+          $scope.checkCollectionNameStatus = function(name){  // 29th march add this function
+            if(name == undefined || name == '' || name == 0){
+              $scope.emptyNameMsg = true;
+              document.getElementById("name").focus();
+            }else{
+                $scope.emptyNameMsg = false;
+            }
+          }
+          $scope.checkCollectionTaxonsStatus = function(name){  // 29th march add this function
+            if(name == undefined || name == '' || name == 0){
+              $scope.emptyTaxonsMsg = true;
+              document.getElementById("taxons").focus();
+            }else{
+                $scope.emptyTaxonsMsg = false;
+            }
+          }
+          $scope.loadItems = function(query){ //30th march
 
-                  }
-              }
-            console.log($scope.tid,$scope.taxonObj);
-           collections.createTaxons($scope.selectedTaxonomieId,$scope.taxonObj).then(function(data){
-              alert('taxon created successfully....');
-              //$scope.activeButton('products')
-            }, function(info) {
-              console.log(info);
-            })
+            return products.searchProducts(query);
+          };
+          // image upload functionality
+          $scope.upload_image = function(files){
+            console.log('typeof', typeof(files[0]));
+            console.log('product image', typeof(files[0]));
+            if (files && files.length) {
+              $scope.style_image = files[0];
+              console.log('files to upload',files[0]);
+              var reader = new FileReader();
+               reader.onload = function (e) {
+                   $('#style_master_img').attr('src', e.target.result);
+               }
+
+               reader.readAsDataURL(files[0]);
+            }
+          }
+
+          $scope.getImage = function(url){
+            //console.log(url);
+            console.log("_______________image handler image url: ",ImageHandler.url(url));
+
+            return ImageHandler.url(url);
+          };
+
+          $scope.createTaxons = function() {
+            if($scope.tagtitle == '' || $scope.tagtitle == undefined || $scope.tagtitle == 0){
+              $scope.alerts.push({type: 'danger', message: 'Name Can Not Be Empty!'});
+              document.getElementById("name").focus();
+            }
+            else if($scope.selectedTaxonomie == '' || $scope.selectedTaxonomie == undefined || $scope.selectedTaxonomie == 0){
+              $scope.alerts.push({type: 'danger', message: 'Select a Taxonomy!'});
+              document.getElementById("taxons").focus();
+            }else{
+              $scope.id=1;
+              var product_ids=[];
+              console.log("title: "+$scope.tagtitle);
+              console.log("title: "+$scope.tagdesc);
+              angular.forEach($scope.rule, function (product, key) {
+                console.log('angularforeach val', product);
+                console.log("product id: ",product.id);
+                product_ids.push(product.id);
+              })
+              console.log("product_ids value are : ",product_ids);
+              $scope.taxonObj={
+                "taxon":{
+                      "name": $scope.tagtitle,
+                      "pretty_name": $scope.tagdesc,
+                      "description": $scope.tagdesc,
+                      "product_ids": product_ids,
+                      "taxonomy_id": $scope.selectedTaxonomieId
+
+                    }
+                }
+              console.log($scope.tid,$scope.taxonObj);
+             collections.createTaxons($scope.selectedTaxonomieId,$scope.taxonObj).then(function(data){
+               console.log("after creating the taxons the data: ",data);
+               console.log("in collection .update image image data:",$scope.style_image);
+
+              collections.update_image($scope.style_image,$scope.selectedTaxonomieId,data.id).then(function(data){
+                      console.log("update image fun is calling after taxon creation...");
+                     console.log("in collection .update image image data:",$scope.style_image);
+                     console.log("update image upload"); // 30th march
+               },function(error) {
+                  console.log(error);
+
+                });
+               $scope.alerts.push({type: 'success', message: 'Taxons created successfully!'});
+               $timeout(function() { // 30th march add this function
+                 console.log("timeout functionality...");
+                 $state.go("admin.collectionHome");
+               }, 3000);
+              }, function(info) {
+                console.log(info);
+              })
+            }
+
           }
 
           // update a taxons

@@ -1,3 +1,18 @@
+<style>
+
+.left-inner-addon {
+  position: relative;
+}
+.left-inner-addon input {
+  padding-left: 30px;
+}
+.left-inner-addon i {
+  position: absolute;
+  padding: 10px 12px;
+  pointer-events: none;
+}
+</style>
+
 <div class="container-fluid" style="height:100%" >
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-2 col-md-2" style="text-align: left;font-size: 20px;">
@@ -22,17 +37,16 @@
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
           <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
-            <span style="font-size: 12px;">All collections</span>
+            <span style="font-size: 12px;">All Collections</span>
           </div>
           <div  class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
 
           </div>
         </div>
 
-
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <div class="input-group col-md-12 col-xs-12">
-            <div class="input-group-btn">
+        <!-- 17th march change-4 commented the dropdown button  :rajib-->
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;padding-left:2%;">
+            <!-- <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Conditions <span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href="#">collection</a></li>
@@ -41,60 +55,69 @@
               <li role="separator" class="divider"></li>
               <li><a href="#">collection</a></li>
             </ul>
+            </div> -->
+            <div class="left-inner-addon ">
+                <i class="fa fa-search"></i>
+                <!-- <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-keypress="$event.keyCode == 13 ? searchTaxonsByQuery(searchText) : null"> -->
+                <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-keyup="searchTaxonsByQuery(searchText,$event)">
+
             </div>
-            <div class="input-group">
-                <span class="input-group-addon">
-                  <i class="fa fa-search"></i>
-                </span>
-                <input type="text" class="form-control" aria-label="..." placeholder="Start typing to search for collections...">
-            </div>
-          </div>
         </div>
+        <!--     17th march change-4    -->
                   <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+                    <div class="row" ng-show="true" style="padding-top:2%;padding-buttom:2%;"><!-- 18th march chnages: add this div  @rajib-->
+                      <div class="alert alert-danger" ng-if="masterTaxonsJson.length == 0" >
+                          <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">Info!</strong>No Results Found..</span></center>
+                      </div>
+                    </div>
+                    <div ng-show="!noCollectionMsg" > <!-- 18th march changes this extra div  @rajib-->
+                      {{taxons.taxonomy_id}} {{taxons.id}}
                     <table class="table table-hover admin-product-list">
                       <thead>
                         <tr>
                           <th>
-                             <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
+                             <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></div>
+
                           </th>
                           <th>
                             Title
                           </th>
                           <th>
-
+                            Pretty Name
                           </th>
-                          <th>
-
-                          </th>
-                          <th>
-
-                          </th>
-
 
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="x in allTaxonsJson">
-                            <td>
-                              <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></div>
+                        <tr ng-repeat="taxons in masterTaxonsJson ">
+                            <td style="width:20%;">
+                              <div><input <input type="checkbox" name="selectAll" value=""> </input>
+                              <img src={{getImage(taxons.icon)}} style="padding-left:5%;"></img></div>
+
                             </td>
                             <td style="width:20%;">
-                              <a ui-sref="admin.editCollections" ng-click="showEditTaxons(x.id)">{{ x.name }}</a>
+                              <a ui-sref="admin.editCollections" ng-click="showEditTaxons(taxons)">{{ taxons.name }}</a> <!-- 18th march changes in this line  @rajib-->
                             </td>
-                            <td style="width:50%;"></td>
                             <td>
-                              <i class="fa fa-pencil-square-o" ng-click="showEditTaxons(x.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-                              <i class="fa fa-trash" ng-click="deleteTaxons(x.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                              <span>{{taxons.pretty_name}}</span>
+                            </td>
+                            <td style="width:10%;"></td>
+                            <td>
+                              <i class="fa fa-pencil-square-o" ng-click="showEditTaxons(taxons)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <i class="fa fa-trash" ng-click="deleteTaxons(taxons,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i><!-- 22nd march change : pass taxon object as argument in delete function -->
                             </td>
                         </tr>
 
                       </tbody>
                     </table>
                   </div>
-        </div>
+
 
       </div>
     </div>
+  </div>
+  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
   </div>
 </div>
 <!-- end -->
