@@ -1,30 +1,54 @@
 angular.module('luxire')
 .controller('CustomerCheckoutDeliveryController',function($scope, $rootScope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $window){
-  $window.scrollTo(0, 0);
-  console.log($rootScope.luxire_cart);
-  $scope.line_items = $rootScope.luxire_cart.line_items;
-  $scope.display_item_total = $rootScope.luxire_cart.display_item_total;
-  $scope.display_total = $rootScope.luxire_cart.display_total;
-  $scope.adjustment_total = $rootScope.luxire_cart.adjustment_total.indexOf('-') !=-1 ? '-$'+$rootScope.luxire_cart.adjustment_total.split('-')[1] : '$'+$rootScope.luxire_cart.adjustment_total;
-  $scope.shipping_total = $rootScope.luxire_cart.display_ship_total;
-  $scope.shipping_address = $rootScope.luxire_cart.ship_address;
+  window.scrollTo(0, 0);
+  function update_state(order){
+    if(order.state!="delivery"){
+      CustomerOrders.update(order, {
+        state: "delivery"
+      })
+      .then(function(data){
+        console.log('updated cart state to ', data.data.state);
+      }, function(error){
+        console.log('update cart failed', error);
+      });
+    }
+  };
+  function checkout_delivery_init(order){
+    if(order.shipments.length){
+      update_state(order);
+      console.log('luxire_cart', order);
+      $scope.shipping_address = order.ship_address;
+      $scope.shipments = order.shipments[0];
+      $scope.shipment_id = order.shipments[0].id;
+      $scope.selected_shipping_rate = $scope.shipments.selected_shipping_rate;
+      $scope.selected_shipping_rate_id = $scope.shipments.selected_shipping_rate.id;
+    }
+    else{
+      $state.go('customer.checkout_address');
+    }
 
-  var order_checkout_object = $rootScope.luxire_cart;
-  $scope.shipments = $rootScope.luxire_cart.shipments[0];
-  $scope.shipment_id = $scope.shipments.id;
-  $scope.selected_shipping_rate = $scope.shipments.selected_shipping_rate;
-  $scope.selected_shipping_rate_id = $scope.shipments.selected_shipping_rate.id;
+  }
+  if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
+    checkout_delivery_init($rootScope.luxire_cart);
+  }
+  else{
+    $scope.$on('fetched_order_from_cookie', function(event, data){
+      if(data.status == 404){
+        $state.go('customer.home');
+      }
+      else if(data.status == 200){
+        checkout_delivery_init(data.data);
+      }
+    });
+  };
+
+
+
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
-  $scope.item_price = parseFloat(order_checkout_object.display_total.split('$')[1])-parseFloat($scope.selected_shipping_rate.cost);
-  $scope.shipping_cost = 0;
-  $scope.total_cost = $scope.item_price;
-  console.log($scope.shipments);
+
   $scope.change_shipping_rate = function(selected_shipping_rate){
-    // $scope.shipping_cost = selected_shipping_rate.cost;
-    // $scope.total_cost = parseFloat($scope.item_price)+parseFloat($scope.shipping_cost);
-    // $scope.selected_shipping_rate_id = selected_shipping_rate.id;
     console.log(selected_shipping_rate);
     console.log($scope.selected_shipping_rate_id);
   };
@@ -38,11 +62,11 @@ angular.module('luxire')
       console.error(error);
     });
   };
-  function genhash(secret_key,account_id,amount,reference_no,return_url,mode)
-  {
-  	var genStr = secret_key + "|" + account_id + "|" + amount + "|" + reference_no + "|" +return_url + "|" + mode
-  	var generatedhash = calcMD5(genStr)
-  	return generatedhash
-  }
-  // $scope.selected_shipping_rate = 'UPS One Day (USD)';
+
 });
+function genhash(secret_key,account_id,amount,reference_no,return_url,mode)
+{
+  var genStr = secret_key + "|" + account_id + "|" + amount + "|" + reference_no + "|" +return_url + "|" + mode
+  var generatedhash = calcMD5(genStr)
+  return generatedhash
+}
