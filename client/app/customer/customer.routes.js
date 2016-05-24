@@ -1,8 +1,7 @@
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
+
 angular.module('luxire')
-.config(['$routeProvider','$stateProvider', '$urlRouterProvider',function($routeProvider, $stateProvider, $urlRouterProvider){
+.config(['$routeProvider','$stateProvider', '$urlRouterProvider', 'CacheFactoryProvider', function($routeProvider, $stateProvider, $urlRouterProvider, CacheFactoryProvider){
+	angular.extend(CacheFactoryProvider.defaults, { maxAge: 5 * 60 * 1000 });
 	$urlRouterProvider.when('/customer','/customer/');
 	$stateProvider
 	.state('customer',{
@@ -55,29 +54,6 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
-	// .state('customer.invoice',{
-	// 	url:'/invoice/:number?id',
-	// 	views: {
-	// 		"customer": {
-	// 			templateUrl: "app/customer/invoices/partials/invoicePage.html",
-	// 		 	controller: "invoiceController"
-	// 		},
-	// 	},
-	// 	data: {
-	// 		require_auth: false
-	// 	}
-	// })
-	// .state('customer.product_detail',{
-	// 	url:'/products/:taxonomy_name/:taxon_name/:product_name',
-	// 	views: {
-	// 		"customer": { templateUrl: "app/customer/product_detail/partials/product_detail.html",
-	// 		 controller: "ProductDetailController"},
-	// 		 params: {taxonomy_name: null,taxon_name: null,product_name: null}
-	// 	},
-	// 	data: {
-	// 		require_auth: false
-	// 	}
-	// })
 	.state('customer.product_detail',{
 		url:'/products/:product_name',
 		views: {
@@ -92,7 +68,7 @@ angular.module('luxire')
 		}
 	})
 	.state('customer.attribute_detail',{
-		url:'/attributes/:attribute_name',
+		url:'/attributes/:attribute_name?type',
 		views: {
 			"customer": { templateUrl: "app/customer/attribute_detail/partials/attribute_detail.html",
 			 controller: "AttributeController"},
@@ -112,6 +88,16 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.pre_cart',{
+		url:'/added_to_cart',
+		views: {
+			"customer": { templateUrl: "app/customer/pre_cart/partials/pre_cart.html",
+			 							controller: "PreCartController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
 	.state('customer.checkout_address',{
 		url: '/checkout/address',
 		views: {
@@ -125,8 +111,10 @@ angular.module('luxire')
 	.state('customer.checkout_delivery',{
 		url: '/checkout/delivery',
 		views: {
-			"customer": { templateUrl: "app/customer/checkout/partials/checkoutDelivery.html",
-										controller: "CustomerCheckoutDeliveryController"},
+			"customer": {
+				templateUrl: "app/customer/checkout/partials/checkoutDelivery.html",
+				controller: "CustomerCheckoutDeliveryController"
+			},
 		},
 		data: {
 			require_auth: false
@@ -207,8 +195,27 @@ angular.module('luxire')
 		}
 	})
 
-
-
-
-
 }])
+// .state('customer.invoice',{
+// 	url:'/invoice/:number?id',
+// 	views: {
+// 		"customer": {
+// 			templateUrl: "app/customer/invoices/partials/invoicePage.html",
+// 		 	controller: "invoiceController"
+// 		},
+// 	},
+// 	data: {
+// 		require_auth: false
+// 	}
+// })
+// .state('customer.product_detail',{
+// 	url:'/products/:taxonomy_name/:taxon_name/:product_name',
+// 	views: {
+// 		"customer": { templateUrl: "app/customer/product_detail/partials/product_detail.html",
+// 		 controller: "ProductDetailController"},
+// 		 params: {taxonomy_name: null,taxon_name: null,product_name: null}
+// 	},
+// 	data: {
+// 		require_auth: false
+// 	}
+// })
