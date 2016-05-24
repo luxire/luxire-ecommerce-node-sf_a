@@ -1,10 +1,35 @@
 angular.module('luxire')
 .controller('CustomerCartController',function($scope, $state, $sce, ImageHandler, $rootScope, $stateParams, CustomerOrders, orders, CustomerConstants, $window){
   window.scrollTo(0, 0);
+  $scope.loading_cart = true;
+  function update_state(order){
+    if(order.state!="cart"){
+      CustomerOrders.update(order, {
+        state: "cart"
+      })
+      .then(function(data){
+        console.log('updated cart state to ', data.data.state);
+      }, function(error){
+        console.log('update cart failed', error);
+      });
+    }
+  };
+  if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
+    $scope.loading_cart = false;
+    update_state($rootScope.luxire_cart);
+  }
+  else if($rootScope.luxire_cart && Object.keys($rootScope.luxire_cart).length === 0){
+    $scope.loading_cart = false;
+  }
+  else{
+    $scope.$on('fetched_order_from_cookie', function(event, data){
+      $scope.loading_cart = false;
+      console.log('successful fetch',data);
+      update_state(data.data);
+    });
+  }
   console.log('CartController params', $stateParams);
-  $scope.$on('fetched_order_from_cookie', function(event, args){
-    console.log('successful fetch',args);
-  });
+
   $scope.dynamicPopover = {
     content: 'Hello, World!',
     templateUrl: 'line_item_detail.html',
@@ -13,12 +38,7 @@ angular.module('luxire')
 
   /*Order json*/
   console.log('cart', $rootScope.luxire_cart);
-  var default_collection = {
-    taxonomy_name: CustomerConstants.default.taxonomy_name,
-    taxon_name: CustomerConstants.default.taxon_name,
-    taxonomy_id: CustomerConstants.default.taxonomy_id,
-    taxon_id: CustomerConstants.default.taxon_id,
-  };
+
   $scope.go_to_product_listing = function(){
     $state.go('customer.home');
   };
@@ -58,37 +78,21 @@ angular.module('luxire')
   }
 
   var updated_line_items = [];
-  // $scope.update_cart = function(line_items){
-  //   console.log(line_items);
-  //   angular.forEach(line_items, function(val, key){
-  //     CustomerOrders.update_cart_by_quantity($rootScope.luxire_cart, val.id, val.variant_id, val.quantity)
-  //     .then(function(data){
-  //       console.log(data.data);
-  //     }, function(error){
-  //       console.error(error);
-  //     })
-  //   });
-  //   CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
-  //     $rootScope.luxire_cart = data.data;
-  //     $rootScope.alerts.push({type: 'success', message: 'Cart updated successfully'});
-  //   }, function(error){
-  //     $rootScope.alerts.push({type: 'danger', message: 'Failed to update cart'});
-  //     console.error(error);
-  //   });
-  // };
   $scope.update_cart = function(line_item, quantity){
     console.log('update cart', line_item);
     console.log('quantity', quantity);
-    CustomerOrders.update_cart_by_quantity($rootScope.luxire_cart, line_item.id, line_item.variant_id, quantity)
-    .then(function(data){
-      console.log(data.data);
-      getOrder('Cart updated successfully', 'Failed to update cart');
-    }, function(error){
-      if(quantity==0&&error.status==404){
-        getOrder('Line item deleted successfully', 'Failed to update cart');
-      }
-      console.error(error);
-    });
+    if(quantity>0){
+      CustomerOrders.update_line_item($rootScope.luxire_cart, line_item.id, line_item.variant_id, quantity)
+      .then(function(data){
+        console.log(data.data);
+        getOrder('Cart updated successfully', 'Failed to update cart');
+      }, function(error){
+        if(quantity==0&&error.status==404){
+          getOrder('Line item deleted successfully', 'Failed to update cart');
+        }
+        console.error(error);
+      });
+    }
 
 
 
@@ -141,7 +145,25 @@ angular.module('luxire')
 
 })
 
-//
+// $scope.update_cart = function(line_items){
+//   console.log(line_items);
+//   angular.forEach(line_items, function(val, key){
+//     CustomerOrders.update_line_item($rootScope.luxire_cart, val.id, val.variant_id, val.quantity)
+//     .then(function(data){
+//       console.log(data.data);
+//     }, function(error){
+//       console.error(error);
+//     })
+//   });
+//   CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+//     $rootScope.luxire_cart = data.data;
+//     $rootScope.alerts.push({type: 'success', message: 'Cart updated successfully'});
+//   }, function(error){
+//     $rootScope.alerts.push({type: 'danger', message: 'Failed to update cart'});
+//     console.error(error);
+//   });
+// };
+
 // function customization_template(customization_data){
 //   customized_text = '<div class="row" style="margin-left: 0px; margin-right: 0px; background: #F8F8F8">'
 //                       +'<div class="col col-md-8 col-sm-8 col-lg-8" style="padding-right: 0px; font-family: Arial; font-weight:600;font-size: 90%;">'

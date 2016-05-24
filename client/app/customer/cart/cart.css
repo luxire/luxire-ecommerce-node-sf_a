@@ -2,7 +2,8 @@
   font-family: HelveticaNeue;
   color: #000000;
   font-weight: 300;
-  text-align: center;
+  text-align: left;
+  margin-left: 2%;
   font-size: 150%
 }
 #luxire-cart-header{
@@ -53,7 +54,7 @@
 #luxire-cart-footer{
   margin-top: 5%
 }
-.popover{
+.cart-detail-popover .popover{
   width: 100%;
   max-width: 80% !important;
 }
@@ -68,4 +69,7 @@
 }
 .update-cart{
   color: grey !important;
+}
+.disabled-quantity{
+  cursor: not-allowed !important;
 }
