@@ -9,6 +9,7 @@ exports.index = function(req, res){
   http.get({
     uri: constants.spree.host+constants.spree.orders,
     body: '',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   },function(error, response, body){
     if(error){
@@ -27,6 +28,7 @@ exports.my_account = function(req, res){
   http.post({
     uri: constants.spree.host+constants.spree.my_account+'?token='+req.headers['X-Spree-Token'],
     body: '',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   },function(error, response, body){
     if(error){
@@ -45,6 +47,7 @@ exports.show = function(req, res){
   http.get({
     uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'?order_token='+req.query.order_token,
     body: '',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   },function(error, response, body){
     if(error){
@@ -60,6 +63,7 @@ exports.create_blank_order = function(req, res){
   http.post({
     uri: constants.spree.host+constants.spree.orders+'.json',
     body: '{}',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   }, function(error,response,body){
     if(error){
@@ -122,6 +126,7 @@ exports.empty_cart = function(req, res){
     uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/empty?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body:''
@@ -136,17 +141,20 @@ exports.empty_cart = function(req, res){
   })
 };
 
+
+
 exports.update = function(req, res){
   console.log('params', req.params);
   console.log('query', req.query);
   console.log('body', req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.query.order_token,
+    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
-    body:''
+    body: JSON.stringify(req.body)
   },function(error,response,body){
     console.log(body);
     if(error){
@@ -166,6 +174,7 @@ exports.add_line_item = function(req, res){
     uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+constants.spree.line_items+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body: JSON.stringify(req.body)
@@ -181,14 +190,18 @@ exports.add_line_item = function(req, res){
 
 /*Update line item*/
 exports.update_line_item = function(req, res){
+  console.log('params', req.params);
+  console.log('query', req.query);
+  console.log('body', req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json?order_token='+req.query.order_token,
+    uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
-    body: JSON.stringify(req.body)
-  }, function(error,response,body){
+    body:''
+  },function(error,response,body){
     if(error){
       res.status(500).send(error.syscall);
     }
@@ -204,6 +217,7 @@ exports.delete_line_item = function(req, res){
     uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/'+constants.spree.line_items+'/'+req.params.id+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body: JSON.stringify(req.body)
@@ -228,6 +242,7 @@ exports.checkout_apply_coupon_code = function (req, res){
     .put({
       uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.query.order_token,
       headers:{'content-type': 'application/x-www-form-urlencoded'},
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       body: 'coupon_code='+req.params.code
     }, function(error, response, body){
         console.log('res error', error);
