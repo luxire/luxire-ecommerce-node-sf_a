@@ -1,12 +1,12 @@
 angular.module('luxire')
-.service('products', function($http, $q, restApiService){
+.service('products', function($http, $q, restApiService, AdminConstants){
 
 	this.createVariants = function(productId,variant) {
 		console.log("create variants in client service is calling...");
 		var deferred = $q.defer();
         var data=angular.toJson(variant);
         console.log("*******variant data is : \n\n"+data);
-		$http.post("/api/products/"+productId+"/variants", angular.toJson(variant)).success(function(res) {
+		$http.post(AdminConstants.api.products+'/'+productId+"/variants", angular.toJson(variant)).success(function(res) {
 			console.log(res);
 			deferred.resolve(res.data);
   		})
@@ -24,7 +24,7 @@ angular.module('luxire')
 		console.log("variant id: ",variantId);
 		console.log("variant obj: ",variantObj);
 
-		$http.put("/api/products/"+productId+'/variants/'+variantId, angular.toJson(variantObj)).success(function(data) {
+		$http.put(AdminConstants.api.products+'/'+productId+'/variants/'+variantId, angular.toJson(variantObj)).success(function(data) {
 			deferred.resolve(data);
 			})
 			.error(function(errData, errStatus, errHeaders, errConfig) {
@@ -33,11 +33,22 @@ angular.module('luxire')
 			});
 			return deferred.promise;
 	}
-
+	this.update_image = function(image, id){
+    console.log("update image service");
+   console.log('image', image);
+   var fd = new FormData();
+   fd.append('image', image);
+   console.log("value appended");
+   return $http.put(AdminConstants.api.style_masters+'/'+id+'/images', fd, {
+       transformRequest: angular.identity,
+       headers: {'Content-Type': undefined}
+    });
+    console.log("end of update service");
+ };
 	this.allProductType= function(){
     console.log("get all product  services is calling...");
     var deferred = $q.defer();
-    $http.get('/api/v1/admin/product_types').then(function(data){
+    $http.get(AdminConstants.api.product_types).then(function(data){
       deferred.resolve(data)
       console.log(data);
     },function(errData, errStatus, errHeaders, errConfig){
@@ -62,9 +73,11 @@ angular.module('luxire')
 	}
 
 	this.searchProducts = function(search_phrase){
+		console.log("search product function is calling...");
 		var deferred = $q.defer();
-		$http.get('/api/products?q[name_cont]='+search_phrase).then(function(data){
-		deferred.resolve(data.data.products)
+		$http.get(AdminConstants.api.products+'/search?q[name_cont]='+search_phrase).then(function(data){
+			console.log(" product search data is : ",data.data);
+		deferred.resolve(data.data);
 		},function(errData, errStatus, errHeaders, errConfig){
 		deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
 	});
@@ -72,14 +85,31 @@ angular.module('luxire')
 	}
 
 
-	this.getProducts = function(){
+	// this.getProducts = function(){
+	// 	var deferred = $q.defer();
+	// 	$http.get(AdminConstants.api.products).then(function(data){
+	// 		deferred.resolve(data)
+	// 	},function(errData, errStatus, errHeaders, errConfig){
+	// 		deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
+	// 	});
+	// 	return deferred.promise;
+	// }
+	//Edited on 20/05/16 for implementing scroll
+	this.getProducts = function(page){
 		var deferred = $q.defer();
-		$http.get('/api/products').then(function(data){
+		var url;
+		if(page){
+			url = AdminConstants.api.products +page;
+		} else {
+			url = AdminConstants.api.products;
+		}
+		$http.get(url).then(function(data){
 			deferred.resolve(data)
 		},function(errData, errStatus, errHeaders, errConfig){
 			deferred.reject({data: errData , status: errData.status ,headers: errData.headers ,config: errData.config});
 		});
 		return deferred.promise;
+
 	}
 
 	this.add_variant_image = function(product_id, variant_id, image){
@@ -88,7 +118,7 @@ angular.module('luxire')
 		console.log('image', image);
 		var fd = new FormData();
 		fd.append('image', image);
-		return $http.post('/api/v1/admin/products/'+product_id+'/variants/'+variant_id+'/images', fd, {
+		return $http.post(AdminConstants.api.products+'/'+product_id+'/variants/'+variant_id+'/images', fd, {
 	      transformRequest: angular.identity,
 	      headers: {'Content-Type': undefined}
 	   });
@@ -99,7 +129,7 @@ angular.module('luxire')
 		var deferred = $q.defer();
         var data=angular.toJson(product);
         console.log("*******product data is : \n\n"+data);
-		$http.post("/api/products", angular.toJson(product)).success(function(res) {
+		$http.post(AdminConstants.api.products, angular.toJson(product)).success(function(res) {
 			console.log(res);
 			deferred.resolve(res);
   		})
@@ -112,7 +142,7 @@ angular.module('luxire')
 
 	this.getProductByID = function(id) {
 		var deferred = $q.defer();
-		$http.get("/api/products/"+id).success(function(data) {
+		$http.get(AdminConstants.api.products+'/'+id).success(function(data) {
 			console.log(data)
 			deferred.resolve(data);
   		})
@@ -131,7 +161,7 @@ angular.module('luxire')
 		console.log("+++++++in services update product id: "+id);
 		console.log("++++++in services update product parameter: ",parameters);
 
-		$http.put("/api/products/"+id, angular.toJson(parameters)).success(function(data) {
+		$http.put(AdminConstants.api.products+'/'+id, angular.toJson(parameters)).success(function(data) {
 			deferred.resolve(data);
   		})
 			.error(function(errData, errStatus, errHeaders, errConfig) {
@@ -143,7 +173,7 @@ angular.module('luxire')
 
 	this.deleteProduct = function(id) {
 		var deferred = $q.defer();
-		$http.delete("/api/products/"+id).success(function(data) {
+		$http.delete(AdminConstants.api.products+'/'+id).success(function(data) {
 			console.log(data);
 			deferred.resolve(data);
   		})
@@ -154,13 +184,13 @@ angular.module('luxire')
   		return deferred.promise;
 	}
 })
-.service('CSV', function($http){
+.service('fileUpload', function($http){
 
 	this.upload = function(file){
 		var fd = new FormData();
 		fd.append('file', file);
 		console.log('file in service', file);
-		return $http.post('/api/v1/admin/products/csv', fd, {
+		$http.post('/files/csv', fd, {
 	      transformRequest: angular.identity,
 	      headers: {'Content-Type': undefined}
 	   })
@@ -183,11 +213,12 @@ angular.module('luxire')
 	}
 
 
-	this.getAllTaxons= function(){
-		return $http.get(AdminConstants.api.allTaxons);
+	this.searchTaxons= function(query){
+		return $http.get(AdminConstants.api.allTaxons+'?q[name_cont]='+query);
 	}
 
 })
+
 .service('luxireVendor', function($http,$q){
 	this.getAllLuxireVendor= function(){
     console.log("get all luxire vendor is calling...");
@@ -219,6 +250,24 @@ angular.module('luxire')
 			});
 			return deferred.promise;
 	}
+})
+.service('CSV', function($http){
+
+	this.upload = function(file){
+		var fd = new FormData();
+		fd.append('file', file);
+		console.log('file in service', file);
+		return $http.post('/api/v1/admin/products/csv', fd, {
+	      transformRequest: angular.identity,
+	      headers: {'Content-Type': undefined}
+	   })
+	   .success(function(data){
+			 console.log(data);
+	   })
+	   .error(function(error){
+			 console.error(error);
+	   });
+	};
 })
 //fileReader service
 .factory('fileReader',["$q", "$log", function ($q, $log) {
@@ -258,7 +307,31 @@ angular.module('luxire')
             readAsDataUrl: readAsDataURL
         };
     }])
+		.service('csvFileUpload', function($http, $q){
+				this.uploadCsvFile = function(fileContent){
+					console.log("csv file upload service is calling with ...\n",fileContent);
+					var fd=new FormData();
+					fd.append('file',fileContent);
+					var deferred = $q.defer();
+					console.log('______________________________________');
+					//console.log('fileContent', {data : fileContent});
+					console.log('______________________________________');
+					$http.post("/csvUploadFile", fd,{
+		             transformRequest: angular.identity,
+		             headers: {'Content-Type': undefined}
+		        }).success(function(res) {
+								console.log("response from node in csv file upload : ",res);
+						deferred.resolve(res.data);
+						})
+						.error(function(errData, errStatus, errHeaders, errConfig) {
+							console.log({data: errData,status: errStatus,headers: errHeaders,config: errConfig})
+							deferred.reject({data: errData,status: errStatus,headers: errHeaders,config: errConfig});
+						});
+						return deferred.promise;
+				}
+		})
 		.service('editModalService', function($http, $q ){
+
 			this.updateStock = function(id,inventoryObj) {
 				var deferred = $q.defer();
 				$http.put("/luxire_stocks/"+id, angular.toJson(inventoryObj)).success(function(data) {

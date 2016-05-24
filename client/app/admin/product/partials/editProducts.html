@@ -42,12 +42,14 @@
             <div class="row" style="margin-top:3%;">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                   <span>Measuring unit</span>
-                  <select class="form-control" name="" ng-model="luxireStock.measuring_unit" style="margin-left:; width: 100%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
-                    <option value="kg">kg</option>
-                    <option value="lb">lb</option>
-                    <option value="oz">oz</option>
-                    <option value="g">g</option>
-                  </select>
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'Inventory-measuring-unit'" class="form-control" ng-model="luxireStock.measuring_unit" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+                  </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
                   <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
@@ -84,13 +86,10 @@
 </script>
 <div class="container-fluid" style="height:100%">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-6 col-md-6" style="text-align: left;font-size: 20px;">
+    <div class="col-lg-9 col-md-9" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;color:#928CA2;font-size:1em;">Products / {{products.name}}<span style="font-weight:normal;color:black;font-size:1em;">{{productData.name}}</span></span>
     </div>
-    <div class="col-lg-1 col-md-1">
-
-    </div>
-    <div class="col-lg-5 col-md-5" style="text-align: right;">
+    <div class="col-lg-3 col-md-3" style="text-align: right;">
       <!-- <button type="button" class="btn btn-default" ><span class="glyphicon glyphicon-new-window"></span>View</button> -->
     <!--  <div class="btn-group">
         <button type="button" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span></button>
@@ -101,11 +100,16 @@
       <button type="button" class="btn btn-default" ng-click="editProduct()" ui-sref="admin.product">Save Product</button>
     </div>
   </div>
+  <!-- 23rd march changes: add this following div -->
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
+
 
   <div class="row" style="height: 93vh;">
     <div class="container-fluid admin-console-content">
       <div class="row">
-        <div class="col-lg-8 col-md-8">
+        <div class="col-lg-8 col-md-8" style="padding-left:2%;">
           <div class="placard">
             <span style="font-size: 13px;" class="required">Title</span>
             <br>
@@ -113,7 +117,7 @@
             <br>
             <span style="font-size: 13px;" class="required">Parent sku</span>
             <br>
-            <input type="text" ng-model="luxire_product.parent_sku"  class="form-control" placeholder="Parent SKU.." ng-readonly="true">
+            <input type="text" ng-model="luxire_stock.parent_sku"  class="form-control" placeholder="Parent SKU.." ng-readonly="true"> <!-- 24th march change: the parent_sku ng-model-->
             <br>
             <span style="font-size: 13px;">Handle</span>
             <br>
@@ -121,7 +125,12 @@
             <br>
             <span style="font-size: 13px;" class="required">Shipping category id</span>
             <br>
-            <input type="text" ng-model="products.shipping_category_id"  class="form-control" placeholder="shipping category id..">
+            <!-- <input type="text" ng-model="products.shipping_category_id"  class="form-control" placeholder="shipping category id.."> -->
+            <input class="form-control" type="number"  ng-model="products.shipping_category_id"   ng-blur="checkShippingCatgoryId(product.shipping_category_id)" placeholder="shipping category id.." required> <!-- 23st march changes -->
+            <span ng-show="shipping_emp_msg"  style="color:red;">Shipping Category id can not be empty..</span> <!-- 23st march changes add this line-->
+            <span ng-show="products.shipping_category_id < 0 " style="color:red;">Shipping Category id can not be negetive..</span> <!-- 23st march changes add this line-->
+            <span ng-show="products.shipping_category_id == 0 " style="color:red;">Invalid Shipping Category id..</span> <!-- 23st march changes add this line-->
+            <br>
             <br>
             <span style="font-size: 13px;">Description</span>
             <br>
@@ -185,6 +194,9 @@
             <div class="row">
               <div class="col-lg-6 col-md-6">
                 <input type="text" class="form-control" ng-model="products.price">
+                <!-- <input class="form-control" type="number" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" min="0" step="0.25" ng-model="products.price" value="parseFloat(products.price)"  placeholder="product price..." required> <!-- 23st march changes add this line-->
+                <!-- <span ng-show="products.price < 0 " style="color:red;">Product price can not be negetive..</span> --><!-- 23st march changes add this line-->
+                <!--<span ng-show="products.price == 0 " style="color:red;">Invalid Product price..</span>--> <!-- 23st march changes add this line-->
               </div>
               <div class="col-lg-6 col-md-6">
                 <input type="text" class="form-control" ng-model="products.display_price">
@@ -210,16 +222,22 @@
             <div class="row">
               <div class="col-lg-6 col-md-6">
                 <div ng-repeat="type in luxireProperties">
-                    <select ng-if="type.name == 'inventory-policy'" class="form-control" ng-model="luxire_product.product_inventory_policy" >
+                    <!-- 24th march commented the following select and add another select-->
+                    <!-- <select ng-if="type.name == 'inventory-policy'" class="form-control" ng-model="products.variants.track_inventory" >
                       <option value = "0" label = "Please Select"></option>
                       <option ng-repeat="val in type.value.split(',')" value="{{val}}">
                           {{val}}
                       </option>
+                    </select> -->
+                    <select ng-if="type.name == 'wrinkle-resistant'" class="form-control" ng-model="products.variants.track_inventory" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-selected="luxire_product.wrinkle_resistance == true" value = "true" >Yes</option>
+                      <option ng-selected="luxire_product.wrinkle_resistance == false" value = "false" >No</option>
                     </select>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6">
-                <input type="text" class="form-control" ng-model="luxire_product.product_barcode">
+                <input type="text" class="form-control" ng-model="luxire_product.barcode">  <!-- 24th march changes: ng-m0del of barcode  -->
               </div>
 
             </div>
@@ -244,6 +262,8 @@
                 <div class="form-group">
                   <div class="input-group" style="width:90%;">
                     <input type="text" class="form-control" aria-label="..." value="0.0" ng-model="products.master.weight">
+                    <!-- <input class="form-control" type="number" min="0" step="any" ng-model="products.master.weight"  placeholder="product weight..." required> --><!-- 21st march changes add this line-->
+
                     <div class="input-group-btn" style="width:30%;">
                       <div ng-repeat="type in luxireProperties">
                         <select ng-if="type.name == 'shipping-weight-unit'" class="form-control" ng-model="luxire_product.product_shipping_weight_unit" >
@@ -256,6 +276,8 @@
                     </div>
                   </div>
                 </div><!-- /input-group -->
+                <span ng-show="products.master.weight < 0 " style="color:red;">Product Weight can not be negetive..</span> <!-- 22st march changes add this line-->
+                <span ng-show="products.master.weight == 0 " style="color:red;">Invalid Product Weight..</span> <!-- 22st march changes add this line-->
               </div>
               <div class="col-lg-6 col-md-6">
 
@@ -309,7 +331,7 @@
           </div>
 
         </div>
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-4 col-md-4" style="padding-left:0%; padding-right:2%;">
           <div class="placard-grey" ng-init="calFlag = true">
             <span style="font-size: 20px;">
               Visibility
@@ -346,7 +368,7 @@
                   <select  class="form-control" ng-model="luxire_product.luxire_product_type_id">
                       <option value="">--- Select an option ---</option>
                       <option ng-selected= "value.id == luxire_product.luxire_product_type_id" ng-repeat="value in allproductType"
-                              value="value.id">{{ value.product_type }}
+                              value="{{value.id}}">{{ value.product_type }}
                       </option>
                   </select>
 
@@ -388,9 +410,18 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                  <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="false"
+                  <!-- <tags-input ng-model="rule" display-property="pretty_name" key-property="id" add-from-autocomplete-only="true"
                         replace-spaces-with-dashes="false" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                             <auto-complete  load-on-down-arrow="true" max-results-to-show="100" source="loadItems($query)"></auto-complete>
+                  </tags-input> -->
+                  <tags-input ng-model="rule" display-property="pretty_name" key-property="id" add-from-autocomplete-only="true"
+                        replace-spaces-with-dashes="false" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
+                            <!-- <auto-complete  load-on-down-arrow="true" max-results-to-show="100"   select-first-match="true" source="loadItems($query)"></auto-complete> -->
+                             <auto-complete source="loadItems($query)"
+                                min-length="0"
+                               load-on-focus="true"
+                               load-on-empty="true">
+                             </auto-complete>
                   </tags-input>
               </div>
             </div>
@@ -410,10 +441,24 @@
               <div class="col-lg-12 col-md-12">
                 <!-- <input type="text" class="form-control" ng-model="luxire_product.product_tags" placeholder="Vintage, cotton, summer"> -->
 
-                   <tags-input ng-model="tagsarr"></tags-input>
-                  <!-- <p>
-                    {{tagsarr}}
-                  </p> -->
+                   <!-- <tags-input ng-model="tagsarr"></tags-input> -->
+                   <tags-input ng-model="tagsArr">
+                     <auto-complete source="loadAutocomplete($query,'tags')"
+                     min-length="0"
+                     load-on-focus="true"
+                     load-on-empty="true"
+                      ></auto-complete>
+                   </tags-input>
+                   <!-- <tags-input ng-model="tagsArr"
+                   display-property="text"
+                   replace-spaces-with-dashes="false"
+                   placeholder="Add tags...">
+                     <auto-complete source="loadAutocomplete($query,'tags')"
+                       min-length="0"
+                       load-on-focus="true"
+                       load-on-empty="true">
+                     </auto-complete>
+                   </tags-input> -->
               </div>
             </div>
             <br>
@@ -435,11 +480,16 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <!-- <input type="text" ng-model="luxire_product.product_color" class="form-control"> -->
-                   <tags-input ng-model="colorTagsArr"></tags-input>
-                  <!-- <p>
-                    {{tagsarr}}
-                  </p> -->
+                   <!-- <tags-input ng-model="colorTagsArr"></tags-input> -->
+                   <tags-input ng-model="colorTagsArr">
+                     <!-- <auto-complete source="loadAutocomplete('color')"></auto-complete> -->
+                     <auto-complete source="loadAutocomplete($query,'color')"
+                     min-length="0"
+                     load-on-focus="true"
+                     load-on-empty="true"
+                      ></auto-complete>
+                   </tags-input>
+
               </div>
             </div>
             <br>
@@ -451,45 +501,106 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <!-- <select class="form-control" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option >
-                  </option>
-                </select> -->
-                <input type="text" ng-model="luxireProduct.usage" class="form-control">
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <span style="font-size: 13px;" class="">Mill</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <!-- <select class="form-control" ng-model="luxireProduct.mill">
-                  <option value = "0" label = "Please Select"></option>
-                  <option >
-                  </option>
-                </select> -->
-                <input type="text" ng-model="luxireProduct.mill" class="form-control">
+                <!-- 24th march change: commented the following div -->
+                <!-- <div ng-repeat="type in luxireProperties">
+                  <select ng-if="type.name == 'usage' && type.value.length >= 1" class="form-control" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option >
+                    </option>
+                  </select>
+                  <div ng-if="type.name == 'usage' && type.value.length <= 1">
+                    <input type="text" ng-model="luxireProduct.usage" class="form-control">
+                  </div>
+                </div> -->
+                <!-- 24th march change: make usage as autocomplete -->
+                  <!-- <tags-input ng-model="usageTagsArr"></tags-input> -->
+                  <tags-input ng-model="usageTagsArr">
+                    <!-- <auto-complete source="loadAutocomplete('usage')"></auto-complete> -->
+                    <auto-complete source="loadAutocomplete($query,'usage')"
+                    min-length="0"
+                    load-on-focus="true"
+                    load-on-empty="true"
+                     ></auto-complete>
+                  </tags-input>
 
               </div>
             </div>
             <br>
-            <div class="row">
+            <div class="row"> <!-- 23rd march add this div-->
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;" class="">Mill</span>
+              </div>
+            </div>
+            <div class="row"><!-- 23rd march add this div-->
+              <div class="col-lg-12 col-md-12">
+                <div ng-repeat="type in luxireProperties">
+                  <select ng-if="type.name == 'mill'" class="form-control"  ng-model="luxire_product.mill" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option ng-repeat="val in type.value.split(',')" value="{{ val }}">
+                        {{val}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row"><!-- 23rd march add this div-->
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Country Of Origin</span>
               </div>
             </div>
             <div class="row">
+              <div class="col-lg-12 col-md-12">  <!-- 23rd march add this div-->
+                <div ng-repeat="type in luxireProperties">
+                  <select ng-if="type.name == 'country-of-origin'" class="form-control"  ng-model="luxire_product.country_of_origin" >
+                    <option value = "0" label = "Please Select"></option>
+                    <option ng-repeat="val in type.value.split(',')" value="{{ val }}">
+                        {{val}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row"> <!-- 28th march add this div -->
               <div class="col-lg-12 col-md-12">
-                <!-- <select class="form-control" >
-                  <option value = "0" label = "Please Select"></option>
-                  <option >
-                  </option>
-                </select> -->
-                <input type="text" ng-model="luxireProduct.country_of_origin" class="form-control">
+                <span style="font-size: 13px;" class="">Related Fabric</span>
+              </div>
+            </div>
+            <div class="row"> <!-- 28th march add this div -->
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.related_fabric" class="form-control"> <!-- 23rd march add this line-->
+              </div>
+            </div>
+            <br>
+            <div class="row"> <!-- 28th march add this div -->
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;" class="">Construction</span>
+              </div>
+            </div>
+            <div class="row"> <!-- 28th march add this div -->
+              <div class="col-lg-12 col-md-12">
+                  <input type="text" ng-model="luxire_product.construction" class="form-control"> <!-- 23rd march add this line-->
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Gift Card</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                  <div ng-repeat="type in luxireProperties">
+                    <select ng-if="type.name == 'gift-card'" class="form-control" ng-model="luxire_product.is_gift_card" >
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-selected="luxire_product.is_gift_card == true" value = "true" >Yes</option>
+                      <option ng-selected="luxire_product.is_gift_card == false" value = "false" >No</option>
+                      <!-- <option ng-repeat="val in type.value.split(',')" value="{{ val }}">
+                          {{val}}
+                      </option> -->
+                    </select>
+                  </div>
               </div>
             </div>
             <br>
@@ -498,13 +609,15 @@
                 <span style="font-size: 13px;" class="">GLM</span>
               </div>
             </div>
+            <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxireProduct.glm" class="form-control">
+                  <input type="text" ng-model="luxire_product.glm" class="form-control"> <!-- 23rd march add this line-->
               </div>
             </div>
             <br>
-            <div class="row">
+            <!-- 24th march commented the following div -->
+            <!-- <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;" class="">Technical Description</span>
               </div>
@@ -514,7 +627,7 @@
                 <textarea class="description" ng-model="luxireProduct.technical_description" rows="3" cols=""></textarea>
               </div>
             </div>
-            <br>
+            <br> -->
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;" class="">Variant Fullfillment Service</span>
@@ -527,9 +640,10 @@
                   <option >
                   </option>
                 </select> -->
-                <input type="text" ng-model="luxireProduct.fullfillment_service" class="form-control">
+                <input type="text" ng-model="luxire_product.variant_fulfillment_service" class="form-control">
               </div>
             </div>
+            <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Weave Type</span>
@@ -555,10 +669,30 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxire_product.thread_count" class="form-control">
+                <!-- <input type="text" ng-model="luxire_product.thread_count" class="form-control"> -->
+                <input class="form-control" type="number"  ng-model="luxire_product.thread_count"  placeholder="Thread count..." required> <!-- 23st march changes add this line-->
+                <span ng-show="luxire_product.thread_count < 0 " style="color:red;">Thread Count can not be negetive..</span> <!-- 22st march changes add this line-->
+                <span ng-show="luxire_product.thread_count == 0 " style="color:red;">Invalid Thread Count..</span> <!-- 22st march changes add this line-->
               </div>
             </div>
             <br>
+            <!-- 23rd march add this div-->
+            <!-- <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Required Length</span>
+              </div>
+            </div>
+            <div class="row"> -->
+               <!-- 23rd march add this div-->
+              <!-- <div class="col-lg-12 col-md-12">
+                <input type="text" ng-model="luxire_product.length_required" class="form-control"> -->
+                <!-- <input class="form-control" type="number"  ng-model="luxire_product.thread_count"  placeholder="Thread count..." required> --> <!-- 23st march changes add this line-->
+                <!--<span ng-show="luxire_product.thread_count < 0 " style="color:red;">Thread Count can not be negetive..</span> --><!-- 22st march changes add this line-->
+                <!--<span ng-show="luxire_product.thread_count == 0 " style="color:red;">Invalid Thread Count..</span> --><!-- 22st march changes add this line-->
+              <!-- </div>
+            </div> -->
+            <!-- 24th march commented the following div as the material column is not there in the csv file-->
+            <!-- <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Material</span>
@@ -576,7 +710,7 @@
               </div>
               </div>
             </div>
-            <br>
+            <br> -->
             <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
@@ -585,14 +719,26 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <div ng-repeat="type in luxireProperties">
+
+                <!-- 24th march commented the following div, as the wash care property needs to be tags input and add one extra tags input -->
+                <!-- <div ng-repeat="type in luxireProperties">
                   <select ng-if="type.name == 'wash-care'" class="form-control" ng-model="luxire_product.wash_care" >
                     <option value = "0" label = "Please Select"></option>
                     <option ng-repeat="val in type.value.split(',')" value="{{val }}">
                         {{val }}
                     </option>
                   </select>
-              </div>
+                </div> -->
+                <!-- <tags-input ng-model="washCareTagsArr"></tags-input> -->
+                <tags-input ng-model="washCareTagsArr">
+                  <!-- <auto-complete source="loadAutocomplete('washCare')"></auto-complete> -->
+                  <auto-complete source="loadAutocomplete($query,'washCare')"
+                  min-length="0"
+                  load-on-focus="true"
+                  load-on-empty="true"
+                   ></auto-complete>
+                </tags-input>
+
               </div>
             </div>
             <br>
@@ -620,8 +766,8 @@
                 </div>
               </div>
             </div>
-
-            <br>
+            <!--   TO DO: HAVE TO BIND WITH PRODUCT API  -->
+            <!-- <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Ounces</span>
@@ -631,7 +777,7 @@
               <div class="col-lg-12 col-md-12">
                   <input type="text" ng-model="luxire_product.ounces" class="form-control">
               </div>
-            </div>
+            </div> -->
 
             <br>
             <div class="row">
@@ -641,7 +787,10 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                  <input type="text" ng-model="luxire_product.gsm" class="form-control">
+                  <!-- <input type="text" ng-model="luxire_product.gsm" class="form-control"> -->
+                  <input class="form-control" type="number"  ng-model="luxire_product.gsm"  placeholder="Thread count..." required> <!-- 22st march changes add this line-->
+                  <span ng-show="luxire_product.gsm < 0 " style="color:red;">GSM can not be negetive..</span> <!-- 22st march changes add this line-->
+                  <span ng-show="luxire_product.gsm == 0 " style="color:red;">Invalid GSM..</span> <!-- 22st march changes add this line-->
               </div>
             </div>
             <br>
@@ -663,7 +812,15 @@
             </div>
             <div class="row">
               <div class="col-lg-12 col-md-12">
-                <input type="text" ng-model="luxire_product.pitch_sales" class="form-control">
+                <!-- <input type="text" ng-model="luxire_product.pitch_sales" class="form-control"> -->
+                <tags-input ng-model="salesPitchTagsArr">
+                  <!-- <auto-complete source="loadAutocomplete('salesPitch')"></auto-complete> -->
+                  <auto-complete source="loadAutocomplete($query,'salesPitch')"
+                  min-length="0"
+                  load-on-focus="true"
+                  load-on-empty="true"
+                   ></auto-complete>
+                </tags-input>
               </div>
             </div>
             <br>
@@ -734,6 +891,20 @@
               </div>
             </div>
             <br>
+            <div class="row"> <!-- 23rd march add this div-->
+              <div class="col-lg-12 col-md-12">
+                <span style="font-size: 13px;">Fabric Width</span>
+              </div>
+            </div>
+            <div class="row"> <!-- 23rd march add this div-->
+              <div class="col-lg-12 col-md-12">
+                <input type="text" ng-model="luxire_stock.fabric_width" class="form-control">
+                <!-- <input class="form-control" type="number" min="0" step="any" ng-model="luxireProduct.thickness"  placeholder="Thickness..." required> --><!-- 22st march changes add this line-->
+                <!--<span ng-show="luxireProduct.thickness < 0 " style="color:red;"> Thickness can not be negetive..</span> --><!-- 22st march changes add this line-->
+                <!--<span ng-show="luxireProduct.thickness == 0 " style="color:red;">Invalid Thickness..</span> --> <!-- 22st march changes add this line-->
+              </div>
+            </div>
+            <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Thickness</span>
@@ -742,6 +913,9 @@
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <input type="text" ng-model="luxire_product.thickness" class="form-control">
+                <!-- <input class="form-control" type="number" min="0" step="any" ng-model="luxire_product.thickness"  placeholder="Thickness..." required> --><!-- 22st march changes add this line-->
+                <!--<span ng-show="luxire_product.thickness < 0 " style="color:red;"> Thickness can not be negetive..</span> --><!-- 22st march changes add this line-->
+                <!--<span ng-show="luxire_product.thickness == 0 " style="color:red;">Invalid Thickness..</span> --><!-- 22st march changes add this line-->
               </div>
             </div>
             <br>
@@ -753,7 +927,12 @@
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <tags-input ng-model="seasonTagsArr">
-                  <auto-complete source="loadSeason('season')"></auto-complete>
+                  <!-- <auto-complete source="loadAutocomplete('season')"></auto-complete> -->
+                  <auto-complete source="loadAutocomplete($query,'season')"
+                  min-length="0"
+                  load-on-focus="true"
+                  load-on-empty="true"
+                   ></auto-complete>
                 </tags-input>
               </div>
             </div>
@@ -762,5 +941,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
   </div>
 </div>

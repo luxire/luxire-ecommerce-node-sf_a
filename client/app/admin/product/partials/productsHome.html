@@ -1,32 +1,51 @@
+<style>
+  .div-scroll {
+    height: 40pc;
+    overflow: scroll;
+  }
+</style>
 <script type="text/ng-template" id="importCsvModal.html">
 <div class="modal-header">
-    <center><h3 class="modal-title">Import products by CSV file </h3></center>
+    <center><h3 class="modal-title">import products by CSV file </h3></center>
 </div>
-<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
-  <img src="lib/assets/loader.gif"/>
-</div>
+<hr>
 <div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4" >
-        Select a file to upload
-        <input type="file" accept=".csv" name="name" ng-file-select ng-file-change="upload_file($files)" value=""><br/>
+  <div class="col-md-2"></div>
+  <div class="col-md-8" >
+        Select an image to upload:ch
+        <input type="file" fileread="uploadme" name="image">
+        <input type="submit" value="Upload file" ng-click="ok()">
   </div>
+
 <div class="col-md-2"></div>
-</div>
-<div class="row" style="margin-left: 5%; margin-right: 5%">
-  <div ng-bind-html="getUploadStatus"></div>
+
+
 </div>
 <div class="modal-footer">
     <div class="container-fluid">
         <div class="row">
             <center>
-              <button class="btn btn-primary" type="button" ng-click="upload()" style="margin-left:4%;">Upload</button>
-              <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Close</button>
+              <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
+              <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Cancel</button>
             </center>
         </div>
     </div>
 </div>
 </script>
+<style>
+
+.left-inner-addon {
+  position: relative;
+}
+.left-inner-addon input {
+  padding-left: 30px;
+}
+.left-inner-addon i {
+  position: absolute;
+  padding: 10px 12px;
+  pointer-events: none;
+}
+</style>
 
 <div class="container-fluid" style="height:100%" >
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
@@ -49,7 +68,7 @@
     <img src="lib/assets/loader.gif"/>
   </div>
 
-  <div class="row" style="height: 93vh;">
+  <div class="row" style="height: 93vh; padding-left:1%; padding-right:1%;">
     <div class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
@@ -60,9 +79,16 @@
 
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <div class="input-group">
+        <div class="row" style="margin:0px; background-color: white; padding: 20px; padding-left:2%;">
+          <!--  17th march change-2   commented  (style tag is added in this page to make the change) -->
+          <div class="left-inner-addon ">
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..."  ng-keyup="searchProductByQuery(searchText,$event)">
+          </div>
+
+          <!-- <div class="input-group">
             <div class="input-group-btn">
+              <i class="fa fa-search"></i>
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href="#">Filter Products</a></li>
@@ -71,11 +97,28 @@
               <li role="separator" class="divider"></li>
               <li><a href="#">Separated link</a></li>
             </ul>
-            </div><!-- /btn-group -->
-            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products...">
-          </div>
+            </div>
+            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-change="searchProductByQuery(searchText)">
+          </div> -->
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+        <div class="row" style="margin:0px; background-color: white; padding: 20px;" >
+          <!-- 18th march chnages: add this div  @rajib-->
+          <!-- <div class="row" ng-show="noProductMsg" style="padding-top:5%;padding-buttom:5%;">
+            <div class="alert alert-danger" ng-if="masterSearchJson.length == 0 " >
+                <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">Info!</strong>No Results Found..</span></center>
+            </div>
+          </div>
+          <div ng-show="!noProductMsg">  -->
+            <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+               <div class="" style="color:black; font-size:120%;">
+                   <center>Data not Found</center>
+                   <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
+                 </div>
+              </div>
+          <div ng-show="!(filteredResults.length == 0)">
+            <!-- 18th march  -->
+          <div class="row div-scroll"  when-scrolled="scrollLoad()"> <!-- 18th march  -->
+            <div class="row" style="margin:0px; background-color: white; padding: 0% 2%;">
           <table class="table table-hover admin-product-list w3-striped">
             <thead>
               <tr>
@@ -100,32 +143,34 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="x in jsonresponse.data.products | filter:{name:searchText}">
+              <tr ng-repeat="product in masterSearchJson  | filter: { name: searchText } as filteredResults">
                 <td>
                   <input type="checkbox" name="selectAll" value="">
                 </td>
                 <td style="width: 15%;">
-                  <span ng-if="x.master.images[0].mini_url != null"><img src="http://54.169.41.36:3000{{x.master.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
-                  <span ng-if="x.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
+                  <span ng-if="product.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
+                  <span ng-if="product.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
 
-                <td style="width: 20%;">
-                  <a   style="cursor:pointer;" ng-click="showEditProducts(x.id)">{{x.name}}</a>
+                <td style="width: 40%;">
+                  <a   style="cursor:pointer;" ng-click="showEditProducts(product.id)">{{product.name}}</a>
                 </td>
-                <td style="width: 15%;">
-                  <span ng-if="x.luxire_product_type.product_type">{{x.luxire_product_type.product_type}}</span>
-                 <span ng-if="x.luxire_product_type.product_type == null">N/A</span>
-                </td>
+                <td style="width: 15%;"> <!-- 17th march change-1:  update product type (rajib) -->
+                  <span ng-if="product.product_type.product_type">{{product.product_type.product_type}}</span>
+                 <span ng-if="product.product_type.product_type == null">N/A</span>
+               </td> <!-- 17th march change-1:  update product type (rajib) -->
                 <td style="width:15%;">
                   <span>{{luxireVendor[0].name}}</span>
                 </td>
-                <td style="width:20%;"></td>
                 <td >
-                  <i class="fa fa-pencil-square-o" ng-click="showEditProducts(x.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <i class="fa fa-trash" ng-click="deleteProducts(x.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                  <i class="fa fa-pencil-square-o" ng-click="showEditProducts(product.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-trash" ng-click="deleteProducts(product.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        </div>
+        </div> <!-- 18th march -->
         </div>
       </div>
       <!-- angular alert  -->

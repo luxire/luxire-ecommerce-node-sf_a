@@ -1,9 +1,23 @@
 angular.module('luxire')
 
-.controller('editModalInstanceCtrl',function($scope, $uibModalInstance, luxireStock, createProductModalService){
+.controller('editModalInstanceCtrl',function($scope,luxireProperties, $uibModalInstance, luxireStock, createProductModalService){
   $scope.modalData = luxireStock;
   console.log("count from main controller : ",$scope.modalData.count);
   console.log("data from main controller : ",$scope.modalData.data);
+
+  // start: inventory measuring unit
+  luxireProperties.luxirePropertiesIndex().then(function(data) {
+    console.log('in inventory modal measuring units are...');
+    //console.log(data);
+    $scope.luxireProperties = data.data;
+    //$scope.loading = false;
+    console.log($scope.luxireProperties);
+  }, function(info){
+    console.log(info);
+  })
+
+  // end: inventory measuring unit
+
 
     if($scope.modalData.count>1){
 

@@ -4,13 +4,23 @@ angular.module('luxire')
   $scope.luxire_product={};
   $scope.parentSkuObj='';
   $scope.swatchPrice=1;
-  $scope.tagsarr=[];
+  $scope.tagsArr=[];
   $scope.colorTagsArr = [];
+  $scope.usageTagsArr = []; // 24th march add this line
+  $scope.washCareTagsArr = []; // 24th march add this line
   $scope.seasonTagsArr = [];
+  $scope.salesPitchTagsArr = []; // 24th march add this line
   $scope.rule=[];
   $scope.taxon_ids=[];
   $scope.editedAllTaxonsJson=[];
   $scope.seasonData=[];
+  $scope.colorData=[];
+  $scope.washCareData=[];
+  $scope.usageData=[];
+  $scope.salesPitchData=[];
+  $scope.tagsData=[];
+  $scope.loading = true;
+
 
 
   $scope.upload_product_image = function(files){
@@ -40,12 +50,14 @@ angular.module('luxire')
  // ---------------- START OF GET ALL THE PRODUCT DETAILS TO SHOW ---------------------
   console.log("state params : "+$stateParams.id);
   products.getProductByID($stateParams.id).then(function(data) {
+    $scope.loading = true;
     $scope.products = data;
     $scope.luxire_stock = data.luxire_stock;
     $scope.luxire_product = data.luxire_product;
     $scope.parentSkuObj = $scope.luxire_stock;
+    //$scope.loading = false;
 
-
+    //  ***** start:- 28th march changes:  this portion responsiblr for converting attribute value into tags input
     if($scope.products.luxire_product.product_tags == undefined){
       console.log("tags field is empty..");
     }else{
@@ -55,7 +67,7 @@ angular.module('luxire')
         tagsObj={
           "text": arr[i]
         };
-          $scope.tagsarr.push(tagsObj);
+          $scope.tagsArr.push(tagsObj);
       }
     }
     if($scope.products.luxire_product.product_color == undefined){
@@ -82,49 +94,199 @@ angular.module('luxire')
           $scope.seasonTagsArr.push(seasonObj);
       }
     }
+    // start : 24th march add the following if else condition
+    if($scope.products.luxire_product.usage == undefined){
+      console.log("usage  tag is empty..");
+    }else{
+      var usageArr=$scope.products.luxire_product.usage.split(','); // converting the array of seasons string into tags input object
+      var usageObj={};
+      for(i=0;i<usageArr.length;i++){
+        usageObj={
+          "text": usageArr[i]
+        };
+          $scope.usageTagsArr.push(usageObj);
+      }
+    }
+    //  end : 24th march add the following if else condition
+    // start : 24th march add the following if else condition
+    if($scope.products.luxire_product.wash_care == undefined){
+      console.log("wash_care  tag is empty..");
+    }else{
+      var washCareArr=$scope.products.luxire_product.wash_care.split(','); // converting the array of seasons string into tags input object
+      var washCareObj={};
+      for(i=0;i<washCareArr.length;i++){
+        washCareObj={
+          "text": washCareArr[i]
+        };
+          $scope.washCareTagsArr.push(washCareObj);
+      }
+    }
+    if($scope.products.luxire_product.sales_pitch == undefined){
+      console.log("wash_care  tag is empty..");
+    }else{
+      var salesPitchArr=$scope.products.luxire_product.sales_pitch.split(','); // converting the array of seasons string into tags input object
+      var salesPitchObj={};
+      for(i=0;i<salesPitchArr.length;i++){
+        salesPitchObj={
+          "text": salesPitchArr[i]
+        };
+          $scope.salesPitchTagsArr.push(salesPitchObj);
+      }
+    }
 
-    console.log("season tags values: ",$scope.seasonTagsArr);
+    // console.log("season tags values: ",$scope.seasonTagsArr);
+    // console.log("usage tags values: ",$scope.usageTagsArr); // 24th march add this line
+    // console.log("wash care tags values: ",$scope.washCareTagsArr); // 24th march add this line
+    // console.log("parent sku object",$scope.parentSkuObj);
+    // console.log("wash care tags values: ",$scope.salesPitchTagsArr); // 24th march add this line
+    // console.log(" luxire stock: \n",$scope.luxire_stock);
+    // console.log("luxire product: \n",$scope.luxire_product);
+    //  ***** end:- 28th march changes:  this portion responsiblr for converting attribute value into tags input
+
+    //  ***** start :- 28th march changes:  this portion responsible for fetch luxire properties and convert them into input tags
+
+      luxireProperties.luxirePropertiesIndex().then(function(data) {
+        var tempSeasonData=[];
+        var tempWashCareData=[];
+        var tempColorData=[];
+        var tempUsageData=[];
+        var tempSalesPitchData=[];
+        var tempTagsData=[];
+        //console.log('admin luxire properties values are ...');
+        //console.log(data);
+        $scope.luxireProperties = data.data;
+        //$scope.loading = false;
+        //console.log($scope.luxireProperties);
+        //console.log("type of properties: ",typeof($scope.luxireProperties[0]));
+        //var arr=$scope.luxireProperties[0].value.split(',');
+        for(var i=0; i<$scope.luxireProperties.length; i++){
+          if($scope.luxireProperties[i].name == 'season'){
+            console.log("season is matching with luxire properties...");
+            tempSeasonData = $scope.luxireProperties[i].value.split(',');
+          }else if($scope.luxireProperties[i].name == 'wash-care'){
+            console.log("wash care is matching with luxire properties...");
+            tempWashCareData = $scope.luxireProperties[i].value.split(',');
+          }else if($scope.luxireProperties[i].name == 'color'){
+            console.log("wash care is matching with luxire properties...");
+            tempColorData = $scope.luxireProperties[i].value.split(',');
+          }else if($scope.luxireProperties[i].name == 'usage'){
+            console.log("wash care is matching with luxire properties...");
+            tempUsageData = $scope.luxireProperties[i].value.split(',');
+          }else if($scope.luxireProperties[i].name == 'sales_pitch'){
+            console.log("sales pitch is matching with luxire properties...");
+            tempSalesPitchData = $scope.luxireProperties[i].value.split(',');
+          }else if($scope.luxireProperties[i].name == 'tags'){
+            console.log("tags is matching with luxire properties...");
+            tempTagsData = $scope.luxireProperties[i].value.split(',');
+          }
+        }
+        var tagObj={};
+        for(var j=0;j<tempSeasonData.length; j++){
+            tagObj = {"text": tempSeasonData[j]}
+            $scope.seasonData.push(tagObj);
+        }
+        console.log("temp wash care data: ",$scope.tempWashCareData);
+        for(var j=0;j<tempWashCareData.length; j++){
+            tagObj = {"text": tempWashCareData[j]}
+            $scope.washCareData.push(tagObj);
+        }
+        for(var j=0;j<tempColorData.length; j++){
+            tagObj = {"text": tempColorData[j]}
+            $scope.colorData.push(tagObj);
+        }
+        for(var j=0;j<tempUsageData.length; j++){
+            tagObj = {"text": tempUsageData[j]}
+            $scope.usageData.push(tagObj);
+        }
+        for(var j=0;j<tempSalesPitchData.length; j++){
+            tagObj = {"text": tempSalesPitchData[j]}
+            $scope.salesPitchData.push(tagObj);
+        }
+        for(var j=0;j<tempTagsData.length; j++){
+            tagObj = {"text": tempTagsData[j]}
+            $scope.tagsData.push(tagObj);
+        }
+
+        console.log("+++season data: \n\n",$scope.seasonData);
+        console.log("+++wash care data: \n\n",$scope.washCareData);
+
+        //console.log("arr\n\n",arr);
+      }, function(info){
+        console.log(info);
+      })
 
 
-    console.log("parent sku object",$scope.parentSkuObj);
-    //console.log("data: \n",$scope.products);
-    console.log(" luxire stock: \n",$scope.luxire_stock);
-    console.log("luxire product: \n",$scope.luxire_product);
+    //  ***** end :- 28th march changes:  this portion responsible for fetch luxire properties and convert them into input tags
+
+      $scope.loading = false;
 
   }, function(info){
     console.log(info);
-  });
+  }); // 28th march end of get product by id functionality
   // ---------------- END OF GET ALL THE PRODUCT DETAILS TO SHOW ---------------------
 
 
   // --------------------------   START GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
 
-  luxireProperties.luxirePropertiesIndex().then(function(data) {
-    var tempSeasonData=[];
-    console.log('admin luxire properties values are ...');
-    console.log(data);
-    $scope.luxireProperties = data.data;
-    //$scope.loading = false;
-    console.log($scope.luxireProperties);
-    console.log("type of properties: ",typeof($scope.luxireProperties[0]));
-    var arr=$scope.luxireProperties[0].value.split(',');
-    for(var i=0; i<$scope.luxireProperties.length; i++){
-      if($scope.luxireProperties[i].name == 'season'){
-        tempSeasonData = $scope.luxireProperties[i].value.split(',');
-        break;
-      }
-    }
-    var seasonTagObj={};
-    for(var j=0;j<tempSeasonData.length; j++){
-        seasonTagObj = {"text": tempSeasonData[j]}
-        $scope.seasonData.push(seasonTagObj);
-    }
-    console.log("+++season data: \n\n",$scope.seasonData);
 
-    console.log("arr\n\n",arr);
-  }, function(info){
-    console.log(info);
-  })
+  $scope.loadItems = function($query){
+    //return $scope.allTaxonsJson;
+    var filteredArr=[];
+    //return $scope.allTaxonsJson;
+    filteredArr = $scope.allTaxonsJson;
+    return filteredArr.filter(function(tag){
+      return tag.pretty_name.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+  // ---------------- START OF TAGS INPUT FUNCTIONALITY LOADI---------------------
+  $scope.loadAutocomplete = function($query,pattern) {
+    var filteredArr=[];
+    if (pattern == 'season') {
+      //console.log("season data: ",$scope.seasonData);
+      //return $scope.seasonData;
+      filteredArr = $scope.seasonData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }else if(pattern == 'washCare'){
+      // console.log("wash care data : ",$scope.washCareData);
+      // return $scope.washCareData;
+      filteredArr = $scope.washCareData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }else if(pattern == 'color'){
+      // console.log("color data : ",$scope.colorData);
+      // return $scope.colorData;
+      filteredArr = $scope.colorData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }else if(pattern == 'usage'){
+      // console.log("color data : ",$scope.usageData);
+      // return $scope.usageData;
+      filteredArr = $scope.usageData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }else if(pattern == 'salesPitch'){
+      // console.log("salesPitch data : ",$scope.salesPitchData);
+      // return $scope.salesPitchData;
+      filteredArr = $scope.salesPitchData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }else if(pattern == 'tags'){
+      // console.log("tags data : ",$scope.tagsData);
+      // return $scope.tagsData;
+      filteredArr = $scope.tagsData;
+      return filteredArr.filter(function(tag){
+        return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+      });
+    }
+
+   }
+
   // --------------------------   START GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
 
   // --------------------------   START GET ALL LUXIRE VENDORS  TO SHOW    -------------------------
@@ -161,7 +323,16 @@ angular.module('luxire')
 	}, function(info){
 		console.log(info);
 	})
-
+  $scope.checkShippingCatgoryId = function(shippingId){ // 23rd march changes: add this function
+    console.log("checkShippingCatgoryId is calling...");
+    $scope.shipping_emp_msg = false;
+    console.log("checkShippingCatgoryId: ",shippingId);
+    if(shippingId == '' || shippingId == undefined){
+      $scope.shipping_emp_msg = true;
+    }else{
+      $scope.shipping_emp_msg = false;
+    }
+  }
 	$scope.showProductType=function(){
 		console.log("select product type is calling..");
 		 console.log("selected product type is "+$scope.newProductType.type);
@@ -235,7 +406,7 @@ angular.module('luxire')
         for(var j=0; j<$scope.products.taxon_ids.length; j++){
           if($scope.allTaxonsJson[i].id == $scope.products.taxon_ids[j]){
             console.log("taxon id matched with all taxonjson id");
-            obj={id:$scope.allTaxonsJson[i].id, name: $scope.allTaxonsJson[i].name };
+            obj={id:$scope.allTaxonsJson[i].id, pretty_name: $scope.allTaxonsJson[i].pretty_name };
             $scope.rule.push(obj);
           }
         }
@@ -250,28 +421,6 @@ angular.module('luxire')
   })
 
 
-  $scope.loadItems = function(query){
-    return $scope.allTaxonsJson;
-  };
-  // ---------------- START OF TAGS INPUT FUNCTIONALITY ---------------------
-  $scope.loadSeason = function(query) {
-    // var tempSeasonData=[];
-    // if (query == 'season') {
-    //   for(var i=0; i<$scope.luxireProperties.length; i++){
-    //     if($scope.luxireProperties[i].name == 'season'){
-    //       tempSeasonData = $scope.luxireProperties[i].value.split(',');
-    //       break;
-    //     }
-    //   }
-    //   var seasonTagObj={};
-    //   for(var j=0;j<tempSeasonData.length; j++){
-    //       seasonTagObj = {"text": tempSeasonData[j]}
-    //       $scope.seasonData.push(seasonTagObj);
-    //   }
-    // }
-    console.log("season data: ",$scope.seasonData);
-    return $scope.seasonData;
-   }
 
  // ---------------- START OF TAGS INPUT FUNCTIONALITY ---------------------
 
@@ -288,11 +437,11 @@ angular.module('luxire')
           taxon_ids[i]=$scope.rule[i].id;
         }
         console.log("before save product taxon ids are: ",$scope.products.taxon_ids);
-        var tagarr=[];
-        for(i=0;i<$scope.tagsarr.length;i++){
-          tagarr[i]=$scope.tagsarr[i].text;
-        }
-        $scope.luxire_product["product_tags"]=tagarr.toString();
+        // var tagarr=[];
+        // for(i=0;i<$scope.tagsarr.length;i++){
+        //   tagarr[i]=$scope.tagsarr[i].text;
+        // }
+        //$scope.luxire_product["product_tags"]=tagarr.toString();
         var colorarr=[];
         for(i=0;i<$scope.colorTagsArr.length;i++){
           colorarr[i]=$scope.colorTagsArr[i].text;
@@ -302,9 +451,29 @@ angular.module('luxire')
         for(i=0;i<$scope.seasonTagsArr.length;i++){
           seasonarr[i]=$scope.seasonTagsArr[i].text;
         }
+        var usagearr=[]; // start: 24th march
+        for(i=0;i<$scope.usageTagsArr.length;i++){
+          usagearr[i]=$scope.usageTagsArr[i].text;
+        }// end: 24th march
+        var washCarearr=[]; // start: 24th march
+        for(i=0;i<$scope.washCareTagsArr.length;i++){
+          washCarearr[i]=$scope.washCareTagsArr[i].text;
+        }// end: 24th march
+        var salesPitcharr=[]; // start: 24th march
+        for(i=0;i<$scope.salesPitchTagsArr.length;i++){
+          salesPitcharr[i]=$scope.salesPitchTagsArr[i].text;
+        }// end: 24th march
+        var tagsarr=[]; // start: 24th march
+        for(i=0;i<$scope.tagsArr.length;i++){
+          tagsarr[i]=$scope.tagsArr[i].text;
+        }// end: 24th march
         $scope.luxire_product["suitable_climates"]= seasonarr.toString(); // converting the season tags input values into a array of string
-        $scope.luxire_product["product_tags"]=tagarr.toString();   // converting the tags input values into a array of string
+        $scope.luxire_product["product_tags"]=tagsarr.toString();   // converting the tags input values into a array of string
         $scope.luxire_product["product_color"]=colorarr.toString();   // converting the color tags input values into a array of string
+        $scope.luxire_product["usage"]=usagearr.toString();   // 24th march changes:  add this line
+        $scope.luxire_product["wash_care"]=washCarearr.toString();   // 24th march changes:  add this line
+        $scope.luxire_product["sales_pitch"]=salesPitcharr.toString();   // 24th march changes:  add this line
+        //$scope.luxire_product["product_tags"]=tagsarr.toString();   // 24th march changes:  add this line
 
         // merging the product structure
         $scope.product={};
@@ -342,7 +511,8 @@ angular.module('luxire')
         products.editProduct($scope.products.id,$scope.postProductData).then(function(data){
           console.log($scope.product);
           console.log("node response: ",data);
-          alert('Product successfully updated...');
+          $scope.alerts.push({type: 'success', message: 'Product Updated successfully!'});
+          //alert('Product successfully updated...');
           $scope.activeButton('products')
         }, function(info) {
           console.log(info);
@@ -360,7 +530,7 @@ angular.module('luxire')
         // })
         // call the update stock functionality
         products.updateStock($scope.luxire_stock.id,$scope.luxireStock).then(function(data){
-          alert('inventory successfully updated...');
+          //alert('inventory successfully updated...');
           $scope.activeButton('products')
         }, function(info) {
           console.log(info);

@@ -1,12 +1,23 @@
 angular.module('luxire')
-.controller('createProductInventoryModalController',function($scope, $uibModalInstance, luxireStock, createProductModalService ){
+.controller('createProductInventoryModalController',function($scope, luxireProperties, $uibModalInstance, luxireStock, createProductModalService ){
   $scope.modalData = luxireStock;
 	$scope.addSetView = false;
   console.log("count from main controller : ",$scope.modalData.count);
   console.log("data from main controller : ",$scope.modalData.data);
 	console.log("parent sku from main controller : ",$scope.modalData.parent_sku_obj);
 	console.log("**** parent sku from main controller"+$scope.modalData.sku_status);
+  // start: inventory measuring unit
+  luxireProperties.luxirePropertiesIndex().then(function(data) {
+    console.log('in inventory modal measuring units are...');
+    //console.log(data);
+    $scope.luxireProperties = data.data;
+    //$scope.loading = false;
+    console.log($scope.luxireProperties);
+  }, function(info){
+    console.log(info);
+  })
 
+  // end: inventory measuring unit
 
     if($scope.modalData.count>1){
       $scope.luxireStock=$scope.luxireStockValue;
