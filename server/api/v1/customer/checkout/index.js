@@ -12,6 +12,7 @@ router.post('/:number/pay_pal_payment', controller.checkout_pay_pal_payment);
 
 // router.post('/:number/:token/gateway', controller.checkout_gateway);
 router.post('/:number/apply_coupon_code/:code', controller.checkout_apply_coupon_code);
+router.post('/:number/apply_gift_card', controller.checkout_apply_gift_card);
 router.post('/gateway_Response', controller.checkout_gateway_response);
 router.post('/:number/confirm', controller.checkout_confirm_payment);
 router.post('/:number/complete', controller.checkout_complete);

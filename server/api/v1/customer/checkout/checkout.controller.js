@@ -23,10 +23,12 @@ function secure_hash_ebs(secret_key,account_id,amount,reference_no,return_url,mo
 exports.checkout_address = function(req, res){
   console.log(req.params.number);
   console.log(req.query.order_token);
+  console.log('req cookies', req.cookies);
 
   http.put({
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'/next.json?order_token='+req.query.order_token,
     body:'',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
     headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
   },function(error,response,body){
     console.error('error',error);
@@ -48,6 +50,7 @@ exports.checkout_delivery  = function(req, res){
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body:JSON.stringify(req.body)
@@ -70,25 +73,18 @@ exports.checkout_payment  = function(req, res){
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body:JSON.stringify(req.body)
   },function(error,response,body){
-    if(error == null){
-      if(body !== {} && body != undefined){
-        var temp = JSON.parse(body);
-        var hash = secure_hash_ebs(ebs_object.secret_key, ebs_object.account_id, parseFloat(temp.total), temp.number, ebs_object.return_url, ebs_object.mode);
-        console.log(hash);
-        temp.secure_hash = hash;
-        body = JSON.stringify(temp);
-      }
-      res.status(response.statusCode).send(body);
-      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+response.statusCode);
+    if(error){
+      res.status(500).send(error.syscall);
     }
     else{
-      res.status(500).send("Internal Server Error");
-      console.log('req from'+req.connection.remoteAddress+'for updating ship_payments, responded with'+error);
+      res.status(response.statusCode).send(body);
     }
+
   });
 
 };
@@ -102,6 +98,7 @@ exports.checkout_pay_pal_payment  = function(req, res){
     uri: constants.spree.host+'/paypal?payment_method_id='+req.body.payment_method_id+'&order_id='+req.body.order_id,
     headers:{
       'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
     body:JSON.stringify(req.body)
@@ -150,9 +147,34 @@ exports.checkout_apply_coupon_code = function (req, res){
       uri: constants.spree.host+constants.spree.orders+'/'+req.params.number+'/apply_coupon_code?order_token='+req.query.order_token,
       headers:{
         'content-type': 'application/x-www-form-urlencoded',
+        'Cookie': 'guest_token='+req.cookies.guest_token,
         'X-Spree-Token': req.headers['X-Spree-Token']
       },
       body: 'coupon_code='+req.params.code
+    }, function(error, response, body){
+      if(error){
+        res.status(500).send(error.syscall);
+      }
+      else{
+        res.status(response.statusCode).send(body);
+      };
+    });
+};
+
+/*Apply Gift card*/
+exports.checkout_apply_gift_card = function (req, res){
+  console.log('apply gift_card', req.body);
+  console.log('apply gift card params', req.params);
+  http
+    .get({
+      uri: constants.spree.host+constants.spree.checkouts+'/apply_gift_code?'+'order[gift_code]='+req.body.gift_card_code+'&order[number]='+req.params.number+'&order[token]='+req.body.order_token,
+      headers:{
+        'content-type': 'application/x-www-form-urlencoded',
+        'X-Spree-Token': req.headers['X-Spree-Token'],
+        'Cookie': 'guest_token='+req.cookies.guest_token
+      }
+      // ,
+      // body: 'order[gift_code]='+req.body.gift_card_code+'&order[number]='+req.params.number+'&order[token]='+req.body.order_token
     }, function(error, response, body){
       if(error){
         res.status(500).send(error.syscall);
@@ -170,7 +192,8 @@ exports.checkout_confirm_payment = function(req, res){
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
-      'X-Spree-Token': req.headers['X-Spree-Token']
+      'X-Spree-Token': req.headers['X-Spree-Token'],
+      'Cookie': 'guest_token='+req.cookies.guest_token
     },
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -189,7 +212,8 @@ exports.checkout_complete = function(req, res){
     uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
     headers:{
       'content-type': 'application/json',
-      'X-Spree-Token': req.headers['X-Spree-Token']
+      'X-Spree-Token': req.headers['X-Spree-Token'],
+      'Cookie': 'guest_token='+req.cookies.guest_token
     },
     body:JSON.stringify(req.body)
   },function(error,response,body){
