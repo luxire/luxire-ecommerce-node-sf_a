@@ -5,6 +5,7 @@ var router = express.Router();
 var controller = require('./product.controller');
 
 router.get('/', controller.index);
+router.get('/search', controller.searchProduct);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.post('/csv', controller.csv_import);

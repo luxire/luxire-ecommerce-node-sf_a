@@ -34,7 +34,7 @@ exports.index = function(req, res) {
   console.log(qstr);
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'?'+qstr,
+      uri: constants.spree.host+constants.spree.adminProducts+'?'+qstr,
       headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }, function(error, response, body){
       if(error){
@@ -50,7 +50,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res){
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
+      uri: constants.spree.host+constants.spree.adminProducts+'/'+req.params.id,
       headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }
       , function(error, response, body){
@@ -88,7 +88,7 @@ exports.create = function(req, res){
 exports.update = function(req, res){
   console.log(req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
+    uri: constants.spree.host+constants.spree.adminProducts+'/'+req.params.id,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
@@ -225,3 +225,21 @@ exports.csv_import = function(req,res){
     });
   });
 }
+exports.searchProduct = function(req, res){
+    var query = req.query.q.name_cont;
+    console.log("query string  : ",query);
+    console.log("product search url is: ",constants.spree.host+constants.spree.products+'?q[name_cont]='+query);
+  http
+    .get({
+      uri: constants.spree.host+constants.spree.products+'?q[name_cont]='+query,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+    }
+      , function(error, response, body){
+      if(error){
+        res.status(500).send(error.syscall);
+      }
+      else{
+        res.status(response.statusCode).send(body);
+      };
+  });
+};
