@@ -2,6 +2,11 @@ angular.module('luxire')
 .controller('CustomerLoginController', function($scope, CustomerAuthentication, $state, $rootScope, CustomerOrders, CustomerConstants){
   window.scrollTo(0, 0);
   console.log($state.params);
+  if(CustomerAuthentication.isLoggedIn()){
+    $state.go('customer.home');
+    $rootScope.alerts.push({type: 'success', message: 'You\'re already logged in'});
+
+  }
   $scope.customer = {
     user: {
       email: '',
@@ -17,29 +22,33 @@ angular.module('luxire')
     if($scope.customer.user.email && $scope.customer.user.password){
       CustomerAuthentication.authenticate($scope.customer)
       .then(function(data){
+        console.log('login data', data.data);
         CustomerAuthentication.login($scope.remember_me, data.data);
 
         if($state.params.nav_to_state === 'customer.checkout_address'){
-          CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
-          .then(function(data){
-            $rootScope.luxire_cart = data.data;
-            $state.go('customer.checkout_address');
-          },
-          function(error){
-            // $state.params ? $state.go($state.params.nav_to_state) : $state.go('customer.product_listing');
-            console.error(error);
-          });
+          $state.go('customer.checkout_address');
+          //
+          // CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+          // .then(function(data){
+          //   console.log('fetched order', data.data);
+          //   $rootScope.luxire_cart = data.data;
+          //   $state.go('customer.checkout_address');
+          // },
+          // function(error){
+          //   // $state.params ? $state.go($state.params.nav_to_state) : $state.go('customer.product_listing');
+          //   console.error(error);
+          // });
         }
         else if ($state.params.nav_to_state == null){
-          //TODO
-          var default_collection = {
-            taxonomy_name: CustomerConstants.default.taxonomy_name,
-            taxon_name: CustomerConstants.default.taxon_name,
-            taxonomy_id: CustomerConstants.default.taxonomy_id,
-            taxon_id: CustomerConstants.default.taxon_id,
-          };
-            $state.go('customer.product_listing', default_collection);
-
+          $state.go('customer.home');
+          CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+          .then(function(data){
+            console.log('fetched order', data.data);
+            $rootScope.luxire_cart = data.data;
+          },
+          function(error){
+            console.error(error);
+          });
         }
 
         $rootScope.alerts.push({type: 'success', message: 'Login successful!'});
