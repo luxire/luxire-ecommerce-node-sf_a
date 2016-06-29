@@ -6,32 +6,34 @@
 </style>
 <script type="text/ng-template" id="importCsvModal.html">
 <div class="modal-header">
-    <center><h3 class="modal-title">import products by CSV file </h3></center>
+    <center><h3 class="modal-title">Import products by CSV file </h3></center>
 </div>
-<hr>
+<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+  <img src="lib/assets/loader.gif"/>
+</div>
 <div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8" >
-        Select an image to upload:ch
-        <input type="file" fileread="uploadme" name="image">
-        <input type="submit" value="Upload file" ng-click="ok()">
+  <div class="col-md-4"></div>
+  <div class="col-md-4" >
+        Select a file to upload
+        <input type="file" accept=".csv" name="name" ng-file-select ng-file-change="upload_file($files)" value=""><br/>
   </div>
-
 <div class="col-md-2"></div>
-
-
+</div>
+<div class="row" style="margin-left: 5%; margin-right: 5%">
+  <div ng-bind-html="getUploadStatus"></div>
 </div>
 <div class="modal-footer">
     <div class="container-fluid">
         <div class="row">
             <center>
-              <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
-              <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Cancel</button>
+              <button class="btn btn-primary" type="button" ng-click="upload()" style="margin-left:4%;">Upload</button>
+              <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Close</button>
             </center>
         </div>
     </div>
 </div>
 </script>
+
 <style>
 
 .left-inner-addon {
@@ -148,8 +150,8 @@
                   <input type="checkbox" name="selectAll" value="">
                 </td>
                 <td style="width: 15%;">
-                  <span ng-if="product.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
-                  <span ng-if="product.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
+                  <span ng-if="product.master.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.master.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
+                  <span ng-if="product.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
 
                 <td style="width: 40%;">
                   <a   style="cursor:pointer;" ng-click="showEditProducts(product.id)">{{product.name}}</a>

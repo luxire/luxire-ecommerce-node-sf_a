@@ -345,44 +345,21 @@ angular.module('luxire')
 
   // --------------   START OF OPEN MODAL FUNCTIONALITY TO UPLOAD CSV FILE    ---------------
 
-	$scope.importModal=function(size){
-		var importCsvModalInstance = $uibModal.open({
-			animation: $scope.animationsEnabled,
-			templateUrl: 'importCsvModal.html',
-			controller: 'importCsvModalController',
-			size: size,
-			resolve: {
-				importValue: function () {
-					return {name: "rajib" };
-				}
-			}
-		});
-		importCsvModalInstance.result.then(function (res) {
-		$scope.importModalValue = res;
-
-		//console.log("modal return value is : \n\n",$scope.importModalValue);
-		var len=JSON.stringify($scope.importModalValue).length;
-		console.log("length: "+$scope.importModalValue.length);
-		console.log("len: "+bytesToSize(len));
-		var csvToJsonData = CSV2JSON($scope.importModalValue);
-		console.log("csv to json file is: \n\n"+typeof(csvToJsonData));
-		//console.log("file content: ",csvToJsonData);
-		console.log("csv to json file is: \n\n"+typeof(JSON.parse(csvToJsonData)));
-		var data=JSON.parse(csvToJsonData);
-
-		csvFileUpload.uploadCsvFile(res).then(function(data) {
-	    console.log("in import modal controller response is: ",data);
-
-	  }, function(info){
-	    console.log(info);
-	  })
+  $scope.importModal=function(size){
+    var importCsvModalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'importCsvModal.html',
+      controller: 'importCsvModalController',
+      size: 'lg'
+    });
+    importCsvModalInstance.result.then(function (res) {
 
 
-	}, function () {
-		$log.info('Modal dismissed at: ' + new Date());
-	});
+  }, function () {
+    $log.info('Modal dismissed at: ' + new Date());
+  });
 
-	}
+  }
   // --------------   END OF OPEN MODAL FUNCTIONALITY TO UPLOAD CSV FILE    ---------------
 
   // --------------   START OF OPEN MODAL FUNCTIONALITY TO SHOW THE INVENTORY    ---------------

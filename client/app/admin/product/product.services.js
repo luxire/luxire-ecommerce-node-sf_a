@@ -218,7 +218,24 @@ angular.module('luxire')
 	}
 
 })
+.service('CSV', function($http){
 
+	this.upload = function(file){
+		var fd = new FormData();
+		fd.append('file', file);
+		console.log('file in service', file);
+		return $http.post('/api/v1/admin/products/csv', fd, {
+	      transformRequest: angular.identity,
+	      headers: {'Content-Type': undefined}
+	   })
+	   .success(function(data){
+			 console.log(data);
+	   })
+	   .error(function(error){
+			 console.error(error);
+	   });
+	};
+})
 .service('luxireVendor', function($http,$q){
 	this.getAllLuxireVendor= function(){
     console.log("get all luxire vendor is calling...");
