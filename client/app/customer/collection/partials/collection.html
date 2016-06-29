@@ -15,7 +15,7 @@
   color: #8A247C !important;
 }
 
-.productImage{
+.productImage, .new-product-image{
   position: relative;
   overflow: hidden;
 }
@@ -30,6 +30,45 @@
   -webkit-transform: scale(2);
   transform: scale(2);
 }
+.product-display-image{
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.product-display-image img{
+  /*max-width: 100%;*/
+  -moz-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  transform: scale(0.8);
+}
+.product-display-image img:hover {
+  -moz-transform: scale(1);
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+.new-product-image.zoomable-taxonomy img{
+  height: 100%;
+  width: 100%;
+-webkit-transition: all 1s ease;
+-moz-transition: all 1s ease;
+-o-transition: all 1s ease;
+-ms-transition: all 1s ease;
+transition: all 1s ease;
+  /*-moz-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  transform: scale(0.7);*/
+}
+.new-product-image.zoomable-taxonomy img:hover {
+  /*height: 225%;
+  width: 225%;*/
+  transform: scale(2, 2);
+  /*-moz-transform: scale(1);
+  -webkit-transform: scale(1);
+  transform: scale(1);*/
+}
+
 
 .activeFilter{
   color: #7F0E6E !important;
@@ -47,7 +86,7 @@
   <br /><br />
   Loading, please wait...
 </p>
-<div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.7%;z-index: 1">
+<div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.6%;z-index: 1">
   <div class="row" style="margin: 0.75% 0.25%">
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"  style="color: #7e7d7d">
       <!-- You are at &nbsp;&nbsp;{{stateParams.taxonomy_name}}&nbsp;&nbsp;>&nbsp;&nbsp;Formal&nbsp;&nbsp;|&nbsp;&nbsp;Casual -->
@@ -63,8 +102,8 @@
         Price&nbsp;&nbsp;
       </span>
       <span style="cursor: pointer; font-size: 130%">
-        <i  ng-class="{'active-predicate': reverse_price==true}" class="fa fa-caret-down" ng-click="reverse_price=true"></i>
-        <i  ng-class="{'active-predicate': reverse_price==false}" class="fa fa-caret-up" ng-click="reverse_price=false"></i>
+        <i  ng-class="{'active-predicate': reverse_price==true}" class="fa fa-caret-down" ng-click="sort_by_price(true)"></i>
+        <i  ng-class="{'active-predicate': reverse_price==false}" class="fa fa-caret-up" ng-click="sort_by_price(false)"></i>
       </span>
       <!-- |&nbsp;&nbsp;<span>
         Arrival
@@ -79,9 +118,9 @@
     </div>
   </div>
 </div>
-<div id="product-body-part" class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 11.7%;background-color: #FDFDFD;font-family: Roboto; ">
+<div id="product-body-part" class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 11.7%;background-color: #FDFDFD;font-family: Roboto;">
   <div id="main-body" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px">
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <div id="filter-categories" class="" style="float:left;display:inline-block;width:14%;border-right:1px solid #EAEAEA;text-align: left; padding-top: 1%">
           <div class="container-fluid" style="margin: 5% 10%;">
             <div style="">
@@ -92,10 +131,10 @@
               <div ng-if="property.name.toLowerCase()=='color'" class="row" style="margin-top: 3%">
                 <span style="font-size:115%;font-weight: 100;">COLOR</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
-                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option)">
+                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block" ng-cloak>
-                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_unchecked.png" alt="" />
-                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
+                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_unchecked.png" alt="" />
+                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
                     <div class="" style="display: inline-block">
                       <div ng-if="filter_option!='all'" class="" style="display: inline-block; position: relative">
@@ -107,7 +146,7 @@
                         <div class="" style="display: inline-block;background: {{color_variants[filter_option].secondary}};width: 11px; height: 9px;margin-left:-4px;border-top: solid 1px grey;border-bottom: solid 1px grey;border-right: solid 1px grey;">
                         </div> -->
                       </div>
-                      <span ng-class="{'activeFilter': selected_filters[property.name]==filter_option}" style="font-weight:100; font-size: 100%">&nbsp;&nbsp;{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">&nbsp;&nbsp;{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
@@ -118,13 +157,13 @@
               <div ng-if="property.name.toLowerCase()=='price'" class="row" style="margin-top: 3%">
                 <span style="font-size:115%;font-weight: 100;">PRICE</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
-                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option)">
+                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block">
-                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_unchecked.png" alt="" />
-                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
+                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_unchecked.png" alt="" />
+                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
                     <div class="" style="display: inline-block">
-                      <span ng-class="{'activeFilter': selected_filters[property.name]==filter_option}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
@@ -136,33 +175,17 @@
               <div ng-if="property.name.toLowerCase()!=='price'&&property.name.toLowerCase()!=='color'" class="row" style="margin-top: 3%">
                 <span style="font-size:115%;font-weight: 100;">{{property.display_name}}</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
-                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option)">
+                  <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block">
-                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_unchecked.png" alt="" />
-                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name]==filter_option" src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
+                      <img ng-hide="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_unchecked.png" alt="" />
+                      <img ng-show="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
                     <div class="" style="display: inline-block">
-                      <span ng-class="{'activeFilter': selected_filters[property.name]==filter_option}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <!--Weave Type-->
-              <!-- <div ng-if="property.name.toLowerCase()=='weave-type'" class="row" style="margin-top: 3%">
-                <span style="font-size:115%;font-weight: 100;">WEAVE TYPE</span>
-                <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
-                  <div style="cursor: pointer; width: 100%" ng-click="selected_weavetype(selected_weave_type, filter_option)">
-                    <div style="width: 20px;display: inline-block">
-                      <img ng-hide="active_filter_option_index==$index||selected_weave_type==filter_option" src="assets/images/customer/checkbox_unchecked.png" alt="" />
-                      <img ng-show="active_filter_option_index==$index||selected_weave_type==filter_option" src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
-                    </div>
-                    <div class="" style="display: inline-block">
-                      <span style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
 
 
             </div>
@@ -170,22 +193,24 @@
           </div>
         </div>
 
-        <div class="" style="display:inline-block;width:82%;margin-left:3%;background-color:#FFFFFF;">
+        <div class="" style="display:inline-block;width:82%;margin-left:3%;background-color:#FFFFFF;" >
           <div id="product-type-name-part" class=" container-fluid" style="margin-top: 1%;">
             <div id="product-type-name-part" class="row" >
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
             </div>
           </div>
           <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)===-1" class="row" style="display: block">
-            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price | filter:filter_with_selections" ng-cloak>
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price" ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
                 <!-- <div class="productImage">
-                  <img ng-click="go_to_product_detail(product.slug)" src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
                 </div> -->
-                <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
-                  <img ng-click="go_to_product_detail(product.slug)" src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+                <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+                </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
+                <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
                 </div>
-
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
                     <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>35? product.name.slice(0,35)+'...' : product.name}}</span></center>
@@ -206,9 +231,9 @@
                   <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
                       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
                         <span>
-                          <img style="max-width: 12%; margin-left: 8%" title="{{product.luxire_product.gsm}} gsm" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.thickness}} thickness" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.stiffness}} stiffness" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                          <img style="max-width: 12%; margin-left: 8%" title="{{product.luxire_product.gsm}} gsm" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
+                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.thickness.split('mm')[0]}} thickness" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.stiffness}} stiffness" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
                         </span>
 
                       </div>
@@ -225,13 +250,16 @@
 
           </div>
           <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1" class="row" style="display: block">
-            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price | filter:filter_with_selections" ng-cloak>
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price" ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
                 <!-- <div class="productImage">
-                  <img ng-click="go_to_product_detail(product.slug)" src="{{getImage(product.master.images[0].product_url)}}" style="max-width: 100%; cursor: pointer"></img>
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].product_url)}}" style="max-width: 100%; cursor: pointer"></img>
                 </div> -->
-                <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
-                  <img ng-click="go_to_product_detail(product.slug)" src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+                <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+                </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
+                <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
                 </div>
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
@@ -262,15 +290,18 @@
    </div>
 </div>
 <!--<footer > -->
-<div style="margin-top: 30%">
+<div class="" infinite-scroll="load_more()" infinite-scroll-distance="2">
+
 </div>
+<!-- <div style="margin-top: 30%">
+</div> -->
 
 <div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
     <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+      <img style="max-width: 75%" ng-src="assets/images/customer/luxire_logo_grey.png" >
     </div>
     <div style="margin-top:2%;">
         <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
@@ -371,7 +402,7 @@
   </div>
 </div> -->
 <!-- <span ng-repeat="climate in product.luxire_product.suitable_climates.split(',')" >
-  <img style="max-width: 12%" src="assets/images/customer/luxire-season-icons/season-{{climate}}.png" alt="" />
+  <img style="max-width: 12%" ng-src="assets/images/customer/luxire-season-icons/season-{{climate}}.png" alt="" />
 </span> -->
 <!-- <span class="glyphicon glyphicon-dashboard" style="margin-left:8%; font-size:130%;"></span>
 <span><i class="fa fa-umbrella" style="font-size:130%;margin-left:8%;"></i></span>
