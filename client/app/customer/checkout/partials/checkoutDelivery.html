@@ -1,4 +1,4 @@
-<p class="text-center text-muted" if-loading="show" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;color: #7F0E6E">
+<p class="text-center text-muted" ng-if="loading" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;color: #7F0E6E">
   <span class="fa fa-spinner fa-spin fa-4x" ></span>
   <br /><br />
   Loading, please wait...
@@ -55,7 +55,7 @@
             <div class=" row" style="text-align: right">
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
                 <!-- <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
-                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart"><i style="margin-left:5%;"class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Return to cart</i></button>
+                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart"><i style="margin-left:5%;"class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Return to cart</i></button>
                 </div> -->
               </div>
             </div>
@@ -66,7 +66,7 @@
               </div>
               <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="margin:0%;padding:0%;">
                 <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
-                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3.5em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_checkout_payment()">Continue<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
+                    <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ng-click="proceed_to_checkout_payment()">Continue<i style="margin-left:5%;"class="glyphicon glyphicon-arrow-right"></i></button>
                 </div>
               </div>
 
@@ -126,12 +126,12 @@
           {{luxire_cart.display_tax_total=="$0.00" ? '-' : luxire_cart.display_tax_total}}
         </div>
       </div>
-      <div class="row">
+      <div class="row" ng-repeat="adjustment in luxire_cart.adjustments">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
-          Discount
+          {{adjustment.label}}
         </div>
         <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
-          {{luxire_cart.adjustment_total=="0.0" ? '-' : '-$'+luxire_cart.adjustment_total.split('-')[1]}}
+          {{adjustment.display_amount}}
         </div>
       </div>
       <hr style="border-bottom: solid 2px #DDDDDD">
