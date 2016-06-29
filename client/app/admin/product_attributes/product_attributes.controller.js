@@ -85,6 +85,7 @@ angular.module('luxire')
   $scope.upload_image = function(files){
     console.log('attr image', files[0]);
     if (files && files.length) {
+      $scope.loading = true;
       $scope.product_image = files[0];
       var reader = new FileReader();
        reader.onload = function (e) {
@@ -93,9 +94,11 @@ angular.module('luxire')
        reader.readAsDataURL(files[0]);
        ProductAttributes.add_image(files[0], $scope.image_size)
        .then(function(data){
+         $scope.loading = false;
          $scope.image_url = data.data.image;
          console.log(data);
        }, function(error){
+         $scope.loading = false;
          console.error(error);
        });
       console.log('files to upload',files[0]);
@@ -205,11 +208,14 @@ angular.module('luxire')
     console.log(array_to_object(target_object, $scope.data[0].key, $scope.data[0].value));
     var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
     if(measurement_type['name'] && $scope.prod_attr_image && $scope.prod_attr_image.length){
+      $scope.loading = true;
       ProductAttributes.create(measurement_type)
       .then(function(data){
+
         console.log('data after create', data);
         ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
         .then(function(data){
+          $scope.loading = false;
           console.log(data);
           $scope.alerts.push({type: 'success', message: 'created successfuly!'});
           $timeout(function(){
@@ -219,6 +225,7 @@ angular.module('luxire')
           // alert('created successfuly');
         }, function(error){
           console.error(error);
+          $scope.loading = false;
           $scope.alerts.push({type: 'danger', message: 'failed to create!'});
 
         });
@@ -226,6 +233,7 @@ angular.module('luxire')
         console.log('created successfuly');
       }, function(error){
         console.log(error);
+        $scope.loading = false;
         console.log('create failed');
       });
     }
@@ -478,17 +486,20 @@ angular.module('luxire')
   $scope.save = function(){
     var measurement_type = array_to_object(target_object, $scope.data[0].key, $scope.data[0].value)['Add Attributes'];
     if(measurement_type['name']){
+      $scope.loading = true;
       ProductAttributes.update(measurement_type, $stateParams.id)
       .then(function(data){
         console.log('data after create', data);
         if($scope.prod_attr_image && $scope.prod_attr_image.length){
           ProductAttributes.update_image($scope.prod_attr_image[0], data.data.id)
           .then(function(data){
+            $scope.loading = false;
             console.log(data);
             // alert('Updated successfuly');
 
           }, function(error){
             console.error(error);
+            $scope.loading = false;
             // alert('Update failed');
 
 
@@ -505,6 +516,7 @@ angular.module('luxire')
 
       }, function(error){
         console.log(error);
+        $scope.loading = false;
         console.log('update failed');
         $scope.alerts.push({type: 'danger', message: 'update failed'});
 
