@@ -1,3 +1,9 @@
+<style>
+  .div-scroll {
+    height: 40pc;
+    overflow: scroll;
+  }
+</style>
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-2 col-md-2" style="text-align: center;font-size: 20px;">
@@ -10,14 +16,20 @@
     </div>
 
   </div>
-
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
   <div class="row" style="margin-left: 0px;height: 93vh;">
     <div class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
-          <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+          <uib-tabset active="active">
+            <uib-tab index="$index + 1" ng-repeat="order_tab in order_tabs" heading="{{order_tab.title}}" ng-click="set_active_order_tab_id(order_tab.id)">
+            </uib-tab>
+          </uib-tabset>
+          <!-- <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
             <span style="font-size: 12px;">All orders</span>
-          </div>
+          </div> -->
           <!-- <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; background-color:#F5F6F7; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0; border-bottom: 1px solid #DBDEE0;">
             <span style="font-size: 12px;">Open</span>
           </div>
@@ -43,10 +55,10 @@
               <li><a href="#">Separated link</a></li>
             </ul>
             </div><!-- /btn-group -->
-            <input type="text" class="form-control" aria-label="...">
+            <input type="text" class="form-control" ng-model="searchText" aria-label="...">
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 0px 20px;">
+        <div class="row div-scroll" when-scrolled="load_more_orders()" style="margin:0px; background-color: white; padding: 0px 20px;">
           <table class="table table-hover admin-product-list">
             <thead >
               <tr>
@@ -74,7 +86,7 @@
               </tr>
             </thead>
             <tbody >
-              <tr ng-repeat="order in orders" ng-mouseover="show_order_details($event, order, $index)">
+              <tr ng-repeat="order in orders | filter:filter_orders | filter: searchText" ng-mouseover="show_order_details($event, order, $index)">
                 <td style="text-align: center">
                   <input type="checkbox" name="selectAll" value="">
                 </td>
@@ -121,9 +133,14 @@
               </tr>
             </tbody>
           </table>
+          <div class="" infinite-scroll="load_more_orders()" infinite-scroll-distance="2">
+
+          </div>
         </div>
+
       </div>
     </div>
+
   </div>
 </div>
 <script type="text/ng-template" id="order_details_modal.html">
