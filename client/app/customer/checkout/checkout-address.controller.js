@@ -85,22 +85,36 @@ angular.module('luxire')
     return ImageHandler.url(url);
   };
 
-  var address_formatter = function(address){
-    var keys_to_remove = ['id', 'full_name', 'country', 'state', 'state_name', 'state_text'];
-    angular.forEach(keys_to_remove, function(val, key){
-      if(address[val]){
-        if(val == 'country'){
-          address.country_id = address[val].id;
-        }
-        else if(val == 'state'){
-          address.state_id = address[val].id;
-        }
-        console.log('val', val);
-        delete address[val];
+  var process_errors = function(error){
+    console.log('processing error', error);
+    angular.forEach(error.errors, function(val,key){
+      if(key === 'base'){
+        $rootScope.alerts[0] = {type: 'danger', message: error.errors.base[0]};
+      }
+      else{
+        $rootScope.alerts[0] = {type: 'danger', message: key.split('.')[0]+' '+key.split('.')[1]+' '+val[0]};
       }
     });
-    return address;
+    if(error.errors && error.errors.base){
+    }
+  };
+
+
+  var address_formatter = function(address){
+    var formatted_address = {};
+    console.log('before formatting address', address);
+    var keys_to_retain = ['firstname', 'lastname', 'company', 'address1', 'address2', 'city', 'zipcode','phone'];
+    angular.forEach(keys_to_retain, function(val, key){
+      if(address[val]){
+        formatted_address[val] =  address[val];
+      }
+    });
+    formatted_address['country_id'] = address.country.id;
+    formatted_address['state_id'] = address.state.id;
+    console.log('after formatting address', formatted_address);
+    return formatted_address;
   }
+  var err_field = '';
   $scope.proceed_to_checkout_delivery = function(){
     $scope.customer_form.submitted = true;
     console.log('form before process', $scope.customer_form);
@@ -109,16 +123,12 @@ angular.module('luxire')
       $scope.load_address = true;
       var shipping_address = {};
       var billing_address = {};
-      if($scope.shipping){
-        shipping_address = $scope.shipping;
-        shipping_address = address_formatter(shipping_address);
-        // shipping_address = address_formatter($scope.shipping);
-      }
-      if($scope.billing){
-        billing_address = $scope.billing;
-        billing_address = address_formatter(billing_address);
-        // billing_address = address_formatter($scope.billing);
-      }
+      console.log('shipping address', $scope.shipping);
+      console.log('billing address', $scope.billing);
+
+      shipping_address = address_formatter($scope.shipping);
+      billing_address = address_formatter($scope.billing);
+
       console.log('form after process', $scope.customer_form);
 
       order_address = {
@@ -136,12 +146,34 @@ angular.module('luxire')
         console.log('move to delivery with', $rootScope.luxire_cart);
         $state.go('customer.checkout_delivery');
       },function(error){
-        alert('invalid data');
-        $scope.load_address = false;
         console.log(error);
+        process_errors(error.data);
+        $scope.load_address = false;
       });
-
-
+    }
+    else{
+      if($scope.customer_form.$error && $scope.customer_form.$error.required){
+        for(var i=0;i<$scope.customer_form.$error.required.length;i++){
+          err_field = '';
+          if($scope.customer_form.$error.required[i].$name.indexOf('ship')===-1&&$scope.customer_form.$error.required[i].$name.indexOf('bill')===-1){
+            err_field = $scope.customer_form.$error.required[i].$name;
+            $rootScope.alerts[0] = {type: 'danger', message: 'Please fill in the mandatory field: Customer '+err_field};
+          }
+          else if($scope.customer_form.$error.required[i].$name.indexOf('ship')!==-1){
+            err_field = $scope.customer_form.$error.required[i].$name.split('ship_');
+            $rootScope.alerts[0] = {type: 'danger', message: 'Please fill in the mandatory field: Shipping address '+err_field[1]};
+          }
+          else if($scope.customer_form.$error.required[i].$name.indexOf('bill')!==-1 && !$scope.same){
+            err_field = $scope.customer_form.$error.required[i].$name.split('bill_');
+            $rootScope.alerts[0] = {type: 'danger', message: 'Please fill in the mandatory field: Billing address '+err_field[1]};
+          }
+          break;
+        }
+      }
+      else if(Object.keys($scope.customer_form.$error).length>0){
+        err_field = $scope.customer_form.$error[Object.keys($scope.customer_form.$error)[0]];
+        $rootScope.alerts[0] = {type: 'danger', message: 'Please enter valid : Customer '+Object.keys($scope.customer_form.$error)[0]};
+      }
     }
 
 
