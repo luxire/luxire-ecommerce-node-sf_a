@@ -34,8 +34,7 @@
   font-size: 100%;
   font-weight: 600;
   text-align: left;
-  line-height: 230%;
-  padding-top: 2%;
+  padding-top: 1%;
   border-right: solid 1px #D4D4D4;
   padding-right: 0px !important;
 }
@@ -56,7 +55,7 @@
 }
 .cart-detail-popover .popover{
   width: 100%;
-  max-width: 80% !important;
+  max-width: 100% !important;
 }
 .measurement.row{
   width: 100%;

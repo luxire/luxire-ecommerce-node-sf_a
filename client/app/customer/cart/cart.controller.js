@@ -15,11 +15,16 @@ angular.module('luxire')
     }
   };
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
+    CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+    .then(function(data){
+      console.log('fetched order', data.data);
+      $rootScope.luxire_cart = data.data;
+    },
+    function(error){
+      console.error(error);
+    });
     $scope.loading_cart = false;
     update_state($rootScope.luxire_cart);
-  }
-  else if($rootScope.luxire_cart && Object.keys($rootScope.luxire_cart).length === 0){
-    $scope.loading_cart = false;
   }
   else{
     $scope.$on('fetched_order_from_cookie', function(event, data){
@@ -69,9 +74,12 @@ angular.module('luxire')
     CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
       $rootScope.luxire_cart = data.data;
       console.log('fetched order', data.data);
-      $rootScope.alerts.push({type: 'success', message: success_msg});
+      $rootScope.alerts[0] = {type: 'success', message: success_msg};
+      // $rootScope.alerts.push({type: 'success', message: success_msg});
     }, function(error){
-      $rootScope.alerts.push({type: 'danger', message: danger_msg});
+      $rootScope.alerts[0] = {type: 'danger', message: danger_msg};
+
+      // $rootScope.alerts.push({type: 'danger', message: danger_msg});
       console.error(error);
     });
 
@@ -106,6 +114,7 @@ angular.module('luxire')
       $rootScope.luxire_cart.line_items.splice(index, 1);
       getOrder('Line item deleted successfully', 'Failed to delete line item');
     }, function(error){
+      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line item'};
       console.error(error);
     });
 
@@ -116,19 +125,29 @@ angular.module('luxire')
     CustomerOrders.empty_cart($rootScope.luxire_cart)
     .then(function(data){
       console.log(data);
-      $rootScope.alerts.push({type: 'success', message: 'Line items deleted successfully'});
+      $rootScope.alerts[0] = {type: 'success', message: 'Line items deleted successfully'};
+      // $rootScope.alerts.push({type: 'success', message: 'Line items deleted successfully'});
     }, function(error){
-      $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line items'});
+      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line items'};
+      // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line items'});
     });
     CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
       $rootScope.luxire_cart = data.data;
-      $rootScope.alerts.push({type: 'success', message: 'Line item deleted successfully'});
+      $rootScope.alerts[0] = {type: 'success', message: 'Line item deleted successfully'};
+
+      // $rootScope.alerts.push({type: 'success', message: 'Line item deleted successfully'});
     }, function(error){
-      $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line item'});
+      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line item'};
+
+      // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line item'});
       console.error(error);
     });
 
   };
+
+  $scope.keys_length = function(obj){
+    return Object.keys(obj).length;
+  }
 
   $scope.checkout = function(){
     console.log('proceed_to_checkout');
