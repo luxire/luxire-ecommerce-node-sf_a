@@ -2,6 +2,7 @@ angular.module('luxire')
 .controller('CustomerCheckoutPaymentController',function($scope, $state, $window, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders){
   window.scrollTo(0, 0);
   console.log('luxire_cart after payment', $rootScope.luxire_cart);
+  $scope.loading = true;
   function update_state(order){
     if(order.state!="payment"){
       CustomerOrders.update(order, {
@@ -24,12 +25,14 @@ angular.module('luxire')
   }
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
     update_state($rootScope.luxire_cart);
+    $scope.loading = false;
   }
   else{
     console.log('CartController params', $stateParams);
     $scope.$on('fetched_order_from_cookie', function(event, data){
       console.log('successful fetch',data);
       update_state(data.data);
+      $scope.loading = false;
     });
   };
 
@@ -41,11 +44,15 @@ angular.module('luxire')
   $scope.gift_card_code = '';
   $scope.apply_gift_card = function(){
     if($scope.gift_card_code){
+      $scope.loading = true;
+
       CustomerOrders.apply_gift_card($rootScope.luxire_cart, $scope.gift_card_code).then(function(data){
         CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
           $rootScope.luxire_cart = data.data;
+          $scope.loading = false;
           $rootScope.alerts.push({type: 'success', message: 'GIft card applied Successfuly!'});
         }, function(error){
+          $scope.loading = false;
           $rootScope.alerts.push({type: 'danger', message: 'error fetching order after appying coupon code'});
           console.error(error);
         });
@@ -60,17 +67,37 @@ angular.module('luxire')
   };
 
   $scope.proceed_to_paypal_payment = function(){
-    if($scope.selected_payment_method_id != -1){
-      CustomerOrders.checkout_payment_pay_pal($scope.selected_payment_method_id, $rootScope.luxire_cart)
+    if(parseFloat($rootScope.luxire_cart.total)==0.0){
+      $scope.loading = true;
+
+      CustomerOrders.auto_complete($rootScope.luxire_cart)
       .then(function(data){
-        console.log(data);
-        $window.location.href = data.data;
+        $scope.loading = false;
+        $rootScope.alerts[0] = {type: 'success', message: 'Your order is successfully placed'};
+        $state.go('invoices', {number: data.data.number, token: data.data.token});
+        console.log('data', data);
       }, function(error){
-        console.error(error);
+        $scope.loading = false;
+        console.log('data', error);
       });
     }
     else{
-      $rootScope.alerts.push({type: 'danger', message: 'Please select a payment method'});
+      if($scope.selected_payment_method_id != -1){
+        $scope.loading = true;
+
+        CustomerOrders.checkout_payment_pay_pal($scope.selected_payment_method_id, $rootScope.luxire_cart)
+        .then(function(data){
+          $scope.loading = false;
+          console.log(data);
+          $window.location.href = data.data;
+        }, function(error){
+          $scope.loading = false;
+          console.error(error);
+        });
+      }
+      else{
+        $rootScope.alerts.push({type: 'danger', message: 'Please select a payment method'});
+      }
     }
 
   };
