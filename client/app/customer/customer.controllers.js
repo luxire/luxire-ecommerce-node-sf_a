@@ -1,7 +1,7 @@
 angular.module('luxire')
 /*Client ctrl instead of customer ctrl is used to
 avoid conflict with customer ctrl on admin side*/
-.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, CustomerProducts, CustomerConstants, $location){
+.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, $timeout, CustomerProducts, CustomerConstants, $location){
   var prev_state = '';
   $scope.show_header = true;
   $scope.header_visibility = function(state){
@@ -26,6 +26,25 @@ avoid conflict with customer ctrl on admin side*/
     console.log('changing state', toState);
   })
 
+  $timeout(function(){
+
+    $(window).scroll(function(){
+      console.log('window scrolled');
+      console.log("You've scrolled " + $(window).scrollTop() + " pixels");
+      //$("#customer-main-nav-header").height()
+      if($(window).scrollTop()>$("#customer-main-nav-header").height()){
+        $("#customer-main-nav-header").addClass('customer-header-color');
+      }
+      else{
+        $("#customer-main-nav-header").removeClass('customer-header-color');
+      }
+    })
+
+  }, 0);
+  $scope.arrow_margin_left = 0;
+  $scope.change_arrow_pos = function(event){
+    $scope.arrow_margin_left = $(event.currentTarget).offset().left + ($(event.currentTarget).width()/2);
+  };
 
   CustomerProducts.taxonomy_index()
   .then(function(data){
@@ -66,6 +85,7 @@ avoid conflict with customer ctrl on admin side*/
       placement: 'right',
       size: 'sm',
       backdrop: 'true',
+      windowClass: 'side-menu',
       backdropClass: 'sideMenuBackdrop',
       resolve: {
         taxonomies: function(){
@@ -154,6 +174,7 @@ avoid conflict with customer ctrl on admin side*/
     $uibModalInstance.dismiss('cancel');
     CustomerAuthentication.logout();
     $rootScope.luxire_cart = [];
+    $rootScope.alerts.push({type: 'success', message: 'Successfully logged out'});
     $state.go('customer.home');
     CustomerOrders.get_order_by_cookie()
     .then(function(data){
@@ -177,10 +198,13 @@ avoid conflict with customer ctrl on admin side*/
   };
 
 })
-.controller('quickViewModalController',function($scope, $uibModalInstance, product, is_fabric_taxonomy, CustomerOrders, $state, ImageHandler){
+.controller('quickViewModalController',function($scope, $uibModalInstance, product, is_fabric_taxonomy, is_gift_card, CustomerOrders, $state, ImageHandler, CustomerProducts, $rootScope){
   console.log('product', product);
+  $scope.loading_product = true;
   console.log('is fabric', is_fabric_taxonomy);
   $scope.fabric_taxonomy = is_fabric_taxonomy;
+  $scope.is_gift_card = is_gift_card;
+
   $scope.weight_index = function(variant_weight){
     console.log('variant_weight', variant_weight);
     console.log(parseFloat(variant_weight)-50)
@@ -246,7 +270,102 @@ avoid conflict with customer ctrl on admin side*/
     return ImageHandler.url(url);
   }
 
-  $scope.quickViewProduct = product;
+  /*Need to make changes to rabl*/
+  /*Functionality for add to cart from quick view*/
+  if(is_fabric_taxonomy){
+    $scope.quickViewProduct = product;
+    $scope.loading_product = false;
+  }
+  else{
+    CustomerProducts.show(product.id)
+    .then(function(data){
+      console.log('Non fabric product', data.data);
+      $scope.loading_product = false;
+      $scope.quickViewProduct = data.data;
+      json_array_to_obj("customization_attributes", $scope.quickViewProduct.customization_attributes);
+      json_array_to_obj("personalization_attributes", $scope.quickViewProduct.personalization_attributes);
+      json_array_to_obj("standard_measurement_attributes", $scope.quickViewProduct.standard_measurement_attributes);
+      json_array_to_obj("body_measurement_attributes", $scope.quickViewProduct.body_measurement_attributes);
+
+      if($scope.quickViewProduct.product_type.product_type.toLowerCase() === 'gift cards'){
+        $scope.selected_gift_card_variant = $scope.quickViewProduct.master;
+        $scope.quickViewProduct.variants.push($scope.quickViewProduct.master);
+        console.log('selected gift card variant', $scope.selected_gift_card_variant);
+      }
+
+    }, function(error){
+      $scope.loading_product = false;
+      console.error('error fetching product', error);
+    });
+  }
+  $scope.cart_object = {};
+
+  $scope.add_to_cart = function(variant){
+    console.log('add to cart', variant);
+    console.log('luxire_cart', $rootScope.luxire_cart);
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
+      CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
+      .then(function(data){
+        CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+          $rootScope.luxire_cart = data.data;
+          $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+          $scope.cancel();
+          $state.go('customer.pre_cart');
+        }, function(error){
+          console.error(error);
+        });
+        console.log(data);
+      },function(error){
+        $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        console.error(error);
+      });
+    }
+    else{
+      CustomerOrders.create_order($scope.cart_object, variant, $scope.measurement_sample)
+      .then(function(data){
+        $rootScope.luxire_cart = data.data;
+        $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+        $scope.cancel();
+        $state.go('customer.pre_cart');
+        console.log(data);
+      },function(error){
+        $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        console.error(error);
+      });
+    }
+  };
+
+  var json_array_to_obj = function(parent, arr){
+    $scope[parent] = {};
+    $scope.cart_object[parent] = {};
+    angular.forEach(arr, function(val, key){
+      if(parent !=='personalization_attributes'){
+        if(val.name.toLowerCase().indexOf('fit type')!==-1){// neutralize fit type for shirt/pant/jacket eg, replacing shirts fit type with Fit type
+          val.name = 'Fit Type';
+        }
+        if(angular.isObject(val.value)){
+          $scope.cart_object[parent][val.name] = {value: '',options: {}};
+        }
+        else{
+          $scope.cart_object[parent][val.name] = {value: val.value,options: {}};
+        }
+
+      }
+      // else{
+      //   $scope.cart_object[parent][val.name] = {};
+      // }
+      $scope[parent][val.name] = val.value;
+    })
+    console.log('after_conv',$scope[parent]);
+    return $scope[parent];
+  };
+
+  $scope.select_gift_card_variant = function(variant){
+    console.log('gift card variant', variant);
+    $scope.selected_gift_card_variant = variant;
+  };
+
+
   $scope.go_to_product_detail = function (product_name) {
     $uibModalInstance.close();
     $state.go('customer.product_detail',{product_name: product_name});
@@ -254,9 +373,9 @@ avoid conflict with customer ctrl on admin side*/
 
   };
 
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss('cancel');
-    };
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 });
 
 // $scope.go_to_listing = function(taxonomy_name, taxonomy_id, taxon_name, taxon_id){
