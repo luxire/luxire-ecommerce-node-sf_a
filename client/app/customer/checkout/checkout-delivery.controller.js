@@ -1,6 +1,7 @@
 angular.module('luxire')
 .controller('CustomerCheckoutDeliveryController',function($scope, $rootScope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $window){
   window.scrollTo(0, 0);
+  $scope.loading = true;
   function update_state(order){
     if(order.state!="delivery"){
       CustomerOrders.update(order, {
@@ -17,6 +18,7 @@ angular.module('luxire')
     if(order.shipments.length){
       update_state(order);
       console.log('luxire_cart', order);
+      $scope.loading = false;
       $scope.shipping_address = order.ship_address;
       $scope.shipments = order.shipments[0];
       $scope.shipment_id = order.shipments[0].id;
@@ -39,6 +41,8 @@ angular.module('luxire')
       else if(data.status == 200){
         checkout_delivery_init(data.data);
       }
+      $scope.loading = false;
+
     });
   };
 
@@ -57,7 +61,14 @@ angular.module('luxire')
     .then(function(data){
       console.log(data);
       $rootScope.luxire_cart = data.data;
-      $state.go('customer.checkout_payment');
+      if(data.data.state === "complete"){
+        $state.go('invoices', {number: data.data.number, token: data.data.token});
+        $rootScope.alerts[0] = {type: 'success', message: 'Your order is successfully placed'};
+
+      }
+      else{
+        $state.go('customer.checkout_payment');
+      }
     },function(error){
       console.error(error);
     });
