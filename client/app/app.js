@@ -6,10 +6,11 @@
 angular.module('luxire', ['ui.router','ngRoute',
 													'ui.bootstrap','angularFileUpload',
 													'ui.bootstrap.datetimepicker','ngTagsInput',
-													 'ngMessages', 'ngAnimate',
-													 'AngularPrint', 'monospaced.qrcode',
-												   'ui.tree','infinite-scroll', 'ngAside',
-													  'angucomplete-alt', 'angularAwesomeSlider', 'angular-cache'])
+													'ngMessages', 'ngAnimate',
+													'AngularPrint', 'monospaced.qrcode',
+												  'ui.tree','infinite-scroll', 'ngAside',
+													'angucomplete-alt', 'angularAwesomeSlider',
+													'angular-cache', 'ui.slider', 'mega-menu'])
 
 
 .run(function($location,$rootScope, $state){
