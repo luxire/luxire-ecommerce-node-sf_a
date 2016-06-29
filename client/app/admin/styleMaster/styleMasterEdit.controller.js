@@ -91,7 +91,7 @@ angular.module('luxire')
      console.log("product type: "+$scope.productType);
 
           styleMasterService.getProductTypeById(id).then(function(data) {
-          //$scope.loading= false;
+          $scope.loading= false;
           $scope.allMeasurementType = data.data.luxire_product_attributes;
           console.log("all measurement type value is: ",$scope.allMeasurementType);
           //$scope.selectedProductType = data.data.product_type;
