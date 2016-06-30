@@ -225,3 +225,26 @@ exports.checkout_complete = function(req, res){
     };
   });
 };
+
+/*Proceed to Autocomplete*/
+exports.checkout_auto_complete = function(req, res){
+  console.log(req.params.number);
+  console.log(req.query.order_token);
+  console.log('req cookies', req.cookies);
+
+  http.put({
+    uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'?order_token='+req.query.order_token,
+    body:'',
+    'Cookie': 'guest_token='+req.cookies.guest_token,
+    headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+  },function(error,response,body){
+    console.error('error',error);
+    console.log('res',body);
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  });
+};

@@ -15,6 +15,7 @@ router.post('/:number/apply_coupon_code/:code', controller.checkout_apply_coupon
 router.post('/:number/apply_gift_card', controller.checkout_apply_gift_card);
 router.post('/gateway_Response', controller.checkout_gateway_response);
 router.post('/:number/confirm', controller.checkout_confirm_payment);
+router.post('/:number/auto_complete', controller.checkout_auto_complete);
 router.post('/:number/complete', controller.checkout_complete);
 
 
