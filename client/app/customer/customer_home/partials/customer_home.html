@@ -4,9 +4,43 @@
   <button ng-click="go_to_product_listing()">Move to listing</button>
 
 </div> -->
-<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 7%; display: block">
-  <div class="" >
-    <uib-carousel active="0" interval="5000" style="width: 100%">
+<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 16.4vh; display: block">
+  <div class="product-promotion-carousel" >
+    <div id="carousel-example-generic" class="carousel slide" data-interval="3000">
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" role="listbox" style="width: 100%">
+        <div class="item" ng-class="{'active': $index==0}" ng-repeat="slide in product_type_carousels" >
+          <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%; height: 89vh"/>
+          <div class="carousel-caption">
+
+          </div>
+          <div class="carousel-collection">
+            {{slide.text}} <br>
+            <button id="viewCollectionButton" type="button" ng-click="go_to_collection(slide.permalink)" class="btn btn-default" name="button">
+              View Collection
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls -->
+      <div class="left carousel-control" href="javascript:void(0)" >
+        <span style="cursor: pointer">
+          <i class="fa fa-chevron-left fa-3x" style="color: lightgrey;-webkit-text-stroke: 10px #F5F5F5;" aria-hidden="true" ng-click="prev_product_slide($index)"></i>
+        </span>
+        <span class="sr-only">Previous</span>
+      </div>
+      <div class="right carousel-control" href="javascript:void(0)" >
+        <span style="cursor: pointer">
+          <i class="fa fa-chevron-right fa-3x" style="color: lightgrey;-webkit-text-stroke: 10px #F5F5F5;" aria-hidden="true" ng-click="next_product_slide($index)"></i>
+        </span>
+        <span class="sr-only">Next</span>
+      </div>
+    </div>
+
+    <!--Using Jquery carousel to overcome issue of non changing slides in uib carousel-->
+    <!-- <uib-carousel active="0" interval="5000" style="width: 100%">
       <uib-slide ng-cloak ng-repeat="slide in product_type_carousels" style="width: 100%">
         <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%; height: 89vh"/>
         <div class="carousel-caption">
@@ -19,7 +53,7 @@
           </button>
         </div>
       </uib-slide>
-    </uib-carousel>
+    </uib-carousel> -->
   </div>
   <div class="click-baits-new" >
     <img src="assets/images/customer/click-bait-image.png" style="width: 100%" alt="" />
@@ -34,18 +68,14 @@
         <div style="transform:rotate(355deg);transform-origin: 0% 0%;" ng-show="active_click_bait.id==click_bait.id" ng-class="{'click-bait-connection': active_click_bait.id==click_bait.id}">
           {{click_bait.text_line}}&nbsp;&nbsp;
         </div>
-        <div ng-show="active_click_bait.id==click_bait.id" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top:-10%">
-          <span style="display: block;">
-            <span>
-              <img src="assets/images/customer/luxire_icon.png" style="max-width: 30%;" alt="" />
-            </span>
-            <span style="margin-left: 2%;font-family: Roboto;font-size: 150%">{{click_bait.name}}</span>
-          </span>
+        <div ng-show="active_click_bait.id==click_bait.id" ng-class="{'active-click-bait-text': active_click_bait.id==click_bait.id}" class="click-bait-text" style="display: block; position: absolute;width: 100%;margin-top:-10%">
+            <img src="assets/images/customer/luxire_icon.png" style="max-width: 30%;" alt="" />
+            <span style="margin-left: 2%;font-family: Roboto;font-size: 100%">{{click_bait.name}}</span>
         </div>
         <div style="transform:rotate(5deg);transform-origin: 0% 0%;" ng-show="active_click_bait.id==click_bait.id" ng-class="{'click-bait-connection': active_click_bait.id==click_bait.id}">
           {{click_bait.text_line}}&nbsp;&nbsp;
         </div>
-        <div ng-show="active_click_bait.id==click_bait.id" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top: 12%">
+        <div ng-show="active_click_bait.id==click_bait.id" ng-class="{'active-click-bait-text': active_click_bait.id==click_bait.id}" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top: 12%">
           <div class="click_bait-details" style="">
             Details
           </div>
