@@ -122,27 +122,77 @@ exports.taxonomy_index = function(req, res){
       };
   });
 };
-
+var conv_to_query = function(filters){
+  var query_str = "";
+  for(var key in filters){
+    query_str = query_str === ""? query_str+key+'='+filters[key] : query_str+'&'+key+'='+filters[key];
+  }
+  return query_str;
+}
 exports.collections = function(req, res){
-  console.log('get collection', req.query.permalink);
+  console.log('req body in collection', req.body);
   http
-    .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
+    .get(constants.redis.host+constants.redis.collections+'?'+conv_to_query(req.body), function(error, response, body){
       if(error){
         res.status(500).send(error.syscall);
       }
       else{
-        if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
-          for(var i=0; i<response.headers['set-cookie'].length; i++){
-            spree_cookie = response.headers['set-cookie'][i].split(';');
-            if(spree_cookie[0].split('=')[0]==='guest_token'){
-              res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
-            }
-          }
-        }
-        console.log('collection response code', response.statusCode);
+        console.log('collection response', body);
         res.status(response.statusCode).send(body);
       };
   });
+  // console.log('get collection', req.query.permalink,'page', req.query.page);
+  // //todo guest token check
+  // if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
+  //   http
+  //     .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
+  //       if(error){
+  //         res.status(500).send(error.syscall);
+  //       }
+  //       else{
+  //         for(var i=0; i<response.headers['set-cookie'].length; i++){
+  //           spree_cookie = response.headers['set-cookie'][i].split(';');
+  //           if(spree_cookie[0].split('=')[0]==='guest_token'){
+  //             res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+  //           }
+  //         }
+  //         console.log('collection response code', response.statusCode);
+  //         res.status(response.statusCode).send(body);
+  //       };
+  //   });
+  // }
+  // else{
+  //   http
+  //     .get(constants.redis.host+constants.redis.collections+'?'+conv_to_query(req.body), function(error, response, body){
+  //       if(error){
+  //         res.status(500).send(error.syscall);
+  //       }
+  //       else{
+  //         console.log('collection response', body);
+  //         res.status(response.statusCode).send(body);
+  //       };
+  //   });
+  // }
+
+  /*fetch collection without redis*/
+  // http
+  //   .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
+  //     if(error){
+  //       res.status(500).send(error.syscall);
+  //     }
+  //     else{
+  //       if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
+  //         for(var i=0; i<response.headers['set-cookie'].length; i++){
+  //           spree_cookie = response.headers['set-cookie'][i].split(';');
+  //           if(spree_cookie[0].split('=')[0]==='guest_token'){
+  //             res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+  //           }
+  //         }
+  //       }
+  //       console.log('collection response code', response.statusCode);
+  //       res.status(response.statusCode).send(body);
+  //     };
+  // });
 };
 
 
@@ -222,6 +272,10 @@ exports.custom_image_upload = function(req, res){
 
 exports.recommended = function(req, res){
   console.log(req.body);
+  var sample_ids = constants.prediction.sample_product_ids;
+  var exp_response_length = constants.prediction.expected_res_len;
+  console.log('ref id', req.body.ref_id);
+  console.log('customer_bought', constants.prediction.host+constants.prediction.customer_bought);
   var recommended_product_ids = [];
   var prediction_response = {};
   http.post({
@@ -239,26 +293,57 @@ exports.recommended = function(req, res){
     else{
       prediction_response = JSON.parse(body);
       console.log('prediction response', prediction_response);
-      if(body && prediction_response && prediction_response.itemScores){
-        for(var i=0;i<prediction_response.itemScores.length;i++){
+      if(body && prediction_response && prediction_response.itemScores.length){
+        for(var i=0;i<prediction_response.itemScores.length&&i<exp_response_length;i++){
           recommended_product_ids.push(parseInt(prediction_response.itemScores[i].item));
         }
       }
-      if(recommended_product_ids.length){
-        console.log('recommended products req', constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']');
-        http
-          .get({
-            uri: constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']',
-          }, function(error, response, body){
-            if(error){
-              res.status(500).send(error.syscall);
-            }
-            else{
-              console.log('response from redis', body);
-              res.status(response.statusCode).send(body);
-            };
-          });
+      console.log('recommended product ids length',recommended_product_ids.length, 'exp len', exp_response_length);
+      if(recommended_product_ids.length<exp_response_length){
+        var i=0;
+        while(recommended_product_ids.length<exp_response_length){
+          if(recommended_product_ids.indexOf(sample_ids[i])==-1){
+            recommended_product_ids.push(sample_ids[i]);
+          }
+          i++;
+        }
       }
+      console.log('recommended products req', constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']');
+      http
+        .get({
+          uri: constants.redis.host+constants.redis.products+'?ids=['+recommended_product_ids+']',
+        }, function(error, response, body){
+          if(error){
+            res.status(500).send(error.syscall);
+          }
+          else{
+            console.log('response from redis', body);
+            res.status(response.statusCode).send(body);
+          };
+        });
+
+    };
+  });
+};
+
+exports.apply_filters = function(req, res){
+  console.log('req body', req.body);
+  console.log('req query', req.query);
+  console.log('redis', constants.redis.host+constants.redis.products_filter);
+  console.log('query str', conv_to_query(req.body));
+  http.post({
+    uri: constants.redis.host+constants.redis.products_filter+'?'+conv_to_query(req.body),
+    headers:{
+      'content-type': 'application/x-www-form-urlencoded',
+    },
+    body: conv_to_query(req.body)
+  },function(error, response, body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      console.log('redis res', body);
+      res.status(response.statusCode).send(body);
     };
   });
 }
