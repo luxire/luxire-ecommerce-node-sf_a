@@ -1,8 +1,8 @@
 angular.module('luxire')
-.controller('PreCartController', ['$scope', '$rootScope', '$state', 'ImageHandler', 'CustomerProducts', '$uibModal',function($scope, $rootScope, $state, ImageHandler, CustomerProducts, $uibModal){
+.controller('PreCartController', ['$scope', '$rootScope', '$state', 'ImageHandler', 'CustomerProducts', '$uibModal', 'CustomerOrders',function($scope, $rootScope, $state, ImageHandler, CustomerProducts, $uibModal, CustomerOrders){
   window.scrollTo(0, 0);
   $scope.recommended_products = [];
-
+  $scope.loading_cart = true;
   function has_line_items(order){
     if(order.line_items && order.line_items.length){
       $scope.active_line_item = order.line_items[order.line_items.length-1];
@@ -20,7 +20,17 @@ angular.module('luxire')
       $state.go('customer.cart');
     }
   };
+  console.log('luxire cart in recommended', $rootScope.luxire_cart);
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number')){
+    console.log('luxire cart in recommended', $rootScope.luxire_cart);
+    CustomerOrders.get_order_by_cookie()
+    .then(function(data){
+      console.log('fetched order', data.data);
+      $rootScope.luxire_cart = data.data;
+    },
+    function(error){
+      console.error(error);
+    });
     $scope.loading_cart = false;
     has_line_items($rootScope.luxire_cart);
   }
