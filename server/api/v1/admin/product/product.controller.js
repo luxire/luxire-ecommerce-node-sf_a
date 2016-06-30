@@ -17,7 +17,6 @@ var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
 
-
 // Get list of all products
 exports.index = function(req, res) {
   var qstr = ''
@@ -78,6 +77,23 @@ exports.create = function(req, res){
     }
     else{
       res.status(response.statusCode).send(body);
+      http.post({
+        uri: constants.redis.host+constants.redis.products+'/'+body.id,
+        headers:{
+          'content-type': 'application/json',
+        },
+        body:JSON.stringify(body)
+      },function(error,response,body){
+        if(error){
+          console.log('error', error);
+          // res.status(500).send(error.syscall);
+        }
+        else{
+          console.log('success', body);
+
+          // res.status(response.statusCode).send(body);
+        };
+      })
     };
   })
 };
@@ -101,6 +117,24 @@ exports.update = function(req, res){
     }
     else{
       res.status(response.statusCode).send(body);
+      http.put({
+        uri: constants.redis.host+constants.redis.products+'/'+body.id,
+        headers:{
+          'content-type': 'application/json',
+        },
+        body:JSON.stringify(body)
+      },function(error,response,body){
+        if(error){
+          console.log('error', error);
+          // res.status(500).send(error.syscall);
+        }
+        else{
+          console.log('success', body);
+
+          // res.status(response.statusCode).send(body);
+        };
+      })
+
     };
   })
 
@@ -108,6 +142,20 @@ exports.update = function(req, res){
 
 //Delete a product
 exports.destroy = function(req, res){
+  http
+    .del({
+      uri: constants.redis.host+constants.redis.products+'/'+req.params.id,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+    }, function(error, response, body){
+      if(error){
+        console.log('error', error);
+        // res.status(500).send(error.syscall);
+      }
+      else{
+        console.log('success', body);
+        // res.status(response.statusCode).send(body);
+      };
+  });
   http
     .del({
       uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
@@ -214,6 +262,7 @@ exports.csv_import = function(req,res){
     };
     http.post({
       uri: constants.spree.host+constants.spree.product_csv_import,
+      timeout: 6000000,
       formData: formDataToPost},
        function (err, response, body) {
          if(err){
