@@ -1,7 +1,8 @@
 <!--Product detail-->
 <style>
 body {
-  padding-right: 0px !important
+  padding-right: 0px !important;
+  overflow-x: hidden;
 }
 
 .bespoke-style-window .modal-content {
@@ -15,6 +16,7 @@ body.modal-open {
 .offset-top-loading{
   margin-top: 100% !important;
 }
+
 
 .bespoke-style-window .modal-open .modal{
   overflow-y: hidden !important;
@@ -36,13 +38,18 @@ font-size: 1px
 
 }
 
-.choose-style-window .modal-dialog .modal-content{
+.choose-style-window .modal-dialog .modal-content,.enlarged-product-window .modal-dialog .modal-content{
   border-radius: 0px !important;
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.49);
+  text-align: center;
 }
 .choose-style-window .modal-dialog {
-  /*width: 96%;*/
-  margin-top: 15% !important;
+  width: 90%;
+  margin-top: 1% !important;
+}
+.enlarged-product-window .modal-dialog {
+  width: 60%;
+  margin: 5% 20% !important;
 }
 
 .bespoke-style-window .modal-dialog .modal-content{
@@ -67,7 +74,7 @@ font-size: 1px
 }
 .activeStyleClass{
   /*z-index: 200;*/
-  background-color: #80D47F !important;
+  /*background-color: #80D47F !important;*/
   border: solid 2px #8A247C !important;
 }
 .luxireStyle:hover {
@@ -203,6 +210,38 @@ style carousel
     transform: scale(1.5);
     margin-top: 5%
 }
+.preset-image #enlarged-image{
+  position: absolute;
+}
+.preset-styles:hover #enlarged-image{
+  top: -300px;
+  left: -20px;
+}
+
+.active-thumbnail img{
+  border: solid 2px black;
+}
+
+.slick-disabled{
+  color: grey;
+  cursor: default;
+}
+
+.zero-padding{
+  padding: 0px;
+}
+.detail-summary .popover{
+  width: 150%;
+}
+
+.attr-changed{
+  background: #8A247C;
+  color: white !important;
+  font-size: 100%;
+  font-weight: 500;
+}
+
+
 
 </style>
 <p class="text-center text-muted" ng-if="loading_product" style="margin-top: 10%; position: absolute; top: 20%;left: 50%; z-index: 99;color: #7F0E6E">
@@ -211,10 +250,10 @@ style carousel
   Loading, please wait...
 </p>
 <div ng-hide="loading_product" class="" style="display: block;position: relative" >
-  <div ng-if="is_fabric_product&&display_summary" class="" style="position: fixed;top: 18.5%;right: 0%;z-index: 10;text-align: right;cursor: pointer" ng-click="show_summary()">
-    <img src="assets/images/customer/my-style-button.gif" style="max-width: 80%" alt="" />
+  <div ng-if="is_fabric_product&&display_summary" class="" style="position: fixed;top: 42%;right: 0%;z-index: 10;text-align: right;cursor: pointer" ng-mouseover="show_summary()">
+    <img ng-src="assets/images/customer/my-style-button.gif" style="max-width: 80%" alt="" />
   </div>
-  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.5%;z-index: 1">
+  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.5%;z-index: 10">
     <div class="row" style="margin: 0.75% 0.25%">
       <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"  style="color: #000000; font-size: 140%; font-weight: 100">
         {{product.name.toUpperCase()}}
@@ -230,21 +269,23 @@ style carousel
     <div class="row" style="margin-left: 0px; margin-right: 0px;border-bottom: solid 1px #D7D7D7; margin-top: 1%; padding-bottom: 1.8%">
       <div id="shirt-detail-image-part" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-left:0%;margin-left:0%;border-right: solid 1px #CCCCCC">
         <div class="row " style="margin: 2% 4% 0% 8%">
-          <uib-carousel interval="0" style="width:100%;">
+          <img id="product_description_image_id" src="{{getImage(active_product_description_image['product_url'])}}" data-zoom-image="{{getImage(active_product_description_image['original_url'])}}" alt="{{slide.alt}}" ng-mouseover="reg_enlarged_image($event)" ng-mouseleave="dereg_enlarged_image($event)" style="max-width: 100%; margin: auto">
+
+          <!-- <uib-carousel interval="0" style="width:100%;">
             <uib-slide ng-repeat="slide in product.master.images" active="slide.active" style="width:100%;">
-              <img ng-src="{{getImage(slide.large_url)}}" alt="{{slide.alt}}" style="max-width: 100%; margin: auto">
-              <!-- <div class="carousel-caption">
-                <h4>Slide {{slide.id}}</h4>
-              </div> -->
+              <img id="product_description_image_id" src="{{getImage(slide.large_url)}}" data-zoom-image="{{getImage(slide.original_url)}}" alt="{{slide.alt}}" ng-mouseover="show_enlarged_image($event)" style="max-width: 100%; margin: auto">
             </uib-slide>
-          </uib-carousel>
+          </uib-carousel> -->
         </div>
-        <div id="thumbnail-part"class="row" style="padding-left: 10%;margin-top: 2%">
-            <div id="thumbnails" style="">
-                <div ng-repeat="thumbnail in product.master.images" style="padding:2%; display: inline-block">
-                  <img src="{{getImage(thumbnail.mini_url)}}" alt="{{thumbnail.alt}}" ng-click="activate_slide(thumbnail.id)" style="border: solid 2px #A5A5A5">
-                </div>
-            </div>
+        <div id="thumbnail-part" style="margin-top: 2%;padding-left: 8%">
+          <a href="#" ng-repeat="thumbnail in product.master.images" ng-click="$parent.active_product_description_image=thumbnail" ng-mouseover="reg_enlarged_image($event)" data-image="{{getImage(thumbnail.product_url)}}" data-zoom-image="{{getImage(thumbnail.original_url)}}">
+              <img id="product_description_thumbnail_id" src="{{getImage(thumbnail.mini_url)}}"/>
+          </a>
+            <!-- <div id="thumbnails" style="">
+                <a ng-repeat="thumbnail in product.master.images" style="padding:2%; display: inline-block">
+                  <img ng-src="{{getImage(thumbnail.mini_url)}}" alt="{{thumbnail.alt}}" ng-click="activate_slide(thumbnail.id)" style="border: solid 2px #A5A5A5">
+                </a>
+            </div> -->
         </div>
 
 
@@ -256,27 +297,27 @@ style carousel
         <div ng-if="is_fabric_product" class="row" style="margin-left: 0px; margin-right: 0px">
           <!--Conditional layouting for product type-->
             <div ng-hide="loading_product" class="row" style="text-align: left">
-              <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 0px">
-                <img ng-if="product&&product.luxire_product&&product.luxire_product.gsm" ng-cloak style="max-width: 20%" src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />
+              <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-left: 0px">
+                <img ng-if="product&&product.luxire_product&&product.luxire_product.gsm" ng-cloak style="max-width: 13%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />
                 <span >&nbsp;
-                  {{product.luxire_product.gsm}} gsm
+                  {{product.luxire_product.gsm}} gsm / {{get_ounce_weight(product.luxire_product.gsm)}} Oz
+                </span>
+              </div>
+              <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <img ng-if="product&&product.luxire_product&&product.luxire_product.thickness" ng-cloak style="max-width: 16%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                <span >&nbsp;
+                  {{product.luxire_product.thickness.split('mm')[0]}}
                 </span>
               </div>
               <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <img ng-if="product&&product.luxire_product&&product.luxire_product.thickness" ng-cloak style="max-width: 25%" src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-                <span >&nbsp;
-                  {{product.luxire_product.thickness.split('mm')[0]+' mm'}}
-                </span>
-              </div>
-              <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <img ng-if="product&&product.luxire_product&&product.luxire_product.stiffness" ng-cloak style="max-width: 25%" src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                <img ng-if="product&&product.luxire_product&&product.luxire_product.stiffness" ng-cloak style="max-width: 26%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
                 <span >&nbsp;
                   {{product.luxire_product.stiffness}}&nbsp;
                 </span>
 
               </div>
-              <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <img ng-if="product&&product.luxire_product&& product.luxire_product.wash_care && product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 " ng-cloak style="max-width: 10%;margin-left: -3%" src="assets/images/customer/luxire-wash-icons/{{wash_care(product.luxire_product.wash_care)}}.png" alt="" />&nbsp;&nbsp;
+              <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: -1.5%">
+                <img ng-if="product&&product.luxire_product&& product.luxire_product.wash_care && product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 " ng-cloak style="max-width: 26%;margin-left: -8%" ng-src="assets/images/customer/luxire-wash-icons/{{wash_care(product.luxire_product.wash_care)}}.png" alt="" />&nbsp;&nbsp;
                 <span ng-if="product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 " style="font-size: 90%">&nbsp;
                   {{product.luxire_product.wash_care}}
                 </span>
@@ -290,39 +331,69 @@ style carousel
                 <div ng-hide="loading_product" id="shirt-description" style="font-size: 100%;text-align: justify">
                   <p style="font-weight: 300">
                       <span>
-                        <span ng-if="product.luxire_product.mill!=='NA'">&#9899 Fabric by {{product.luxire_product.mill}} </span>
-                        <span ng-if="product.luxire_product.composition!=='NA'">&#9899 {{product.luxire_product.composition}} </span>
-                        <span ng-if="product.luxire_product.technical_description!=='NA'">&#9899 {{product.luxire_product.technical_description}} </span>
-                        <span ng-if="product.luxire_product.suitable_climates!=='NA'">&#9899 Ideal for {{product.luxire_product.suitable_climates}} </span>
-                        <span ng-if="product.luxire_product.gsm!='NA'">&#9899 {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight </span>
-                        <span ng-if="product.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'">&#9899 {{product.luxire_product.thickness}} thickness and softness rated at {{product.luxire_product.stiffness}} </span>
-                        <span ng-if="product.luxire_product.wash_care!='NA'">&#9899 {{product.luxire_product.wash_care}} </span>
-                        <span ng-if="product.luxire_product.sales_pitch!='NA'">&#9899 {{product.luxire_product.sales_pitch}}</span>
+                        <span ng-if="product.luxire_product.mill!=='NA'">Fabric by {{product.luxire_product.mill}} </span>
+                        <span ng-if="product.luxire_product.composition!=='NA'"><b>|</b> {{product.luxire_product.composition}} </span>
+                        <span ng-if="product.luxire_product.technical_description!=='NA'"><b>|</b> {{product.luxire_product.technical_description}} </span>
+                        <span ng-if="product.luxire_product.suitable_climates!=='NA'"><b>|</b> Ideal for {{product.luxire_product.suitable_climates}} </span>
+                        <span ng-if="product.luxire_product.gsm!='NA'"><b>|</b> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight </span>
+                        <span ng-if="product.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'"><b>|</b> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} </span>
+                        <span ng-if="product.luxire_product.wash_care!='NA'"><b>|</b> {{product.luxire_product.wash_care}} </span>
+                        <span ng-if="product.luxire_product.sales_pitch!='NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
 
                       </span>
                   </p>
                 </div>
                 <div class="" style="margin-top: 2%;border: dotted 2px #E6E6E6;margin-left: 0px; margin-right: 0px;">
                   <div class="row" style="margin-left: 0px; margin-right: 0px;background: #EDEDED;padding-top: 4%; padding-bottom: 7%">
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div ng-if="!is_bespoke_style">
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
+                          <div ng-if="active_style.name!==''&&active_style.name!==undefined" class="">
+                            Choose a Style
+                          </div>
+                        </div>
+
                       </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
-                        <div ng-if="active_style.name!==''&&active_style.name!==undefined" class="">
-                          Choose a Style
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                          <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-click="choose_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         </div>
                       </div>
+                    </div>
+                    <div ng-if="is_bespoke_style">
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
+                          <div ng-if="active_style.name!==''&&active_style.name!==undefined" class="">
+                            Choose a Style
+                          </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
 
+                      </div>
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                          <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-click="choose_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                          <!-- <div style="padding: 2%;border:1px solid #DDDCDA;margin-left:4%;"> -->
+                          <button type="button" class="btn btn-default" style="width: 100%;background-color: #8A247C;color:white;font-weight: 100" ng-click="bespoke_style()">Make My Own Bespoke Style<span style="margin-left:2%;"class="fa fa-scissors"></span></button>
+                          <!-- </div> -->
+                        </div>
+                        <div ng-init="my_preset_style_hovered=false" ng-mouseover="my_preset_style_hovered=true" ng-mouseleave="my_preset_style_hovered=false" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                          <button type="button" class="btn btn-default btn-lux" ng-disabled="true" style="width:100%;background-color: #F9F9F9;color:black; font-weight: 100">{{!my_preset_style_hovered? 'Select From ': 'Feature '}}<span style="color: #7F0E6E">{{!my_preset_style_hovered? 'My Saved Styles': 'Coming Soon'}}</span></button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-click="choose_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                      </div>
-                    </div>
+
                     <div class="row" style="margin-left: 0px; margin-right: 0px;">
                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                       </div>
@@ -511,6 +582,38 @@ style carousel
 
                     </div>
 
+                    <div ng-if="is_bespoke_style">
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-size: 150%; margin-left:14%; color: #3B3B3B; font-weight: 100">
+                          +
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        </div>
+                      </div>
+                      <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                          <button type="button" class="btn btn-default btn-lux "
+                           style="width:100%;background-color: #E4E4E4;color:black;text-align:center;"
+                           ng-click="standard_measurement()">
+                            Custom Measurements
+                         </button>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-right: solid 2px grey">
+                          <button type="button" class="btn btn-default btn-lux" ng-click="body_measurement()"
+                          style="width:100%;background-color: #F4F4F4;color:black;text-align:center;">
+                            Body Measurements
+                          </button>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-top: 1%;text-align: left;font-weight: 100">
+                          <input type="checkbox" name="name" ng-model="measurement_sample" ng-change="send_sample(measurement_sample)">
+                          <span>Send {{product.product_type.product_type.slice(0,-1)}} Sample</span>
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
 
                 </div>
@@ -519,7 +622,7 @@ style carousel
                   </div>
                   <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div style="padding: 2%;border:1px solid #E1C9DD;">
-                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(product.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" src="assets/images/customer/cart_bag.png" alt="" /></span></button>
+                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(product.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
                     </div>
                   </div>
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -541,7 +644,10 @@ style carousel
 
                   </div>
                   <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                      <button type="button" class="btn btn-default" style="width:100%;font-size:130%;font-weight: 100;background-color: black;border-radius:0px;color:white;" ng-click="make_my_own_style()">Make My Own Style<i style="margin-left:4%;font-size:140%;"class="fa fa-arrow-circle-down"></i></button>
+                      <button type="button" class="btn btn-default" style="width:100%;font-size:130%;font-weight: 100;background-color: black;border-radius:0px;color:white;" ng-click="make_my_own_style()">
+                        {{is_bespoke_style? 'Standard Size' : 'Make My Own Style'}}
+                        <!-- <i style="margin-left:4%;font-size:140%;"class="fa fa-arrow-circle-down"></i> -->
+                      </button>
                   </div>
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 
@@ -580,6 +686,8 @@ style carousel
                     <!--Layout for Ties-->
                     <div ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'ties'" >
                       <div class="row" style="margin-left: 0px; margin-right: 0px;font-weight: 300">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group">
                             Width
@@ -590,13 +698,15 @@ style carousel
                             Length
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                        <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group">
                             Folds
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
                               <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Width']['value']">
@@ -607,11 +717,11 @@ style carousel
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Length']['value']">
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                        <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Folds']['value']">
                           </div>
-                        </div>
+                        </div> -->
 
                       </div>
 
@@ -622,30 +732,34 @@ style carousel
                     <!--Layout for Belts-->
                     <div ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'belts'" >
                       <div class="row" style="margin-left: 0px; margin-right: 0px;font-weight: 300">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                          <div class="btn-group">
+                            Width
+                          </div>
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group">
                             Length
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
 
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-
-                        </div>
                       </div>
                       <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                            <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Belt Width']['value']">
+                          </div>
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
                           <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Belt Length']['value']">
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
 
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-
-                        </div>
 
                       </div>
 
@@ -686,7 +800,7 @@ style carousel
                   </div>
                   <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div style="padding: 2%;border:1px solid #E1C9DD;">
-                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(product.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" src="assets/images/customer/cart_bag.png" alt="" /></span></button>
+                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(product.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
                     </div>
                   </div>
 
@@ -697,7 +811,7 @@ style carousel
                   </div>
                   <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div style="padding: 2%;border:1px solid #E1C9DD;">
-                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(selected_gift_card_variant)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" src="assets/images/customer/cart_bag.png" alt="" /></span></button>
+                        <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(selected_gift_card_variant)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
                     </div>
                   </div>
 
@@ -713,8 +827,8 @@ style carousel
     </div>
     <!--Page2-->
   </div>
-  <!--Only for fabric products-->
-  <div ng-if="is_fabric_product" class="">
+  <!--Only for fabric products--><!--Hidden as per discussion dated 9/6/2016-->
+  <div ng-if="false" class="">
     <div id="make_my_own_style" class="row" style = "background: #FAFBFB;border-bottom: solid 1px #D7D7D7;margin-left: 0px; margin-right: 0px;">
       <div class="row" style="margin-left: 0px; margin-right: 0px;">
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
@@ -745,31 +859,24 @@ style carousel
       </div>
 
       <div class="row" ng-init="count=0;" style="margin-left: 1.5%;margin-right: 1.5%;cursor: pointer;">
-        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="padding-right:0%;cursor: pointer;">
-          <!-- <i ng-hide="hidePrev" class="fa fa-chevron-left" ng-click="slidePrev()" style="padding-left:0%;padding-top: 45%;font-size:x-large;"></i> -->
-          <i ng-hide="hidePrev" class="fa fa-chevron-left" ng-click="slidePrev()" style="padding-left:0%;padding-top: 50%;font-size:x-large;cursor: pointer"></i>
-          <i ng-show="hidePrev" class="fa fa-chevron-left" style="padding-left:0%;padding-top: 50%;font-size:x-large;color: #EBEBEA"></i>
-            <!-- <span ng-hide="hidePrev" class="glyphicon glyphicon-chevron-left" ng-click="slidePrev()" style="padding-right:0%;padding-top:65%;font-size:200%;"></span> -->
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" id="myCarousel2" style="text-align: center">
-          <div class="carousel-inner" style="cursor: pointer;margin-left: 7%">
-            <div   ng-repeat="luxire_style in luxire_styles | limitTo: 8" style="display:inline-block;float:left;margin-right:1%;" ng-click="select_style($index, luxire_style)">
-                <div class="luxireStyle" style="width: 15vh;height: 15vh;border: solid 2px  grey" ng-class="{'selectSlider': luxire_style.name==active_style.name }">
 
-                <!-- <div class="luxireStyle" style="width: 15vh;height: 15vh;border: solid 2px  grey" ng-class="{'selectSlider': (($index==active_style_index) }"> -->
-                    <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
-                </div>
-                <div style="text-align:center;font-size:90%;color:black;font-weight: 100;width: 15vh;">{{luxire_style.name}}</div>
-                <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.help}}" popover-trigger="mouseenter"></i></span></div>
-            </div>
+        <div style="display: inline-block;width: 8%;cursor: pointer;vertical-align: top;padding-top: 9%;text-align: center">
+          <i ng-hide="hidePrev" class="fa fa-chevron-left" ng-click="slidePrev()" style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
+          <i ng-show="hidePrev" class="fa fa-chevron-left" style="padding-left:0%;font-size:x-large;color: #EBEBEA"></i>
+        </div>
+        <div id="myCarousel2" style="display: inline-block;width: 82%;text-align: center;">
+          <div   ng-repeat="luxire_style in luxire_styles | limitTo: 5" style="display:inline-block;float:left;margin-right:1%;" ng-click="select_style($index, luxire_style)">
+              <div class="luxireStyle" style="border: solid 1px  grey;text-align: center" ng-class="{'selectSlider': luxire_style.name==active_style.name }">
+                  <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 100%">
+              </div>
+              <div style="text-align:center;font-size:100%;color:black;font-weight: 300;">{{luxire_style.name}}</div>
+              <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.help}}" popover-trigger="mouseenter"></i></span></div>
           </div>
-        </div>
-        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="padding-left:0%;cursor: pointer; text-align: right">
-          <i ng-hide="hideNext" class="fa fa-chevron-right" ng-click="slideNext()" style="padding-left:0%;padding-top: 50%;font-size:x-large;cursor: pointer"></i>
-          <i ng-show="hideNext" class="fa fa-chevron-right" style="padding-left:0%;padding-top: 50%;font-size:x-large;color: #EBEBEA"></i>
 
-          <!-- <i ng-hide="hideNext" class="fa fa-chevron-right" ng-click="slideNext()" style="padding-left:0%;padding-top: 45%;font-size:x-large;"></i> -->
-            <!-- <span  class="glyphicon glyphicon-chevron-right"  ></span> -->
+        </div>
+        <div style="display: inline-block;width: 8%;cursor: pointer;vertical-align: top;padding-top: 9%;text-align: center">
+          <i ng-hide="hideNext" class="fa fa-chevron-right" ng-click="slideNext()" style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
+          <i ng-show="hideNext" class="fa fa-chevron-right" style="padding-left:0%;font-size:x-large;color: #EBEBEA"></i>
         </div>
 
       </div>
@@ -790,7 +897,7 @@ style carousel
       <div class="row" style="margin-left: 0px; margin-right: 0px;">
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
           <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin:0%;padding:0%;">
-              <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:140%;background-color: #F9F9F9;border-radius:0px;color:black; font-weight: 100">Select From <span style="color: #7F0E6E">My Saved Styles</span></button>
+              <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:140%;background-color: #F9F9F9;border-radius:0px;color:black; font-weight: 100">Select From <span style="color: #7F0E6E">My Saved Styles</span></button>
           </div>
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
           <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin:0%;padding:0%;">
@@ -803,7 +910,7 @@ style carousel
       <div class="row" style="margin-left: 0px; margin-right: 0px;margin-bottom: 1.5%; margin-top: 1%">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center; cursor: pointer" ng-click="move_to_choose_fit()">
-          <img src="assets/images/customer/next_page_uncolored.png" style="max-width: 30%" alt="" />
+          <img ng-src="assets/images/customer/next_page_uncolored.png" style="max-width: 30%" alt="" />
         </div>
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
 
@@ -833,19 +940,19 @@ style carousel
         </div>
         <div class="row col-lg-8 col-md-8 col-sm-8 col-xs-8" style="text-align: center; font-family: Roboto;font-size: 150%; font-weight: 100">
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer" >
-            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" src="assets/images/customer/luxire-fits/shirts/regular_fit_selected.png" alt="" />
+            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" ng-src="assets/images/customer/luxire-fits/shirts/regular_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" style="background: #E2E2E2; color: black; padding: 3%" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Regular'}" >
                 Regular Fit
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer">
-            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" src="assets/images/customer/luxire-fits/shirts/slim_fit_selected.png" alt="" />
+            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" ng-src="assets/images/customer/luxire-fits/shirts/slim_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Slim'}" style="background: #E2E2E2; color: black; padding: 3%">
               Slim Fit
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer">
-            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Super Slim')" style="max-width: 42%" src="assets/images/customer/luxire-fits/shirts/super_slim_fit_selected.png" alt="" />
+            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Super Slim')" style="max-width: 42%" ng-src="assets/images/customer/luxire-fits/shirts/super_slim_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Super Slim')" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Super Slim'}" style="background: #E2E2E2; color: black; padding: 3%">
               Super Slim Fit
             </div>
@@ -861,13 +968,13 @@ style carousel
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer" >
-            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" src="assets/images/customer/luxire-fits/pants/regular_fit_selected.png" alt="" />
+            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" ng-src="assets/images/customer/luxire-fits/pants/regular_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" style="background: #E2E2E2; color: black; padding: 3%" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Regular'}" >
                 Regular Fit
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer">
-            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" src="assets/images/customer/luxire-fits/pants/slim_fit_selected.png" alt="" />
+            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" ng-src="assets/images/customer/luxire-fits/pants/slim_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Slim'}" style="background: #E2E2E2; color: black; padding: 3%">
               Slim Fit
             </div>
@@ -883,13 +990,13 @@ style carousel
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer" >
-            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" src="assets/images/customer/luxire-fits/jackets/regular_fit_selected.png" alt="" />
+            <img style="max-width: 40%" ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" ng-src="assets/images/customer/luxire-fits/jackets/regular_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Regular')" style="background: #E2E2E2; color: black; padding: 3%" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Regular'}" >
                 Regular Fit
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px;cursor: pointer;padding-top: 0.65%">
-            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" src="assets/images/customer/luxire-fits/jackets/slim_fit_selected.png" alt="" />
+            <img ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" style="max-width: 37.2%" ng-src="assets/images/customer/luxire-fits/jackets/slim_fit_selected.png" alt="" />
             <div ng-click="set_attribute_value('standard_measurement_attributes', 'Fit Type', 'Slim')" ng-class="{'active-fit': cart_object['standard_measurement_attributes']['Fit Type']['value']=='Slim'}" style="background: #E2E2E2; color: black; padding: 3%">
               Slim Fit
             </div>
@@ -902,7 +1009,7 @@ style carousel
       <div class="row" style="margin-left: 0px; margin-right: 0px;margin-bottom: 5%; margin-top: 7%">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center; cursor: pointer" ng-click="move_to_measurements()">
-          <img src="assets/images/customer/next_page_uncolored.png" style="max-width: 30%" alt="" />
+          <img ng-src="assets/images/customer/next_page_uncolored.png" style="max-width: 30%" alt="" />
         </div>
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
 
@@ -926,111 +1033,130 @@ style carousel
       <!--Conditional Layouting for product types-->
 
       <!--Shirt-->
-      <div class="" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'shirts'">
-        <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 2%;font-weight: 300;font-size: 127%;">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      <div class="shirts" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'shirts'">
+        <div class="" style="text-align: center;margin-top: 5%;background: #F6F5F6;padding-left: 13%">
+          <span class="upper-sticker" >
+              Neck Size: <label>{{ newUpperMeasurement }}</label>
+          </span>
+          <div ng-cloak class="upper-slider" ui-slider data-min="{{uCountersInt[0]}}" data-max="{{uCountersInt[uCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.upper">
+              <span class="upper-sticker" style="margin-left:{{uSliderHandleLeftMargin}}; margin-top:{{uTopDisplacement}}; position: fixed;">
+                  Neck Size: <label>{{ newUpperMeasurement }}</label>
+              </span>
           </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            Neck Size
+          <custom-measure ng-cloak>
+              <div class="scale-boundary" id="scale-boundary">
+                  <div class="upper-side">
+                      <div class="ruler-top" id="top-{{$index}}" ng-repeat="uCounter in uCounters">
+                          <div class="scale-top"></div>
+                          <label class="label-top label-top-width">{{uCounter}}</label>
+                      </div>
+                  </div>
+                  <div class="scale-middle"></div>
+                  <div class="lower-side">
+                      <div class="ruler-bottom" id="bottom-{{$index}}" ng-repeat="lCounter in lCounters">
+                          <label class="label-bottom label-bottom-width">{{lCounter}}</label>
+                          <div class="scale-bottom"></div>
+                      </div>
+                  </div>
+              </div>
+          </custom-measure>
+          <div ng-cloak class="lower-slider" ui-slider data-min="{{lCountersInt[0]}}" data-max="{{lCountersInt[lCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.lower">
+              <span class="sticker" style="margin-left:{{lSliderHandleLeftMargin}}; margin-top:{{lBottomDisplacement}}; position: fixed;">
+                  Sleeve Length: <label>{{ newLowerMeasurement }}</label>
+              </span>
           </div>
+          <span class="sticker" >
+              Sleeve Length: <label>{{ newLowerMeasurement }}</label>
+          </span>
         </div>
-        <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-          </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            <div class="neck_size" style="margin: 0% 1.3%">
-                <input ng-model="value3"  type="text" id="{{id}}" slider options="options_neck_size" />
-            </div>
-          </div>
-        </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 5%;font-weight: 300;font-size: 127%;">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-         </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           Sleeve Length
-         </div>
-       </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-         </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           <div class="sleeve_length" style="margin: 0% 1.3%">
-               <input ng-model="value4"  type="text" id="{{id}}" slider options="options_sleeve_length" />
-           </div>
-         </div>
-       </div>
 
       </div>
+      <!-- <script type="text/javascript">
+          var CustomMeasure = document.registerElement('custom-measure', {
+                  prototype: Object.create(HTMLElement.prototype)
+              });
+      </script> -->
+
+
+
+
       <!--Pant-->
-      <div class="" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'">
-        <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 2%;font-weight: 300;font-size: 127%;">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-          </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            Waist Size
-          </div>
-        </div>
-        <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-          </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            <div class="sleeve_length" style="margin: 0% 1.3%">
-              <input ng-model="value4"  type="text" id="{{id}}" slider options="options_sleeve_length" />
-            </div>
-          </div>
-        </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 5%;font-weight: 300;font-size: 127%;">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      <div class="pants" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'">
+       <div class="" style="text-align: center;margin-top: 5%;background: #F6F5F6;padding-left: 13%">
+         <span class="upper-sticker" >
+             Waist Size: <label>{{ newUpperMeasurement }}</label>
+         </span>
+         <div ng-cloak class="upper-slider" ui-slider data-min="{{uCountersInt[0]}}" data-max="{{uCountersInt[uCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.upper">
+             <span class="upper-sticker" style="margin-left:{{uSliderHandleLeftMargin}}; margin-top:{{uTopDisplacement}}; position: fixed;">
+                 Waist Size: <label>{{ newUpperMeasurement }}</label>
+             </span>
          </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           In-Seam
+         <custom-measure ng-cloak>
+             <div class="scale-boundary" id="scale-boundary">
+                 <div class="upper-side">
+                     <div class="ruler-top" id="top-{{$index}}" ng-repeat="uCounter in uCounters">
+                         <div class="scale-top"></div>
+                         <label class="label-top label-top-width">{{uCounter}}</label>
+                     </div>
+                 </div>
+                 <div class="scale-middle"></div>
+                 <div class="lower-side">
+                     <div class="ruler-bottom" id="bottom-{{$index}}" ng-repeat="lCounter in lCounters">
+                         <label class="label-bottom label-bottom-width">{{lCounter}}</label>
+                         <div class="scale-bottom"></div>
+                     </div>
+                 </div>
+             </div>
+         </custom-measure>
+         <div ng-cloak class="lower-slider" ui-slider data-min="{{lCountersInt[0]}}" data-max="{{lCountersInt[lCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.lower">
+             <span class="sticker" style="margin-left:{{lSliderHandleLeftMargin}}; margin-top:{{lBottomDisplacement}}; position: fixed;">
+                 In-Seam: <label>{{ newLowerMeasurement }}</label>
+             </span>
          </div>
-       </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-         </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           <div class="sleeve_length" style="margin: 0% 1.3%">
-               <input ng-model="value4"  type="text" id="{{id}}" slider options="options_sleeve_length" />
-           </div>
-         </div>
+         <span class="sticker" >
+             In-Seam: <label>{{ newLowerMeasurement }}</label>
+         </span>
        </div>
 
       </div>
       <!--Jacket-->
-      <div class="" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'">
-        <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 2%;font-weight: 300;font-size: 127%;">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      <div class="jackets" ng-if="product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'">
+        <div class="" style="text-align: center;margin-top: 5%;background: #F6F5F6;padding-left: 13%">
+          <span class="upper-sticker" >
+              Chest Size: <label>{{ newUpperMeasurement }}</label>
+          </span>
+          <div ng-cloak class="upper-slider" ui-slider data-min="{{uCountersInt[0]}}" data-max="{{uCountersInt[uCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.upper">
+              <span class="upper-sticker" style="margin-left:{{uSliderHandleLeftMargin}}; margin-top:{{uTopDisplacement}}; position: fixed;">
+                  Chest Size: <label>{{ newUpperMeasurement }}</label>
+              </span>
           </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            Chest Size
+          <custom-measure ng-cloak>
+              <div class="scale-boundary" id="scale-boundary">
+                  <div class="upper-side">
+                      <div class="ruler-top" id="top-{{$index}}" ng-repeat="uCounter in uCounters">
+                          <div class="scale-top"></div>
+                          <label class="label-top label-top-width">{{uCounter}}</label>
+                      </div>
+                  </div>
+                  <div class="scale-middle"></div>
+                  <div class="lower-side">
+                      <div class="ruler-bottom" id="bottom-{{$index}}" ng-repeat="lCounter in lCounters">
+                          <label class="label-bottom label-bottom-width">{{lCounter}}</label>
+                          <div class="scale-bottom"></div>
+                      </div>
+                  </div>
+              </div>
+          </custom-measure>
+          <div ng-cloak class="lower-slider" ui-slider data-min="{{lCountersInt[0]}}" data-max="{{lCountersInt[lCountersInt.length - 1]}}" data-step="1" data-transition="1" ng-model="Tracker.lower">
+              <span class="sticker" style="margin-left:{{lSliderHandleLeftMargin}}; margin-top:{{lBottomDisplacement}}; position: fixed;">
+                  Length: <label>{{ newLowerMeasurement }}</label>
+              </span>
           </div>
+          <span class="sticker" >
+              Length: <label>{{ newLowerMeasurement }}</label>
+          </span>
         </div>
-        <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-          </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-            <div class="sleeve_length" style="margin: 0% 1.3%">
-              <input ng-model="value4"  type="text" id="{{id}}" slider options="options_sleeve_length" />
-            </div>
-          </div>
-        </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;text-align: center;margin-top: 5%;font-weight: 300;font-size: 127%;">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-         </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           Length
-         </div>
-       </div>
-       <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 2%">
-         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-         </div>
-         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-           <div class="sleeve_length" style="margin: 0% 1.3%">
-               <input ng-model="value4"  type="text" id="{{id}}" slider options="options_sleeve_length" />
-           </div>
-         </div>
-       </div>
+
 
       </div>
 
@@ -1038,7 +1164,7 @@ style carousel
        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
        </div>
        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-         <img style="max-width: 100%" src="assets/images/customer/scale.png" alt="" />
+         <img style="max-width: 100%" ng-src="assets/images/customer/scale.png" alt="" />
        </div>
     </div> -->
 
@@ -1104,7 +1230,7 @@ style carousel
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-top: 3%;">
             <input type="checkbox" name="name" ng-model="measurement_sample" ng-change="send_sample(measurement_sample)">
-            <span>Send Shirt Sample</span>
+            <span>Send {{product.product_type.product_type.slice(0,-1)}} Sample</span>
           </div>
         </div>
       </div>
@@ -1116,7 +1242,7 @@ style carousel
           </div>
           <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
             <div style="padding: 2%;border:1px solid #E1C9DD;">
-                <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart()">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" src="assets/images/customer/cart_bag.png" alt="" /></span></button>
+                <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart()">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
             </div>
           </div>
 
@@ -1133,56 +1259,62 @@ style carousel
 </div>
 
 <script type="text/ng-template" id="choose_style.html">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
-    <div >
-      <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
-    </div>
-  </div>
-  <div class="row" style="margin-left: 6.2%; margin-right: 0px">
-    <span style="color: #800e6f; border-bottom: solid 2px #C696BF; font-weight: 300; font-size: 135%; padding-bottom: 0.3%">Choose a Style</span>
-  </div>
-  <div class="row" style="margin-top: 3%">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-left: 2%; margin-top: 2%">
-      <div class="carousel-inner">
-        <div class="row" style="display:block;margin-left: 0px;margin-right: 0px">
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px; text-align: right">
-              <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;padding-top: 35%;font-size:x-large;cursor: pointer;margin-right: 25%"></i>
-            </div>
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" >
-              <div class="slick-bespoke-style-slider">
-                <div ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important" ng-click="select_style($index, luxire_style)">
-                  <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="width: 6vw;height: 15vh;border: solid 2px  grey" >
-                    <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
-                  </div>
-                  <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name && luxire_style.name.length>10? luxire_style.name.slice(0,10)+'...' : luxire_style.name}}</div>
-                  <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.name}}" popover-trigger="mouseenter"></i></span></div>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px; text-align: left; padding-right: 0.7%">
-              <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;padding-top: 45%;font-size:x-large;cursor: pointer"></i>
-              <!--//i ng-show="hideNext" class="slide-next fa fa-chevron-right" style="padding-left:0%;padding-top: 50%;font-size:x-large;color: #EBEBEA"></i-->
-            </div>
-        </div>
-        <div class="row" style="text-align: center;margin: 2%;" >
-          <button class="btn btn-default" style="background-color: #8A247C;color: white" ng-click="done()">Done</button>
-        </div>
-
-        <!--/*div class="item active"  ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;margin-right:1%;" ng-click="select_style($index, luxire_style)">
-            <div class="" style="width:75px;height:75px;border: solid 2px  grey" ng-class="{'selectSlider': selected_style.name==luxire_style.name}" >
-              {{}}
-              <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
-            </div>
-            <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name && luxire_style.name.length>10? luxire_style.name.slice(0,10)+'...' : luxire_style.name}}</div>
-            <div style="text-align:center;"><span><i class="fa fa-question-circle" style="font-size:160%; color: #7A7A7A" uib-popover="{{luxire_style.name+' '+luxire_style.help}}" popover-trigger="mouseenter"></i></span></div>
-        </div--*/>
+  <div style="padding: 0.25%;font-family: Roboto">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
+      <div >
+        <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
       </div>
     </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-right: 0px;margin-bottom: 2%">
+      <span style="color: #800e6f; border-bottom: solid 2px #C696BF; font-weight: 300; font-size: 135%; padding-bottom: 0.3%">Choose a Style</span>
+    </div>
+    <div >
+      <div class="row-eq-height" style="display: inline-block;width: 8%;text-align: center;vertical-align: top;padding-top: 5%">
+        <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;font-size:x-large;cursor: pointer;"></i>
+      </div>
+      <div class="row-eq-height" style="display: inline-block;width: 82%">
+        <div class="slick-bespoke-style-slider">
+          <div ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%" ng-click="select_style($index, luxire_style)">
+            <!--//border: solid 1px  grey;-->
+            <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="text-align: center;position: relative">
+              <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 60%">
+              <i ng-if="selected_style.name==luxire_style.name" class="fa fa-check-circle" style="font-size:160%;color: green;position: absolute;top:15%;right: 15%"></i>
+            </div>
+            <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name}}</div>
+            <div style="text-align:center;"><span><i class="fa fa-info-circle" ng-mouseover="toggle_detailed_style(luxire_style, false)"  style="font-size:160%; color: #D3AFCE" ng-mouseover="show_detailed_style(luxire_style)"></i></span></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row-eq-height" style="display: inline-block;width: 8%;text-align: center;vertical-align: top;padding-top: 5%">
+        <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;font-size:x-large;cursor: pointer;"></i>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" uib-collapse="hide_active_style_details" ng-mouseleave="hide_active_style_details=true">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
+        <div >
+          <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="hide_active_style_details=true"></i>
+        </div>
+      </div>
+      <div class="row well well-lg" style="margin-left: 0px;margin-right: 0px">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-right: solid 1px grey">
+          <img ng-src="{{getImage(active_detail_style.images.large_url)}}">
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" >
+          <div style="text-align: center;margin-top: 1%;font-size: 150%;">
+            {{active_detail_style.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center;width: 100%;" >
+        <!--//button class="btn btn-default"  ng-click="cancel()">Cancel</button-->
+        <button class="btn btn-default" style="background-color: #8A247C;color: white" ng-click="cancel()">Done</button>
+    </div>
   </div>
 
 
-  </script>
+</script>
 <script type="text/ng-template" id="bespoke_style.html">
 
 <div class="row" style="background: #FDFDFD; position: relative; overflow: auto; height: 95vh;">
@@ -1206,40 +1338,80 @@ style carousel
         <!--// hr style="margin: 0.5% 0% 0.7% 0%"-->
         <div class="row container-fluid" style="width:100%;height:100%;margin-top: 4%">
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="position: fixed; padding-left:2.5%;z-index: 99;">
-                <div class="row" style="margin-top:1%;">
-                    <img src="{{getImage(product.master.images[0].product_url)}}" alt="{{product.master.images[0].alt}}" style="max-width: 100%"/>
+                <div class="row" style="margin-top:1%;text-align: center">
+                    <img ng-src="{{getImage(product.master.images[0].mini_url)}}" alt="{{product.master.images[0].alt}}" style="max-width: 100%"/>
                 </div>
                 <div class="row" style="margin-top:12%;">
-                  <table style="font-size: 100%; font-weight: 300">
-                    <tr>
-                      <td>Price:</td>
-                      <td>{{product.display_price}}</td>
-                    </tr>
-                    <tr>
-                      <td>Personalization Cost:</td>
-                      <td>{{cart_object.personalization_cost}}</td>
-                    </tr>
-                    <tr>
-                      <td>Total Cost:</td>
-                      <td>{{cart_object.total_cost}}</td>
-                    </tr>
-                  </table>
+                  <div style="width: 100%; font-weight: 300">
+                    <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
+                      Price:
+                    </div>
+                    <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
+                      >
+                      {{product.display_price}}
+                    </div>
+                  </div>
+                  <div style="width: 100%; font-weight: 300">
+                    <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
+                      Personalization Cost:
+                    </div>
+                    <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
+                    animate-on-change="cart_object.personalization_cost">
+                      {{cart_object.personalization_cost}}
+                    </div>
+                  </div>
+                  <div style="width: 100%; font-weight: 300">
+                    <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
+                      Total Cost:
+                    </div>
+                    <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
+                      animate-on-change="cart_object.total_cost">
+                      {{cart_object.total_cost}}
+                    </div>
+                  </div>
+
 
                 </div>
-                <div class="row" style="margin-top:4%; border-bottom: 1px solid #DDDCDA;padding-bottom:10%;">
-                    <span style="font-size:130%;">Selected Options</span>
-                    <div>
-                        <table class="shirt-details">
-                            <tr ng-repeat="attribute in product['customization_attributes']" style="font-weight: 300">
-                                <td style="padding: 0px !important">{{attribute.name}}:</td>
-                                <td style="padding: 0px !important; font-size: 90%">{{cart_object["customization_attributes"][attribute.name]['value']}}</td>
-                            </tr>
-                        </table>
+                <div class="row detail-summary" style="margin-top:4%; border-bottom: 1px solid #DDDCDA;padding-bottom:10%;">
+                    <span>Selected Options</span>
+                    <div ng-repeat="attribute in product['customization_attributes']" style="width: 100%; font-weight: 300;font-size: 80%">
+                      <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
+                        {{attribute.name}}:
+                      </div>
+                      <div style="width: 48%;text-align: left;display: inline-block;display: inline-block;text-decoration: underline;color: #7F0E6E"
+                        ng-init="attribute.options=cart_object['customization_attributes'][attribute.name]['options']"
+                        uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter"
+                        animate-on-change="cart_object['customization_attributes'][attribute.name]['value']" >
+                        {{cart_object["customization_attributes"][attribute.name]['value']}}
+                      </div>
                     </div>
+                    <div ng-repeat="attribute in product['personalization_attributes']" style="width: 100%; font-weight: 300;font-size: 80%">
+                      <div style="width: 48%;text-align: left;display: inline-block;font-weight: 400;vertical-align: top">
+                        {{attribute.name}}:
+                      </div>
+                      <div style="width: 48%;text-align: left;display: inline-block;color: #7F0E6E">
+
+                        <div ng-if="attr_options_key_length(cart_object['personalization_attributes'][attribute.name])>0 && attribute.name.toLowerCase()!=='monogram'"
+                            ng-repeat="(prop_key, prop_val) in cart_object['personalization_attributes'][attribute.name]"
+                            ng-init="attribute={};attribute.options=prop_val"
+
+                            uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter" >
+                            &#9899 <span style="text-decoration: underline;" animate-on-change="prop_key"> {{prop_key}}</span>
+                        </div>
+                        <div ng-if="attr_options_key_length(cart_object['personalization_attributes'][attribute.name])>0 && attribute.name.toLowerCase()=='monogram'"
+                            ng-init="attribute={};attribute.options=cart_object['personalization_attributes'][$parent.attribute.name]"
+                            animate-on-change="cart_object['personalization_attributes'][$parent.attribute.name]"
+                            uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter" >
+                            Yes
+                        </div>
+
+                      </div>
+                    </div>
+
                 </div>
                 <div class="row">
                   <div class=""  style="padding: 2%;margin-top: 4%;border:1px solid #DDDCDA;bottom:3%;">
-                    <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
+                    <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
                   </div>
                 </div>
 
@@ -1254,24 +1426,25 @@ style carousel
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="padding-left: 5.5%">
                 <div class="row container-fluid">
                     <div class="row" style="display:block;margin-left: 0px">
-                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px">
-                          <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;padding-top: 35%;font-size:x-large;cursor: pointer"></i>
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px;padding-top: 5%">
+                          <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
                           <!--//i ng-show="hidePrev" class="slide-prev fa fa-chevron-left" style="padding-left:0%;padding-top: 50%;font-size:x-large;color: #EBEBEA"></i-->
                         </div>
-                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" >
+                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="position: relative;padding-left: 4%">
                           <div class="slick-bespoke-style-slider">
-                            <div ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;margin-right:1%;cursor: pointer;border: none !important">
-                                  <div class="base-style" ng-class="{'activeStyleClass': luxire_style.name==active_style.name}" style="width:80px;height:80px;border: solid 2px  grey" ng-click="select_style($index, luxire_style)">
-                                    <img src="{{getImage(luxire_style.image)}}" style="width:100%;height:100%;">
-                                  </div>
-
-                                  <div style="font-size:100%;text-align:center;padding-top:1%;width:80px;"><span>{{luxire_style.name}}</span></div>
+                            <div class="preset-styles" ng-repeat="luxire_style in luxire_styles"  style="display:inline-block;float:left;margin-right:1%;cursor: pointer;border: none !important;position: relative">
+                              <div ng-class="{'activeStyleClass': luxire_style.name==active_style.name}"  ng-click="select_style($index, luxire_style)">
+                                <img ng-mouseover="enlarge_style(luxire_style, $event)" ng-mouseleave="$parent.enlarged_style={}" ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 100%">
+                              </div>
+                              <div style="font-size:100%;text-align:center;padding-top:1%;"><span>{{luxire_style.name}}</span></div>
                             </div>
-
+                          </div>
+                          <div ng-if="enlarged_style && enlarged_style.images && enlarged_style.images.large_url" style="border: solid 1px grey;position: absolute;z-index: 999;top: {{enlarge_image_ypos+'px'}};left: {{enlarge_image_xpos+'px'}};background-color: white;box-shadow: 2px" >
+                            <img ng-mouseover="enlarge_style(luxire_style, $event)" ng-src="{{getImage(enlarged_style.images.large_url)}}" style="">
                           </div>
                         </div>
-                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px; text-align: right; padding-right: 0.7%">
-                          <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;padding-top: 35%;font-size:x-large;cursor: pointer"></i>
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding: 0px; text-align: right; padding-right: 0.7%;padding-top: 5%">
+                          <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
                           <!--//i ng-show="hideNext" class="slide-next fa fa-chevron-right" style="padding-left:0%;padding-top: 50%;font-size:x-large;color: #EBEBEA"></i-->
                         </div>
                     </div>
@@ -1295,8 +1468,8 @@ style carousel
                                     <div class="bespoke-attributes-slide" ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer" >
                                       <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
                                         <div class="luxireStyle" style="width: 100%;background-color: #FDFDFD;text-align: center">
-                                          <img src="{{getImage(bespoke_attribute.image)}}||assets/images/customer/grey_circle.png"
-                                         class="img-circle"
+                                          <img ng-src="{{getImage(bespoke_attribute.image)}}||assets/images/customer/grey_circle.png"
+                                          class="img-circle"
                                           ng-class="{'active-bespoke': bespoke_attribute.name==selected_bespoke_attribute.name}"
                                            style="margin-top: 8%; margin-bottom: 8%;border: solid 2px #FDFDFD"
                                            onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
@@ -1308,7 +1481,7 @@ style carousel
                                   <!--//div  ng-repeat="customization_attribute in product['customization_attributes']" style="margin-bottom:8%; cursor: pointer" >
                                   //     <div ng-click="activate_customization_attribute(customization_attribute, $index)">
                                   //       <div class="luxireStyle" style="width: 100%;background-color: #FDFDFD;">
-                                  //         <img src="{{getImage(customization_attribute.image)}}"
+                                  //         <img ng-src="{{getImage(customization_attribute.image)}}"
                                   //        class="img-circle"
                                   //         ng-class="{'activeCustomizationAttribute': $index==selected_customization_attribute_index}"
                                   //          style="margin-top: 8%; margin-bottom: 8%; margin-left: 25%"
@@ -1320,7 +1493,7 @@ style carousel
                                   // <div  ng-repeat="personalization_attribute in product['personalization_attributes']" style="margin-bottom:8%;border: 1px solid #DDDCDA; z-index: -200;cursor: pointer" >
                                   //     <div class="luxireStyle" ng-click="activate_personalization_attribute(personalization_attribute, $index)">
                                   //       <div  style="width:100%;">
-                                  //         <img src="{{getImage(personalization_attribute.image)}}"
+                                  //         <img ng-src="{{getImage(personalization_attribute.image)}}"
                                   //          class="img-circle"
                                   //           ng-class="{'activeCustomizationAttribute': $index==selected_personalization_attribute_index}"
                                   //            style="margin: 8% 20%"
@@ -1343,9 +1516,9 @@ style carousel
                                   <div class="bespoke-style-top-align" ng-if="selected_bespoke_attribute.category=='c'"
                                     ng-click="activate_bespoke_style('customize', style_object, $index, style_name)"
                                     ng-repeat="(style_name, style_object) in selected_bespoke_attribute.value"
-                                     style="display:inline-block;margin-left: 4%;cursor: pointer; width: 15%;margin-top: 2%;height: 12%;text-align: center" >
+                                     style="display:inline-block;margin-left: 4%;cursor: pointer; width: 20%;margin-top: 2%;height: 12%;text-align: center" >
                                       <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5% 0%;display: block" >
-                                        <img class="img-circle" src="{{getImage(style_object.image)||'assets/images/customer/grey_circle.png'}}" alt="getImage(style_object.image)"
+                                        <img class="img-circle" ng-src="{{getImage(style_object.image)||'assets/images/customer/grey_circle.png'}}" alt="getImage(style_object.image)"
                                          ng-class="{'active-bespoke': style_name==cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']}"
                                           style="border: solid 2px #DADADA" onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                       </div>
@@ -1357,7 +1530,7 @@ style carousel
                                         ng-repeat="(personalization_attribute_child, personalization_attribute_child_value) in selected_bespoke_attribute.value"
                                          style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%" >
                                           <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center";  >
-                                            <img src="{{getImage(personalization_attribute_child_value.image) || 'assets/images/customer/grey_circle.png'}}"
+                                            <img ng-src="{{getImage(personalization_attribute_child_value.image) || 'assets/images/customer/grey_circle.png'}}"
                                               ng-class="{'active-bespoke': cart_object['personalization_attributes'][selected_bespoke_attribute.name].hasOwnProperty(personalization_attribute_child)}"
                                               alt="getImage(style_object.image)"
                                              class="img-circle" style="border: solid 1.5px #E5E5E5;"
@@ -1373,7 +1546,7 @@ style carousel
                                       <div ng-click="activate_bespoke_style('personalize',null, $index, 'monogram')"
                                          style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%" >
                                           <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center" >
-                                            <img src="{{getImage(selected_bespoke_attribute.value.image)||'assets/images/customer/grey_circle.png'}}"
+                                            <img ng-src="{{getImage(selected_bespoke_attribute.value.image)||'assets/images/customer/grey_circle.png'}}"
                                               ng-class="{'active-bespoke': cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)}"
 
                                              class="img-circle" style="border: solid 1.5px #E5E5E5; "
@@ -1426,7 +1599,7 @@ style carousel
                                           <div style="text-align: right; margin-bottom: -5.5%;margin-right: -3%">
                                             <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300; color: grey" ng-click="delete_custom_image($index)"></i>
                                           </div>
-                                          <img style="width: 100%" class="img-responsive" src="{{getImage(custom_image.url)}}"/>
+                                          <img style="width: 100%" class="img-responsive" ng-src="{{getImage(custom_image.url)}}"/>
 
                                         </div>
                                         <span>Image
@@ -1450,13 +1623,13 @@ style carousel
                               <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()!=='monogram'">
                                 <div style="padding: 2%" ng-if="option_value.hasOwnProperty('fabric')" ng-repeat="(option_key, option_value) in cart_object['personalization_attributes'][selected_bespoke_attribute.name]">
                                   <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{option_key}} Fabric</p>
-                                  <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{option_value.fabric.title}}</p>
-                                  <angucomplete-alt id="products" style="height: 25px"
+                                  <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][option_key]['fabric']}}</p>
+                                  <angucomplete-alt id="{{'personalization_attributes#'+selected_bespoke_attribute.name+'#'+option_key+'#'+'fabric'}}" style="height: 25px"
                                       placeholder="Search fabric"
                                       pause="400"
-                                      selected-object="cart_object['personalization_attributes'][selected_bespoke_attribute.name][option_key]['fabric']"
+                                      selected-object="select_contrast_product"
                                       remote-url="{{search_products_url}}"
-                                      remote-url-data-field=""
+                                      remote-url-data-field="products"
                                       title-field="name"
                                       match-class="highlight"
                                       clear-selected=true
@@ -1467,7 +1640,7 @@ style carousel
                               <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram'&&cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)"
                                ng-repeat="(style_property,style_values) in monogram_options" style="padding-top: 4%">
                                 <div style="background: #F4F5F5; padding: 3% 5%">
-                                  <div ng-if="style_property!=='cost'" class="row" style="margin-left: 0px; margin-right: 0px">
+                                  <div ng-if="style_property.toLowerCase()!=='cost'&&style_property.toLowerCase()!=='image'" class="row" style="margin-left: 0px; margin-right: 0px">
                                     <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="font-weight: 300; font-size: 90%; padding: 0px">
                                       {{style_property}}
                                     </div>
@@ -1475,7 +1648,7 @@ style carousel
                                       <input type="text" class="form-control" placeholder="{{style_property}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][style_property]">
                                     </div>
                                     <div ng-if="checkIsArray(style_values)" style="padding: 0px"class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                      <select class="form-control" style="width: 95%" name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][style_property]">
+                                      <select class="form-control"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][style_property]">
                                         <option ng-repeat="option in style_values" value="{{option}}" style="width: 80%">{{option}}</option>
                                       </select>
                                     </div>
@@ -1543,7 +1716,7 @@ style carousel
             </div>
             <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-bottom: 1%">
               <div class=""  style="padding: 2%;border:1px solid #DDDCDA;bottom:3%;width:80%;">
-                <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
+                <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
               </div>
             </div>
 
@@ -1594,7 +1767,7 @@ style carousel
             </div>
             <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-bottom: 1%">
               <div class=""  style="padding: 2%;border:1px solid #DDDCDA;bottom:3%;width:80%;margin-top: 5%">
-                <button type="button" class="btn btn-default" style="width:100%;height:3.5em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
+                <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
               </div>
             </div>
 
@@ -1610,7 +1783,7 @@ style carousel
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
     <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+      <img style="max-width: 75%" ng-src="assets/images/customer/luxire_logo_grey.png" >
     </div>
     <div style="margin-top:2%;">
         <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
@@ -1640,14 +1813,14 @@ style carousel
         placeholder="Search Fabric.."
         class="form-control input-sm"
         ng-change="inputChangeHandler(searchStr)"/>
-      <div class="angucomplete-dropdown" ng-show="showDropdown">
+      <div class="angucomplete-dropdown" ng-show="showDropdown" style="height: 40vh;overflow: auto">
         <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
         <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
-        <div class="angucomplete-row" style="border-bottom: solid 1px black; display: block;padding: 1%" ng-repeat="result in results | limitTo: 5" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
-          <div class="angucomplete-image-holder" style="display: inline-block; width: 48%">
-            <img id="fabric-image" src="{{result.originalObject.variant.spree_assets[0].small_url.indexOf('http')>-1?result.originalObject.variant.spree_assets[0].small_url:'http://104.215.254.150:3000'+result.originalObject.variant.spree_assets[0].small_url}}" class="angucomplete-image"/>
+        <div class="angucomplete-row" style="border-bottom: solid 1px black; display: block;padding: 1%" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
+          <div class="angucomplete-image-holder" style="display: inline-block; width: 20%;vertical-align: top">
+            <img id="fabric-image" ng-src="{{result.originalObject.variant.spree_assets[0].small_url.indexOf('http')>-1?result.originalObject.variant.spree_assets[0].small_url:'http://104.215.254.150:3000'+result.originalObject.variant.spree_assets[0].small_url}}" style="max-width: 100%"  class="angucomplete-image"/>
           </div>
-          <div style="display: inline-block; width: 48%">
+          <div style="display: inline-block; width: 78%">
             <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
             <div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div>
           </div>
@@ -1657,7 +1830,7 @@ style carousel
     </div>
 </script>
 <script type="text/ng-template" id="summary.html">
-  <div style="padding: 3%">
+  <div style="padding: 3%" ng-mouseleave="close()">
     <div style="color: #8F2B80;font-size: 150%;font-weight: 500">
       {{product.product_type.product_type.slice(0,-1)}}
     </div>
@@ -1673,8 +1846,8 @@ style carousel
       <div style="display: inline-block;width: 30%">
         Base Style Selected:
       </div>
-      <div style="display: inline-block;width: 30%;">
-        {{Object.keys(base_style).length ? base_style.name : 'None'}}
+      <div  style="display: inline-block;width: 30%;">
+        {{base_style && base_style.name ? base_style.name : 'None'}}
       </div>
     </div>
     <uib-accordion close-others="true" >
@@ -1692,7 +1865,7 @@ style carousel
             {{attribute.value}}
           </div>
           <div class="view-measurement-popover" style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
-            <a ng-if="attr_options_key_length(attribute.options)>0" style="color: #7E006C" uib-popover-template="view_measurements.templateUrl" popover-placement="right" >View Measurement</a>
+            <a ng-if="attr_options_key_length(attribute.options)>0" style="color: #7E006C" uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter">View Details</a>
           </div>
           <div style="display: inline-block;width: 38%;padding:1%">
             <span ng-if="attribute.cost">+{{attribute.cost}}</span>
@@ -1749,13 +1922,21 @@ style carousel
   </div>
 </script>
 <script type="text/ng-template" id="view_measurements_popover.html">
-  <div class="summary-row" style="width: 100%;text-align: left;" ng-repeat="(attr_property, attr_property_value) in attribute.options">
-    <div style="display: inline-block;width: 48%;padding:1%">
+  <div class="summary-row" style="width: 100%;text-align: left;color: black" ng-repeat="(attr_property, attr_property_value) in attribute.options">
+    <div style="display: inline-block;width: 58%;padding:1%">
       {{attr_property}}:
     </div>
-    <div style="display: inline-block;width: 48%;padding:1%;">
+    <div style="display: inline-block;width: 38%;padding:1%;">
       {{attr_property_value}}
     </div>
 
   </div>
+</script>
+<script type="text/ng-template" id="enlarged_product_image.html">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: center;background-color: white;padding: 2%;position: relative" ng-mouseleave="cancel()">
+  <div style="text-align: right;position: absolute;right: 0;top: 0">
+    <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
+  </div>
+  <img style="max-width: 100%" src="{{getImage(product.master.images[0].original_url)}}">
+</div>
 </script>

@@ -1,21 +1,33 @@
 angular.module('luxire')
-.controller('ProductDetailController', function($scope, $sce, CustomerOrders, $state, countries, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal, $window, $timeout){
+.controller('ProductDetailController', function($scope, $sce, CustomerOrders, $state, countries, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal, $window, $timeout, $log, colorpicker, uiSliderConfig, $compile, $interval){
   $window.scrollTo(0, 0);
   $scope.loading_product = true;
   $scope.display_summary = false;
+  $scope.is_bespoke_style = false;
+  $scope.active_product_description_image = {
+    product_url: '',
+    large_url: '',
+    original_url: ''
+  }
   CustomerProducts.show($stateParams.product_name).then(function(data){
     console.log('product data for', $stateParams.product_name, data);
     $scope.product = data.data;
     $scope.images_array = [];
+    $scope.images_array_for_zoom = {};
     angular.forEach($scope.product.master.images, function(val, key){
       $scope.images_array.push(val.id)
+      $scope.images_array_for_zoom[key+1] = {
+        img: $scope.getImage(val.large_url),
+        thumb: $scope.getImage(val.mini_url),
+        title: key+'image'
+      }
     })
+    $scope.active_product_description_image = $scope.product.master.images[0];
     json_array_to_obj("customization_attributes", $scope.product.customization_attributes);
     json_array_to_obj("personalization_attributes", $scope.product.personalization_attributes);
     json_array_to_obj("standard_measurement_attributes", $scope.product.standard_measurement_attributes);
     json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
     $scope.luxire_styles = data.data.luxire_style_masters;
-    $scope.hideNext= $scope.product.luxire_style_masters.length>6 ? false : true;
     console.log('cart', $scope.cart_object);
     $scope.active_product_type = $scope.product.product_type.product_type;
     $scope.fabric_product_types = ["shirts", "pants", "jackets"];
@@ -27,6 +39,11 @@ angular.module('luxire')
       $scope.product.variants.push($scope.product.master);
       console.log('selected gift card variant', $scope.selected_gift_card_variant);
     }
+
+    // $scope.hideNext= $scope.product.luxire_style_masters.length>5 ? false : true;
+    // if($scope.fabric_product_types.indexOf($scope.product.product_type.product_type.toLowerCase())!==-1){
+    //   load_measurement_scales($scope.product);
+    // }
   }, function(error){
     $scope.loading_product = false;
     console.log(error);
@@ -95,7 +112,6 @@ angular.module('luxire')
   };
 
   $scope.get_ounce_weight = function(gram_weight){
-    console.log('gram_weight', gram_weight);
     return (parseFloat(gram_weight)/28.3).toFixed(2);
   };
 
@@ -103,57 +119,256 @@ angular.module('luxire')
 
   $scope.value3 = 12;
   $scope.value4 = 20;
+  $scope.reg_enlarged_image = function(element){
+    console.log('show enlarged image for', element.target.id);
+    $('#product_description_image_id').ezPlus({
+      gallery: 'thumbnail-part',
+      cursor: 'pointer',
+      galleryActiveClass: 'active-thumbnail',
+      easing: true,
+      zoomWindowFadeIn: 300,
+      zoomWindowFadeOut: 300,
+      lensFadeIn: 300,
+      lensFadeOut: 300,
+      responsive: true,
+      borderSize: 1,
+      cursor: "crosshair",
+      zoomType: "window",
+      zoomWindowWidth: 800,
+      zoomWindowHeight: 450,
+      zoomWindowOffsetX: 80,
+      zoomWindowOffsetY: -5,
+      zoomWindowPosition: 1,
+      loadingIcon: '/client/assets/images/customer/loading.gif'
+
+    });
+
+    $('#product_description_image_id').bind('click', function (e) {
+      console.log('clicked',e);
+      var ez = $('#product_description_image_id').data('ezPlus');
+      $.fancyboxPlus(ez.getGalleryList());
+      return false;
+    });
+
+        // var modal_instance = $uibModal.open({
+    //   animation: true,
+    //   templateUrl: 'enlarged_product_image.html',
+    //   controller: 'EnlargedProductImageController',
+    //   size: 'md',
+    //   windowClass: 'enlarged-product-window',
+    //   resolve: {
+    //     product: function () {
+    //       return $scope.product;
+    //     }
+    //   }
+    // });
+    // modal_instance.result.then(function () {
+    //
+    // }, function () {
+    //   console.info('Modal dismissed at: ' + new Date());
+    // });
+
+  };
+  $scope.dereg_enlarged_image = function(element){
+    console.log('dereg elem', $('#product_description_image_id').ezPlus);
+  };
+  /*Measurement Slider*/
+  // $scope.uMin = 1;
+  // $scope.uMax = 19;
+  // $scope.lMin = 1;
+  // $scope.lMax = 34
+  load_measurement_scales  = function(product){
+    $scope.$watch('Tracker.upper', function(newVal, oldVal){
+      console.log('upper slider new value', newVal);
+        refreshUpperMeasure(newVal);
+    })
+    $scope.$watch('Tracker.lower', function(newVal, oldVal){
+        refreshLowerMeasure(newVal);
+    })
+    if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'shirts'){
+
+      $scope.uCounters = [12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19];
+      $scope.uCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+      $scope.uCountersMap = [11.75,12,12.25,12.5,12.75,13,13.25,13.5,13.75,14,14.25,14.5,14.75,15,15.25,15.5,15.75,16,16.25,16.5,16.75,17,17.25,17.5,17.75,18,18.25,18.5,18.75];
+      $scope.lCounters = [20,21,22,23,24,25,26,27,28,29,30,31,32,33,34];
+      $scope.lCountersMap = [19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30,30.5,31,31.5,32,32.5,33,33.5,34];
+      $scope.lCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+
+    }
+    else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'){
+      $scope.uCounters =    [25,26,27,28,29,30,31,32,33,34,35,36,37,38];
+      $scope.uCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+      $scope.uCountersMap = [24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30,30.5,31,32,32.5,33,33.5,34,34.5,35,35.5,36,36.5,37,37.5,38];
+      $scope.lCounters =   [35,36,37,38,39,40,41,42,43,44,45,46,47,48];
+      $scope.lCountersMap = [34.5,35,35.5,36,36.5,37,37.5,38,38.5,39,39.5,40,40.5,41,41.5,42,42.5,43,43.5,44,44.5,45,45.5,46,46.5,47,47.5,48];
+      $scope.lCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+
+    }
+    else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'){
+      $scope.uCounters =    [25,26,27,28,29,30,31,32,33,34,35,36,37,38];
+      $scope.uCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+      $scope.uCountersMap = [24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30,30.5,31,32,32.5,33,33.5,34,34.5,35,35.5,36,36.5,37,37.5,38];
+      $scope.lCounters =   [35,36,37,38,39,40,41,42,43,44,45,46,47,48];
+      $scope.lCountersMap = [34.5,35,35.5,36,36.5,37,37.5,38,38.5,39,39.5,40,40.5,41,41.5,42,42.5,43,43.5,44,44.5,45,45.5,46,46.5,47,47.5,48];
+      $scope.lCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+
+    }
+  }
+  // Counter/Stepper for upper slider
+  // $scope.uCounters = [12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19];
+  // $scope.uCountersInt = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+  // $scope.uCountersMap = [12,12.25,12.5,12.75,13,13.25,13.5,13.75,14,14.25,14.5,14.75,15,15.25,15.5,15.75,16,16.25,16.5,16.75,17,17.25,17.5,17.75,18,18.25,18.5,18.75,19];
+
+  // Counter/Stepper for lower slider
+    // Initial Values
+
+  $scope.Tracker = {
+      upper: 0,
+      lower: 0
+  }
+  $scope.Tracker.upper = $scope.uMin;
+  $scope.Tracker.lower = $scope.lMin;
+  //Track values as they change
+  $scope.newUpperMeasurement = $scope.uMin;
+  $scope.newLowerMeasurement = $scope.lMin;
+  //left margin property for upper and lower slider handles
+  $scope.uSliderHandleLeftMargin = '0px';
+  $scope.lSliderHandleLeftMargin = '0px';
+
+  //Vertical alignment
+  $scope.uTopDisplacement = -75+'px';
+  $scope.lBottomDisplacement = 33+'px';
+
+  $scope.getAlert = {
+      start: uiSliderConfig.start,
+      stop: uiSliderConfig.stop
+  }
+  /**
+   * Process Upper Slider tracking and view updates
+   * */
 
 
-  $scope.options_neck_size = {
-      from: 12,
-      to: 18,
-      step: 0.25,
-      dimension: "",
-      vertical: false,
-      scale: [12, '|', 12.5, '|', 13, '|' , 13.5, '|', 14, '|', 14.5, '|',
-              15, '|', 15.5, '|', 16, '|' , 16.5, '|', 17, '|', 17.5, '|', 18 ],
-      round: 2,
-      css: {
-          background: {"background-color": "silver"},
-          before: {"background-color": "purple"},
-          // default: {"background-color": "white"},
-          after: {"background-color": "#8A247C"},
-          pointer: {"background-color": "red"}
-      },
-      callback: function(value, elt) {
-          $scope.set_attribute_value('standard_measurement_attributes', 'Neck Size', value);
-          $scope.get_standard_sizes();
-          console.log(value);
+  function refreshUpperMeasure(newValue) {
+      var location = $scope.uCountersInt.indexOf(newValue);
+      $scope.newUpperMeasurement = $scope.uCountersMap[location];
+      var product = $scope.product;
+      if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'shirts'){
+        $scope.cart_object['standard_measurement_attributes']['Collar Size']['value'] = $scope.newUpperMeasurement;
+      }
+      else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'){
+        $scope.cart_object['standard_measurement_attributes']['Waist Size']['value'] = $scope.newUpperMeasurement;
+      }
+      else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'){
+        $scope.cart_object['standard_measurement_attributes']['Chest Size']['value'] = $scope.newUpperMeasurement;
+      }
+
+
+  }
+  //get the upper ui-slider-handle position every 10ms and update the upper sticker position
+  // $interval(function(){
+  //     $scope.uSliderHandleLeftMargin = getPosition(document.querySelector('div.upper-slider > span.ui-slider-handle')).x -99 -33 -36 + 'px';
+  // },10)
+
+  $scope.getUpperValue = function() {
+      return $scope.newUpperMeasurement
+  }
+  /**
+   * Process Lower Slider tracking and view updates
+   * */
+
+
+
+  function refreshLowerMeasure(newValue) {
+      var location = $scope.uCountersInt.indexOf(newValue);
+      $scope.newLowerMeasurement = $scope.lCountersMap[location];
+      var product = $scope.product;
+
+      if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'shirts'){
+        $scope.cart_object['standard_measurement_attributes']['Sleeve Length']['value'] = $scope.newLowerMeasurement;
+      }
+      else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'){
+        $scope.cart_object['standard_measurement_attributes']['In-seam']['value'] = $scope.newLowerMeasurement;
+      }
+      else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'){
+        $scope.cart_object['standard_measurement_attributes']['Length']['value'] = $scope.newLowerMeasurement;
+      }
+
+  }
+  //get the upper ui-slider-handle position every 10ms and update the upper sticker position
+  // $interval(function(){
+  //     $scope.lSliderHandleLeftMargin = getPosition(document.querySelector('div.lower-slider > span.ui-slider-handle')).x -99 -33 -36 + 'px';
+  // },10)
+
+  $scope.getLowerValue = function() {
+      return $scope.newLowerMeasurement
+  }
+  /**
+   * Utility Functions
+   * */
+  function getPosition(el) {
+      var xPos = 0;
+      var yPos = 0;
+
+      while (el) {
+          console.log('EL is: ', el);
+          if (el.tagName == "BODY") {
+              // deal with browser quirks with body/window/document and page scroll
+              var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+              var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+              xPos += (el.offsetLeft - xScroll + el.clientLeft);
+              yPos += (el.offsetTop - yScroll + el.clientTop);
+          } else {
+              console.log('In ELSE')
+              // for all other non-BODY elements
+              xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+              yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+              console.log('XPos: ',xPos,'YPos: ',yPos)
+          }
+
+          el = el.offsetParent;
+      }
+      return {
+          x: xPos,
+          y: yPos
+      };
+  }
+  /**
+   * Following functions came with the example - delete after testing
+   * */
+  function refreshSwatch(ev, ui) {
+      var red = $scope.colorpicker.red,
+              green = $scope.colorpicker.green,
+              blue = $scope.colorpicker.blue;
+      colorpicker.refreshSwatch(red, green, blue);
+  }
+
+  this.slider = {
+      options: {
+          start: function(event, ui){
+              $log.info('Event: Slider start - set with slider options', event);
+          },
+          stop: function(event, ui){
+              $log.info('Event: Slider stop - set with slider options', event);
+          }
+      }
+  }
+  this.colorpicker = {
+      red: 255,
+      green: 140,
+      blue: 60,
+      options: {
+          orientation: 'horizontal',
+          min: 0,
+          max: 255,
+          range: 'min',
+          change: refreshSwatch,
+          slide: refreshSwatch
       }
   };
 
-  $scope.options_sleeve_length = {
-      from: 20,
-      to: 33,
-      step: 0.5,
-      dimension: "",
-      vertical: false,
-      scale: [20, '|', 21, '|', 22, '|' , 23, '|', 24, '|', 25, '|',
-              26, '|', 27, '|', 28, '|' , 29, '|', 30, '|', 31, '|', 32, '|', 33 ],
-      round: 1,
 
-      css: {
-          background: {"background-color": "silver"},
-          before: {"background-color": "purple"},
-          // default: {"background-color": "white"},
-          after: {"background-color": "#8A247C"},
-          pointer: {"background-color": "red"}
-      },
-      callback: function(value, elt) {
-          $scope.set_attribute_value('standard_measurement_attributes', 'Sleeve Length', value);
-          $scope.get_standard_sizes();
-          console.log(value);
-      }
-  };
-
-  /**/
-
+  /*Measurement Slider*/
 
   /*fn to convert array of object in a object*/
   $scope.cart_object = {};
@@ -165,7 +380,7 @@ angular.module('luxire')
     $scope.cart_object[parent] = {};
     angular.forEach(arr, function(val, key){
       if(parent !=='personalization_attributes'){
-        if(val.name.toLowerCase().indexOf('fit type')!==-1){// neutralize fit type for shirt/pant/jacket
+        if(val.name.toLowerCase().indexOf('fit type')!==-1){// neutralize fit type for shirt/pant/jacket eg, replacing shirts fit type with Fit type
           val.name = 'Fit Type';
         }
         if(angular.isObject(val.value)){
@@ -174,6 +389,7 @@ angular.module('luxire')
         else{
           $scope.cart_object[parent][val.name] = {value: val.value,options: {}};
         }
+
       }
       // else{
       //   $scope.cart_object[parent][val.name] = {};
@@ -190,41 +406,95 @@ angular.module('luxire')
   $scope.send_sample = function(measurement_sample){
     console.log(measurement_sample);
   };
+
+  $scope.invalid_fields = [];
+
+  /*Validations*/
+  var has_valid_measurements = function(){
+    var mandatory_fields = [];
+    var valid_measurements = [];
+    $scope.invalid_fields = [];
+    var product_type_validations = {
+      'shirts': 'Collar Size,Sleeve Length,Fit Type',
+      'pants': 'Waist Size,In-seam,Fit Type',
+      'jackets': 'Chest Size,Length,Fit Type',
+      'gift cards': '',
+      'ties': '',//Tie Width,Tie Length
+      'belts': ''//Belt Length
+    };
+    var product_type = $scope.product.product_type.product_type;
+    console.log('product_type', product_type_validations[product_type.toLowerCase()].indexOf(','));
+    if(product_type_validations[product_type.toLowerCase()].indexOf(',')!==-1){
+      mandatory_fields = product_type_validations[product_type.toLowerCase()].split(',');
+      console.log('mandatory_fields', mandatory_fields);
+      angular.forEach(mandatory_fields, function(val, key){
+        console.log('mandatory_fields', val);
+        if($scope.cart_object['standard_measurement_attributes'] && $scope.cart_object['standard_measurement_attributes'][val] && $scope.cart_object['standard_measurement_attributes'][val].value && $scope.cart_object['standard_measurement_attributes'][val].value!==''){
+          valid_measurements.push(true);
+        }
+        else{
+          $scope.invalid_fields.push(val);
+          valid_measurements.push(false);
+        }
+      })
+      if(valid_measurements.indexOf(false)==-1){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return true;
+    }
+  };
   $scope.add_to_cart = function(variant){
     console.log('add to cart', variant);
     console.log('luxire_cart', $rootScope.luxire_cart);
-    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
-      CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
-      .then(function(data){
-        CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+    console.log('has valid measurements', has_valid_measurements());
+    if(has_valid_measurements()){
+      if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
+        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
+        .then(function(data){
+          CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
+            $rootScope.luxire_cart = data.data;
+            $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
+            $state.go('customer.pre_cart');
+          }, function(error){
+            console.error(error);
+          });
+          console.log(data);
+        },function(error){
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+          console.error(error);
+        });
+      }
+      else{
+        CustomerOrders.create_order($scope.cart_object, variant, $scope.measurement_sample)
+        .then(function(data){
           $rootScope.luxire_cart = data.data;
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
           $state.go('customer.pre_cart');
-        }, function(error){
+          console.log(data);
+        },function(error){
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
           console.error(error);
         });
-        console.log(data);
-      },function(error){
-        console.error(error);
-      });
+      }
     }
     else{
-      CustomerOrders.create_order($scope.cart_object, variant, $scope.measurement_sample)
-      .then(function(data){
-        $rootScope.luxire_cart = data.data;
-        $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
-        $state.go('customer.pre_cart');
-        console.log(data);
-      },function(error){
-        console.error(error);
-      });
+      $rootScope.alerts.push({type: 'danger', message: 'Please fill mandatory field '+$scope.invalid_fields[0]});
     }
   };
 
-  var style_iterator = function(style, attribute_type){
+  var style_iterator = function(style, attribute_type, is_selected){
+    console.log('style iterator for: ', style,'of type, : ',attribute_type,'is selected', is_selected);
+    console.log('cart object b4', $scope.cart_object);
     angular.forEach($scope.cart_object[attribute_type], function(value, key){
-      if(angular.isUndefined(style)){
-        $scope.cart_object[attribute_type][key]['value'] = '';
+      if(!is_selected){
+        if(style[attribute_type][key] && style[attribute_type][key]!==''){
+          $scope.cart_object[attribute_type][key]['value'] = '';
+        }
       }
       else{
         if(angular.isDefined(style[attribute_type][key])){
@@ -232,24 +502,33 @@ angular.module('luxire')
         }
         else{
           $scope.cart_object[attribute_type][key]['value'] = '';
+
         }
+
       }
     })
+    console.log('cart object after', $scope.cart_object);
+
     return;
 
   };
 
-  $scope.style_extractor = function(style){
-    console.log('cart_object',$scope.cart_object);
+  $scope.style_extractor = function(style, is_selected){
+    console.log('cart_object in style extractor',$scope.cart_object);
     console.log('extracted style', style);
-    if(angular.isDefined(style)){
-      style_iterator(style.default_values, "customization_attributes");
-      style_iterator(style.default_values, "standard_measurement_attributes");
-      style_iterator(style.default_values, "body_measurement_attributes");
-    }
-    else{
-      style_iterator();
-    }
+    $scope.active_style = style;
+    $scope.cart_object.selected_style = style;
+    style_iterator(style.default_values, "customization_attributes",is_selected);
+    style_iterator(style.default_values, "standard_measurement_attributes", is_selected);
+    style_iterator(style.default_values, "body_measurement_attributes", is_selected);
+    // if(is_selected){
+    //   style_iterator(style.default_values, "customization_attributes",true);
+    //   style_iterator(style.default_values, "standard_measurement_attributes", true);
+    //   style_iterator(style.default_values, "body_measurement_attributes", true);
+    // }
+    // else{
+    //   style_iterator();
+    // }
     console.log('cart_object',$scope.cart_object);
     return;
   };
@@ -258,7 +537,8 @@ angular.module('luxire')
     style_iterator();
   };
 
-
+  var prev_fit_type = '';
+  var new_fit_type = '';
   $scope.active_style = {};//Selected style accross modals
   $scope.choose_style = function(){
     var modal_instance = $uibModal.open({
@@ -273,15 +553,31 @@ angular.module('luxire')
         },
         active_style: function(){
           return $scope.active_style;
+        },
+        parent_scope: function(){
+          return $scope;
         }
       }
     });
     modal_instance.result.then(function (selected_style) {
-      console.log('selected style', selected_style);
-      $scope.active_style = selected_style;
-      $scope.style_extractor(selected_style);
-      $scope.cart_object.selected_style = selected_style;
+      // console.log('selected style', selected_style, 'has_style_changed', selected_style.has_style_changed, 'is_selected', selected_style.is_selected);
+      // if(selected_style.has_style_changed){
+      //   delete selected_style.has_style_changed;
+      //   delete selected_style.is_selected;
+      //   if(selected_style && selected_style.name){
+      //     prev_fit_type = 'Custom';
+      //     $scope.cart_object["standard_measurement_attributes"]["Fit Type"].value = 'Custom';
+      //     $scope.style_extractor(selected_style, true);
+      //   }
+      //   else{
+      //     $scope.style_extractor($scope.active_style, false);
+      //   }
+      // }
     }, function () {
+      if($scope.active_style && $scope.active_style.name){
+        prev_fit_type = 'Custom';
+        $scope.cart_object["standard_measurement_attributes"]["Fit Type"].value = 'Custom';
+      }
       console.info('Modal dismissed at: ' + new Date());
     });
     modal_instance.opened.then(function(){
@@ -306,7 +602,7 @@ angular.module('luxire')
   };
 
   $scope.show_summary = function(){
-    console.log('show summary');
+    console.log('show summary with base style', $scope.active_style);
     var modal_instance = $uibModal.open({
       animation: true,
       templateUrl: 'summary.html',
@@ -351,33 +647,40 @@ angular.module('luxire')
   }
 
   $scope.get_standard_sizes = function(){
+    console.log('get std sizes for fit');
+    new_fit_type = $scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"];
+    if(prev_fit_type.toLowerCase() === 'custom' && new_fit_type.toLowerCase() !== 'custom'){
+      console.log('change in fit type');
+      // $scope.style_extractor();
+    }
 
-
-    if($scope.cart_object["standard_measurement_attributes"]["Neck Size"] && $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"] &&
-       $scope.cart_object["standard_measurement_attributes"]["Fit Type"] && $scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]){
-         console.log($scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"]);
-         console.log($scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"]);
-         console.log($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]);
-         console.log('making request');
-         CustomerProducts.standard_sizes($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"],
-          $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"],
-          $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"])
-         .then(function(data){
-           if(data.data && !data.data.msg){
-             console.log('std sizes', data);
-             $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"] = data.data['neck'];
-             $scope.cart_object["body_measurement_attributes"]["Chest Around"]["value"] = data.data['chest'];
-             $scope.cart_object["body_measurement_attributes"]["Waist Around"]["value"] = data.data['waist'];
-            //  $scope.cart_object["standard_measurement_attributes"]["Bottom"]["value"] = data.data['bottom'];
-            //  $scope.cart_object["standard_measurement_attributes"]["Biceps"]["value"] = data.data['biceps'];
-             $scope.cart_object["standard_measurement_attributes"]["Yoke Width"]["value"] = data.data['yoke'];
-             $scope.cart_object["body_measurement_attributes"]["Wrist Around"]["value"] = data.data['wrist'];
-             $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"] = data.data['shirt_length'];
-           };
-         },function(error){
-           console.log(error);
-         });
-   }
+  //
+   //
+  //   if($scope.cart_object["standard_measurement_attributes"]["Neck Size"] && $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"] &&
+  //      $scope.cart_object["standard_measurement_attributes"]["Fit Type"] && $scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]){
+  //        console.log($scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"]);
+  //        console.log($scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"]);
+  //        console.log($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"]);
+  //        console.log('making request');
+  //        CustomerProducts.standard_sizes($scope.cart_object["standard_measurement_attributes"]["Fit Type"]["value"],
+  //         $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"],
+  //         $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"])
+  //        .then(function(data){
+  //          if(data.data && !data.data.msg){
+  //            console.log('std sizes', data);
+  //            $scope.cart_object["standard_measurement_attributes"]["Neck Size"]["value"] = data.data['neck'];
+  //            $scope.cart_object["body_measurement_attributes"]["Chest Around"]["value"] = data.data['chest'];
+  //            $scope.cart_object["body_measurement_attributes"]["Waist Around"]["value"] = data.data['waist'];
+  //           //  $scope.cart_object["standard_measurement_attributes"]["Bottom"]["value"] = data.data['bottom'];
+  //           //  $scope.cart_object["standard_measurement_attributes"]["Biceps"]["value"] = data.data['biceps'];
+  //            $scope.cart_object["standard_measurement_attributes"]["Yoke Width"]["value"] = data.data['yoke'];
+  //            $scope.cart_object["body_measurement_attributes"]["Wrist Around"]["value"] = data.data['wrist'];
+  //            $scope.cart_object["standard_measurement_attributes"]["Sleeve Length"]["value"] = data.data['shirt_length'];
+  //          };
+  //        },function(error){
+  //          console.log(error);
+  //        });
+  //  }
 
 
   };
@@ -495,8 +798,9 @@ angular.module('luxire')
 
 
   $scope.make_my_own_style = function(event){
-    console.log('scrolling');
-    $('html, body').animate({ scrollTop:$("#make_my_own_style").offset().top-120}, 500);
+    $scope.is_bespoke_style = !$scope.is_bespoke_style;
+    // console.log('scrolling');
+    // $('html, body').animate({ scrollTop:$("#make_my_own_style").offset().top-120}, 500);
     // $anchorScroll.yOffset = angular.element(document.getElementById('product_detail')).prop('offsetTop')+ 50;
     // console.log('pos',angular.element(document.getElementById('product_detail')).prop('offsetTop'));
     // $location.hash('make_my_own_style');
@@ -514,8 +818,8 @@ angular.module('luxire')
 
   var tempObj=[];
   var slideStart=0;
-  var slideEnd=9;
-  $scope.hideNext= $scope.product.luxire_style_masters != undefined && $scope.product.luxire_style_masters.length>7 ? false : true;
+  var slideEnd=5;
+  $scope.hideNext= $scope.product.luxire_style_masters != undefined && $scope.product.luxire_style_masters.length>5 ? false : true;
   $scope.hidePrev=true;
   $scope.slideNext=function(){
     tempObj=$scope.product.luxire_style_masters;
@@ -580,22 +884,75 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseStyleController', function($scope, $uibModalInstance, luxire_styles, active_style, ImageHandler, $timeout){
+.controller('ChooseStyleController', function($scope, $uibModalInstance, luxire_styles, active_style, parent_scope,ImageHandler, $timeout){
   console.log(luxire_styles);
   $scope.luxire_styles = luxire_styles;
   $scope.selectSliderIndex=-1;
   $scope.selected_style = active_style;
+  $scope.hide_active_style_details = true;
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
+  $scope.active_detail_style = {};
+  $scope.toggle_detailed_style = function(style, toggle){
+    console.log('show style', style);
+    $scope.hide_active_style_details = toggle;
+    $scope.active_detail_style = !toggle ? style : {};
+    console.log('active detail style', $scope.active_detail_style);
+  };
   $(document).ready(function(){
       $timeout(function () {
+        var slides_to_scroll = 5;
         $('.slick-bespoke-style-slider').slick({
+          infinite: false,
           mobileFirst: true,
-          slidesToShow: 8,
-          slidesToScroll: 1,
-          prevArrow: $('#prev-style'),
-          nextArrow: $('#next-style')
+          slidesToShow: slides_to_scroll,
+          slidesToScroll: 1
+          // ,
+          // prevArrow: $('#prev-style'),
+          // nextArrow: $('#next-style')
+        });
+        function fetch_slick(key){
+          var slick = $('.slick-bespoke-style-slider').slick('getSlick');
+          if(key){
+            return slick[key];
+          }
+          else{
+            return slick;
+          }
+        }
+        $('#prev-style').addClass('slick-arrow');
+        $('#next-style').addClass('slick-arrow');
+        var slick = fetch_slick();
+        var slide_count = fetch_slick('slideCount');
+        if(slide_count>slides_to_scroll){
+          $('#prev-style').addClass('slick-disabled');
+        }
+        else{
+          $('#prev-style').addClass('slick-disabled');
+          $('#next-style').addClass('slick-disabled');
+        }
+        $('#next-style').click(function(){
+          var slick= fetch_slick();
+          if((slick.currentSlide+slides_to_scroll-1)<(slide_count-1)){
+            $('.slick-bespoke-style-slider').slick('slickNext');
+            $('#prev-style').removeClass('slick-disabled');
+            slick= fetch_slick();
+          }
+          if((slick.currentSlide+slides_to_scroll-1)===(slide_count-1)){
+            $('#next-style').addClass('slick-disabled');
+          }
+        });
+        $('#prev-style').click(function(){
+          var slick= fetch_slick();
+          if(slick.currentSlide>0){
+            $('.slick-bespoke-style-slider').slick('slickPrev');
+            $('#next-style').removeClass('slick-disabled');
+            slick= fetch_slick();
+          }
+          if(slick.currentSlide==0){
+            $('#prev-style').addClass('slick-disabled');
+          }
         });
       }, 0);
   });
@@ -605,21 +962,39 @@ angular.module('luxire')
     $scope.selectSliderIndex=index;
     $scope.selected_style = selected_style;
   };
-  $scope.select_style=function(index, style){
+  $scope.select_style = function(index, style){
     console.log("index: "+index);
     console.log('style', style);
-    if($scope.selected_style.name == style.name){
+    if($scope.selected_style.name === style.name){
       $scope.selected_style = {};
+      parent_scope.style_extractor(style, false);
     }
     else{
       $scope.selected_style = style;
+      parent_scope.style_extractor(style, true);
     };
   };
-
-
-  $scope.done = function(){
-    $uibModalInstance.close($scope.selected_style);
-  };
+  // $scope.select_style=function(index, style){
+  //   console.log("index: "+index);
+  //   console.log('style', style);
+  //   if($scope.selected_style.name === style.name){
+  //     $scope.selected_style = {};
+  //     $scope.selected_style.is_selected = false;
+  //   }
+  //   else{
+  //     $scope.selected_style = style;
+  //     $scope.selected_style.is_selected = true;
+  //   };
+  // };
+  //
+  //
+  // $scope.done = function(){
+  //   $scope.selected_style.has_style_changed = false;
+  //   if(active_style.name!==$scope.selected_style.name){
+  //     $scope.selected_style.has_style_changed = true;
+  //   }
+  //   $uibModalInstance.close($scope.selected_style);
+  // };
 
   $scope.cancel = function(){
     $uibModalInstance.dismiss('cancel');
@@ -627,7 +1002,7 @@ angular.module('luxire')
 
 
 })
-.controller('BespokeStyleController', function($scope, $uibModalInstance, ImageHandler, product, cart_object, parent_scope, active_style, $state, CustomerConstants, $filter, $timeout){
+.controller('BespokeStyleController', function($scope, $uibModalInstance, ImageHandler, product, cart_object, parent_scope, active_style, $state, CustomerConstants, $filter, $timeout, $uibPosition){
   $scope.product = product;
   $scope.product['bespoke_attributes'] = product['customization_attributes'].concat(product['personalization_attributes']);
   $scope.product['bespoke_attributes'] = $filter('orderBy')($scope.product['bespoke_attributes'], 'id');
@@ -638,27 +1013,115 @@ angular.module('luxire')
     return ImageHandler.url(url);
   };
 
+
   /*Slick wheeler/slider*/
   $(document).ready(function(){
       $timeout(function () {
+        var slides_to_scroll = 6;
         $('.slick-bespoke-style-slider').slick({
+          infinite: false,
           mobileFirst: true,
-          slidesToShow: 8,
+          slidesToShow: slides_to_scroll,
           slidesToScroll: 1,
-          centerPadding: '2%',
-          prevArrow: $('#prev-style'),
-          nextArrow: $('#next-style')
+          centerPadding: '2%'
         });
+        var attr_to_show = 4;
         $('.bespoke-attributes-slider').slick({
           infinite: false,
-          slidesToShow: 4,
+          slidesToShow: attr_to_show,
           slidesToScroll: 1,
           centerPadding: '2%',
-          prevArrow: $('#prev-attr'),
-          nextArrow: $('#next-attr'),
           vertical: true
         });
+        $('#prev-style').addClass('slick-arrow');
+        $('#next-style').addClass('slick-arrow');
+        function fetch_slick(key){
+          var slick = $('.slick-bespoke-style-slider').slick('getSlick');
+          if(key){
+            return slick[key];
+          }
+          else{
+            return slick;
+          }
+        }
+        var slide_count = fetch_slick('slideCount');
+        if(slide_count>slides_to_scroll){
+          $('#prev-style').addClass('slick-disabled');
+        }
+        else{
+          $('#prev-style').addClass('slick-hidden');
+          $('#next-style').addClass('slick-hidden');
+        }
+        $('#next-style').click(function(){
+          var slick= fetch_slick();
+          if((slick.currentSlide+slides_to_scroll-1)<(slide_count-1)){
+            $('.slick-bespoke-style-slider').slick('slickNext');
+            $('#prev-style').removeClass('slick-disabled');
+            slick= fetch_slick();
+          }
+          if((slick.currentSlide+slides_to_scroll-1)===(slide_count-1)){
+            $('#next-style').addClass('slick-disabled');
+          }
+        });
+        $('#prev-style').click(function(){
+          var slick= fetch_slick();
+          if(slick.currentSlide>0){
+            $('.slick-bespoke-style-slider').slick('slickPrev');
+            $('#next-style').removeClass('slick-disabled');
+            slick= fetch_slick();
+          }
+          if(slick.currentSlide==0){
+            $('#prev-style').addClass('slick-disabled');
+          }
+        });
+
+        $('#prev-attr').addClass('slick-arrow');
+        $('#next-attr').addClass('slick-arrow');
+        function fetch_slick_attrs(key){
+          var slick = $('.bespoke-attributes-slider').slick('getSlick');
+          if(key){
+            return slick[key];
+          }
+          else{
+            return slick;
+          }
+        }
+        var attr_count = fetch_slick_attrs('slideCount');
+        if(attr_count>attr_to_show){
+          $('#prev-attr').addClass('slick-disabled');
+        }
+        else{
+          $('#prev-attr').addClass('slick-hidden');
+          $('#next-attr').addClass('slick-hidden');
+        }
+        $('#next-attr').click(function(){
+          var slick= fetch_slick_attrs();
+          if((slick.currentSlide+attr_to_show-1)<(attr_count-1)){
+            $('.bespoke-attributes-slider').slick('slickNext');
+            $('#prev-attr').removeClass('slick-disabled');
+            slick= fetch_slick_attrs();
+          }
+          if((slick.currentSlide+attr_to_show-1)===(attr_count-1)){
+            $('#next-attr').addClass('slick-disabled');
+          }
+        });
+        var prev_attr_init = true;
+        $('#prev-attr').click(function(){
+          var slick= fetch_slick_attrs();
+          if(slick.currentSlide>0){
+            $('.bespoke-attributes-slider').slick('slickPrev');
+            $('#next-attr').removeClass('slick-disabled');
+            slick= fetch_slick_attrs();
+          }
+          if(slick.currentSlide==0){
+            $('#prev-attr').addClass('slick-disabled');
+          }
+        });
+        $('#next-attr').click();
+
         $('#prev-attr').click();
+
+
         $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][0]);
         // $('.bespoke-attributes-slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
         //   console.log('n', nextSlide);
@@ -675,6 +1138,26 @@ angular.module('luxire')
     attr_name = attr_name.toLowerCase().replace(" ","-");
     attr_type = attr_type.toLowerCase().replace(" ","-");
     window.open('/#/attributes/'+attr_name+'?type='+attr_type, '_blank')
+  };
+
+  $scope.attr_options_key_length = function(options_obj){
+    if(options_obj && angular.isObject(options_obj)){
+      return Object.keys(options_obj).length;
+    }
+    else{
+      return 0;
+    }
+  };
+
+  $scope.view_measurements = {
+    templateUrl: 'view_measurements_popover.html'
+  };
+
+  $scope.enlarge_style = function(style, element){
+    $scope.enlarge_image_xpos = element.clientX-360;
+    $scope.enlarge_image_ypos = element.clientY-30;
+    $scope.enlarged_style = style;
+
   };
 
   $scope.upload_custom_image = function(files, index){
@@ -875,6 +1358,13 @@ angular.module('luxire')
   /*Load products*/
   $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';
 
+  $scope.select_contrast_product = function(product){
+    console.log('selected contrast product', product, 'parent', this.$parent.$$childHead.id);
+    var path = this.$parent.$$childHead.id.split('#');
+    console.log('selected contrast product', path);
+    $scope.cart_object[path[0]][path[1]][path[2]][path[3]] = product.title;
+  };
+
   $scope.selected_fabric = function(data){
     console.log(data);
   };
@@ -924,55 +1414,17 @@ angular.module('luxire')
   $scope.luxire_styles = $scope.product.luxire_style_masters;
 
   console.log('luxire_styles length', $scope.luxire_styles.length);
-    var tempObj=[];
-    var slideStart=0;
-    var slideEnd = 8;
-    $scope.hideNext= $scope.product.luxire_style_masters.length>8 ? false : true;
-    $scope.hidePrev= slideStart==0? true: false;
-    $scope.slideNext=function(){
-      tempObj=$scope.product.luxire_style_masters;
-      console.log("slide next is calling");
-      slideStart++;
-      console.log("slide start: "+slideStart);
-      slideEnd++;
-      if(slideStart!=0){
-        $scope.hidePrev=false;
-      }
-      console.log("slide end: "+slideEnd);
-      $scope.luxire_styles = tempObj.slice(slideStart,slideEnd);
-      if(slideEnd==$scope.product.luxire_style_masters.length){
-        $scope.hideNext=true;
-      }
-
-    }
-    $scope.slidePrev=function(){
-
-      tempObj=$scope.product.luxire_style_masters;;
-      console.log("slide prev is calling");
-      slideStart--;
-      console.log("slide start: "+slideStart);
-      slideEnd--;
-      console.log("slide end: "+slideEnd);
-      if(slideEnd!=$scope.product.luxire_style_masters.length){
-        $scope.hideNext=false;
-      }
-      $scope.luxire_styles = tempObj.slice(slideStart,slideEnd);
-      if(slideStart==0){
-        $scope.hidePrev=true;
-      }
-
-    };
     $scope.select_style = function(index, style){
       console.log("index: "+index);
       console.log('style', style);
       if($scope.active_style.name == style.name){
+        parent_scope.style_extractor(style, false);
         $scope.active_style = {};
-        parent_scope.style_extractor();
 
       }
       else{
         $scope.active_style = style;
-        parent_scope.style_extractor(style);
+        parent_scope.style_extractor(style, true);
       };
     };
 
@@ -1168,10 +1620,11 @@ angular.module('luxire')
   };
 })
 
-.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style',function($scope, product, cart_object, base_style){
+.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style', '$uibModalInstance',function($scope, product, cart_object, base_style, $uibModalInstance){
   $scope.product = product;
   $scope.cart_object = cart_object;
   $scope.base_style = base_style;
+  console.log('cart_object in summary', cart_object);
   $scope.summary_bespoke_attributes = cart_object['customization_attributes'];
   angular.forEach(cart_object['personalization_attributes'], function(val, key){
     $scope.summary_bespoke_attributes[key] = val;
@@ -1180,13 +1633,22 @@ angular.module('luxire')
   console.log('cart object', cart_object);
   console.log('bespoke attributes', $scope.summary_bespoke_attributes);
   angular.forEach($scope.summary_bespoke_attributes, function(val, key){
-    if(val.value&&val.options){
+    console.log('printing attr for summary', 'key',key,'val',val);
+    if(val.value&&val.options && val.value!==''){
       $scope.total_customizable_attributes.push({name: key,value:val.value,options: val.options});
     }
-    else{//for personalisation
-      angular.forEach(val,function(v, k){
-        $scope.total_customizable_attributes.push({name: key,value:k,cost: v.cost});
-      })
+    else if((val.value&&val.options && val.value=='') || (!val.value&&!val.options) ){//for personalisation
+      console.log('Personalization keys', key);
+      if(key.toLowerCase()!=='monogram'){
+        angular.forEach(val,function(v, k){
+          $scope.total_customizable_attributes.push({name: key,value:k,options: v,cost: v.cost});
+        })
+      }
+      else{
+        console.log('Personalization keys Monogram');
+        $scope.total_customizable_attributes.push({name: key,value:'Monogram',options: val,cost: val.cost});
+      }
+
     }
   });
   $scope.view_measurements = {
@@ -1212,6 +1674,49 @@ angular.module('luxire')
     return attrs;
   }
 
+  $scope.close = function(){
+    $uibModalInstance.dismiss('cancel');
+  };
+
 
 
 }])
+.controller('EnlargedProductImageController',['$scope', 'product', '$uibModalInstance', 'ImageHandler', function($scope, product, $uibModalInstance, ImageHandler){
+  console.log('enlarged product image ctrl', product);
+  $scope.product = product;
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
+  };
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
+}])
+.factory('uiSliderConfig', function ($log) {
+    this.sliderStartValue = 0;
+    this.sliderStopValue = 0;
+    var self = this;
+    return {
+        start: function (event, ui) {
+            // $log.info('Slider start',event,ui); self.sliderStartValue = ui.value;
+        },
+        stop: function (event, ui) {
+            // $log.info('Slider stop',event,ui); $log.error('Note - end value = ',self.sliderStopValue);
+        }
+    };
+})
+.factory('colorpicker', function() {
+    function hexFromRGB(r, g, b) {
+        var hex = [r.toString(16), g.toString(16), b.toString(16)];
+        angular.forEach(hex, function(value, key) {
+            if (value.length === 1)
+                hex[key] = "0" + value;
+        });
+        return hex.join('').toUpperCase();
+    }
+    return {
+        refreshSwatch: function(r, g, b) {
+            var color = '#' + hexFromRGB(r, g, b);
+            angular.element('#swatch').css('background-color', color);
+        }
+    };
+})
