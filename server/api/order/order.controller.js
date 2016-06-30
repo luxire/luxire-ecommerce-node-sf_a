@@ -6,8 +6,9 @@ var env = require('../../config/constants');
 
 
 exports.index = function(req, res){
+  var page = req.query.page || 1;
   http.get({
-    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.orders+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058&page='+page,
     body: ''
   },function(error, response, body){
     if(error == null){
@@ -153,6 +154,29 @@ exports.update = function(req, res){
       res.status(500).send("Rails server not responding");
       console.log('req from'+req.connection.remoteAddress+'for updating  order, responded with'+error);
 
+    }
+  })
+};
+
+
+/*Update status*/
+exports.update_status = function(req, res){
+  console.log('update order status', req.body);
+  // console.log(req.body);
+  // console.log(env.spree.host+env.spree.orders+'/'+req.body.order_number+'/line_items/'+req.body.line_item_id+'?line_item[variant_id]='+req.body.variant_id+'&line_item[quantity]='+req.body.quantity+'&order_token='+req.body.order_token);
+  http.put({
+    uri: env.spree.host+'/api/change_order_status?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    headers:{'content-type': 'application/json'},
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    console.log(body);
+    if(error){
+      res.status(500).send("Rails server not responding");
+      console.log('req from'+req.connection.remoteAddress+'for updating  order, responded with'+error);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+      console.log('req from'+req.connection.remoteAddress+'for updating order, responded with'+response.statusCode);
     }
   })
 };

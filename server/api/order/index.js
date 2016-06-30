@@ -6,6 +6,7 @@ var router = express.Router();
 
 router.get('/',controller.index);
 router.get('/incomplete', controller.incomplete_order);
+router.put('/update_status', controller.update_status);
 router.get('/:number/payments', controller.get_payment_methods);
 
 router.get('/:number/:token', controller.show);
