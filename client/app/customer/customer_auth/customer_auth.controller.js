@@ -26,18 +26,17 @@ angular.module('luxire')
         CustomerAuthentication.login($scope.remember_me, data.data);
 
         if($state.params.nav_to_state === 'customer.checkout_address'){
-          $state.go('customer.checkout_address');
-          //
-          // CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
-          // .then(function(data){
-          //   console.log('fetched order', data.data);
-          //   $rootScope.luxire_cart = data.data;
-          //   $state.go('customer.checkout_address');
-          // },
-          // function(error){
-          //   // $state.params ? $state.go($state.params.nav_to_state) : $state.go('customer.product_listing');
-          //   console.error(error);
-          // });
+
+          CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+          .then(function(data){
+            console.log('fetched order', data.data);
+            $rootScope.luxire_cart = data.data;
+            $state.go('customer.checkout_address');
+          },
+          function(error){
+            // $state.params ? $state.go($state.params.nav_to_state) : $state.go('customer.product_listing');
+            console.error(error);
+          });
         }
         else if ($state.params.nav_to_state == null){
           $state.go('customer.home');
@@ -80,32 +79,30 @@ angular.module('luxire')
       password_confirmation: ''
     }
   }
+  $scope.loading = false;
   $scope.error_reg = '';
   $scope.register = function(){
+    $scope.error_reg = '';
     console.log('register');
     console.log($scope.new_user);
     if($scope.new_user.user.email!="" && $scope.new_user.user.password!="" && $scope.new_user.user.password_confirmation!=""){
       console.log($scope.new_user);
+      $scope.loading = true;
       CustomerAuthentication.signup($scope.new_user)
       .then(function(data){
+        $scope.loading = false;
         CustomerAuthentication.authenticate($scope.new_user)
         .then(function(data){
           CustomerAuthentication.login(false, data.data);
-          var default_collection = {
-            taxonomy_name: CustomerConstants.default.taxonomy_name,
-            taxon_name: CustomerConstants.default.taxon_name,
-            taxonomy_id: CustomerConstants.default.taxonomy_id,
-            taxon_id: CustomerConstants.default.taxon_id,
-          };
-            $state.go('customer.product_listing', default_collection);
-            $rootScope.alerts.push({type: 'success', message: 'Signup successful!'});
-
+          $state.go('customer.home');
+          $rootScope.alerts.push({type: 'success', message: 'Signup successful!'});
         }, function(error){
-
+          $rootScope.alerts.push({type: 'success', message: 'Signup failed!'});
         })
 
         console.log(data);
       }, function(error){
+        $scope.loading = false;
         console.log(error);
         $scope.error_reg = "*"+error.data.statusText;
       });
@@ -124,11 +121,13 @@ angular.module('luxire')
     }
   };
   $scope.error = '';
-
+  $scope.loading = false;
   $scope.forgot_password = function(){
+    $scope.loading = true;
     if($scope.customer.user.email!=''){
       CustomerAuthentication.forgot_password($scope.customer)
       .then(function(data){
+        $scope.loading = false;
         if(data.data && data.data.statusCode == 404){
           $scope.error = "*User doesn't exist";
         }
@@ -140,10 +139,11 @@ angular.module('luxire')
             taxonomy_id: CustomerConstants.default.taxonomy_id,
             taxon_id: CustomerConstants.default.taxon_id,
           };
-          $state.go('customer.product_listing', default_collection);
+          $state.go('customer.home');
         }
         console.log(data);
       }, function(error){
+        $scope.loading = false;
         console.error(error);
       });
     }
@@ -172,23 +172,26 @@ angular.module('luxire')
         message: ''
       };
     }
+    else{
+      $scope.validating_token = false;
+      $rootScope.alerts.push({type: 'danger',message: 'Invalid reset password link'});
+      $state.go('customer.home');
+    }
     console.log(data);
   }, function(error){
+    $rootScope.alerts.push({type: 'danger',message: 'Invalid reset password link'});
+    $state.go('customer.home');
     console.error(error);
   });
-
+  $scope.loading = false;
   $scope.reset = function(){
+    $scope.loading = true;
     if($scope.customer.new_password!=''&&$scope.customer.new_password_confirmation!=''){
       CustomerAuthentication.reset_password($state.params.token, $scope.customer)
       .then(function(data){
+        $scope.loading = false;
         if(data.data.statusCode == 200){
-          var default_collection = {
-            taxonomy_name: CustomerConstants.default.taxonomy_name,
-            taxon_name: CustomerConstants.default.taxon_name,
-            taxonomy_id: CustomerConstants.default.taxonomy_id,
-            taxon_id: CustomerConstants.default.taxon_id,
-          };
-          $state.go('customer.product_listing', default_collection);
+          $state.go('customer.home');
           $rootScope.alerts.push({type: 'success', message: 'Password reset successful!'});
         }
         else{

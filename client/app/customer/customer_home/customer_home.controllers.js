@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location){
+.controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location, CustomerOrders, $timeout){
 
   var default_collection = {
     taxonomy_name: CustomerConstants.default.taxonomy_name,
@@ -8,6 +8,19 @@ angular.module('luxire')
     taxon_id: CustomerConstants.default.taxon_id,
   };
   $scope.product_taxonomies = [];
+
+  $timeout(function(){
+    $('.carousel').carousel();
+  }, 0);
+  $scope.prev_product_slide = function(index){
+    console.log('index', index);
+    $('.carousel').carousel('prev');
+  };
+  $scope.next_product_slide = function(index){
+    console.log('index', index);
+
+    $('.carousel').carousel('next');
+  };
 
   CustomerProducts.taxonomy_index()
   .then(function(data){
@@ -19,6 +32,14 @@ angular.module('luxire')
   $scope.go_to_product_listing = function(taxonomy_name, taxon_name){
     $state.go('customer.product_listing', default_collection);
   };
+  CustomerOrders.get_order_by_cookie()
+  .then(function(data){
+    console.log('fetched order', data.data);
+    $rootScope.luxire_cart = data.data;
+  },
+  function(error){
+    console.error(error);
+  });
 
   $scope.go_to_collection = function(permalink){
     console.log('set location for', permalink);
@@ -63,10 +84,21 @@ angular.module('luxire')
   $scope.active_click_bait = {
     id: -1
   }
+  $scope.active_click_bait_detail = {
+    id: -1
+  }
 
   $scope.change_active_click_bait = function(id){
     console.log('mouse over', id);
     $scope.active_click_bait.id=id;
+    if($scope.active_click_bait_detail.id!==id){
+      // $scope.active_click_bait_detail.id = -1;
+      $scope.active_click_bait_detail.id = id;
+      // $timeout(function () {
+      //
+      // }, 500);
+    }
+
   };
 
   $scope.click_baits = [
