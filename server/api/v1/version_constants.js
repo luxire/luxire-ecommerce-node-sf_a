@@ -51,11 +51,15 @@ module.exports = {
   },
   prediction: {
     host: 'https://137.116.155.7:8000',
-    customer_bought: '/queries.json'
+    customer_bought: '/queries.json',
+    sample_product_ids: [1759, 1760, 1761, 1762, 1763, 1764, 1765, 1766, 1768, 1748],
+    expected_res_len: 5
   },
   redis: {
     host: 'http://localhost:9090',
-    products: '/api/redis/products'
+    products: '/api/redis/products',
+    products_filter: '/api/redis/customer/products/filter',
+    collections: '/api/redis/collection'//change to plural
   }
 
 };
