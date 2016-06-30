@@ -1,7 +1,7 @@
 angular.module('luxire')
 .service('CustomerConstants', function(){
   this.api = {
-    host: 'http://104.215.254.150:3000/',
+    host: 'http://104.215.254.150:3000',
     products: '/api/v1/products',
     product_types: '/api/v1/product_types',
     style_masters: '/api/v1/style_masters',
@@ -82,11 +82,23 @@ angular.module('luxire')
   };
 
   //Used for product listing
-  this.collections = function(permalink){
-    return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink, {
-      cache: product_cache
-    });
+  this.collections = function(filters){
+    return $http.post(CustomerConstants.api.products+'/collections', angular.toJson(filters));
+
+    // return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink+'&page='+page);
+    // return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink+'&page='+page, {
+    //   cache: product_cache
+    // });
   };
+  // //Used for product listing
+  // this.collections = function(permalink, page){
+  //   return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink+'&page='+page);
+  //
+  //   // return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink+'&page='+page);
+  //   // return $http.get(CustomerConstants.api.products+'/collections?permalink='+permalink+'&page='+page, {
+  //   //   cache: product_cache
+  //   // });
+  // };
 
   this.taxon_index = function(taxonomy_id, taxon_id){
     return $http.get(CustomerConstants.api.products+'/taxonomies/'+taxonomy_id+'/taxons/'+taxon_id);
@@ -103,7 +115,10 @@ angular.module('luxire')
   this.recommended = function(id){
     console.log('fetch recommended for', id);
     return $http.post(CustomerConstants.api.products+'/recommended', angular.toJson({ref_id: id}));
-  }
+  };
+  this.apply_filters = function(filter_object){
+    return $http.post(CustomerConstants.api.products+'/filters',angular.toJson(filter_object));
+  };
 
 })
 .service('CustomerOrders', function($http, CustomerConstants){
@@ -249,6 +264,9 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.orders+'/'+order.number+'/payments?order_token='+order.token, payment)
   };
 
+  this.auto_complete = function(order){
+    return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/auto_complete?order_token='+order.token, '');
+  };
 })
 
 
