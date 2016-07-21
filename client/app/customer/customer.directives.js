@@ -50,8 +50,7 @@ angular.module('luxire')
   return function(scope, element, attr){
     console.log('attr in directive', attr.animateOnChange);
     scope.$watch(attr.animateOnChange, function(newVal, oldVal){
-      console.log('old val in dir', oldVal);
-      console.log('new val in dir', newVal);
+      
       if(newVal!==oldVal){
         element.addClass('attr-changed');
         $timeout(function(){
