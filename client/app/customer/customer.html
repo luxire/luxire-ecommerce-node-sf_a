@@ -24,38 +24,53 @@
             clear-selected="true"/>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: right; margin-top: 0.5%">
-          <!-- <i class="fa fa-search" style="margin-right: 1%; cursor: pointer;color: #8A247C;" ng-click="show_search_panel=!show_search_panel;setFocusOnSearch(show_search_panel)"></i>&nbsp;&nbsp; -->
-          <!-- <span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="show_search_panel=!show_search_panel;setFocusOnSearch(show_search_panel)">
-            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
-            <i class="fa fa-search fa-stack-1x" style="color: white"></i>
-          </span> -->
-          <span class="fa-stack" style="margin-right: 1%; cursor: pointer;position: relative" >
+          <span ng-if="!isLoggedIn" style="font-size: 92%;font-weight: 300;margin-top: 1.4%">
+            <i class="fa fa-user" style="color: #8A247C" aria-hidden="true"></i>
+            &nbsp;<span ng-click="go_to_signup()" style="cursor: pointer">Sign Up</span>&nbsp;|
+            &nbsp;<span ng-click="go_to_login()" style="cursor: pointer">Login</span>&nbsp;&nbsp;
+          </span>
+          <span ng-if="isLoggedIn" style="font-size: 92%;font-weight: 300;margin-top: 1.4%">
+            <span uib-dropdown ng-init="is_open=false" ng-mouseenter="is_open=true" ng-mouseleave="is_open=false" is-open="is_open">
+              <span class="user-drop-down" uib-dropdown-toggle>
+                Hello, {{user_name}}
+                <span class="caret"></span>&nbsp;&nbsp;
+              </span>
+              <ul class="dropdown-menu user-drop-down" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                <li class="user-drop-down" ng-click="go_to_my_account()">
+                  My Account
+                </li>
+                <li class="user-drop-down" ng-click="logout()">
+                  Logout
+                </li>
+              </ul>
+            </span>
+            
+            
+          </span>
+          <span class="fa-stack" title="Change currency" style="margin-right: 1%; cursor: pointer;position: relative" >
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
             <i class="fa fa-usd fa-stack-1x" style="color: white"></i>
           </span>
-          <span class="fa-stack" style="margin-right: 1%; cursor: pointer;position: relative">
-            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
+          <span uib-dropdown ng-init="is_open=false" ng-mouseenter="is_open=true" ng-click="is_open=!is_open" ng-mouseleave="is_open=false" is-open="is_open" class="fa-stack" title="Change measurement unit" style="margin-right: 1%; cursor: pointer;position: relative">
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%" uib-dropdown-toggle></i>
             <i class="fa fa-stack-1x" style="color: white">M</i>
+            <ul class="dropdown-menu measurement-unit-dropdown" uib-dropdown-menu aria-labelledby="simple-dropdown">
+              <li ng-repeat="measurement_unit in measurement_units" class="measurement-unit-dropdown" ng-class="{'active-measurement-unit': measurement_unit.label===selected_measurement_unit.label}" ng-click="change_measurement_unit(measurement_unit)">
+                {{measurement_unit.label}}
+              </li>
+            </ul>
+            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -35%;right: -35%">
+               {{selected_measurement_unit.symbol}}
+            </span>           
           </span>
           <span class="fa-stack" style="margin-right: 1%; cursor: pointer;position: relative" ui-sref="customer.cart">
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
             <i class="fa fa-shopping-cart fa-stack-1x" style="color: white"></i>
-            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -30%;right: -35%">
+            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -35%;right: -35%">
               {{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}}
             </span>
           </span>
-          <!-- <i ui-sref="customer.cart" class="fa fa-shopping-cart" style="color: #8A247C;font-size:130%;cursor: pointer">
-            <span class = "badge" style="color: white;background: #8A247C">
-              ({{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}})
-            </span>
-          </i>&nbsp;&nbsp;
-          <span style="margin-right: 1%; color: #D4D4D4">
-            |
-          </span> -->
-          <!--<span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="open_side_menu()">
-            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
-            <i class="fa fa-bars fa-stack-1x" style="color: white"></i>
-          </span>-->
+
 
         </div>
 
@@ -174,7 +189,7 @@
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
       <img ng-src="assets/images/customer/luxire_logo.png" style="max-width: 100%;">
     </div>
-    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
+    <div ng-if="checkout_state" class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
       <div class="row" >
         <div  style="text-align: left; font-family: Roboto;margin-top: 0.9%">
           <div ng-repeat="(checkout_step_name, checkout_step_val) in checkout_steps" style="display: inline-block;width: 10%;text-align: center;">
@@ -458,3 +473,20 @@
     </div>
   </div>
 </script>
+  <!-- <i class="fa fa-search" style="margin-right: 1%; cursor: pointer;color: #8A247C;" ng-click="show_search_panel=!show_search_panel;setFocusOnSearch(show_search_panel)"></i>&nbsp;&nbsp; -->
+          <!-- <span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="show_search_panel=!show_search_panel;setFocusOnSearch(show_search_panel)">
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
+            <i class="fa fa-search fa-stack-1x" style="color: white"></i>
+          </span> -->
+          <!-- <i ui-sref="customer.cart" class="fa fa-shopping-cart" style="color: #8A247C;font-size:130%;cursor: pointer">
+            <span class = "badge" style="color: white;background: #8A247C">
+              ({{luxire_cart != {} && luxire_cart.line_items.length>0 ? luxire_cart.line_items.length: 0}})
+            </span>
+          </i>&nbsp;&nbsp;
+          <span style="margin-right: 1%; color: #D4D4D4">
+            |
+          </span> -->
+          <!--<span class="fa-stack" style="margin-right: 1%; cursor: pointer" ng-click="open_side_menu()">
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
+            <i class="fa fa-bars fa-stack-1x" style="color: white"></i>
+          </span>-->

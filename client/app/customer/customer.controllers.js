@@ -1,28 +1,42 @@
 angular.module('luxire')
 /*Client ctrl instead of customer ctrl is used to
 avoid conflict with customer ctrl on admin side*/
-.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, $timeout, CustomerProducts, CustomerConstants, $location){
+.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, $timeout, CustomerProducts, CustomerConstants, $location, CustomerAuthentication){
   var prev_state = '';
   $scope.show_header = true;
+  $scope.checkout_state = false;
   $scope.header_visibility = function(state){
     console.log('current state', state);
     if(state.name!==prev_state){
       if(state.name.indexOf('checkout') !==-1){
-        console.log('checkout state');
+        console.log('hide header');
         $scope.show_header = false;
+        $scope.checkout_state = true;
+      }
+      else if(state.name.indexOf('attribute_detail') !==-1){
+        $scope.show_header = false;
+        $scope.checkout_state = false;
       }
       else{
         console.log(' not a checkout state');
         $scope.show_header = true;
+        $scope.checkout_state = false;
       }
       prev_state = state.name;
     }
 
 
   }
+  function reset_login_status(){
+    $scope.isLoggedIn = CustomerAuthentication.isLoggedIn();
+    $scope.user_name = $scope.isLoggedIn ? CustomerAuthentication.identity() : '';
+  };
+  reset_login_status();
   $scope.header_visibility($state.current);
+
   $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
     $scope.header_visibility(toState);
+    reset_login_status();
     console.log('changing state', toState);
   })
 
@@ -32,7 +46,8 @@ avoid conflict with customer ctrl on admin side*/
       console.log('window scrolled');
       console.log("You've scrolled " + $(window).scrollTop() + " pixels");
       //$("#customer-main-nav-header").height()
-      if($(window).scrollTop()>$("#customer-main-nav-header").height()){
+      // $(window).scrollTop()>$("#customer-main-nav-header").height()
+      if($(window).scrollTop()>0){
         $("#customer-main-nav-header").addClass('customer-header-color');
       }
       else{
@@ -42,6 +57,8 @@ avoid conflict with customer ctrl on admin side*/
 
   }, 0);
   $scope.arrow_margin_left = 0;
+
+  /*Tool tip for taxonomy */
   $scope.change_arrow_pos = function(event){
     $scope.arrow_margin_left = $(event.currentTarget).offset().left + ($(event.currentTarget).width()/2);
   };
@@ -69,12 +86,44 @@ avoid conflict with customer ctrl on admin side*/
   /*Load products*/
   $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';
 
+  /*Select product from search*/
   $scope.select_product = function(data){
     $scope.show_search_panel = false;
     console.log('selected product', data);
     $state.go('customer.product_detail', {
       product_name: data.originalObject.slug
     });
+  };
+
+
+  $scope.go_to_login = function(){
+    $state.go('customer.login');
+  };
+
+  $scope.go_to_signup = function(){
+    $state.go('customer.signup');
+  };
+
+  $scope.logout = function(){
+    CustomerAuthentication.logout();
+    $rootScope.luxire_cart = [];
+    $rootScope.alerts.push({type: 'success', message: 'Successfully logged out'});
+    $state.go('customer.home');
+    CustomerOrders.get_order_by_cookie()
+    .then(function(data){
+      console.log('fetched order', data.data);
+      $rootScope.luxire_cart = data.data;
+    },
+    function(error){
+      $rootScope.luxire_cart = [];
+      console.error(error);
+    });
+    reset_login_status();
+
+  };
+
+  $scope.go_to_my_account = function(){
+    $state.go('customer.my_account');
   };
 
   $scope.open_side_menu = function(){
@@ -122,6 +171,7 @@ avoid conflict with customer ctrl on admin side*/
   });
   $rootScope.luxire_cart = angular.isUndefined($rootScope.luxire_cart)? {} : $rootScope.luxire_cart;
 
+  /*Bread crumbs */
   $scope.checkout_steps = {
     'address': {
       id: 0,
@@ -135,6 +185,28 @@ avoid conflict with customer ctrl on admin side*/
       id: 2,
       name: 'PAYMENT'
     }
+  };
+  
+  /*Measurement Unit*/
+  $scope.measurement_units = [
+    {
+      id: 1,
+      label: 'Inch',
+      symbol: 'In'
+    },
+    {
+      id: 2,
+      label: 'Cm',
+      symbol: 'cm'
+    }
+  ];
+  
+  $scope.selected_measurement_unit = $scope.measurement_units[0];
+  
+  $scope.change_measurement_unit = function(measurement_unit){
+    $scope.selected_measurement_unit = measurement_unit;
+    console.log('selected unit', measurement_unit);
+    $rootScope.$broadcast('measurement_unit_change', measurement_unit);
   };
 
   $scope.go_to_checkout_state = function(state){
