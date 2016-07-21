@@ -1,6 +1,26 @@
 angular.module('luxire')
 .service('CustomerAuthentication', function($http){
   var _identity = undefined,_authenticated = false;
+  this.isLoggedIn = function(){
+    if(window.localStorage.luxire_token || window.sessionStorage.luxire_token){
+      return true;
+    }
+    else{
+      return false;
+    }
+  };
+  var set_identity = function () {
+    var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
+    var decoded = JSON.parse(atob(token.split('.')[1]));
+    _identity = decoded && decoded.luxire_customer && decoded.luxire_customer.first_name? decoded.luxire_customer.first_name : '';
+    console.log('resolved identity', decoded);
+  };
+  this.identity = function(){
+    var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
+    var decoded = JSON.parse(atob(token.split('.')[1]));
+    _identity = decoded && decoded.luxire_customer && decoded.luxire_customer.first_name? decoded.luxire_customer.first_name : '';
+    return _identity;
+  };
   this.is_identity_resolved = function(){
     return angular.isDefined(_identity);
   };
@@ -38,17 +58,7 @@ angular.module('luxire')
     }
     delete $http.defaults.headers.common['x-luxire-token'];
   };
-  this.isLoggedIn = function(){
-    if(window.localStorage.luxire_token || window.sessionStorage.luxire_token){
-      return true;
-    }
-    else{
-      return false;
-    }
-  };
-  this.identity = function(){
-
-  };
+  
   this.forgot_password = function(user){
     return $http.post('/api/userManager/forgot_password', angular.toJson(user))
   };
