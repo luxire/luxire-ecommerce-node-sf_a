@@ -17,14 +17,14 @@ angular.module('luxire')
   };
 
   // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
-  //$scope.loading = true;
+  $scope.loading = true;
   styleMasterService.getAllProductType().then(function(data) {
-    $scope.loading= true;
+    // $scope.loading= true;
     $scope.allproductType=data.data;
     $scope.loading = false;
   }, function(info){
     console.log(info);
-    $scope.loading = true;
+    $scope.loading = false;
 
   })
 
@@ -87,7 +87,7 @@ angular.module('luxire')
         $scope.loading= true;
         styleMasterService.getProductTypeById(id).then(function(data) {
         var tempContrast=[];
-        // $scope.loading= true;
+        $scope.loading= false;
         $scope.allMeasurementType = data.data.luxire_product_attributes;
         $scope.bodyMeasurement = data.data.luxire_product_attributes.body_measurement_attributes; // 28th march add this line
         if(data.data.luxire_product_attributes.personalization_attributes[1].value == undefined){
@@ -110,7 +110,7 @@ angular.module('luxire')
 
       }, function(info){
         console.log(info);
-        $scope.loading= true;
+          $scope.loading= false;
 
       });
 
