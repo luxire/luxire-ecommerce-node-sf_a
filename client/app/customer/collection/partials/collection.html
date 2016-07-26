@@ -200,7 +200,7 @@ transition: all 1s ease;
             </div>
           </div>
           <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)===-1" class="row" style="display: block">
-            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price" ng-cloak>
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData " ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
                 <!-- <div class="productImage">
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
@@ -213,7 +213,7 @@ transition: all 1s ease;
                 </div>
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
-                    <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>35? product.name.slice(0,35)+'...' : product.name}}</span></center>
+                    <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>32? product.name.slice(0,32)+'...' : product.name}}</span></center>
                     <center><span style="font-size:90%;color:#7F7F7F;">{{product.display_price}}</span></center>
                   </div>
                   <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
@@ -250,7 +250,7 @@ transition: all 1s ease;
 
           </div>
           <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1" class="row" style="display: block">
-            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData | orderBy:'display_price':reverse_price" ng-cloak>
+            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData" ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
                 <!-- <div class="productImage">
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].product_url)}}" style="max-width: 100%; cursor: pointer"></img>
@@ -263,7 +263,7 @@ transition: all 1s ease;
                 </div>
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
-                    <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>35? product.name.slice(0,35)+'...' : product.name}}</span></center>
+                    <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>32? product.name.slice(0,32)+'...' : product.name}}</span></center>
                     <center><span style="font-size:90%;color:#7F7F7F;">{{product.display_price}}</span></center>
                   </div>
                   <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
