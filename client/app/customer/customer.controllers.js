@@ -43,8 +43,7 @@ avoid conflict with customer ctrl on admin side*/
   $timeout(function(){
 
     $(window).scroll(function(){
-      console.log('window scrolled');
-      console.log("You've scrolled " + $(window).scrollTop() + " pixels");
+      
       //$("#customer-main-nav-header").height()
       // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
