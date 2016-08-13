@@ -1,0 +1,127 @@
+<p class="text-center text-muted" ng-if="loading_products||loading_filters" style="margin-top: 10%; position: fixed; top: 20%;left: 45%; z-index: 99;color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait...
+</p>
+
+<div id="product-body-part" class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 8.5%;background-color: #FDFDFD;font-family: Roboto;">
+  <div id="side-block" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center">
+    <div class="" style="margin-top: 20%">
+      <h4>Product Type</h4>
+      <div ui-sref="customer.search({name_cont: stateParams.name_cont,taxonomy: key,page: 1})" ng-repeat="(key,value) in taxonomy_counts" style="cursor: pointer">
+        <span>
+          {{key}}
+        </span>
+        <span>
+          ({{value}})
+        </span>
+      </div>
+    </div>
+
+
+  </div>
+  <div id="main-block" class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="padding-left: 0px;height:100%;">
+    <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData " ng-cloak>
+      <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
+        <!-- <div class="productImage">
+          <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
+        </div> -->
+        <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+          <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+        </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
+        <div class="new-product-image" ng-class="{'zoomable-taxonomy': get_taxonomy_details(product.taxons[0].permalink).is_gift_card==false}" style="height: 45vh;overflow: hidden">
+          <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+        </div>
+        <div class="container-fluid" style="background-color: ">
+          <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
+            <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>32? product.name.slice(0,32)+'...' : product.name}}</span></center>
+            <center><span style="font-size:90%;color:#7F7F7F;">{{product.master.prices[selected_currency]}}</span></center>
+          </div>
+
+          <div ng-if="get_taxonomy_details(product.taxons[0].permalink).is_fabric_taxonomy" class="" style="width: 100%">
+            <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="order_swatch(product.variants[0])">
+                  <div style="margin-top:5%;margin-bottom:5%;">
+                    <span style="text-align:center;font-size:80%;">Order fabric swatch</span><br>
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" ng-click="showQuickView(product,'md')">
+                  <div style="margin-top:5%;margin-bottom:10%;">
+                    <span style="font-size:80%;">Quick View</span><br>
+                  </div>
+                </div>
+            </div>
+            <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
+                  <span>
+                    <img style="max-width: 12%; margin-left: 8%" title="{{product.luxire_product.gsm}} gsm" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
+                    <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.thickness.split('mm')[0]}} thickness" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                    <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.stiffness}} stiffness" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                  </span>
+
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:2% 1% 1% 1%;">
+                  <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                </div>
+               </div>
+            </div>
+          </div>
+
+          <div ng-if="!get_taxonomy_details(product.taxons[0].permalink).is_fabric_taxonomy" class="" style="width: 100%">
+            <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="showQuickView(product,'md')">
+                  <div style="margin-top:5%;margin-bottom:5%;">
+                    <span style="text-align:center;font-size:80%;">Quick View</span><br>
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" >
+                  <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;margin-top: 3%">SELECT</button>
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+</div>
+<!--<footer > -->
+<div class="" infinite-scroll="load_more()" infinite-scroll-distance="2">
+
+</div>
+<!-- <div style="margin-top: 30%">
+</div> -->
+
+<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
+  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
+    <div id="luxire-logo">
+      <img style="max-width: 75%" ng-src="assets/images/customer/luxire_logo_grey.png" >
+    </div>
+    <div style="margin-top:2%;">
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+    </div>
+
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
+    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
+    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+  </div>
+
+</div>

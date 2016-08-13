@@ -194,7 +194,21 @@ angular.module('luxire')
 			require_auth: true
 		}
 	})
-
+	.state('customer.search',{
+		url:'/search?name_cont&taxonomy',
+		views: {
+			"customer": { templateUrl: "app/customer/search/partials/search.html",
+			 controller: "SearchController"},
+			 params: {
+				 name_cont: null,
+				 taxonomy: null,
+				 page: null,
+			 }
+		},
+		data: {
+			require_auth: false
+		}
+	})
 }])
 // .state('customer.invoice',{
 // 	url:'/invoice/:number?id',
