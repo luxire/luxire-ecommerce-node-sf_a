@@ -16,6 +16,8 @@ var constants = require(path.resolve('server/api/v1/version_constants'));
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
+var prediction = require(path.resolve('server/api/v1/generic/prediction/prediction.controller'));
+
 
 /*****
 Products
@@ -56,6 +58,36 @@ exports.index = function(req, res) {
   });
 };
 
+//Search from redis for products
+exports.search = function(req, res) {
+  console.log('req to search', req.query);
+  var qstr = ''
+  for(var x in req.query){
+    if(typeof req.query[x]=='object'){
+      for(var y in req.query[x]){
+        qstr=qstr+x+'['+y+']='+req.query[x][y]+'&'
+      }
+    }
+    else{
+      qstr=qstr+x+'='+req.query[x]+'&'
+    }
+  }
+  console.log(qstr);
+  http
+    .get({
+      uri: constants.redis.host+constants.redis.search.products+'?'+qstr,
+    }, function(error, response, body){
+      if(error){
+        res.status(500).send(error.syscall);
+      }
+      else{
+        res.status(response.statusCode).send(body);
+      };
+
+  });
+};
+
+
 //Get product by id
 exports.show = function(req, res){
   console.log('req params', req.params);
@@ -70,6 +102,13 @@ exports.show = function(req, res){
           res.status(500).send(error.syscall);
         }
         else{
+          prediction.create({
+            "event" : "view",
+            "entityType" : "user",
+            "entityId" : "1",       //need to change for guest user
+            "targetEntityType" : "item",
+            "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
+          });
           console.log('response cookies', response.headers['set-cookie']);
           if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
             for(var i=0; i<response.headers['set-cookie'].length; i++){
