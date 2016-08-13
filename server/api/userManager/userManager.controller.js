@@ -6,6 +6,8 @@
   var env = require('../../config/constants');
   var luxire_secret = env.spree.jwt_secret;
   var path = require('path');
+  var prediction = require(path.resolve('server/api/v1/generic/prediction/prediction.controller'));
+
 
   // Get list of users
   exports.index = function(req, res) {
@@ -110,8 +112,12 @@
         console.log(body);
         var resp = JSON.parse(body)
         if(resp.statusCode == 201){
-
           console.log('New user created with ID: '+resp.user_id);
+          prediction.create({
+            "event" : "$set",
+            "entityType" : "user",
+            "entityId" : resp.user_id
+          });
           res.status(201).send(resp);
         }
         else if(resp.statusCode == 422){
