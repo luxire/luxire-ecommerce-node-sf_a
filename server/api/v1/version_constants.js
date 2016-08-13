@@ -39,7 +39,8 @@ module.exports = {
     standard_sizes: '/standard_sizes',
     json: '.json',
     product_csv_import: '/luxire_product_data/imports',
-    collections: '/customized_taxons/get_taxon_details.json'
+    collections: '/customized_taxons/get_taxon_details.json',
+    get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code='
   },
   payment: {
     ebs: {
@@ -50,16 +51,28 @@ module.exports = {
     }
   },
   prediction: {
-    host: 'https://137.116.155.7:8000',
+    host: 'http://137.116.155.7:8000',
     customer_bought: '/queries.json',
-    sample_product_ids: [1759, 1760, 1761, 1762, 1763, 1764, 1765, 1766, 1768, 1748],
-    expected_res_len: 5
+    sample_product_ids: [313, 315, 301, 297, 306, 1, 310, 298, 317, 314],
+    expected_res_len: 5,
+    feed_host: 'http://137.116.155.7:7070',
+    feed_url: '/events.json?accessKey=',
+    feed_access_key: 'QRblQvAr2lZ2IwP2fD85LixUKPqg7Tf2Y56jYEUIaUwWA80nfA1q6iFwKwrHt4fd'
   },
   redis: {
     host: 'http://localhost:9090',
     products: '/api/redis/products',
     products_filter: '/api/redis/customer/products/filter',
-    collections: '/api/redis/collection'//change to plural
+    collections: '/api/redis/collection',//change to plural
+    search: {
+      products: '/api/redis/customer/search/products'
+    }
+  },
+  location_by_ip: {
+    host: 'http://freegeoip.net/json'
+  },
+  location_by_city: {
+    host: 'http://getcitydetails.geobytes.com/GetCityDetails?fqcn='
   }
 
 };
