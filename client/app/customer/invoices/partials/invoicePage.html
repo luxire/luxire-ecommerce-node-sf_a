@@ -98,7 +98,7 @@ function printDiv(divName) {
         </div-->
         {{shipment.selected_shipping_rate.name}}
       </td>
-      <td ng-if="invoiceDetailedJson.payments.length>0" ng-repeat="payment in invoiceDetailedJson.payments">
+      <td ng-if="(invoiceDetailedJson.payments.length>0)&&payment.state=='completed'" ng-repeat="payment in invoiceDetailedJson.payments">
         {{payment.payment_method.name}}
       </td>
       <td ng-if="invoiceDetailedJson.payments.length==0">
