@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('ProductDetailController', function($scope, $sce, CustomerOrders, $state, countries, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal, $window, $timeout, $log, $compile, $interval){
+.controller('ProductDetailController', function($scope, $sce, CustomerOrders, $state, countries, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal, $window, $timeout, $log, $compile, $interval, CustomerUtils){
   $window.scrollTo(0, 0);
   $scope.loading_product = true;
   $scope.display_summary = false;
@@ -9,37 +9,17 @@ angular.module('luxire')
     large_url: '',
     original_url: ''
   };
-  
+
   var convert_to_cm = function(product){
-    console.log('convert product to cm', product);
-    var exclusion_list = ['id'];
-    var conv_iterator = function(attr_object){
-      angular.forEach(attr_object, function(val,key){
-        if(exclusion_list.indexOf(key) === -1){
-          if(!angular.isObject(val) && !isNaN(parseFloat(val))){
-            attr_object[key] = Math.round(parseFloat(val)*2.54*10)/10;
-          }
-          else if(angular.isObject(val)){
-            conv_iterator(val);
-          }
-        }
-      });
-      // return attr_object;
-    };
-    conv_iterator(product['customization_attributes']);
-    conv_iterator(product['personalization_attributes']);
-    conv_iterator(product['standard_measurement_attributes']);
-    conv_iterator(product['body_measurement_attributes']); 
+    CustomerUtils.convert_in_to_cm(product['customization_attributes']);
+    CustomerUtils.convert_in_to_cm(product['personalization_attributes']);
     console.log('after conversion product', product);
     $scope.product_in_cm = product;
-    
     /*Standard measurement in cm */
-    $scope.standard_measurement_attributes_in_cm = angular.copy($scope.standard_measurement_attributes);
-    conv_iterator($scope.standard_measurement_attributes_in_cm);
- 
-    
+    // $scope.standard_measurement_attributes_in_cm = angular.copy($scope.standard_measurement_attributes);
+    // conv_iterator($scope.standard_measurement_attributes_in_cm);
   };
-  
+
   CustomerProducts.show($stateParams.product_name).then(function(data){
     console.log('product data for', $stateParams.product_name, data);
     $scope.product = data.data;
@@ -71,7 +51,7 @@ angular.module('luxire')
       $scope.product.variants.push($scope.product.master);
       console.log('selected gift card variant', $scope.selected_gift_card_variant);
     }
-    
+
     /*Convert to cm */
       convert_to_cm(angular.copy(data.data));
     /* */
@@ -89,26 +69,60 @@ angular.module('luxire')
     console.log('gift card variant', variant);
     $scope.selected_gift_card_variant = variant;
   };
-  
+
   /*Unit conversion*/
   $scope.selected_measurement_unit = "in";
   $scope.$on('measurement_unit_change', function(event, data){
+    console.log('unit', data.symbol.toLowerCase());
     $scope.selected_measurement_unit = data.symbol.toLowerCase();
-    console.log('selected measurement type', data)
+    $scope.selected_measurement_unit === "cm" ? CustomerUtils.convert_in_to_cm($scope.cart_object) : CustomerUtils.convert_cm_to_in($scope.cart_object);
+  });
+
+  /*Multi currency support*/
+  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  $scope.$on('currency_change', function(event, data){
+    console.log('currency changed', data)
+    $scope.selected_currency = data;
   });
 
 
-  $scope.weight_index = function(variant_weight){
-    // console.log('variant_weight', variant_weight);
-    // console.log(parseFloat(variant_weight)-50)
-    if((parseFloat(variant_weight)-50)<0){
+  /*Get weight icon*/
+  var weight_indexes_ref = {
+    shirts: {
+      min: 50,
+      max: 150,
+      step: 12.5//150/12
+    },
+    pants: {
+      min: 150,
+      max: 500,
+      step: 30 //
+    }
+  };
+  var min_weight = 0;
+  var max_weight = 0;
+  $scope.weight_index = function(variant_weight, product_type){
+    product_type = product_type.toLowerCase();
+    if(product_type && product_type.indexOf('pant') !== -1){
+      min_weight = weight_indexes_ref['pants']['min'];
+      max_weight = weight_indexes_ref['pants']['max'];
+      step = weight_indexes_ref['pants']['step'];
+    }
+    else if(product_type && product_type.indexOf('pant') == -1){
+      min_weight = weight_indexes_ref['shirts']['min'];
+      max_weight = weight_indexes_ref['shirts']['max'];
+      step = weight_indexes_ref['shirts']['step'];
+    };
+
+
+    if((parseFloat(variant_weight))<min_weight){
       return 1;
     }
-    else if((parseFloat(variant_weight)-50)>150){
+    else if((parseFloat(variant_weight))>max_weight){
       return 12;
     }
     else{
-      return parseInt((parseFloat(variant_weight)-50)/12.5)+1;
+      return parseInt((parseFloat(variant_weight)-min_weight)/step)+1;
     };
   };
 
@@ -213,7 +227,7 @@ angular.module('luxire')
   };
   $scope.dereg_enlarged_image = function(element){
   };
- 
+
 
   /*Measurement Slider*/
 
@@ -635,7 +649,7 @@ angular.module('luxire')
   };
 
   $scope.set_attribute_value = function(attribute_type, attribute_key, attribute_value){
-    
+
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
     $scope.get_standard_sizes();
   };
@@ -724,8 +738,8 @@ angular.module('luxire')
     //   console.log($scope.cart_object);
     // };
   };
-  
-  
+
+
   /*New Mockup July 1 changes*/
   $scope.invoke_choose_fit_and_measurement = function(){
     var modal_instance = $uibModal.open({
@@ -737,21 +751,26 @@ angular.module('luxire')
       resolve: {
         product: function () {
           console.log("invoking fit", $scope.selected_measurement_unit, $scope.product_in_cm);
-          return $scope.selected_measurement_unit === "in" ? $scope.product : $scope.product_in_cm;
+          // return $scope.selected_measurement_unit === "in" ? $scope.product : $scope.product_in_cm;
+          return $scope.product;
         },
         cart_object: function(){
           return angular.copy($scope.cart_object);
         },
         standard_measurement_attributes: function(){
-          return $scope.selected_measurement_unit === "in" ? $scope.standard_measurement_attributes : $scope.standard_measurement_attributes_in_cm;
+          // return $scope.selected_measurement_unit === "in" ? $scope.standard_measurement_attributes : $scope.standard_measurement_attributes_in_cm;
+           return $scope.standard_measurement_attributes;
         },
         body_measurement_attributes: function(){
           return $scope.body_measurement_attributes;
         },
         selected_measurement_id: function(){
           return $scope.selected_measurement_id;
+        },
+        selected_measurement_unit: function(){
+          return $scope.selected_measurement_unit;
         }
-        
+
       }
     });
     modal_instance.result.then(function (measurements_object) {
@@ -772,7 +791,7 @@ angular.module('luxire')
         $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
         $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements);
       }
-     
+
       // console.log('cart object after', $scope.cart_object);
       $scope.display_summary = true;
       console.log('selected_measurements', measurements_object);
@@ -780,7 +799,7 @@ angular.module('luxire')
       console.info('Modal dismissed at: ' + new Date());
     });
   };
-  
+
   $scope.invoke_choose_a_style = function(){
     var modal_instance = $uibModal.open({
       animation: true,
@@ -804,7 +823,7 @@ angular.module('luxire')
         parent_scope: function(){
           return $scope;
         }
-        
+
       }
     });
     modal_instance.result.then(function (response_object) {
@@ -819,10 +838,16 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','selected_measurement_id',function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, selected_measurement_id){
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','selected_measurement_id', 'selected_measurement_unit',function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, selected_measurement_id, selected_measurement_unit){
   console.log('product', product);
   console.log('cart_object', cart_object);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
+  $scope.product = product;
+  $scope.measurement_unit = {
+    selected: selected_measurement_unit
+  };
+
+
   var key_name_map = {};
   var dependent_attrs = {};
   angular.forEach(product['standard_measurement_attributes'], function(val, key){
@@ -832,14 +857,11 @@ angular.module('luxire')
         dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()] = [];
       }
       dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()].push(val.name.trim().toLowerCase());
-    }    
+    }
   });
   console.log('key-name-map', key_name_map);
   console.log('dependent-attr', dependent_attrs);
-  
-  $scope.product = product;
-  
-  
+
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -871,19 +893,19 @@ angular.module('luxire')
   $scope.active_measurement_type_id = selected_measurement_id || 1;
   $scope.change_measurement_type = function(id){
     $scope.active_measurement_type_id = id;
-    
+
   };
   $scope.set_attribute_value = function(attribute_type, attribute_key, attribute_value){
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
     // $scope.get_standard_sizes();
   };
-  
+
   /*Check dependents and set dependents*/
   $scope.change_dependents = function(attr_type, attr_name, attr_value){
     console.log('attr type', attr_type, 'attr_name', attr_name, 'attr_value',attr_value);
     if(attr_name.indexOf('(') !== -1){//dependent child
       $scope.cart_object[attr_type][key_name_map[attr_name.trim().toLowerCase().split('(')[0].trim()]]['value'] = "";
-      
+
     }
     else if(attr_name.indexOf('(')  === -1 && dependent_attrs.hasOwnProperty(attr_name.trim().toLowerCase())){//dependent parent
       console.log('dependent', dependent_attrs[attr_name.trim().toLowerCase()]);
@@ -895,9 +917,9 @@ angular.module('luxire')
 
       });
     }
-    
+
   };
-  
+
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
@@ -911,7 +933,7 @@ angular.module('luxire')
         // console.log('cart_object',$scope.cart_object.standard_measurement_attributes);
 
   }
-  
+
   $scope.next_step = function(){
     var measurements = {};
     if($scope.active_measurement_type_id === 3){
@@ -923,8 +945,8 @@ angular.module('luxire')
     else{
       measurements = $scope.cart_object.standard_measurement_attributes;
     }
-    
-    
+
+
     console.log('cart_object before close',cart_object);
     console.log('selected measuremnet', measurements);
 
@@ -933,7 +955,7 @@ angular.module('luxire')
       selected_measurements: measurements
     });
   };
-  
+
   $scope.checkIsArray = function(style_value){
 
     if(angular.isArray(style_value)){
@@ -950,7 +972,7 @@ angular.module('luxire')
   $scope.change_active_style_option = function(option){
     $scope.active_style_option = option;
   };
-  
+
   /*Select Style functionality */
   console.log(luxire_styles);
   $scope.luxire_styles = luxire_styles;
@@ -968,6 +990,42 @@ angular.module('luxire')
     $scope.active_detail_style = !toggle ? style : {};
     console.log('active detail style', $scope.active_detail_style);
   };
+
+  $scope.init_active_style = function(style){
+    console.log('init style', style, $scope.getImage(style.images.large_url));
+    $scope.active_detail_style_image = $scope.getImage(style.images.large_url);
+  };
+  $scope.change_active_style_image = function(image){
+    $scope.active_detail_style_image = $scope.getImage(image.large);
+  };
+
+  $scope.aggregated_style_images = [];
+  $scope.set_aggregated_style_images = function(style){
+    console.log('input style', angular.fromJson(style));
+    if(style && Object.keys(style).length){
+      $scope.aggregated_style_images = [];
+      // $scope.aggregated_style_images = angular.copy(style.real_images);
+      console.log('aggregate style images', style.real_images);
+      $scope.aggregated_style_images = $scope.aggregated_style_images.concat(style.sketch_images);
+      console.log('aggregate style images', style.sketch_images);
+      $scope.aggregated_style_images.splice(0,0,{ large: style.images.large_url,medium: style.images.medium_url, small: style.images.small_url});
+      console.log('aggregate style images', $scope.aggregated_style_images);
+    }
+  };
+
+  $scope.style_detail_images = [];
+  $scope.activate_style_details = function(style){
+    $scope.style_detail_images = [];
+    $scope.hide_active_style_details = false;
+    $scope.active_detail_style = style;
+    $scope.style_detail_images = $scope.active_detail_style.sketch_images;
+    $('.style-detail-images-slider').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    });
+    console.log('active_detail_style length', $scope.style_detail_images);
+  }
+
   $(document).ready(function(){
       $timeout(function () {
         var slides_to_scroll = 5;
@@ -993,14 +1051,26 @@ angular.module('luxire')
         $('#next-style').addClass('slick-arrow');
         var slick = fetch_slick();
         var slide_count = fetch_slick('slideCount');
-       
+
         $('#next-style').click(function(){
           $('.slick-bespoke-style-slider').slick('slickNext');
         });
         $('#prev-style').click(function(){
           $('.slick-bespoke-style-slider').slick('slickPrev');
         });
-        
+
+
+        var style_images_to_show = 1;
+        $('.style-detail-images-slider').slick({
+          slidesToShow: style_images_to_show,
+          slidesToScroll: 1
+          // prevArrow: $('#prev-style-detail-image'),
+          // nextArrow: $('#next-style-detail-image')
+        });
+        // $('#prev-style-detail-image').addClass('slick-arrow');
+        // $('#next-style-detail-image').addClass('slick-arrow');
+
+
         // $('.slick-bespoke-style-slide').click(function(){
         //   console.log('style selected', $('.slick-bespoke-style-slide'));
         // });
@@ -1033,10 +1103,10 @@ angular.module('luxire')
         //     $('#prev-style').addClass('slick-disabled');
         //   }
         // });
-        
-        
 
-                
+
+
+
         var attr_to_show = 4;
         $('.bespoke-attributes-slider').slick({
           infinite: false,
@@ -1124,8 +1194,8 @@ angular.module('luxire')
   $scope.edit_style = function(){
       $scope.active_style_option = "bespoke";
   };
-  
-  
+
+
   /*Bespoke Style Functionality */
   $scope.product = product;
   $scope.cart_object = cart_object;
@@ -1419,7 +1489,7 @@ angular.module('luxire')
       return false;
     }
   };
-  
+
 
 
 
@@ -1480,10 +1550,10 @@ angular.module('luxire')
         $scope.selected_personalization_attribute = personalization_attribute;
       }
 
-  
-  
 
-  
+
+
+
 }])
 .controller('ChooseStyleController', function($scope, $uibModalInstance, luxire_styles, active_style, parent_scope,ImageHandler, $timeout){
   console.log(luxire_styles);
@@ -1600,7 +1670,7 @@ angular.module('luxire')
   //   $uibModalInstance.close($scope.selected_style);
   // };
 
-  
+
 
 
 })
@@ -2107,7 +2177,7 @@ angular.module('luxire')
   $scope.cancel = function(){
     $uibModalInstance.dismiss('cancel');
   };
-  
+
   $scope.checkIsArray = function(style_value){
     console.log(style_value);
     console.log('style_value',angular.isArray(style_value));

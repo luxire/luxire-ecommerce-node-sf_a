@@ -1,8 +1,7 @@
 angular.module('luxire')
-.controller('PreCartController', ['$scope', '$rootScope', '$state', 'ImageHandler', 'CustomerProducts', '$uibModal', 'CustomerOrders',function($scope, $rootScope, $state, ImageHandler, CustomerProducts, $uibModal, CustomerOrders){
+.controller('PreCartController', ['$scope', '$rootScope', '$state', 'ImageHandler', 'CustomerProducts', '$uibModal', 'CustomerOrders', 'CustomerUtils', function($scope, $rootScope, $state, ImageHandler, CustomerProducts, $uibModal, CustomerOrders, CustomerUtils){
   window.scrollTo(0, 0);
   $scope.recommended_products = [];
-  $scope.loading_cart = true;
   function has_line_items(order){
     if(order.line_items && order.line_items.length){
       $scope.active_line_item = order.line_items[order.line_items.length-1];
@@ -23,15 +22,20 @@ angular.module('luxire')
   console.log('luxire cart in recommended', $rootScope.luxire_cart);
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number')){
     console.log('luxire cart in recommended', $rootScope.luxire_cart);
+    $scope.loading_cart = true;
+
     CustomerOrders.get_order_by_cookie()
     .then(function(data){
       console.log('fetched order', data.data);
       $rootScope.luxire_cart = data.data;
+      $scope.loading_cart = false;
+
     },
     function(error){
       console.error(error);
+      $scope.loading_cart = false;
+
     });
-    $scope.loading_cart = false;
     has_line_items($rootScope.luxire_cart);
   }
   else{
@@ -45,6 +49,19 @@ angular.module('luxire')
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
+  
+  /*Multi currency support*/
+  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  $scope.$on('currency_change', function(event, data){
+    console.log('currency changed ', data)
+    $scope.selected_currency = data;
+    
+  });
+  $scope.$on('fetched_order_from_cookie', function(event, data){
+    console.log('fetched order in pre cart', data);
+    has_line_items($rootScope.luxire_cart);
+  });
+
 
   $scope.quick_view = function(product){
     console.log('quick view', product);
@@ -65,6 +82,9 @@ angular.module('luxire')
         },
         is_fabric_taxonomy: function(){
           return $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false;
+        },
+        selected_currency: function(){
+          return $scope.selected_currency;
         }
       }
     });
