@@ -9,7 +9,7 @@ app.on('mount', function(parent){
   console.log('api v1 mounted');
 })
 app.use('/admin', require('./admin'));
-// app.use('/generic', require('./generic'));
+app.use('/generic', require('./generic'));
 app.use('/', require('./customer'));
 
 
