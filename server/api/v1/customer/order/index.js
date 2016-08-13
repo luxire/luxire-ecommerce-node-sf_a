@@ -14,6 +14,8 @@ router.post('/:number/apply_coupon_code/:code', controller.checkout_apply_coupon
 router.put('/:number', controller.update);//order_token passed as query param
 router.put('/:number/empty', controller.empty_cart);//order_token passed as query param
 
+router.put('/:number/update_order_currency', controller.update_order_currency);
+
 
 /**Line Items**/
 router.post('/:number/line_items', controller.add_line_item);//order_token passed as query param

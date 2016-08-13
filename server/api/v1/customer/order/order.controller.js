@@ -166,6 +166,34 @@ exports.update = function(req, res){
   })
 };
 
+var token = "";
+/*Update order currency */
+exports.update_order_currency = function(req, res){
+  console.log('params', req.params);
+  console.log('query', req.query);
+  console.log('body', req.body);
+  token = req.body.order_token;
+  req.body.token = token;
+  delete req.body.order_token;
+  http.put({
+    uri: constants.spree.host+'/api/update_order_currency',
+    headers:{
+      'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    },
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    console.log(body);
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  })
+};
+
 /*Add line item to cart*/
 exports.add_line_item = function(req, res){
   console.log('add new line_item');
