@@ -31,6 +31,9 @@
             <div class="settings admin-sidebar-tab" ui-sref="admin.shipping_setting">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-cog" style="font-size:20px;"></i>
             </div>
+            <div class="crm admin-sidebar-tab" ng-click="go_to_crm()">
+              &nbsp;&nbsp;&nbsp;<i class="fa fa-life-ring" style="font-size:20px;"></i>
+            </div>
             <div class="admin-sidebar-tab"
              style="position: absolute;bottom: 0;width: 85%;">
               &nbsp;&nbsp;&nbsp;<i class="fa fa-user" style="font-size:20px;"></i>
@@ -159,6 +162,8 @@
   								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
   								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
                   <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
+                  <div class="crm admin-sidebar-tab" style="font-size:13px;" id="crm" ng-click="go_to_crm()">Support</div>
+
                 </div>
                 <div class="admin-sidebar-tab" ng-init="popoverIsOpen=false" uib-popover-template="user_popover.templateUrl" popover-append-to-body="true"
                  style="font-size:13px;position: fixed; bottom: 0px;width: 20%" id="settings"
@@ -238,6 +243,12 @@
     });
 		$(".settings").click(function(){
       $(".settings").toggleClass("active-sidebar1");
+    });
+    $(".crm").hover(function(){
+      $(".crm").toggleClass("hover-sidebar");
+    });
+		$(".crm").click(function(){
+      $(".crm").toggleClass("active-sidebar1");
     });
 </script>
 <script type="text/ng-template" id="user_popover.html">

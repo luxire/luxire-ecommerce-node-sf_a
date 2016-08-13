@@ -9,6 +9,8 @@
     <div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
     <div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
     <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
+    <div class="settings admin-sidebar-tab" style="font-size:13px;" id="crm" ng-click="go_to_crm()">Support</div>
+    
   </div>
   <div class="admin-sidebar-tab" ng-init="popoverIsOpen=false" uib-popover-template="user_popover.templateUrl" popover-append-to-body="true"
    style="font-size:13px;position: fixed; bottom: 0px;width: 20%" id="settings"
