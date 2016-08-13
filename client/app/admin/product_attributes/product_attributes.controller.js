@@ -79,6 +79,23 @@ angular.module('luxire')
        reader.readAsDataURL(files[0]);
     }
   };
+  
+  $scope.range = {};
+  var range_string = "";
+  $scope.compute_range = function(range){
+    range_string = "";
+    range.steps = "";
+    console.log('range', range)
+    for(var i=parseFloat(range.start);i<=parseFloat(range.end);i=parseFloat(i)+parseFloat(range.step)){
+      if(i==parseFloat(range.end)){
+        range_string = range_string+parseFloat(i).toFixed(2);
+      }
+      else{
+        range_string = range_string+parseFloat(i).toFixed(2)+'#';
+      }
+    }
+    range.steps = range_string;
+  };
 
 
   /*Image attr image for[custom image that returns url]*/
@@ -298,6 +315,24 @@ angular.module('luxire')
       return false;
     };
   };
+  
+  $scope.range = {};
+  var range_string = "";
+  $scope.compute_range = function(range){
+    range_string = "";
+    range.steps = "";
+    console.log('range', range)
+    for(var i=parseFloat(range.start);i<=parseFloat(range.end);i=parseFloat(i)+parseFloat(range.step)){
+      if(i==parseFloat(range.end)){
+        range_string = range_string+parseFloat(i).toFixed(2);
+      }
+      else{
+        range_string = range_string+parseFloat(i).toFixed(2)+'#';
+      }
+    }
+    range.steps = range_string;
+  };
+
 
   /*Image*/
   $scope.upload_image = function(files){

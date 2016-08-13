@@ -61,6 +61,23 @@
             <li>Sub categories of Measurement Types: 'body' for body measurement attributes</li>
             <li>Use help field to add help text</li>
           </ul>
+          
+          <div class="placard">
+            <h4 style="font-size: 20px;" class="required">Compute Steps</h4>
+            Start
+            <input type="text" place-holder="start" class="form-control" ng-model="range.start">
+            End
+            <input type="text" place-holder="end" class="form-control" ng-model="range.end">
+            Step size
+            <input type="text" place-holder="Step Size" class="form-control"ng-model="range.step">
+            <br>
+            <div style="width: 100%">
+              <button class="primary" ng-click="compute_range(range)">Compute</button>
+            </div>
+            Steps
+            <textarea type="text" class="form-control" ng-model="range.steps"></textarea>
+      
+          </div>
 
           <div class="placard">
             <h4 style="font-size: 20px;" class="required">Image Upload</h4>
