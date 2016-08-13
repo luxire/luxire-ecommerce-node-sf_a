@@ -44,12 +44,21 @@
                 </li>
               </ul>
             </span>
-            
-            
+
+
           </span>
-          <span class="fa-stack" title="Change currency" style="margin-right: 1%; cursor: pointer;position: relative" >
+          <span uib-dropdown ng-init="is_currency_dropdown_open=false" ng-mouseenter="is_currency_dropdown_open=true" ng-click="is_currency_dropdown_open=!is_currency_dropdown_open" ng-mouseleave="is_currency_dropdown_open=false" is-open="is_currency_dropdown_open" class="fa-stack" 
+          title="Change currency" style="margin-right: 1%; cursor: pointer;position: relative" >
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
             <i class="fa fa-usd fa-stack-1x" style="color: white"></i>
+            <ul class="dropdown-menu measurement-unit-dropdown" uib-dropdown-menu aria-labelledby="simple-dropdown">
+              <li ng-repeat="(symbol,currency) in currencies" class="measurement-unit-dropdown" ng-class="{'active-currency': currency.symbol===selected_currency.symbol}" ng-click="change_currency(currency)">
+                {{currency.label +' - '+ currency.symbol}}
+              </li>
+            </ul>
+            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -45%;right: -50%">
+               {{selected_currency.symbol}}
+            </span>
           </span>
           <span uib-dropdown ng-init="is_open=false" ng-mouseenter="is_open=true" ng-click="is_open=!is_open" ng-mouseleave="is_open=false" is-open="is_open" class="fa-stack" title="Change measurement unit" style="margin-right: 1%; cursor: pointer;position: relative">
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%" uib-dropdown-toggle></i>
@@ -61,7 +70,7 @@
             </ul>
             <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -35%;right: -35%">
                {{selected_measurement_unit.symbol}}
-            </span>           
+            </span>
           </span>
           <span class="fa-stack" style="margin-right: 1%; cursor: pointer;position: relative" ui-sref="customer.cart">
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
@@ -265,15 +274,16 @@
         <div class="angucomplete-row" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: left;color: #8A247C;font-weight: 500;cursor: pointer" ng-repeat="result in results | limitTo: 10"
           ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" >
           <div style="width: 10%;display: inline-block">
-            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.variant.spree_assets[0].small_url.indexOf('http')>-1?result.originalObject.variant.spree_assets[0].small_url:'http://104.215.254.150:3000'+result.originalObject.variant.spree_assets[0].small_url}}"/>
+            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.master.images[0].small_url.indexOf('http')>-1?result.originalObject.master.images[0].small_url:'http://104.215.254.150:3000'+result.originalObject.master.images[0].small_url}}"/>
           </div>
           <div style="width: 85%;display: inline-block;vertical-align: top">
             <div style="display: inline-block" class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
-            <span style="color: grey" ng-if="matchClass"> in </span>
-            <span ng-if="matchClass">{{result.originalObject.product_type.product_type}}</span>
+             <!--//span style="color: grey" ng-if="matchClass"> in </span-->
+            <!--//span ng-if="matchClass">{{result.originalObject.product_type.product_type}}</span-->
             <div class="angucomplete-title" ng-if="!matchClass">{{result.title}}</div>
           </div>
         </div>
+        <div ng-if="results.length>10" ui-sref="customer.search({name_cont: searchStr,taxonomy: '',page: 1})" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: center;color: #8A247C;font-weight: 500;cursor: pointer">Load more..</div>
       </div>
 
     </div>
@@ -310,7 +320,7 @@
           <div ng-if="fabric_taxonomy">
             <div>
               <span>
-                <img style="max-width: 14%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(quickViewProduct.luxire_product.gsm)}}.png" alt="" />&nbsp;&nbsp;
+                <img style="max-width: 14%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(quickViewProduct.luxire_product.gsm, quickViewProduct.product_type.product_type)}}.png" alt="" />&nbsp;&nbsp;
                 {{quickViewProduct.luxire_product.gsm}}&nbsp;gsm
               </span>
             </div>
@@ -339,7 +349,7 @@
           </div>
           <hr style="border-top: solid 1px #CACACA">
           <div style="display: block; font-size: 170%; color: rgba(0, 0, 0, 0.5);">
-            {{quickViewProduct.display_price}}
+            {{quickViewProduct.master.prices[selected_currency]}}
           </div>
           <hr style="border-top: solid 1px #CACACA">
           <!--//Layout for Ties-->

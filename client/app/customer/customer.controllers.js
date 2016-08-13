@@ -1,7 +1,7 @@
 angular.module('luxire')
 /*Client ctrl instead of customer ctrl is used to
 avoid conflict with customer ctrl on admin side*/
-.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, $timeout, CustomerProducts, CustomerConstants, $location, CustomerAuthentication){
+.controller('ClientController',function($scope, $rootScope, $state, CustomerOrders, $aside, $timeout, CustomerProducts, CustomerConstants, $location, CustomerAuthentication, CustomerUtils){
   var prev_state = '';
   $scope.show_header = true;
   $scope.checkout_state = false;
@@ -43,7 +43,7 @@ avoid conflict with customer ctrl on admin side*/
   $timeout(function(){
 
     $(window).scroll(function(){
-      
+
       //$("#customer-main-nav-header").height()
       // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
@@ -83,7 +83,9 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   /*Load products*/
-  $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';
+  // $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';//search provided by ransack
+  $scope.search_products_url = CustomerConstants.api.products+'/search?q[name_cont]=';
+
 
   /*Select product from search*/
   $scope.select_product = function(data){
@@ -164,9 +166,44 @@ avoid conflict with customer ctrl on admin side*/
       $rootScope.$broadcast('fetched_order_from_cookie', data);
       $rootScope.luxire_cart = data.data;
     }
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.currency){
+      CustomerUtils.set_local_currency_in_app($rootScope.luxire_cart.currency);
+      $scope.selected_currency = $scope.currencies[$rootScope.luxire_cart.currency];
+    }
+    else{
+      CustomerUtils.get_local_currency().then(function(data){
+        console.log('currency', data);
+        CustomerUtils.set_local_currency_in_app(data.data);
+        if(data.data && $scope.currencies.hasOwnProperty(data.data)){
+          $scope.selected_currency = $scope.currencies[data.data];
+        }
+        else{
+          $scope.selected_currency = $scope.currencies["USD"];
+        }
+        $rootScope.$broadcast('currency_change', data.data);
+      }, function(error){
+        console.log('error', error)
+        $scope.selected_currency = $scope.currencies["USD"];
+      });
+    }
+   
   }, function(error){
     console.error('data from cookie', error);
     $rootScope.$broadcast('fetched_order_from_cookie', error);
+    CustomerUtils.get_local_currency().then(function(data){
+        console.log('currency', data);
+        CustomerUtils.set_local_currency_in_app(data.data);
+        if(data.data && $scope.currencies.hasOwnProperty(data.data)){
+          $scope.selected_currency = $scope.currencies[data.data];
+        }
+        else{
+          $scope.selected_currency = $scope.currencies["USD"];
+        }
+        $rootScope.$broadcast('currency_change', data.data);
+      }, function(error){
+        console.log('error', error)
+        $scope.selected_currency = $scope.currencies["USD"];
+      });
   });
   $rootScope.luxire_cart = angular.isUndefined($rootScope.luxire_cart)? {} : $rootScope.luxire_cart;
 
@@ -185,7 +222,7 @@ avoid conflict with customer ctrl on admin side*/
       name: 'PAYMENT'
     }
   };
-  
+
   /*Measurement Unit*/
   $scope.measurement_units = [
     {
@@ -199,13 +236,85 @@ avoid conflict with customer ctrl on admin side*/
       symbol: 'cm'
     }
   ];
-  
+
   $scope.selected_measurement_unit = $scope.measurement_units[0];
-  
+
   $scope.change_measurement_unit = function(measurement_unit){
     $scope.selected_measurement_unit = measurement_unit;
     console.log('selected unit', measurement_unit);
     $rootScope.$broadcast('measurement_unit_change', measurement_unit);
+  };
+  
+  /*Multi Currency */
+  $scope.currencies = {
+    "USD": {
+      id: 1,
+      label: "US Dollar",
+      symbol: "USD"
+    },
+    "EUR": {
+      id: 2,
+      label: "EURO",
+      symbol: "EUR"
+    },
+    "AUD": {
+      id: 3,
+      label: "Australian Dollar",
+      symbol: "AUD"
+    },
+    "SGD": {
+      id: 4,
+      label: "Singapore Dollar",
+      symbol: "SGD"
+    },
+    "NOK": {
+      id: 5,
+      label: "Norway Krone",
+      symbol: "NOK"
+    },
+    "DKK": {
+      id: 6,
+      label: "Danish Krone",
+      symbol: "DKK"
+    },
+    "SEK": {
+      id: 7,
+      label: "Sweden Krona",
+      symbol: "SEK"
+    },
+    "CHF": {
+      id: 8,
+      label: "Swiss Franc",
+      symbol: "CHF"
+    },
+    "INR": {
+      id: 9,
+      label: "Indian Rupee",
+      symbol: "INR"
+    }
+    
+  };
+  
+  
+    
+  
+ 
+
+  $scope.change_currency = function(currency){
+    $scope.selected_currency = currency;
+    console.log('selected currency', currency);
+    CustomerUtils.set_local_currency_in_app(currency.symbol);
+    $rootScope.$broadcast('currency_change', currency.symbol);
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.currency && $rootScope.luxire_cart.currency !== currency.symbol){
+      CustomerOrders.update_order_currency($rootScope.luxire_cart).then(function(data){
+        console.log('success', data);
+        $rootScope.luxire_cart = data.data;
+        $rootScope.$broadcast('fetched_order_from_cookie', data);
+      }, function(error){
+        console.log('error', error);
+
+      });
+    }
   };
 
   $scope.go_to_checkout_state = function(state){
@@ -269,26 +378,54 @@ avoid conflict with customer ctrl on admin side*/
   };
 
 })
-.controller('quickViewModalController',function($scope, $uibModalInstance, product, is_fabric_taxonomy, is_gift_card, CustomerOrders, $state, ImageHandler, CustomerProducts, $rootScope){
+.controller('quickViewModalController',function($scope, $uibModalInstance, product, is_fabric_taxonomy, is_gift_card, selected_currency, CustomerOrders, $state, ImageHandler, CustomerProducts, $rootScope){
   console.log('product', product);
   $scope.loading_product = true;
   console.log('is fabric', is_fabric_taxonomy);
   $scope.fabric_taxonomy = is_fabric_taxonomy;
   $scope.is_gift_card = is_gift_card;
+  $scope.selected_currency = selected_currency;
 
-  $scope.weight_index = function(variant_weight){
-    console.log('variant_weight', variant_weight);
-    console.log(parseFloat(variant_weight)-50)
-    if((parseFloat(variant_weight)-50)<0){
+/*Get weight icon*/
+  var weight_indexes_ref = {
+    shirts: {
+      min: 50,
+      max: 150,
+      step: 12.5//150/12
+    },
+    pants: {
+      min: 150,
+      max: 500,
+      step: 30 //
+    }
+  };
+  var min_weight = 0;
+  var max_weight = 0;
+  $scope.weight_index = function(variant_weight, product_type){
+    product_type = product_type.toLowerCase();
+    if(product_type && product_type.indexOf('pant') !== -1){
+      min_weight = weight_indexes_ref['pants']['min'];
+      max_weight = weight_indexes_ref['pants']['max'];
+      step = weight_indexes_ref['pants']['step'];
+    }
+    else if(product_type && product_type.indexOf('pant') == -1){
+      min_weight = weight_indexes_ref['shirts']['min'];
+      max_weight = weight_indexes_ref['shirts']['max'];
+      step = weight_indexes_ref['shirts']['step'];
+    };
+    
+
+    if((parseFloat(variant_weight))<min_weight){
       return 1;
     }
-    else if((parseFloat(variant_weight)-50)>150){
+    else if((parseFloat(variant_weight))>max_weight){
       return 12;
     }
     else{
-      return parseInt((parseFloat(variant_weight)-50)/12.5)+1;
+      return parseInt((parseFloat(variant_weight)-min_weight)/step)+1;
     };
   };
+
 
   var thickness = 0;
   /*Get Thickness icon*/

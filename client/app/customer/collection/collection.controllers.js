@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory){
+.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils){
 
   $scope.active_permalink = $location.url().split('/collections/')[1];
   console.log('active_permalink', $scope.active_permalink);
@@ -271,7 +271,12 @@ angular.module('luxire')
     console.log('event fired', data);
   });
 
-
+  /*Multi currency support*/
+  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  $scope.$on('currency_change', function(event, data){
+    console.log('currency changed', data)
+    $scope.selected_currency = data;
+  });
 
   /*Filters from redis*/
   /**/
@@ -327,9 +332,7 @@ angular.module('luxire')
       $scope.loading_products = false;
       $scope.total_collection_pages = data.data.pages;
       console.log('collections', data);
-      if(data.data.products){
-        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      }
+      
     }, function(error){
       $scope.loading_products = false;
       console.error(error);
@@ -394,8 +397,10 @@ angular.module('luxire')
       var price_sort_order = is_desc === true ? 'desc' : 'asc';
       $scope.selected_redis_filters.sort = price_sort_order;
       active_res_page = 1;
+      $scope.selected_redis_filters.page = 1;
       $scope.load_more();
       $scope.allProductsData = [];
+      $('html, body').animate({ scrollTop: 0}, 500);
     };
   /**/
 
@@ -410,17 +415,44 @@ angular.module('luxire')
     return ImageHandler.url(url);
   }
 
-  /*Get weight icon*/
-  $scope.weight_index = function(variant_weight){
+  var weight_indexes_ref = {
+    shirts: {
+      min: 50,
+      max: 150,
+      step: 12.5//150/12
+    },
+    pants: {
+      min: 150,
+      max: 500,
+      step: 30 //
+    }
+  };
 
-    if((parseFloat(variant_weight)-50)<0){
+  /*Get weight icon*/
+  var min_weight = 0;
+  var max_weight = 0;
+  $scope.weight_index = function(variant_weight, product_type){
+    product_type = product_type.toLowerCase();
+    if(product_type && product_type.indexOf('pant') !== -1){
+      min_weight = weight_indexes_ref['pants']['min'];
+      max_weight = weight_indexes_ref['pants']['max'];
+      step = weight_indexes_ref['pants']['step'];
+    }
+    else if(product_type && product_type.indexOf('pant') == -1){
+      min_weight = weight_indexes_ref['shirts']['min'];
+      max_weight = weight_indexes_ref['shirts']['max'];
+      step = weight_indexes_ref['shirts']['step'];
+    };
+
+
+    if((parseFloat(variant_weight))<min_weight){
       return 1;
     }
-    else if((parseFloat(variant_weight)-50)>150){
+    else if((parseFloat(variant_weight))>max_weight){
       return 12;
     }
     else{
-      return parseInt((parseFloat(variant_weight)-50)/12.5)+1;
+      return parseInt((parseFloat(variant_weight)-min_weight)/step)+1;
     };
   };
   var thickness = 0;
@@ -939,6 +971,9 @@ angular.module('luxire')
           },
           is_gift_card: function(){
             return $scope.is_gift_card;
+          },
+          selected_currency: function(){
+            return $scope.selected_currency;
           }
         }
       });

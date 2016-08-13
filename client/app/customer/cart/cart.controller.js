@@ -1,7 +1,6 @@
 angular.module('luxire')
-.controller('CustomerCartController',function($scope, $state, $sce, ImageHandler, $rootScope, $stateParams, CustomerOrders, orders, CustomerConstants, $window){
+.controller('CustomerCartController',function($scope, $state, $sce, ImageHandler, $rootScope, $stateParams, CustomerOrders, orders, CustomerConstants, $window, CustomerUtils){
   window.scrollTo(0, 0);
-  $scope.loading_cart = true;
   function update_state(order){
     if(order.state!="cart"){
       CustomerOrders.update(order, {
@@ -15,15 +14,20 @@ angular.module('luxire')
     }
   };
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
+    $scope.loading_cart = true;
+
     CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
     .then(function(data){
       console.log('fetched order', data.data);
       $rootScope.luxire_cart = data.data;
+      $scope.loading_cart = false;
+
     },
     function(error){
       console.error(error);
+      $scope.loading_cart = false;
+
     });
-    $scope.loading_cart = false;
     update_state($rootScope.luxire_cart);
   }
   else{
@@ -62,6 +66,27 @@ angular.module('luxire')
     return Object.keys(obj).length;
   };
 
+
+/*Multi currency support*/
+  // $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  // $scope.$on('currency_change', function(event, data){
+  //   console.log('currency changed in cart', data)
+  //   $scope.selected_currency = data;
+  //   $scope.loading_cart = true;
+
+  //   CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+  //   .then(function(data){
+  //     console.log('fetched order', data.data);
+  //     $rootScope.luxire_cart = data.data;
+  //     $scope.loading_cart = false;
+
+  //   },
+  //   function(error){
+  //     console.error(error);
+  //     $scope.loading_cart = false;
+
+  //   });
+  // });
 
   /*order json*/
 
