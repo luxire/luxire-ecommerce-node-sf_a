@@ -332,7 +332,10 @@ angular.module('luxire')
       $scope.loading_products = false;
       $scope.total_collection_pages = data.data.pages;
       console.log('collections', data);
-      
+      if(data.data.products){
+        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+      }
+
     }, function(error){
       $scope.loading_products = false;
       console.error(error);
