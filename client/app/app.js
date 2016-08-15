@@ -6,11 +6,11 @@
 angular.module('luxire', ['ui.router','ngRoute',
 													'ui.bootstrap','angularFileUpload',
 													'ui.bootstrap.datetimepicker','ngTagsInput',
-													'ngMessages', 'ngAnimate',
+													'ngMessages',
 													'AngularPrint', 'monospaced.qrcode',
 												  'ui.tree','infinite-scroll', 'ngAside',
 													'angucomplete-alt', 'angularAwesomeSlider',
-													'angular-cache', 'ui.slider', 'mega-menu'])
+													'angular-cache', 'ui.slider', 'mega-menu'])//removed ng-animate to resolve carousel issue
 
 
 .run(function($location,$rootScope, $state){
