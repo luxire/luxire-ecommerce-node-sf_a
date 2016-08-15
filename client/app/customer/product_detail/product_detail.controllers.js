@@ -848,19 +848,6 @@ angular.module('luxire')
   };
 
 
-  var key_name_map = {};
-  var dependent_attrs = {};
-  angular.forEach(product['standard_measurement_attributes'], function(val, key){
-    key_name_map[val.name.trim().toLowerCase()] = val.name;
-    if(val.name.trim().toLowerCase().indexOf('(') !== -1){
-      if(!dependent_attrs.hasOwnProperty(val.name.trim().toLowerCase().split('(')[0].trim())){
-        dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()] = [];
-      }
-      dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()].push(val.name.trim().toLowerCase());
-    }
-  });
-  console.log('key-name-map', key_name_map);
-  console.log('dependent-attr', dependent_attrs);
 
 
   function capitalizeFirstLetter(string) {
@@ -966,6 +953,18 @@ angular.module('luxire')
     }
   };
 
+  var key_name_map = {};
+  var dependent_attrs = {};
+  angular.forEach(product['standard_measurement_attributes'], function(val, key){
+    key_name_map[val.name.trim().toLowerCase()] = val.name;
+    if(val.name.trim().toLowerCase().indexOf('(') !== -1){
+      if(!dependent_attrs.hasOwnProperty(val.name.trim().toLowerCase().split('(')[0].trim())){
+        dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()] = [];
+      }
+      dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()].push(val.name.trim().toLowerCase());
+    }
+  });
+
 }])
 .controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition){
   $scope.active_style_option = "system_preset";
@@ -1004,14 +1003,13 @@ angular.module('luxire')
     console.log('input style', angular.fromJson(style));
     if(style && Object.keys(style).length){
       $scope.aggregated_style_images = [];
-      // $scope.aggregated_style_images = angular.copy(style.real_images);
-      console.log('aggregate style images', style.real_images);
+      $scope.aggregated_style_images = angular.copy(style.real_images);
       $scope.aggregated_style_images = $scope.aggregated_style_images.concat(style.sketch_images);
-      console.log('aggregate style images', style.sketch_images);
       $scope.aggregated_style_images.splice(0,0,{ large: style.images.large_url,medium: style.images.medium_url, small: style.images.small_url});
-      console.log('aggregate style images', $scope.aggregated_style_images);
     }
   };
+
+
 
   $scope.style_detail_images = [];
   $scope.activate_style_details = function(style){
@@ -1019,11 +1017,8 @@ angular.module('luxire')
     $scope.hide_active_style_details = false;
     $scope.active_detail_style = style;
     $scope.style_detail_images = $scope.active_detail_style.sketch_images;
-    $('.style-detail-images-slider').slick({
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    });
-    console.log('active_detail_style length', $scope.style_detail_images);
+    $scope.set_aggregated_style_images(style);
+
   }
 
   $(document).ready(function(){
