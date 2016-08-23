@@ -12,5 +12,8 @@ angular.module('luxire')
     }
     return $http.put('/api/orders/update_status', angular.toJson(order_obj));
   };
+  this.show = function(number){
+    return $http.get('/api/orders/'+number);
+  };
 
 })

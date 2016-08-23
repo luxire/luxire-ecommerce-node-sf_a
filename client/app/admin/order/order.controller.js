@@ -65,10 +65,10 @@ angular.module('luxire')
     else if($scope.active_order_tab_id === 1 && order.state !== 'complete'){
       return order;
     }
-    else if($scope.active_order_tab_id === 2 && order.payment_state !== 'paid'){
+    else if($scope.active_order_tab_id === 2 && order.state == 'complete' && order.payment_state !== 'paid'){
       return order;
     }
-    else if($scope.active_order_tab_id === 3 && order.shipment_state !== 'ready'){
+    else if($scope.active_order_tab_id === 3 && order.state == 'complete' && order.payment_state == 'paid' && order.shipment_state !== 'ready'){
       return order;
     }
 
@@ -82,12 +82,13 @@ angular.module('luxire')
   $scope.show_order = function(event, order){
     event.preventDefault();
     console.log(order);
-    orders.get_order_by_id(order.number, order.token).then(function(data){
-      console.log(data);
-      $state.go('admin.order_sheet',{order_number: order.number,order: data.data});
-    }, function(error){
-      console.error(error);
-    });
+    $state.go('admin.order_sheet', {order_number: order.number});
+    // orders.get_order_by_id(order.number, order.token).then(function(data){
+    //   console.log(data);
+    //   $state.go('admin.order_sheet',{order_number: order.number,order: data.data});
+    // }, function(error){
+    //   console.error(error);
+    // });
   };
 
   $scope.order_details_popover = {
@@ -129,15 +130,28 @@ angular.module('luxire')
   };
 
 })
-.controller('OrderSheetController', function($scope, $stateParams, ImageHandler, AdminConstants, AdminOrderService, $rootScope){
-  $scope.order_id = $stateParams.order_number;
-  $scope.luxire_order = $stateParams.order;
-  if($scope.luxire_order && $scope.luxire_order.luxire_order && !$scope.luxire_order.luxire_order.fulfillment_status){
-    $scope.luxire_order.luxire_order = {};
-    $scope.luxire_order.luxire_order.fulfillment_status = ''
-  }
-  $scope.order_details = $stateParams.order;
-  console.log($scope.order_details);
+.controller('OrderSheetController', function($scope, $state, $stateParams, ImageHandler, AdminConstants, AdminOrderService, $rootScope){
+  console.log('state', $state);
+  $scope.current_state = $state.current.name;
+  $scope.isStatePrint = function(){
+    if ($state.current.name === "order_sheet_print"){
+      return true;
+    }
+    return false;
+  };
+  AdminOrderService.show($stateParams.order_number).then(function(data){
+    console.log('fetched order', data.data);
+    $scope.order = data.data;
+    $scope.luxire_order = data.data;
+
+  }, function(error){
+    console.log('error', error);
+  });
+  // if($scope.luxire_order && $scope.luxire_order.luxire_order && !$scope.luxire_order.luxire_order.fulfillment_status){
+  //   $scope.luxire_order.luxire_order = {};
+  //   $scope.luxire_order.luxire_order.fulfillment_status = ''
+  // }
+
   console.log('luxire_order', $scope.luxire_order);
   $scope.order_states = [
     {
@@ -169,28 +183,21 @@ angular.module('luxire')
       console.error('error', error);
     });
   }
-  $scope.order_url = window.location.href+'/'+$stateParams.order_number;
-  console.log('order_url', $scope.order_url);
-  console.log($scope.order_details.line_items[0].variant.images[0].small_url);
-  $scope.prod_image = AdminConstants.api.host +$scope.order_details.line_items[0].variant.images[0].small_url;
-  console.log($scope.prod_image);
-  $scope.print_sheet = function () {
-    console.log('printing sheet');
-    window.print();
+  // $scope.order_url = window.location.href+'/'+$stateParams.order_number;
+
+  $scope.preview_order_sheet = function () {
+    var new_url = window.location.origin+"/#/order_sheet/"+$scope.order.number;
+    console.log('new url', new_url);
+    var win = window.open(new_url, '_blank');
+    win.focus();
   }
+
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
-
-  // <td>{{collar_details.points}}</td>
-  // <td>{{collar_details.spread}}</td>
-  // <td>{{collar_details.tie_space}}</td>
-  // <td>{{collar_details.nb_ht_back}}</td>
-  // <td>{{collar_details.nb_ht_front}}</td>
-  // <td>{{{{collar_details.collar_ht}}</td>
-  // <td>{{collar_details.side_curve}}</td>
-  // <td>{{collar_details.nb_const}}</td>
-  // <td>{{collar_details.collar_const}}</td>
+  $scope.checkIsObject = function(val){
+    return angular.isObject(val);
+  };
   $scope.collar = [{
                     points: "3.0\"",
                     spread: '5.0\"',
