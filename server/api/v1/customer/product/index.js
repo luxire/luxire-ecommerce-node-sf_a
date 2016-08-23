@@ -8,7 +8,8 @@ var controller = require('./product.controller');
 router.get('/', controller.index);
 router.get('/taxonomies', controller.taxonomy_index);
 router.get('/properties', controller.properties_index);
-router.get('/search', controller.search);
+router.post('/search', controller.search); //search from redis
+router.get('/searchByName', controller.search); //search from redis
 // router.get('/collections', controller.collections);
 router.post('/collections', controller.collections);
 
