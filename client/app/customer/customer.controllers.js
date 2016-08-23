@@ -84,7 +84,7 @@ avoid conflict with customer ctrl on admin side*/
 
   /*Load products*/
   // $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';//search provided by ransack
-  $scope.search_products_url = CustomerConstants.api.products+'/search?q[name_cont]=';
+  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';
 
 
   /*Select product from search*/
@@ -186,7 +186,7 @@ avoid conflict with customer ctrl on admin side*/
         $scope.selected_currency = $scope.currencies["USD"];
       });
     }
-   
+
   }, function(error){
     console.error('data from cookie', error);
     $rootScope.$broadcast('fetched_order_from_cookie', error);
@@ -244,7 +244,7 @@ avoid conflict with customer ctrl on admin side*/
     console.log('selected unit', measurement_unit);
     $rootScope.$broadcast('measurement_unit_change', measurement_unit);
   };
-  
+
   /*Multi Currency */
   $scope.currencies = {
     "USD": {
@@ -292,13 +292,13 @@ avoid conflict with customer ctrl on admin side*/
       label: "Indian Rupee",
       symbol: "INR"
     }
-    
+
   };
-  
-  
-    
-  
- 
+
+
+
+
+
 
   $scope.change_currency = function(currency){
     $scope.selected_currency = currency;
@@ -413,7 +413,7 @@ avoid conflict with customer ctrl on admin side*/
       max_weight = weight_indexes_ref['shirts']['max'];
       step = weight_indexes_ref['shirts']['step'];
     };
-    
+
 
     if((parseFloat(variant_weight))<min_weight){
       return 1;
