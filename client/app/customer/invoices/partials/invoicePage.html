@@ -140,7 +140,7 @@ function printDiv(divName) {
             <td></td>
             <td></td>
             <td ng-repeat="shipment in invoiceDetailedJson.shipments">Shipping:{{shipment.shipping_method.name}}</td>
-            <td ng-repeat="shipment in invoiceDetailedJson.shipments">${{shipment.cost}}</td>
+            <td ng-repeat="shipment in invoiceDetailedJson.shipments">{{shipment.display_cost}}</td>
           </tr>
           <tr>
             <td> </td>
