@@ -1,114 +1,57 @@
-<style>
-  .product-type-header{
-    width: 100%;
-    text-align: center;
-    font-size: 250%;
-    text-decoration: underline
-  }
-  .attribute-type-header{
-    width:100%;
-    text-align: left;
-    font-size: 200%;
-    padding: 0 1%;
-    text-decoration: underline
-  }
-  .attributes-section{
-    width: 100%;
-    padding: 0.5%;
-  }
-  .attrribute-section{
-    font-size: 90%;
-  }
-</style>
-<div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 5.8%;font-family: Roboto">
-  <!--<div class="" ng-include="attr_template.url" onload="template_loaded()">
-  </div>-->
-  <div ng-cloak ng-repeat="(product_type_name,product_type) in product_types">
-    <div class="product-type-header">{{product_type_name.toUpperCase()}}</div>
-    <div class="attributes-section" ng-repeat="(attribute_type_name,attributes) in product_type">
-      <div class="attribute-type-header">
-        {{attribute_type_name.toUpperCase()}}
-      </div>
-      <div id="{{id_generator(attribute_name)}}" class="attrribute-section" ng-repeat="(attribute_name,attribute) in attributes">
-        <div style="margin: 1%; padding: 1%;border: solid 1px grey">
-          <div class="row" style="margin-left: 0px; margin-right: 0px">
-            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-              <uib-carousel >
-                <uib-slide ng-repeat="attribute_image in attribute.images">
-                  <img ng-cloak style="max-width: 100%" src="{{attribute_image.url}}" alt="{{attribute_image.ref}}" />
-                </uib-slide>
-              </uib-carousel>
+<div ng-repeat="(product_type_name,product_type) in product_types">
+  <div class="product-type-header">{{product_type_name.toUpperCase()}}</div>
+  <div class="attributes-section" ng-repeat="(attribute_type_name,attributes) in product_type">
+    <div class="attribute-type-header">
+      {{attribute_type_name.toUpperCase()}}
+    </div>
+    <div id="{{id_generator(attribute_name)}}" class="attrribute-section" ng-repeat="(attribute_name,attribute) in attributes">
+      <div style="margin: 1%; padding: 1%;border: solid 1px grey">
+        <div class="row" style="margin-left: 0px; margin-right: 0px">
+          <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <uib-carousel >
+              <uib-slide ng-repeat="attribute_image in attribute.images">
+                <img ng-cloak style="max-width: 100%" src="{{attribute_image.url}}" alt="{{attribute_image.ref}}" />
+              </uib-slide>
+            </uib-carousel>
+          </div>
+          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            <div class="" style="text-align: center; font-size: 200%;margin-top: 3%">
+              {{attribute['title']}}
             </div>
-            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-              <div class="" style="text-align: center; font-size: 200%;margin-top: 3%">
-                {{attribute['title']}}
-              </div>
-              <hr>
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <p class="attr-desc" style="font-weight: 400; color: grey">
-                  {{attribute['description']}}
-                </p>
-              </div>
-              <hr style="width: 100%">
-              <div class="row" style="margin:0">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                  <div class="attribute-properties" ng-repeat="(property_name, property_value) in attribute['properties']">
-                    <span style="font-weight: 300;color: grey">{{property_name}}: </span>&nbsp;&nbsp;<span>{{property_value}}</span>
-                    <hr style="margin-top: 5px; margin-bottom: 5px">
-                  </div>
+            <hr>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <p class="attr-desc" style="font-weight: 400; color: grey">
+                {{attribute['description']}}
+              </p>
+            </div>
+            <hr style="width: 100%">
+            <div class="row" style="margin:0">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="attribute-properties" ng-repeat="(property_name, property_value) in attribute['properties']">
+                  <span style="font-weight: 300;color: grey">{{property_name}}: </span>&nbsp;&nbsp;<span>{{property_value}}</span>
+                  <hr style="margin-top: 5px; margin-bottom: 5px">
                 </div>
-                
               </div>
-              
-              <div ng-if="attribute['table-view'] && attribute['table-view']['body']"  class="row" style="margin: 0">
-                <div ng-repeat="(table_attr_name,table_attr) in attribute['table-view']['body']" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                  {{table_attr_name}}
-                  <div class="attribute-properties" ng-repeat="(property_name, property_value) in table_attr">
-                    <span style="font-weight: 300;color: grey">{{property_name}}: </span>&nbsp;&nbsp;<span>{{property_value}}</span>
-                    <hr style="margin-top: 5px; margin-bottom: 5px">
-                  </div>
-                  
-                </div>
-                
-              </div>
-              
 
             </div>
+
+            <div ng-if="attribute['table-view'] && attribute['table-view']['body']"  class="row" style="margin: 0">
+              <div ng-repeat="(table_attr_name,table_attr) in attribute['table-view']['body']" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                {{table_attr_name}}
+                <div class="attribute-properties" ng-repeat="(property_name, property_value) in table_attr">
+                  <span style="font-weight: 300;color: grey">{{property_name}}: </span>&nbsp;&nbsp;<span>{{property_value}}</span>
+                  <hr style="margin-top: 5px; margin-bottom: 5px">
+                </div>
+
+              </div>
+
+            </div>
+
+
           </div>
         </div>
       </div>
     </div>
-    
-  </div>
-</div>
-<div style="margin-top: 30%">
-</div>
-
-<div  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;margin-top:10%;padding-top:1%;padding-bottom:2%;">
-  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
-    <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
-    </div>
-    <div style="margin-top:2%;">
-        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
-    </div>
-
-  </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
-    <span><a href="#" style="color:#D2D2D2;">Home</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Catalogue</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Search</a></span><br><br>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
-    <span><a href="#" style="color:#D2D2D2;">Privacy policy</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
-    <span><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
   </div>
 
 </div>
