@@ -13,7 +13,7 @@ body, ul {
 }
 
 tags-input{
-	
+
 }
 
 header {
@@ -693,4 +693,60 @@ tags-input .tags {
 	line-height: 33px;
 	padding: 5px;
 	margin: 0px 10px !important;
+}
+#luxire-container{
+  margin-top: 1%;
+}
+#search-collection{
+  height: 26px;
+  width: 125px
+}
+#luxire-top-menu{
+  text-align: center;
+}
+#luxire-logo{
+  text-align: center;
+  align: center;
+  padding-top: 4%;
+}
+#luxire-categories{
+  margin-top: 0.5%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  border-top: solid 1px #C7BD98;
+  border-bottom: solid 1px #C7BD98;
+  font-size: 12px;
+}
+.luxire-categories-border{
+  border-right: solid 1px #C7BD98;
+}
+a.right.carousel-control, a.left.carousel-control{
+  /*display: none;*/
+}
+#luxire-carousel-container{
+  padding-top: 2%;
+}
+#luxire-carousel{
+  width: 100%;
+  border: none;
+}
+#luxire-carousel{
+  width: 100;
+  border: none;
+}
+.active{
+  border: none;
+}
+#luxire-product-collection{
+  border: solid 2px #AD7984;
+  border-radius: 10px;
+  margin-top: 2%;
+  margin-left: 3%;
+  margin-right: 4%;
+  padding-top: 2%;
+  padding-bottom: 2%
+}
+#email-feild{
+  height: 26px;
+  width: 175px
 }
