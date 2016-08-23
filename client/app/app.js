@@ -160,8 +160,18 @@ angular.module('luxire', ['ui.router','ngRoute',
 		data: {
 			require_auth: false
 		},
+	})
+	.state('order_sheet_print',{
+		url: '/order_sheet/:order_number',
+		params: {param	: {}},
+		templateUrl: 'app/admin/order/partials/order_sheet.html',
+		controller: 'OrderSheetController',
+		data: {
+			require_auth: true
+		},
 		// reloadOnSearch: true
 	})
+
 	// .state('cart',{
 	// 	url: '/cart',
 	// 	params: {cartObject: {}},
