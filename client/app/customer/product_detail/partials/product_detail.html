@@ -2064,35 +2064,58 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                               </div>
                             </div>
                             <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()!=='monogram'">
-                              <div style="padding: 2%" ng-if="option_value.hasOwnProperty('fabric')" ng-repeat="(option_key, option_value) in cart_object['personalization_attributes'][selected_bespoke_attribute.name]">
-                                <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{option_key}} Fabric</p>
-                                <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][option_key]['fabric']}}</p>
-                                <angucomplete-alt id="{{'personalization_attributes#'+selected_bespoke_attribute.name+'#'+option_key+'#'+'fabric'}}" style="height: 25px"
-                                    placeholder="Search fabric"
-                                    pause="400"
-                                    selected-object="select_contrast_product"
-                                    remote-url="{{search_products_url}}"
-                                    remote-url-data-field="products"
-                                    title-field="name"
-                                    match-class="highlight"
-                                    clear-selected=true
-                                    template-url="search_template_fabric.html">
-                                    input-class=""/>
+                              <div ng-if="personalisation_item.name == selected_bespoke_attribute.name" style="padding: 2%" ng-repeat="personalisation_item in product['personalization_attributes']">
+                                <div style="padding: 2%" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key]" ng-repeat="(personalisation_item_key, personalisation_item_value) in personalisation_item.value">
+                                  <div ng-repeat="(key, val) in personalisation_item_value">
+                                    <div style="padding: 2%" ng-if="key.toLowerCase() == 'fabric'" >
+                                      <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{option_key}} Fabric</p>
+                                      <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][option_key]['fabric']}}</p>
+                                      <angucomplete-alt id="{{'personalization_attributes#'+selected_bespoke_attribute.name+'#'+option_key+'#'+'fabric'}}" style="height: 25px"
+                                          placeholder="Search fabric"
+                                          pause="400"
+                                          selected-object="select_contrast_product"
+                                          remote-url="{{search_products_url}}"
+                                          remote-url-data-field="products"
+                                          title-field="name"
+                                          match-class="highlight"
+                                          clear-selected=true
+                                          minlength="1"
+                                          template-url="search_template_fabric.html">
+                                          input-class=""/>
+                                    </div>
+                                    <div style="padding: 2%" ng-if="key.toLowerCase() !== 'fabric' && check_unpermitted_customization_params(personalisation_item_key, key)">
+                                      <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{personalisation_item_key}} {{key}}</p>
+
+                                      <div ng-if="!checkIsObject(val)">
+                                        <input type="text" class="form-control input-sm" placeholder="{{key}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]" >
+                                      </div>
+                                      <div ng-if="checkIsObject(val)">
+                                        <select class="form-control input-sm" ng-init="val.splice(0,0,'-select-')" name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]">
+                                          <option ng-repeat="option in val" value="{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]}}" >{{option}}</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+                                </div>
                               </div>
+
                             </div>
-                            <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram'&&cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)"
+                            <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram' &&cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)"
                               ng-repeat="(style_property,style_values) in monogram_options" style="padding-top: 4%">
-                              <div style="background: #F4F5F5; padding: 3% 5%">
-                                <div ng-if="style_property.toLowerCase()!=='cost'&&style_property.toLowerCase()!=='image'" class="row" style="margin-left: 0px; margin-right: 0px">
+
+                              <div style="background: #F4F5F5; padding: 3% 5%" ng-repeat="(property_key, property_val) in style_values">
+                                <div ng-if="check_unpermitted_customization_params('monogram', property_key.toLowerCase())" class="row" style="margin-left: 0px; margin-right: 0px">
                                   <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="font-weight: 300; font-size: 90%; padding: 0px">
-                                    {{style_property}}
+                                    {{property_key}}
                                   </div>
-                                  <div ng-if="!checkIsArray(style_values)" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 0px">
-                                    <input type="text" class="form-control" placeholder="{{style_property}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][style_property]">
+                                  <div ng-if="property_val.options && !checkIsArray(property_val.options)" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 0px">
+                                    <input type="text" class="form-control" placeholder="{{property_key}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][property_key]">
                                   </div>
-                                  <div ng-if="checkIsArray(style_values)" style="padding: 0px"class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <select class="form-control"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][style_property]">
-                                      <option ng-repeat="option in style_values" value="{{option}}" style="width: 80%">{{option}}</option>
+                                  <div ng-if="property_val.options && checkIsArray(property_val.options)" style="padding: 0px"class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <select class="form-control"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][property_key]">
+                                      <option ng-repeat="option in property_val.options" value="{{option}}" style="width: 80%">{{option}}</option>
                                     </select>
                                   </div>
 

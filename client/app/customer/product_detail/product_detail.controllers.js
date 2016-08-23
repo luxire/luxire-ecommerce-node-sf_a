@@ -884,6 +884,8 @@ angular.module('luxire')
   };
   $scope.set_attribute_value = function(attribute_type, attribute_key, attribute_value){
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
+    console.log('set attribute', attribute_type, attribute_key, attribute_value);
+    $scope.change_dependents(attribute_type, attribute_key, attribute_value);
     // $scope.get_standard_sizes();
   };
 
@@ -967,6 +969,7 @@ angular.module('luxire')
 
 }])
 .controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition){
+  console.log('product', product);
   $scope.active_style_option = "system_preset";
   $scope.change_active_style_option = function(option){
     $scope.active_style_option = option;
@@ -1208,8 +1211,10 @@ angular.module('luxire')
   /*Slick wheeler/slider*/
 
   $scope.more_details = function(attr_name, attr_type){
-    attr_name = attr_name.toLowerCase().replace(" ","-");
-    attr_type = attr_type.toLowerCase().replace(" ","-");
+    attr_name = attr_name.toLowerCase().split(" ").join("-");
+    attr_type = attr_type.toLowerCase().split(" ").join("-");
+    console.log('more details on', attr_name, attr_type);
+
     window.open('/#/attributes/'+attr_name+'?type='+attr_type, '_blank')
   };
 
@@ -1331,8 +1336,10 @@ angular.module('luxire')
     console.log('selected_bespoke_attribute', bespoke_attribute);
   };
   var obj_keys = [];
+  $scope.personalization_options = {};
   //activate and deactivate a bespoke style
   $scope.activate_bespoke_style = function(attr_type, style_object, index, style_name){
+    console.log('activate style', attr_type, style_object, index, style_name);
 
     if(attr_type == 'customize'){
       if($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']==style_name){
@@ -1429,7 +1436,7 @@ angular.module('luxire')
   /*Bespoke attributes*/
 
   /*Load products*/
-  $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';
+  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';;
 
   $scope.select_contrast_product = function(product){
     console.log('selected contrast product', product, 'parent', this.$parent.$$childHead.id);
@@ -1470,9 +1477,7 @@ angular.module('luxire')
     if(angular.isArray(style_value)){
       return true;
     }
-    else{
-      return false;
-    }
+    return false;
   };
   $scope.checkIsObject = function(style_value){
     console.log(style_value);
@@ -1480,9 +1485,7 @@ angular.module('luxire')
     if(angular.isObject(style_value)){
       return true;
     }
-    else{
-      return false;
-    }
+    return false;
   };
 
 
@@ -2023,7 +2026,7 @@ angular.module('luxire')
   /*Bespoke attributes*/
 
   /*Load products*/
-  $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';
+  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';;
 
   $scope.select_contrast_product = function(product){
     console.log('selected contrast product', product, 'parent', this.$parent.$$childHead.id);
