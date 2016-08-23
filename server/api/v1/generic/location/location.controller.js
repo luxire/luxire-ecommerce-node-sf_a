@@ -36,38 +36,50 @@ var get_currency = function(country_code){
 };
 
 //Get product by id
-var req_ip = "";
-var req_cur = "";
+
 exports.geo_location = function(req, res){
+  var req_ip = "";
+  var req_cur = "";
   console.log('req ip',req.ip);
-  req_ip = "";
-  req_cur = "";
+
   req_ip = req.ip === "127.0.0.1" ? '' : req.ip;
+
   var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD"];
-  console.log('geo_location', req.ip);
+  console.log('geo_location', req_ip, constants.location_by_ip.host+'/'+req_ip);
+  // http.get({
+  //   uri: constants.location_by_ip.host+'/'+req_ip
+  // },function(error, response, body){
+  //   if(error){
+  //     res.status(500).send(error.syscall);
+  //   }
+  //   else{
+  //     console.log('req country', body);
+  //   }
+  //
+  // });
   http
     .get({
       uri: constants.location_by_ip.host+'/'+req_ip
     }, function(error, response, body){
         if(error){
+          console.log('error getting location', error.syscall);
           res.status(500).send(error.syscall);
         }
         else{
           console.log('req country', body);
-          // http
-          //   .get({
-          //     uri: constants.spree.host+constants.spree.get_currency_by_country_code+JSON.parse(body).country_code
-          //   }, function(err, resp, res_body){
-          //       if(err){
-          //         res.status(500).send(err.syscall);
-          //       }
-          //       else{
-          //         req_cur = JSON.parse(res_body).currency.toUpperCase();
-          //         console.log('res currency', req_cur);
-          //         res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
-          //       };
-          // });
-          res.status(response.statusCode).send(get_currency(JSON.parse(body).country_code));
+          http
+            .get({
+              uri: constants.spree.host+constants.spree.get_currency_by_country_code+JSON.parse(body).country_code
+            }, function(err, resp, res_body){
+                if(err){
+                  res.status(500).send(err.syscall);
+                }
+                else{
+                  req_cur = JSON.parse(res_body).currency.toUpperCase();
+                  console.log('res currency', req_cur);
+                  res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
+                };
+          });
         };
   });
 };
