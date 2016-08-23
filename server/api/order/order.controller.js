@@ -25,8 +25,9 @@ exports.show = function(req, res){
   console.log('req from'+req.connection.remoteAddress);
   console.log(req.params);
   console.log(req.body);
+  var token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058'
   http.get({
-    uri: env.spree.host+env.spree.orders+'/'+req.params.number+'?order_token='+req.params.token,
+    uri: env.spree.host+env.spree.orders+'/'+req.params.number+'?token='+token,
     body: ''
   },function(error, response, body){
     if(error == null){

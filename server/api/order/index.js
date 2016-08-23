@@ -9,7 +9,7 @@ router.get('/incomplete', controller.incomplete_order);
 router.put('/update_status', controller.update_status);
 router.get('/:number/payments', controller.get_payment_methods);
 
-router.get('/:number/:token', controller.show);
+router.get('/:number', controller.show);
 router.post('/', controller.create);
 // router.put('/:number', controller.update);
 router.post('/new', controller.create_blank_order);
