@@ -62,11 +62,7 @@ angular.module('luxire')
   };
 
   this.search_products_in_redis = function(query_object){
-    var query_str = "";
-    for(var key in query_object){
-      query_str = query_str + "q["+key +"]="+query_object[key]+"&";
-    };
-    return $http.get(CustomerConstants.api.products+"/search?"+query_str);
+    return $http.post(CustomerConstants.api.products+"/search", angular.toJson(query_object));
   };
 
   this.show = function(product_name){
@@ -219,7 +215,7 @@ angular.module('luxire')
 		};
 		return $http.put(CustomerConstants.api.orders+'/'+order.number+'/line_items/'+line_item_id+'?order_token='+order.token, angular.toJson(updated_cart));
 	};
-  
+
   this.update_order_currency = function(order){
     var order_obj = {
       order_number: order.number,
@@ -321,7 +317,7 @@ angular.module('luxire')
       });
     };
     in_to_cm(measurement_obj);
-    
+
   };
   this.get_local_currency = function(){
     return $http.get(CustomerConstants.api.get_location_by_ip);
@@ -332,7 +328,7 @@ angular.module('luxire')
   this.get_local_currency_in_app = function(){
     return local_currency;
   };
-  
+
 });
 
 
