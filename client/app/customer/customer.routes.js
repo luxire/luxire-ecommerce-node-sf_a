@@ -70,7 +70,7 @@ angular.module('luxire')
 	.state('customer.attribute_detail',{
 		url:'/attributes/:attribute_name?type',
 		views: {
-			"customer": { templateUrl: "app/customer/attribute_detail/partials/attribute_detail.html",
+			"customer": { templateUrl: "app/customer/attribute_detail/partials/attribute_detail_index.html",
 			 controller: "AttributeController"},
 			 params: {attribute_name: null}
 		},
