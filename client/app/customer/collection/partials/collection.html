@@ -91,6 +91,23 @@
                     </div>
                   </div>
                 </div>
+                <div ng-if="selected_filters[property.name].toLowerCase() == 'custom'" ng-init="$parent.price_start='';$parent.price_end=''" class="">
+                  <div class="" style="display: inline-block;width: 80%;font-size:115%;font-weight: 100;">
+                    Start <span ng-if="$parent.price_start!==''">{{$parent.price_start}} {{selected_currency}}</span>
+                  </div>
+                  <div class="" style="display: inline-block;font-size:115%;font-weight: 100;">
+                    <input type="number" class="form-control" style="width: 80%" ng-model="$parent.price_start" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
+                  </div>
+                </div>
+                <div ng-if="selected_filters[property.name].toLowerCase() == 'custom'" class="">
+                  <div class="" style="display: inline-block;width: 80%;font-size:115%;font-weight: 100;">
+                    End <span ng-if="$parent.price_end!==''">{{$parent.price_end}} {{selected_currency}}</span>
+                  </div>
+                  <div class="" style="display: inline-block;font-size:115%;font-weight: 100;">
+                    <input type="number" class="form-control" style="width: 80%" ng-model="$parent.price_end" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
+                  </div>
+                </div>
+
 
 
               </div>

@@ -36,14 +36,15 @@ angular.module('luxire')
   $('[data-toggle="tooltip"]').tooltip();
   $scope.stateParams = $stateParams;
 
+  /*Filters-start*/
   /*filters*/
-  $scope.selected_filters = {};
+  $scope.selected_filters = {}; //for DOM Manipulation
   $scope.filter_properties = [];
   var filter_index = '';
   //weight, brand & material removed, thickness needs to be added in properties
   var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'transparency', 'construction'];
   var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'TRANSPARENCY', 'CONSTRUCTION',];
-  var filter_db_column_names = ['product_color', 'display_price', 'product_weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction'];
+  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction'];
 
   $scope.color_variants = {
     white: {
@@ -100,7 +101,7 @@ angular.module('luxire')
         $scope.selected_filters[val.name] = 'all';
         val.display_name = filter_display_names[filter_index];
         val.db_name = filter_db_column_names[filter_index];
-        val.value = 'all,'+val.value;
+        val.value = 'all,'+val.value; //available option for filters
         $scope.filter_properties.push(val);
       }
     });
@@ -110,12 +111,14 @@ angular.module('luxire')
     $scope.loading_filters = false;
   });
 
-  $scope.selected_redis_filters = {
-    permalink: $scope.active_permalink,
-    page: 1,
-    sort: 'asc'
-  };
 
+  $scope.selected_redis_filters = {
+    sort: 'asc',
+    page: 1,
+    taxonomy: $scope.active_permalink,
+    price_start: $scope.price_start,
+    price_end: $scope.price_end,
+  };
   var price_range = function(price_string){
     var range = price_string.split(',');
     var prices = [];
@@ -150,11 +153,16 @@ angular.module('luxire')
           $scope.selected_redis_filters[db_field] = option;
         }
         else{
-          $scope.selected_redis_filters[db_field] = price_range(option);
+          // $scope.selected_redis_filters[db_field] = price_range(option);
         }
       }
       else if($scope.selected_filters[property] && option === 'all'){
         delete $scope.selected_redis_filters[db_field];
+        if(property == 'price'){
+          $scope.selected_redis_filters.page = 1;
+          $scope.allProductsData = [];
+          load_products();
+        }
       }
       /*For redis post*/
     }
@@ -183,89 +191,22 @@ angular.module('luxire')
           $scope.selected_redis_filters[db_field] = $scope.selected_filters[property];
         }
         else{
-          $scope.selected_redis_filters[db_field] = price_range($scope.selected_filters[property]);
+          // $scope.selected_redis_filters[db_field] = price_range($scope.selected_filters[property]);
         }
       }
     }
+    $scope.allProductsData=[];
+    $scope.selected_redis_filters.page = 1;
     console.log('selected filters', $scope.selected_filters);
     console.log('output to redis', $scope.selected_redis_filters);
-    $scope.allProductsData=[];
-    active_res_page = 1;
-    if(Object.keys($scope.selected_redis_filters).length === 3){
-      load_collections(active_res_page);
-    }
-    else{
-      if($scope.selected_redis_filters.permalink.indexOf('/')===-1){
-        load_collections(active_res_page);
-      }
-      else{
-        load_filtered_products(active_res_page);
-      }
-    }
 
-  };
+    load_products();
 
-  $scope.filter_with_selections = function(product){
-    // console.log('filter with selections');
-    var condition_array = [];
-    angular.forEach($scope.selected_filters, function(val, key){
-      if(val && val != '' && val != 'all'){
-        if(key!='price' && key!='color'){
-          if(product['luxire_product'][filter_db_column_names[required_filters.indexOf(key)]] == val){
-            condition_array.push(true);
-          }
-          else{
-            condition_array.push(false);
-          }
-        }
-        else if(key == 'color'){
-          if(product['luxire_product'][filter_db_column_names[required_filters.indexOf(key)]].toLowerCase().indexOf(val.toLowerCase())>-1){
-            condition_array.push(true);
-          }
-          else{
-            condition_array.push(false);
-          }
-        }
-        else if(key == 'price'){
-          if(val.toLowerCase().indexOf('under') > -1){
-            if(parseFloat(product.price) < parseFloat(val.split('$')[1])){
-              condition_array.push(true);
-            }
-            else{
-              condition_array.push(false);
-            }
-          }
-          else if(val.toLowerCase().indexOf('over') > -1){
-            if(parseFloat(product.price) > parseFloat(val.split('$')[1])){
-              condition_array.push(true);
-            }
-            else{
-              condition_array.push(false);
-            }
-          }
-          else{
-            var selected_price = val.split('-');
-            if((parseFloat(product.price) > parseFloat(selected_price[0].split('$')[1])) && (parseFloat(product.price) < parseFloat(selected_price[1].split('$')[1]))){
-              condition_array.push(true);
-            }
-            else{
-              condition_array.push(false);
-            }
-
-          }
-        }
-     }
-
-    });
-    if(condition_array.indexOf(false)>-1){
-      return ;
-    }
-    else{
-      return product;
-    }
   };
 
   $scope.reverse_price = false;//predicate for sorting products by price
+
+  /*Filters-end*/
 
   $rootScope.$on('fetched_order_from_cookie', function(event, data){
     console.log('event fired', data);
@@ -279,134 +220,70 @@ angular.module('luxire')
   });
 
   /*Filters from redis*/
-  /**/
 
-  /*Search products*/
-  //
-  // $scope.allProductsData=[];
-  // $scope.total_collection_pages = 1;
-  // var load_collections = function(page){
-  //   $scope.loading_products = true;
-  //   CustomerProducts.collections($stateParams.collection_name, page)
-  //   .then(function(data){
-  //     $scope.loading_products = false;
-  //     $scope.total_collection_pages = data.data.total_pages;
-  //     console.log('collections', data);
-  //     if($scope.allProductsData.length){
-  //       $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-  //     }
-  //     else{
-  //       $scope.allProductsData = data.data.products;
-  //     }
-  //   }, function(error){
-  //     $scope.loading_products = false;
-  //     console.error(error);
-  //   });
-  // };
-  // var load_filtered_products = function(page){
-  //   $scope.loading_products = true;
-  //   $scope.selected_redis_filters.page = page;
-  //   CustomerProducts.apply_filters($scope.selected_redis_filters)
-  //   .then(function(data){
-  //     $scope.loading_products = false;
-  //     $scope.total_collection_pages = data.data.pages;// total pages
-  //     console.log('res data', data);
-  //     if($scope.allProductsData.length){
-  //       $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-  //     }
-  //     else{
-  //       $scope.allProductsData = data.data.products;
-  //     }
-  //   },function(error){
-  //     $scope.loading_products = false;
-  //     console.log('error', error);
-  //   });
-  // };
-
+  /*Redis Filters-start*/
   $scope.allProductsData=[];
   $scope.total_collection_pages = 1;
-  var load_collections = function(page){
+
+
+  /*Redis caching mechanism*/
+    var active_res_page = 1;
+    $scope.sort_by_price = function(is_desc){
+      $scope.reverse_price = is_desc;
+      var price_sort_order = is_desc === true ? 'desc' : 'asc';
+      $scope.selected_redis_filters.sort = price_sort_order;
+      $scope.selected_redis_filters.page = 1;
+      $scope.allProductsData = [];
+      load_products();
+      $('html, body').animate({ scrollTop: 0}, 500);
+    };
+
+    $scope.filter_by_price = function(price_start, price_end){
+      $scope.allProductsData = [];
+      $scope.selected_redis_filters.price_start = price_start;
+      $scope.selected_redis_filters.price_end = price_end;
+      $scope.selected_redis_filters.page = 1;
+
+      load_products();
+    }
+  /**/
+
+  /*Redis Filter-end*/
+
+  $scope.allProductsData=[];
+
+  $scope.reverse_price = false;//predicate for sorting products by price
+
+
+  var load_products = function(){
     $scope.loading_products = true;
-    CustomerProducts.collections($scope.selected_redis_filters)
+    console.log('filters before post', $scope.selected_redis_filters);
+    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
     .then(function(data){
       $scope.loading_products = false;
       $scope.total_collection_pages = data.data.pages;
-      console.log('collections', data);
-      if(data.data.products){
-        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      }
-
+      $scope.taxonomy_counts = data.data.taxonomies;
+      console.log('fetched products', data.data);
+      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+      $scope.selected_redis_filters.page++;
     }, function(error){
       $scope.loading_products = false;
       console.error(error);
     });
   };
-  var load_filtered_products = function(page){
-    $scope.loading_products = true;
-    $scope.selected_redis_filters.page = page;
-    CustomerProducts.apply_filters($scope.selected_redis_filters)
-    .then(function(data){
-      $scope.loading_products = false;
-      $scope.total_collection_pages = data.data.pages;// total pages
-      console.log('filtered data', data);
-      if(data.data.products){
-        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      }
-
-    },function(error){
-      $scope.loading_products = false;
-      console.log('error', error);
-    });
-  };
 
   /*Redis caching mechanism*/
-    var active_res_page = 1;
-    // load_collections(active_res_page);
+    $scope.total_collection_pages = 1;
     $scope.load_more = function(){
       console.log('load more');
       console.log('total pages', $scope.total_collection_pages);
-      console.log('active page', active_res_page);
-      if(active_res_page<=$scope.total_collection_pages){
-        // if(Object.keys($scope.selected_redis_filters).length === 3){
-        //   load_collections(active_res_page);
-        // }
-        // else{
-        //   load_filtered_products(active_res_page);
-        // }
-        // active_res_page = active_res_page + 1;
-        if(Object.keys($scope.selected_redis_filters).length === 3){
-          load_collections(active_res_page);
-        }
-        else{
-          if($scope.selected_redis_filters.permalink.indexOf('/')===-1){
-            load_collections(active_res_page);
-          }
-          else{
-            load_filtered_products(active_res_page);
-          }
-        }
-
-        active_res_page = active_res_page + 1;
-        $scope.selected_redis_filters.page = active_res_page;
-
+      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
+        load_products();
       }
-
-
-
       console.log('scrolling');
-    }
-    $scope.sort_by_price = function(is_desc){
-      $scope.reverse_price = is_desc;
-      var price_sort_order = is_desc === true ? 'desc' : 'asc';
-      $scope.selected_redis_filters.sort = price_sort_order;
-      active_res_page = 1;
-      $scope.selected_redis_filters.page = 1;
-      $scope.load_more();
-      $scope.allProductsData = [];
-      $('html, body').animate({ scrollTop: 0}, 500);
     };
-  /**/
 
+  /**/
 
 
 
