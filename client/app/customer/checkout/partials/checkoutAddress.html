@@ -62,7 +62,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <select style="margin-top: 2%" name="ship_country"
                 ng-model="shipping.country"
-                class="form-control" ng-options="country as country.name for country in countries track by country.id" required>
+                class="form-control" ng-options="country as country.name for country in countries | orderBy : 'name' track by country.id" required>
               </select>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
