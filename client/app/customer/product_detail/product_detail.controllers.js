@@ -279,8 +279,8 @@ angular.module('luxire')
     $scope.invalid_fields = [];
     var product_type_validations = {
       'shirts': '',//Collar Size,Sleeve Length,Fit Type
-      'pants': 'Waist Size,In-seam,Fit Type',
-      'jackets': 'Chest Size,Length,Fit Type',
+      'pants': '',//Waist Size,In-seam,Fit Type
+      'jackets': '',//Chest Size,Length,Fit Type
       'gift cards': '',
       'ties': '',//Tie Width,Tie Length
       'belts': ''//Belt Length
