@@ -1,7 +1,7 @@
 angular.module('luxire')
 .controller('styleMasterEditController',function($scope, $state, $timeout, styleMasterService, $state,$stateParams, ImageHandler, productSearch){
   $scope.styleMasterByIdValue='';
-  $scope.newProductType='';
+  $scope.newProductType={};
   $scope.selectedType=[];
   $scope.allMeasurementType=[];
   $scope.productType='';
@@ -62,6 +62,7 @@ angular.module('luxire')
   };
   $scope.bodyMeasurement=[]; //28th march add this line
   $scope.contrastJson = [];
+  $scope.selected_customization_attributes = {}; //Added on 25 aug -Mudassir
   console.log(" in style master edit state params: "+$stateParams.id);
   styleMasterService.getStyleMasterById($stateParams.id).then(function(data){
      $scope.loading = true; // 29th march
@@ -104,6 +105,9 @@ angular.module('luxire')
         for(var key in data.data.default_values){
           console.log("key val is: "+key);
           if(key == 'customization_attributes'){
+            $scope.selected_customization_attributes = data.data.default_values[key]; //Added on 25 aug -Mudassir
+            console.log('selected customization_attributes', $scope.selected_customization_attributes);
+
             var value = data.data.default_values[key];
             for(var nestedkey in value){
               console.log("c object: ",value[nestedkey]);
@@ -111,43 +115,45 @@ angular.module('luxire')
                //$scope.customizeDefault.push(value[nestedkey]);
 
             }
-          }else if(key == 'personalization_attributes'){
-            // var value = data.data.default_values[key];
-            //  var value = data.data.default_values[key];
-            // for(var nestedkey in value){
-            //   console.log("key: ",nestedkey);
-            //   console.log("value: ",value[nestedkey]);
-            //   if(nestedkey != 'monogram'){
-            //     value[nestedkey].selected=true;
-            //     var obj={"text": value[nestedkey].name};
-            //     //$scope.contrast_collor.push(obj);
-            //     //console.log("contrast_collor: ",$scope.contrast_collor);
-            //     console.log("tags obj:",obj);
-            //     $scope.personalizeDefault.push({ name: nestedkey, id:value[nestedkey].id, value: obj });
-            //   }
-            //    $scope.personalizeDefault.push(value[nestedkey]);
-            //
-            //  }
-            for(i=0;i<data.data.default_values.personalization_attributes.contrast.length; i++){
-              if(data.data.default_values.personalization_attributes.contrast[i].rule != null){
-                data.data.default_values.personalization_attributes.contrast[i].selected=true;
-              }else{
-                data.data.default_values.personalization_attributes.contrast[i].selected=false;
-              }
-            }
-           }else if(key == 'standard_measurement_attributes'){
-            var value = data.data.default_values[key];
-            for(var nestedkey in value){
-              console.log("c object: ",value[nestedkey]);
-               $scope.standardDefault.push({ name: nestedkey, value: value[nestedkey]});
-               //$scope.standardDefault.push(value[nestedkey]);
           }
-        }
+          // else if(key == 'personalization_attributes'){
+          //   // var value = data.data.default_values[key];
+          //   //  var value = data.data.default_values[key];
+          //   // for(var nestedkey in value){
+          //   //   console.log("key: ",nestedkey);
+          //   //   console.log("value: ",value[nestedkey]);
+          //   //   if(nestedkey != 'monogram'){
+          //   //     value[nestedkey].selected=true;
+          //   //     var obj={"text": value[nestedkey].name};
+          //   //     //$scope.contrast_collor.push(obj);
+          //   //     //console.log("contrast_collor: ",$scope.contrast_collor);
+          //   //     console.log("tags obj:",obj);
+          //   //     $scope.personalizeDefault.push({ name: nestedkey, id:value[nestedkey].id, value: obj });
+          //   //   }
+          //   //    $scope.personalizeDefault.push(value[nestedkey]);
+          //   //
+          //   //  }
+          //     for(i=0;i<data.data.default_values.personalization_attributes.contrast.length; i++){
+          //       if(data.data.default_values.personalization_attributes.contrast[i].rule != null){
+          //         data.data.default_values.personalization_attributes.contrast[i].selected=true;
+          //       }else{
+          //         data.data.default_values.personalization_attributes.contrast[i].selected=false;
+          //       }
+          //     }
+          //  }
+          //  else if(key == 'standard_measurement_attributes'){
+          //     var value = data.data.default_values[key];
+          //     for(var nestedkey in value){
+          //       console.log("c object: ",value[nestedkey]);
+          //        $scope.standardDefault.push({ name: nestedkey, value: value[nestedkey]});
+          //        //$scope.standardDefault.push(value[nestedkey]);
+          //    }
+          // }
       }
         //$scope.selectedCustomizeValue = $scope.customizeDefault[1];
         console.log("**********customization arr: \n\n",$scope.customizeDefault);
-        console.log("**********personalization arr: \n\n",$scope.personalizeDefault);
-        console.log("**********standard arr: \n\n",$scope.standardDefault);
+        // console.log("**********personalization arr: \n\n",$scope.personalizeDefault);
+        // console.log("**********standard arr: \n\n",$scope.standardDefault);
         //console.log("**********body arr: \n\n",$scope.bodyDefault);
         $scope.loading = false; // 29th march
 
@@ -197,9 +203,7 @@ angular.module('luxire')
   }else if(type == 'standard measurement attributes'){
     for(i=0; i<$scope.standardDefault.length; i++){
       if($scope.standardDefault[i].name == name){
-        console.log("customize value :"+$scope.standardDefault[i] );
-        console.log("fun value :"+value );
-        console.log("---------------------------------");
+
         return true;
       }
     }
@@ -220,15 +224,11 @@ angular.module('luxire')
 // monogram portiopn end
 
   $scope.showMeasurementType=function(key,name,value){
-    console.log("select measurement type is calling.. : ");
-    console.log("key: "+key);
-    console.log("name: "+name);
-    console.log("value: "+value);
+
     if(key == 'customization'){
        $scope.values.customization_attributes[name]=value;
 
     }else if(key == 'personalization'){
-      console.log("call personalization...");
     //$scope.values.personalization_attributes[name]=value;
         // var obj={};
         // obj["id"] = name[0].id;
@@ -255,6 +255,7 @@ angular.module('luxire')
   }
 
   $scope.save=function(){
+    console.log('new product type', $scope.newProductType);
     if($scope.newProductType.name == undefined || $scope.newProductType.name == '' || $scope.newProductType.name == 0){
         $scope.alerts.push({type: 'danger', message: 'Name Field Can Not Be Empty !'});
         document.getElementById("name").focus();
@@ -262,17 +263,19 @@ angular.module('luxire')
       console.log("in save default values are\n",$scope.values);
       //console.log("new product type :\n",$scope.newProductType);
       //console.log("default_values: \n",$scope.default_values);
-      console.log("before posting the monogram object is: ",$scope.monogramJson);
-      $scope.values["personalization_attributes"]["monogram"]= $scope.monogramJson;
-      $scope.values["body_measurement_attributes"]= $scope.bodyMeasurement;
-      $scope.values["personalization_attributes"]["contrast"] = $scope.contrastjson;
-      console.log("before update contrast obj: ",$scope.contrastjson);
+      // console.log("before posting the monogram object is: ",$scope.monogramJson);
+      // $scope.values["personalization_attributes"]["monogram"]= $scope.monogramJson;
+      // $scope.values["body_measurement_attributes"]= $scope.bodyMeasurement;
+      // $scope.values["personalization_attributes"]["contrast"] = $scope.contrastjson;
+      // console.log("before update contrast obj: ",$scope.contrastjson);
 
 
       $scope.newProductType["default_values"]=$scope.values;
       //$scope.newProductType["luxire_product_type"]='';
        delete $scope.newProductType.image;
       console.log("before posting the the default values are: ",$scope.values);
+
+      $scope.newProductType['default_values']['customization_attributes'] = $scope.selected_customization_attributes;
 
       console.log(" before posting the new product type obj is  :\n",JSON.stringify($scope.newProductType));
       styleMasterService.updateStyleMasterById($stateParams.id,$scope.newProductType).then(function(data){

@@ -75,16 +75,10 @@ div.sm:last-child:after {
                <input type="text" ng-model="newProductType.name" ng-blur="checkStyleMasterName(newProductType.name)" class="form-control" placeholder="product name.." >
                <span ng-show="emptyNameMsg" style="color:red;">Name Can Not Be Empty</span>
                <br>
-               <!-- <span style="font-size: 13px;">Description</span>
+               <span style="font-size: 13px;">Description</span>
                <br>
-               <div class="panel panel-default">
-                 <div class="panel-heading" style="padding: 0px;">
-                 </div>
-                 <div class="panel-body">
-                   <textarea class="description"  rows="2" cols="20"></textarea>
-                 </div>
+               <textarea style="border: solid 1px grey" ng-model="newProductType.description" class="description"  rows="2" cols="20"></textarea>
 
-               </div> -->
                <span class="required" style="font-size: 1.2em; font-weight: 900;">Image</span>
                <!--Image  -->
                <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="">
@@ -118,8 +112,8 @@ div.sm:last-child:after {
                             <span>{{customizeObj.name}}</span>
                           </div>
                           <div class="col-md-8" style="padding-right:6%; padding-top:2%;">
-                            <select class="form-control" ng-model=" customizeObj.selectedCustomizeValue" ng-change="showMeasurementType(keyToWord,customizeObj.name,customizeObj.selectedCustomizeValue )">
-                              <option  ng-repeat=" (nestedKey,value) in customizeObj.value "  ng-selected="fun(customizeKey,customizeObj.name, nestedKey)" value="{{ nestedKey }}">
+                            <select class="form-control" ng-model="selected_customization_attributes[customizeObj.name]" >
+                              <option  ng-repeat=" (nestedKey,value) in customizeObj.value " ng-click="selected_customization_attributes[customizeObj.name] = nestedKey"  ng-selected="selected_customization_attributes[customizeObj.name] && selected_customization_attributes[customizeObj.name] == nestedKey" value="{{nestedKey}}">
                                   {{nestedKey}}
                               </option>
 
@@ -127,7 +121,7 @@ div.sm:last-child:after {
                           </div>
                      </div>
                  </div>
-                 <div class="row" ng-if="key == 'personalization_attributes' "  style="margin-top:2%;">
+                 <!-- <div class="row" ng-if="key == 'personalization_attributes' "  style="margin-top:2%;">
                      <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
                        <span style="font-size:160%; padding-left:10%; text-transform: capitalize;">{{customizeKey}}</span>
                      </div>
@@ -181,13 +175,7 @@ div.sm:last-child:after {
                             <div ng-if="customizeObj.name == 'Contrast' " ng-repeat=" val in contrastjson" style="padding-top:2%;">
                               <input type="checkbox" ng-model="val.selected" ng-checked="val.rule.length > 0" ng-click="showMeasurementType(keyToWord,key,value.selected)"><span style="padding-left: 5%;">{{val.name}}</span><br>
                               <div style="padding-left:5%;" ng-show="val.selected" style="padding-top:2%;">
-                                <!-- <tags-input ng-model="value.rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
-                                        maxTags="1" ng-blur="showMeasurementType(keyToWord,key,value.rule)" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
-                                          <auto-complete  source="loadItems($query)"></auto-complete>
-                                </tags-input> -->
-                                <!-- <tags-input ng-model="val.rule"  ng-blur="showMeasurementType(keyToWord,key,val.rule)">
-                                           <auto-complete  source="loadItems($query)"></auto-complete>
-                                </tags-input> -->
+
                                 <tags-input ng-model="val.rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
                                         max-tags="maxtag" min-tags="mintag" ng-blur="showMeasurementType(keyToWord,rule,val.rule)" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
                                           <auto-complete  source="loadItems($query)"></auto-complete>
@@ -218,29 +206,6 @@ div.sm:last-child:after {
                           </div>
                      </div>
                  </div>
-                 <!-- <div class="row" ng-if="key == 'body_measurement_attributes' " style="margin-top: 2%;" >
-                    <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                      <span style="font-size:160%; padding-left:10%; text-transform: capitalize;">{{customizeKey}}</span>
-                    </div>
-                    <div ng-repeat="(keyname,keyval) in values.body_measurement_attributes" ng-repeat="bodyObj in allMeasurementType.body_measurement_attributes" >
-                        <div class="row" id="customization_attributes" >
-                             <div class="col-md-4" style="padding-left:10%; padding-top:2%;">
-                               <span>{{bodyObj.name}}</span>
-                             </div>
-                             <div class="col-md-8" style="padding-right:6%;padding-top:3%;"> -->
-                               <!--<span ng-if=" bodyObj.value == null" style="padding-top:5%;">-->
-                               <!--<span ng-if="bodyObj.name == keyname">
-                                 name matching part  {{keyname}}
-                                 <input   type="text"  class="form-control" ng-model="keyval.value" ng-selected="fun(customizeKey,bodyObj.name,selectedBodyValue)" placeholder="type body measurement..." ng-blur="showMeasurementType(keyToWord,bodyObj.name, selectedBodyValue)"/> </span>
-                               </span>
-                               <span ng-if="bodyObj.name != keyname">
-                                 name not matching part  {{keyname}}
-                                 <input type="text"  class="form-control" ng-model="bodyObj.value" ng-selected="fun(customizeKey,bodyObj.name,selectedBodyValue)" placeholder="type body measurement..." ng-blur="showMeasurementType(keyToWord,bodyObj.name, selectedBodyValue)"/> </span>
-                               </span>
-                             </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="row" ng-if="key == 'body_measurement_attributes' " style="margin-top: 2%;" >
                    <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
                      <span style="font-size:160%; padding-left:10%; text-transform: capitalize;">{{customizeKey}}</span>
@@ -252,7 +217,7 @@ div.sm:last-child:after {
                         <div class="col-md-8" style="padding-right:6%;padding-top:3%;">
                           <span style="padding-top:5%;"><input type="text" ng-model="bodyObj.value" class="form-control" placeholder="type body measurement..." > </span>
                         </div>
-                   </div>
+                   </div> -->
                </div>
 
 
