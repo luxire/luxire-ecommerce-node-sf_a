@@ -973,6 +973,7 @@ angular.module('luxire')
   $scope.active_style_option = "system_preset";
   $scope.change_active_style_option = function(option){
     $scope.active_style_option = option;
+    $('#prev-attr').click();
   };
 
   /*Select Style functionality */
@@ -1003,7 +1004,6 @@ angular.module('luxire')
 
   $scope.aggregated_style_images = [];
   $scope.set_aggregated_style_images = function(style){
-    console.log('input style', angular.fromJson(style));
     if(style && Object.keys(style).length){
       $scope.aggregated_style_images = [];
       $scope.aggregated_style_images = angular.copy(style.real_images);
@@ -1011,6 +1011,57 @@ angular.module('luxire')
       $scope.aggregated_style_images.splice(0,0,{ large: style.images.large_url,medium: style.images.medium_url, small: style.images.small_url});
     }
   };
+
+  var style_iterator = function(style, attribute_type, is_selected){
+    console.log('style iterator for: ', style,'of type, : ',attribute_type,'is selected', is_selected);
+    console.log('cart object b4', $scope.cart_object);
+    angular.forEach($scope.cart_object[attribute_type], function(value, key){
+      if(!is_selected){
+        if(style[attribute_type][key] && style[attribute_type][key]!==''){
+          $scope.cart_object[attribute_type][key]['value'] = '';
+        }
+      }
+      else{
+        if(angular.isDefined(style[attribute_type][key])){
+          $scope.cart_object[attribute_type][key]['value'] = style[attribute_type][key];
+        }
+        else{
+          $scope.cart_object[attribute_type][key]['value'] = '';
+
+        }
+
+      }
+    })
+    console.log('cart object after', $scope.cart_object);
+
+    return;
+
+  };
+
+  $scope.style_extractor = function(style, is_selected){
+    console.log('cart_object in style extractor',$scope.cart_object);
+    console.log('extracted style', style);
+    $scope.active_style = style;
+    $scope.cart_object.selected_style = style;
+    style_iterator(style.default_values, "customization_attributes",is_selected);
+    style_iterator(style.default_values, "standard_measurement_attributes", is_selected);
+    style_iterator(style.default_values, "body_measurement_attributes", is_selected);
+    // if(is_selected){
+    //   style_iterator(style.default_values, "customization_attributes",true);
+    //   style_iterator(style.default_values, "standard_measurement_attributes", true);
+    //   style_iterator(style.default_values, "body_measurement_attributes", true);
+    // }
+    // else{
+    //   style_iterator();
+    // }
+    console.log('cart_object',$scope.cart_object);
+    return;
+  };
+
+  $scope.revert_style = function(){
+    style_iterator();
+  };
+
 
 
 
@@ -1058,57 +1109,11 @@ angular.module('luxire')
         });
 
 
-        var style_images_to_show = 1;
-        $('.style-detail-images-slider').slick({
-          slidesToShow: style_images_to_show,
-          slidesToScroll: 1
-          // prevArrow: $('#prev-style-detail-image'),
-          // nextArrow: $('#next-style-detail-image')
-        });
-        // $('#prev-style-detail-image').addClass('slick-arrow');
-        // $('#next-style-detail-image').addClass('slick-arrow');
-
-
-        // $('.slick-bespoke-style-slide').click(function(){
-        //   console.log('style selected', $('.slick-bespoke-style-slide'));
-        // });
-        // if(slide_count>slides_to_scroll){
-        //   $('#prev-style').addClass('slick-disabled');
-        // }
-        // else{
-        //   $('#prev-style').addClass('slick-disabled');
-        //   $('#next-style').addClass('slick-disabled');
-        // }
-        // $('#next-style').click(function(){
-        //   var slick= fetch_slick();
-        //   if((slick.currentSlide+slides_to_scroll-1)<(slide_count-1)){
-        //     $('.slick-bespoke-style-slider').slick('slickNext');
-        //     $('#prev-style').removeClass('slick-disabled');
-        //     slick= fetch_slick();
-        //   }
-        //   if((slick.currentSlide+slides_to_scroll-1)===(slide_count-1)){
-        //     $('#next-style').addClass('slick-disabled');
-        //   }
-        // });
-        // $('#prev-style').click(function(){
-        //   var slick= fetch_slick();
-        //   if(slick.currentSlide>0){
-        //     $('.slick-bespoke-style-slider').slick('slickPrev');
-        //     $('#next-style').removeClass('slick-disabled');
-        //     slick= fetch_slick();
-        //   }
-        //   if(slick.currentSlide==0){
-        //     $('#prev-style').addClass('slick-disabled');
-        //   }
-        // });
-
-
-
 
         var attr_to_show = 4;
         $('.bespoke-attributes-slider').slick({
           infinite: false,
-          slidesToShow: attr_to_show,
+          slidesToShow: 4,
           slidesToScroll: 1,
           vertical: true
         });
@@ -1154,19 +1159,20 @@ angular.module('luxire')
             $('#prev-attr').addClass('slick-disabled');
           }
         });
-        // $('#next-attr').click();
+        $('#next-attr').click();
 
-        $('#prev-attr').click();
+
         $('.bespoke-attributes-slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
           console.log('n', nextSlide);
           $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][nextSlide]);
-          $scope.$digest();
+          // $scope.$digest();
         });
 
 
         $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][0]);
 
       }, 0);
+
   });
 
   $scope.selectSlider=function(index, selected_style){
@@ -1179,11 +1185,11 @@ angular.module('luxire')
     console.log('style', style);
     if($scope.selected_style.name === style.name){
       $scope.selected_style = {};
-      parent_scope.style_extractor(style, false);
+      $scope.style_extractor(style, false);
     }
     else{
       $scope.selected_style = style;
-      parent_scope.style_extractor(style, true);
+      $scope.style_extractor(style, true);
     };
   };
   $scope.cancel = function(){

@@ -1930,7 +1930,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                               </div>
                               <div class="row container-fluid" style="">
                                 <div class="bespoke-attributes-slider">
-                                  <div class="bespoke-attributes-slide" ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer" >
+                                  <div class="bespoke-attributes-slide" ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
                                     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
                                       <div class="luxireStyle" style="width: 100%;background-color: #FDFDFD;text-align: center">
                                         <img ng-src="{{getImage(bespoke_attribute.image)}}||assets/images/customer/grey_circle.png"
