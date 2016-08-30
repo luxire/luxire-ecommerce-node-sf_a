@@ -42,8 +42,7 @@ exports.geo_location = function(req, res){
   var req_cur = "";
   var forwarded_for = "";
   forwarded_for = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log('req ip',req.ip);
-  console.log('forwarded for ip', forwarded_for);
+  console.log('req ip',req.ip,'forwarded for ip', forwarded_for);
 
   req_ip = forwarded_for === "127.0.0.1" ? '' : forwarded_for;
 
