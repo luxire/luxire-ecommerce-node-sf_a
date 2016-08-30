@@ -34,8 +34,8 @@
             Select Shipping Option:
           </div>
           <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-            <div class="row" ng-repeat="shipping_rate in shipments.shipping_rates" style="padding: 1% 0%">
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border-right: solid 1px #B0B0B0">
+            <div class="row" ng-repeat="shipping_rate in shipments.shipping_rates" style="padding: 1% 0%;cursor: pointer">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border-right: solid 1px #B0B0B0" ng-click="$parent.selected_shipping_rate_id=shipping_rate.id">
                 <input type="radio" ng-model="$parent.selected_shipping_rate_id" ng-change="change_shipping_rate(shipping_rate)" ng-value="shipping_rate.id" >
                 <span style="font-size: 150%; margin: 5%">{{shipping_rate.name}}</span>
               </div>
