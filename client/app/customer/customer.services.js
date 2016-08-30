@@ -269,6 +269,7 @@ angular.module('luxire')
   };
 
 
+
   this.create_payment = function(order){
     var payment = {
       "payment" : {
@@ -279,8 +280,16 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.orders+'/'+order.number+'/payments?order_token='+order.token, payment)
   };
 
+
   this.auto_complete = function(order){
     return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/auto_complete?order_token='+order.token, '');
+  };
+
+  this.brain_tree_init = function(payment_method_id, order){
+    return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/payments/brain_tree_init?order_token='+order.token+'&payment_method_id='+payment_method_id);
+  };
+  this.checkout_paypal_brain_tree = function(order, brain_tree_object){
+    return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/payments/brain_tree?order_token='+order.token, angular.toJson(brain_tree_object));
   };
 })
 .service('CustomerUtils', function($http, CustomerConstants){
