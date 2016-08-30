@@ -1,3 +1,6 @@
+<style media="screen">
+
+</style>
 <p class="text-center text-muted" ng-if="loading" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;color: #7F0E6E">
   <span class="fa fa-spinner fa-spin fa-4x"></span>
   <br /><br />
@@ -19,18 +22,16 @@
         <div id="payment_options_text"  style="font-size: 100%; font-weight: 600;font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
           Select Payment Option:
         </div>
-        <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+        <div id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue;cursor: pointer" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
           <div class="row" ng-repeat="payment_method in luxire_cart.payment_methods" style="padding: 1% 0%">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-click="$parent.selected_payment_method_id = payment_method.id">
               <input type="radio" ng-model="$parent.selected_payment_method_id" ng-value="payment_method.id" >
               <span style="font-size: 150%; margin: 5%">{{payment_method.name}}</span>
             </div>
-            <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-              <span style="font-size: 150%; margin: 5%">{{payment_method.name}}</span>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 
-            </div> -->
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <div id="paypal-container" style="display: none" ></div>
+          </div>
 
           </div>
         </div>
@@ -40,6 +41,8 @@
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left">
           <div class=" row" style="text-align: right">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin:0%;padding:0%;">
+              <!-- <button type="button" name="button" ng-click="proceed_to_brain_tree_payment()">Submit to brain tree</button> -->
+
               <!-- <div style="padding: 3% 3% 3% 3%;border:1px solid #C9B0C6;margin-left:4%;">
                   <button type="button" class="btn btn-default" style="width:100%;font-family: Arial;height:3em;font-size:120%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" ui-sref="customer.cart"><i style="margin-left:5%;"class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;Return to cart</i></button>
               </div> -->
