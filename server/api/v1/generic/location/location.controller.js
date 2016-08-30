@@ -67,19 +67,25 @@ exports.geo_location = function(req, res){
         }
         else{
           console.log('req country', body);
-          http
-            .get({
-              uri: constants.spree.host+constants.spree.get_currency_by_country_code+JSON.parse(body).country_code
-            }, function(err, resp, res_body){
-                if(err){
-                  res.status(500).send(err.syscall);
-                }
-                else{
-                  req_cur = JSON.parse(res_body).currency.toUpperCase();
-                  console.log('res currency', req_cur);
-                  res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
-                };
-          });
-        };
+          if(body['country_code']){
+              http
+                .get({
+                  uri: constants.spree.host+constants.spree.get_currency_by_country_code+JSON.parse(body).country_code
+                }, function(err, resp, res_body){
+                    if(err){
+                      res.status(500).send(err.syscall);
+                    }
+                    else{
+                      req_cur = JSON.parse(res_body).currency.toUpperCase();
+                      console.log('res currency', req_cur);
+                      res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
+                    };
+              });
+            };
+          }
+          else{
+            res.status(200).send("USD");
+          }
+
   });
 };
