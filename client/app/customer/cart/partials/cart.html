@@ -78,7 +78,7 @@
           Total Amount:
         </div>
         <div class="col-lg- col-md-3 col-sm-3 col-xs-3" style="text-align:center;">
-          {{luxire_cart.display_total}}
+          {{luxire_cart.display_item_total}}
         </div>
       </div>
       <uib-alert style="margin-top: 5%" ng-hide="(luxire_cart != {} && luxire_cart.line_items.length >0) || loading_cart" type="success">Your cart is empty</uib-alert>
@@ -129,7 +129,7 @@
           Subtotal ({{luxire_cart.line_items.length}} {{luxire_cart.line_items.length>1? 'items' : 'item'}}):
         </span>
         <span style="color: #8A247C">
-          &nbsp;{{luxire_cart.display_total}}
+          &nbsp;{{luxire_cart.display_item_total}}
         </span>
       </div>
       <div style="">
