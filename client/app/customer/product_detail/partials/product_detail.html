@@ -468,7 +468,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 <div ng-hide="loading_product" id="shirt-description" style="font-size: 100%;text-align: justify">
                   <p style="font-weight: 300">
                       <span>
-                        <span ng-if="product.luxire_product.mill!=='NA'">Fabric by {{product.luxire_product.mill}} </span>
+                        <span >Fabric by {{product.luxire_product.mill}} </span>
                         <span ng-if="product.luxire_product.composition!=='NA'"><b>|</b> {{product.luxire_product.composition}} </span>
                         <span ng-if="product.luxire_product.technical_description!=='NA'"><b>|</b> {{product.luxire_product.technical_description}} </span>
                         <span ng-if="product.luxire_product.suitable_climates!=='NA'"><b>|</b> Ideal for {{product.luxire_product.suitable_climates}} </span>
@@ -576,7 +576,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                       </div>
                       <div class="row" style="margin-left: 0px; margin-right: 0px;">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Collar Size']['value']==''||cart_object['standard_measurement_attributes']['Collar Size']['value']==undefined?'Collar Size':cart_object['standard_measurement_attributes']['Collar Size']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -587,7 +587,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                 {{cart_object['standard_measurement_attributes']['Sleeve Length']['value']==''||cart_object['standard_measurement_attributes']['Sleeve Length']['value']==undefined?'Sleeve Length':cart_object['standard_measurement_attributes']['Sleeve Length']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -598,7 +598,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Fit Type']['value']==''||cart_object['standard_measurement_attributes']['Fit Type']['value']==undefined?'Fit Type':cart_object['standard_measurement_attributes']['Fit Type']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -637,7 +637,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
                       <div class="row" style="margin-left: 0px; margin-right: 0px;">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Waist Size']['value']==''||cart_object['standard_measurement_attributes']['Waist Size']['value']==undefined?'Waist Size':cart_object['standard_measurement_attributes']['Waist Size']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -648,7 +648,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                 {{cart_object['standard_measurement_attributes']['In-seam']['value']==''||cart_object['standard_measurement_attributes']['In-seam']['value']==undefined?'In-seam':cart_object['standard_measurement_attributes']['In-seam']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -659,7 +659,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Fit Type']['value']==''||cart_object['standard_measurement_attributes']['Fit Type']['value']==undefined?'Fit Type':cart_object['standard_measurement_attributes']['Fit Type']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -696,7 +696,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
                       <div class="row" style="margin-left: 0px; margin-right: 0px;">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Chest Size']['value']==''||cart_object['standard_measurement_attributes']['Chest Size']['value']==undefined?'Chest Size':cart_object['standard_measurement_attributes']['Chest Size']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -707,7 +707,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                 {{cart_object['standard_measurement_attributes']['Length']['value']==''||cart_object['standard_measurement_attributes']['Length']['value']==undefined?'Length':cart_object['standard_measurement_attributes']['Length']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -718,7 +718,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                   {{cart_object['standard_measurement_attributes']['Fit Type']['value']==''||cart_object['standard_measurement_attributes']['Fit Type']['value']==undefined?'Fit Type':cart_object['standard_measurement_attributes']['Fit Type']['value']}}
                                   <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -861,17 +861,17 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Width']['value']">
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Length']['value']">
                           </div>
                         </div>
                         <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Folds']['value']">
                           </div>
                         </div> -->
@@ -903,12 +903,12 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Belt Width']['value']">
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                             <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Belt Length']['value']">
                           </div>
                         </div>
@@ -928,7 +928,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
                         </div>
                         <div class="col-sm-4 col-xs-4 col-md-4 col-lg-4">
-                          <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+                          <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                               {{selected_gift_card_variant.display_price ? 'Select Amount' : ''}}
                               <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                                 {{ selected_gift_card_variant.display_price ? selected_gift_card_variant.display_price : 'Select Amount'}}
@@ -1325,7 +1325,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-            <div class="btn-group" uib-dropdown keyboard-nav>
+            <div class="btn-group" uib-dropdown uib-keyboard-nav>
                 <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
                     Sleeve Length {{cart_object['standard_measurement_attributes']['Sleeve Length']['value']}}<span class="caret"></span>
                 </button>
@@ -1335,7 +1335,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
-            <div class="btn-group" uib-dropdown keyboard-nav>
+            <div class="btn-group" uib-dropdown uib-keyboard-nav>
                 <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
                     Neck Size {{cart_object['standard_measurement_attributes']['Neck Size']['value']}}<span class="caret"></span>
                 </button>
@@ -1466,7 +1466,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                       {{cart_object['standard_measurement_attributes']['Collar Size']['value']==''||cart_object['standard_measurement_attributes']['Collar Size']['value']==undefined?'Collar Size':cart_object['standard_measurement_attributes']['Collar Size']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1477,7 +1477,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                     {{cart_object['standard_measurement_attributes']['Sleeve Length']['value']==''||cart_object['standard_measurement_attributes']['Sleeve Length']['value']==undefined?'Sleeve Length':cart_object['standard_measurement_attributes']['Sleeve Length']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1511,8 +1511,8 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div ng-if="cart_object['standard_measurement_attributes']['Waist Size']['value']!=''&&cart_object['standard_measurement_attributes']['Waist Size']['value']!=undefined" class="btn-group">
-                Waist Size
+              <div ng-if="cart_object['standard_measurement_attributes']['Waist(rounded)']['value']!=''&&cart_object['standard_measurement_attributes']['Waist(rounded)']['value']!=undefined" class="btn-group">
+                Waist(rounded)
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
@@ -1528,18 +1528,18 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
-                      {{cart_object['standard_measurement_attributes']['Waist Size']['value']==''||cart_object['standard_measurement_attributes']['Waist Size']['value']==undefined?'Waist Size':cart_object['standard_measurement_attributes']['Waist Size']['value']}}
+                      {{cart_object['standard_measurement_attributes']['Waist(rounded)']['value']==''||cart_object['standard_measurement_attributes']['Waist(rounded)']['value']==undefined?'Waist(rounded)':cart_object['standard_measurement_attributes']['Waist(rounded)']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
                   </button>
                   <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                    <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Waist Size'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Waist Size', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+                    <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Waist(rounded)'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Waist(rounded)', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
                   </ul>
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                     {{cart_object['standard_measurement_attributes']['In-seam']['value']==''||cart_object['standard_measurement_attributes']['In-seam']['value']==undefined?'In-seam':cart_object['standard_measurement_attributes']['In-seam']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1593,7 +1593,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="height:100%;">
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                       {{cart_object['standard_measurement_attributes']['Chest Size']['value']==''||cart_object['standard_measurement_attributes']['Chest Size']['value']==undefined?'Chest Size':cart_object['standard_measurement_attributes']['Chest Size']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1604,7 +1604,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
+              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                     {{cart_object['standard_measurement_attributes']['Length']['value']==''||cart_object['standard_measurement_attributes']['Length']['value']==undefined?'Length':cart_object['standard_measurement_attributes']['Length']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1651,10 +1651,19 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                       placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
                   </div>
                   <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
-                    <select ng-disabled="!allow_edit" class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']"
-                    ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])" style="width: 100%">
-                      <option ng-repeat="option in standard_measurement.value[measurement_unit.selected]" value="{{option}}" style="width: 80%">{{option}}</option>
-                    </select>
+                     <!--//select ng-disabled="!allow_edit" class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']"
+                    // ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])" style="width: 100%">
+                    //   <option ng-repeat="option in standard_measurement.value[measurement_unit.selected]" value="{{option}}" style="width: 80%">{{option}}</option>
+                    // </select -->
+                    <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                        <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                            {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
+                            <span style="margin-top: 5%" class="caret pull-right"></span>
+                        </button>
+                        <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                          <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                        </ul>
+                    </div>
                   </div>
                 </div>
                 <div style="display: inline-block">
@@ -1684,10 +1693,15 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
                 </div>
                 <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
-                  <select  class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']"
-                  ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])" style="width: 100%">
-                    <option ng-repeat="option in standard_measurement.value[measurement_unit.selected]" value="{{option}}" style="width: 80%">{{option}}</option>
-                  </select>
+                  <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                      <button id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                          {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
+                          <span style="margin-top: 5%" class="caret pull-right"></span>
+                      </button>
+                      <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                        <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                      </ul>
+                  </div>
                 </div>
               </div>
               <div style="display: inline-block">
