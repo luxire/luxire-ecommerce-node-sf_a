@@ -248,3 +248,40 @@ exports.checkout_auto_complete = function(req, res){
     };
   });
 };
+
+/*Initialising brain tree*/
+exports.brain_tree_init = function(req, res){
+  console.log('brain_tree_init1', req.query);
+  var req_uri = "/api/get_braintree_token?order_number="+req.params.number+"&order_token="+req.query.order_token+"&payment_method_id="+req.query.payment_method_id;
+  http.get({
+    uri: constants.spree.host + req_uri,
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  });
+};
+
+/*Complete brain tree*/
+exports.brain_tree_payment = function(req, res){
+  console.log('brain_tree_payment');
+  http.put({
+    uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
+    headers:{
+      'content-type': 'application/json',
+      'X-Spree-Token': req.headers['X-Spree-Token'],
+      'Cookie': 'guest_token='+req.cookies.guest_token
+    },
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  });
+};

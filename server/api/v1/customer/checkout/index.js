@@ -18,5 +18,10 @@ router.post('/:number/confirm', controller.checkout_confirm_payment);
 router.post('/:number/auto_complete', controller.checkout_auto_complete);
 router.post('/:number/complete', controller.checkout_complete);
 
+/*Brain tree configuration*/
+router.post('/:number/payments/brain_tree_init', controller.brain_tree_init);
+router.post('/:number/payments/brain_tree', controller.brain_tree_payment);
+
+
 
 module.exports = router;
