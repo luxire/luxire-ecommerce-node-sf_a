@@ -81,11 +81,14 @@ exports.geo_location = function(req, res){
                       res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
                     };
               });
-            };
           }
           else{
             res.status(200).send("USD");
           }
+
+        };
+
+
 
   });
 };
