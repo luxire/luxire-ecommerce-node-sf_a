@@ -93,6 +93,7 @@ exports.styleMastersShowById = function(req, res) {
 };
 
 exports.styleMastersUpdateById = function (req, res){
+  console.log('req body in update', req.body);
         http
           .put({
             uri: constants.spree.host+constants.spree.style_masters+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
