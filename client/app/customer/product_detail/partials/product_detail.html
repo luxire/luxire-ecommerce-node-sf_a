@@ -1831,7 +1831,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 {{active_detail_style.description.split("##")[0]}}
               </div>
               <div style="text-align: left;font-size: 90%;font-weight: 300">
-                <p style="margin: 2%" ng-repeat="detail in active_detail_style.description.split('##')[1].split('#')">
+                <p ng-if="active_detail_style.description.split('##')[1]" style="margin: 2%" ng-repeat="detail in active_detail_style.description.split('##')[1].split('#')">
                   &bull; {{detail}}
                 </p>
 
