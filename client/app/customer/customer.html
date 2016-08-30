@@ -47,7 +47,7 @@
 
 
           </span>
-          <span uib-dropdown ng-init="is_currency_dropdown_open=false" ng-mouseenter="is_currency_dropdown_open=true" ng-click="is_currency_dropdown_open=!is_currency_dropdown_open" ng-mouseleave="is_currency_dropdown_open=false" is-open="is_currency_dropdown_open" class="fa-stack" 
+          <span uib-dropdown ng-init="is_currency_dropdown_open=false" ng-mouseenter="is_currency_dropdown_open=true" ng-click="is_currency_dropdown_open=!is_currency_dropdown_open" ng-mouseleave="is_currency_dropdown_open=false" is-open="is_currency_dropdown_open" class="fa-stack"
           title="Change currency" style="margin-right: 1%; cursor: pointer;position: relative" >
             <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
             <i class="fa fa-usd fa-stack-1x" style="color: white"></i>
@@ -462,7 +462,7 @@
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px;padding-right: 0px; rgba(0, 0, 0, 0.5);text-align: justify">
           <p ng-if="fabric_taxonomy" style="font-weight: 300">
               <span>
-                <span ng-if="quickViewProduct.luxire_product.mill!=='NA'">Fabric by {{quickViewProduct.luxire_product.mill}} </span>
+                <span>Fabric by {{quickViewProduct.luxire_product.mill}} </span>
                 <span ng-if="quickViewProduct.luxire_product.composition!=='NA'"><b>|</b> {{quickViewProduct.luxire_product.composition}} </span>
                 <span ng-if="quickViewProduct.luxire_product.technical_description!=='NA'"><b>|</b> {{quickViewProduct.luxire_product.technical_description}} </span>
                 <span ng-if="quickViewProduct.luxire_product.suitable_climates!=='NA'"><b>|</b> Ideal for {{quickViewProduct.luxire_product.suitable_climates}} </span>
