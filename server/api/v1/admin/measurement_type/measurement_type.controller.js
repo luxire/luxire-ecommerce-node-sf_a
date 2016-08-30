@@ -129,6 +129,7 @@ exports.add_image = function(req, res){
           res.status(500).send(error);
         }
         else{
+          console.log('response from spree', body);
           res.status(response.statusCode).send(body);
         };
       });
