@@ -50,31 +50,67 @@ angular.module('luxire')
   };
 
   $scope.product_type_carousels = [
+    // {
+    //   id: 2,
+    //   image: 'assets/images/customer/luxire-banner/jacket.jpg',
+    //   link: '',
+    //   text: 'Bespoke Suit Jackets',
+    //   permalink: 'jackets'
+    // }
+    // ,
+    // {
+    //   id: 1,
+    //   image: 'assets/images/customer/luxire-banner/shirt.jpg',
+    //   link: '',
+    //   text: 'Hand-Stitched Luxury Shirts',
+    //   permalink: 'shirts'
+    //
+    // }
     {
-      id: 2,
-      image: 'assets/images/customer/luxire-banner/jacket.jpg',
+      id: 1,
+      image: 'assets/images/customer/luxire-banner/slide-01.jpg',
       link: '',
       text: 'Bespoke Suit Jackets',
-      selected_collection: {
-        taxonomy_name: 'Jackets & Coats',
-        taxonomy_id: 5,
-        taxon_name: 'Leather',
-        taxon_id: 23
-      },
       permalink: 'jackets'
     }
     ,
     {
-      id: 1,
-      image: 'assets/images/customer/luxire-banner/shirt.jpg',
+      id: 2,
+      image: 'assets/images/customer/luxire-banner/slide-02.jpg',
       link: '',
       text: 'Hand-Stitched Luxury Shirts',
-      selected_collection: {
-        taxonomy_name: 'Shirts',
-        taxonomy_id: 3,
-        taxon_name: 'Casual',
-        taxon_id: 13
-      },
+      permalink: 'shirts'
+
+    },
+    {
+      id: 3,
+      image: 'assets/images/customer/luxire-banner/slide-03.jpg',
+      link: '',
+      text: 'Bespoke Suit Jackets',
+      permalink: 'jackets'
+    }
+    ,
+    {
+      id: 4,
+      image: 'assets/images/customer/luxire-banner/slide-04.jpg',
+      link: '',
+      text: 'Hand-Stitched Luxury Shirts',
+      permalink: 'shirts'
+
+    },
+    {
+      id: 5,
+      image: 'assets/images/customer/luxire-banner/slide-05.jpg',
+      link: '',
+      text: 'Bespoke Suit Jackets',
+      permalink: 'jackets'
+    }
+    ,
+    {
+      id: 6,
+      image: 'assets/images/customer/luxire-banner/slide-06.jpg',
+      link: '',
+      text: 'Hand-Stitched Luxury Shirts',
       permalink: 'shirts'
 
     }
