@@ -40,9 +40,12 @@ var get_currency = function(country_code){
 exports.geo_location = function(req, res){
   var req_ip = "";
   var req_cur = "";
+  var forwarded_for = "";
+  forwarded_for = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log('req ip',req.ip);
+  console.log('forwarded for', req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 
-  req_ip = req.ip === "127.0.0.1" ? '' : req.ip;
+  req_ip = forwarded_for === "127.0.0.1" ? '' : forwarded_for;
 
   var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD"];
   console.log('geo_location', req_ip, constants.location_by_ip.host+'/'+req_ip);
