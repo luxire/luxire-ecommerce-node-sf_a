@@ -209,6 +209,16 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.payment_failed',{
+		url:'/payment_failed',
+		views: {
+			"customer": { templateUrl: "app/customer/payment_failed/partials/payment_failed.html",
+			 							controller: "PaymentFailedController"},
+		},
+		data: {
+			require_auth: false
+		}
+	})
 }])
 // .state('customer.invoice',{
 // 	url:'/invoice/:number?id',
