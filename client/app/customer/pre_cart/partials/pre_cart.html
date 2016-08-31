@@ -104,7 +104,7 @@
         <div class="" style="text-align: center">
           {{product.name && product.name.length>23? product.name.slice(0,23)+'...' : product.name}}        </div>
         <div class="" style="text-align: center;color: #7F0E6E">
-          {{product.display_price}}
+          {{product.master.prices[selected_currency]}}
         </div>
 
       </div>
