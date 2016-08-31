@@ -75,7 +75,8 @@ exports.geo_location = function(req, res){
                   uri: constants.spree.host+constants.spree.get_currency_by_country_code+JSON.parse(body).country_code
                 }, function(err, resp, res_body){
                     if(err){
-                      res.status(500).send(err.syscall);
+                      // res.status(500).send(err.syscall);
+                      res.status(200).send("USD");
                     }
                     else{
                       req_cur = JSON.parse(res_body).currency.toUpperCase();
