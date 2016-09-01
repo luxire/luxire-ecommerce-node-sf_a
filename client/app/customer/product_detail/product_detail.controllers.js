@@ -1517,7 +1517,7 @@ angular.module('luxire')
     $uibModalInstance.dismiss('cancel');
   };
   $scope.edit_style = function(){
-      $scope.active_style_option = "bespoke";
+    $scope.change_active_style_option("bespoke");
   };
 
 
