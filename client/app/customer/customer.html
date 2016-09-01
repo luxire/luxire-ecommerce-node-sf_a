@@ -461,16 +461,16 @@
       <div class="row" style="padding-top: 2%">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px;padding-right: 0px; rgba(0, 0, 0, 0.5);text-align: justify">
           <p ng-if="fabric_taxonomy" style="font-weight: 300">
-              <span>
-                <span>Fabric by {{quickViewProduct.luxire_product.mill}} </span>
-                <span ng-if="quickViewProduct.luxire_product.composition!=='NA'"><b>|</b> {{quickViewProduct.luxire_product.composition}} </span>
-                <span ng-if="quickViewProduct.luxire_product.technical_description!=='NA'"><b>|</b> {{quickViewProduct.luxire_product.technical_description}} </span>
-                <span ng-if="quickViewProduct.luxire_product.suitable_climates!=='NA'"><b>|</b> Ideal for {{quickViewProduct.luxire_product.suitable_climates}} </span>
-                <span ng-if="quickViewProduct.luxire_product.gsm!='NA'"><b>|</b> {{quickViewProduct.luxire_product.gsm}}g/{{get_ounce_weight(quickViewProduct.luxire_product.gsm)}}Oz in weight </span>
-                <span ng-if="quickViewProduct.luxire_product.thickness!='NA'&&quickViewProduct.luxire_product.stiffness!='NA'"><b>|</b> {{quickViewProduct.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{quickViewProduct.luxire_product.stiffness}} </span>
-                <span ng-if="quickViewProduct.luxire_product.wash_care!='NA'"><b>|</b> {{quickViewProduct.luxire_product.wash_care}} </span>
-                <span ng-if="quickViewProduct.luxire_product.sales_pitch!='NA'"><b>|</b> {{quickViewProduct.luxire_product.sales_pitch}}</span>
-              </span>
+            <span>
+              <span ng-if="quickViewProduct.luxire_product.mill!=='NA'">Fabric by {{quickViewProduct.luxire_product.mill}} <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.composition!=='NA'"> {{quickViewProduct.luxire_product.composition}} <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.technical_description!=='NA'"> {{quickViewProduct.luxire_product.technical_description}} <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.suitable_climates!=='NA'"> Ideal for {{quickViewProduct.luxire_product.suitable_climates}} <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.gsm!='NA'"> {{quickViewProduct.luxire_product.gsm}} g/{{get_ounce_weight(quickViewProduct.luxire_product.gsm)}} Oz in weight <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'"> {{quickViewProduct.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{quickViewProduct.luxire_product.stiffness}} <b>|</b></span>
+              <span ng-if="quickViewProduct.luxire_product.wash_care!='NA'"> {{quickViewProduct.luxire_product.wash_care}} </span>
+              <span ng-if="quickViewProduct.luxire_product.sales_pitch!='NA'"><b>|</b> {{quickViewProduct.luxire_product.sales_pitch}}</span>
+            </span>
           </p>
         </div>
         <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
