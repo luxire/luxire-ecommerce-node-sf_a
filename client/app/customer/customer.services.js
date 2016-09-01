@@ -1,7 +1,7 @@
 angular.module('luxire')
 .service('CustomerConstants', function(){
   this.api = {
-    host: 'http://104.215.254.150:3000',
+    host: 'https://test.store.luxire.com',
     products: '/api/v1/products',
     product_types: '/api/v1/product_types',
     style_masters: '/api/v1/style_masters',
