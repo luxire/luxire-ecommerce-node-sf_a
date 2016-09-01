@@ -1395,12 +1395,13 @@ angular.module('luxire')
 
   $scope.style_detail_images = [];
   $scope.activate_style_details = function(style){
-    $scope.style_detail_images = [];
-    $scope.hide_active_style_details = false;
-    $scope.active_detail_style = style;
-    $scope.style_detail_images = $scope.active_detail_style.sketch_images;
-    $scope.set_aggregated_style_images(style);
-
+    if(!$scope.selected_style.name){
+      $scope.style_detail_images = [];
+      $scope.hide_active_style_details = false;
+      $scope.active_detail_style = style;
+      $scope.style_detail_images = $scope.active_detail_style.sketch_images;
+      $scope.set_aggregated_style_images(style);
+    }
   }
 
   $(document).ready(function(){
@@ -1516,6 +1517,8 @@ angular.module('luxire')
       $scope.style_extractor(style, false);
     }
     else{
+      $scope.selected_style = {};//added to disable detail change on style selected
+      $scope.activate_style_details(style);//added to disable detail change on style selected
       $scope.selected_style = style;
       $scope.style_extractor(style, true);
     };
