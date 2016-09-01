@@ -1779,7 +1779,6 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
           <div class="row-eq-height" style="display: inline-block;width: 82%">
             <div class="slick-bespoke-style-slider">
               <div class="slick-bespoke-style-slide" ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%"
-
                 ng-mouseenter="activate_style_details(luxire_style)" ng-click="select_style($index, luxire_style)">
                 <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="text-align: center;position: relative" >
                   <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 90%">
@@ -1808,22 +1807,10 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 <div uib-carousel>
                   <div uib-slide ng-repeat="style_image in aggregated_style_images">
                     <img src="{{getImage(style_image.large)}}" style="margin:auto;">
-
                   </div>
                 </div>
               </div>
-
-
             </div>
-
-            <!--//div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-            //   <img ng-src="{{active_detail_style_image}}">
-            // </div>
-            // <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="border-left: solid 1px grey">
-            //   <div ng-click="change_active_style_image(sketch)" ng-class="{'active-detail-style-image': getImage(sketch.large)==active_detail_style_image}" ng-repeat="sketch in active_detail_style.sketch_images" style="padding: 5%;margin: 1%;cursor: pointer">
-            //     <img style="max-width: 100%" ng-src="{{getImage(sketch.small)}}">
-            //   </div>
-            // </div-->
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" >
               <div style="text-align: center;margin-top: 1%;font-size: 150%;">
                 {{active_detail_style.name}}

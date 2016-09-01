@@ -827,6 +827,8 @@ angular.module('luxire')
       }
     });
     modal_instance.result.then(function (response_object) {
+      console.log('response_object', response_object);
+      $scope.active_style = response_object.active_style;
       $scope.cart_object = response_object.cart_object;
       $scope.display_summary = true;
       console.log('bespoke style controller returned', response_object);
@@ -1289,7 +1291,7 @@ angular.module('luxire')
   });
 
 }])
-.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition){
+.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce){
   console.log('product', product);
   $scope.active_style_option = "system_preset";
   $scope.change_active_style_option = function(option){
@@ -1359,6 +1361,7 @@ angular.module('luxire')
 
   };
 
+
   $scope.style_extractor = function(style, is_selected){
     console.log('cart_object in style extractor',$scope.cart_object);
     console.log('extracted style', style);
@@ -1381,6 +1384,10 @@ angular.module('luxire')
 
   $scope.revert_style = function(){
     style_iterator();
+  };
+
+  $scope.get_style_description_as_html = function(description){
+    return $sce.trustAsHtml(description);
   };
 
 
@@ -1635,7 +1642,7 @@ angular.module('luxire')
     console.log('closing bespoke style', $scope.active_style);
     $uibModalInstance.close({
       cart_object: $scope.cart_object,
-      active_style: $scope.active_style
+      active_style: $scope.selected_style
     });
   };
 
