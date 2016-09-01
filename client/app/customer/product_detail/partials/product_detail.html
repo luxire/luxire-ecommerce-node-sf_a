@@ -30,6 +30,7 @@ font-size: 1px
 .carousel-control.right {
   background: url(/path/to/[image-here].png) no-repeat !important;
 }
+.style-nav .carousel-indicators li { visibility: hidden; }
 .selectSlider{
   border:3px solid #8A247C !important;
 }
@@ -468,13 +469,13 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 <div ng-hide="loading_product" id="shirt-description" style="font-size: 100%;text-align: justify">
                   <p style="font-weight: 300">
                       <span>
-                        <span >Fabric by {{product.luxire_product.mill}} </span>
-                        <span ng-if="product.luxire_product.composition!=='NA'"><b>|</b> {{product.luxire_product.composition}} </span>
-                        <span ng-if="product.luxire_product.technical_description!=='NA'"><b>|</b> {{product.luxire_product.technical_description}} </span>
-                        <span ng-if="product.luxire_product.suitable_climates!=='NA'"><b>|</b> Ideal for {{product.luxire_product.suitable_climates}} </span>
-                        <span ng-if="product.luxire_product.gsm!='NA'"><b>|</b> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight </span>
-                        <span ng-if="product.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'"><b>|</b> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} </span>
-                        <span ng-if="product.luxire_product.wash_care!='NA'"><b>|</b> {{product.luxire_product.wash_care}} </span>
+                        <span ng-if="product.luxire_product.mill!=='NA'">Fabric by {{product.luxire_product.mill}} <b>|</b></span>
+                        <span ng-if="product.luxire_product.composition!=='NA'"> {{product.luxire_product.composition}} <b>|</b></span>
+                        <span ng-if="product.luxire_product.technical_description!=='NA'"> {{product.luxire_product.technical_description}} <b>|</b></span>
+                        <span ng-if="product.luxire_product.suitable_climates!=='NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span>
+                        <span ng-if="product.luxire_product.gsm!='NA'"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
+                        <span ng-if="product.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'"> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
+                        <span ng-if="product.luxire_product.wash_care!='NA'"> {{product.luxire_product.wash_care}} </span>
                         <span ng-if="product.luxire_product.sales_pitch!='NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
 
                       </span>
@@ -1804,7 +1805,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
           <div class="row well well-lg" style="margin: 0px;border-radius: 0;margin-bottom: 1%">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <div class="style-nav">
-                <div uib-carousel interval="3000">
+                <div uib-carousel>
                   <div uib-slide ng-repeat="style_image in aggregated_style_images">
                     <img src="{{getImage(style_image.large)}}" style="margin:auto;">
 
@@ -1840,7 +1841,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
           </div>
         </div>
         <div style="text-align: center;width: 100%;padding: 1%" >
-            <button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style()">Edit</button>
+            <button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit</button>
             <button class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="next_step()">Done</button>
         </div>
       </div>
@@ -2026,12 +2027,14 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                             <div class="row" style="margin-left: 0px; margin-right: 0px;font-size:110%;font-weight: 300;padding: 8% 4% 0% 4%" >
                               Details
                             </div>
-                            <div ng-if="selected_bespoke_attribute.category=='c'&&cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != undefined && cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != ''" class="row" style="height: 100%;margin-left: 0px; margin-right: 0px" >
+                            <div ng-show="selected_bespoke_attribute.category=='c'&&cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != undefined && cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != ''" class="row" style="height: 100%;margin-left: 0px; margin-right: 0px" >
                               <div style="border-bottom: solid 1px #E0E0E0; padding: 3% 5%">
                                 <p style="margin-bottom: 0px; text-decoration: underline;">{{cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']}}</p>
                                 <p style="margin-bottom: 0px" ng-repeat="help in selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help'].split(';')">{{help}}</p>
-                                <div ng-if="selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'] != undefined && selected_customization_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'] != ''">
-                                  <img style="border: solid 1px grey; width: 90%"src="{{getImage(selected_customization_attribute['value'][cart_object['customization_attributes'][selected_customization_attribute.name]['value']]['help_image'])}}" />
+                                <!--// {{selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']}}
+                                // {{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}} -->
+                                <div ng-if="selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']">
+                                  <img style="border: solid 1px grey; width: 90%" ng-src="{{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}}" />
                                 </div>
                                 <p style="font-size: 90%; color: #800e6f; cursor: pointer; margin: 2% 0% 1% 0%" ng-click="more_details(selected_bespoke_attribute.name, cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'])">View More Details&nbsp;<i class="fa fa-play-circle"></i></p>
 
