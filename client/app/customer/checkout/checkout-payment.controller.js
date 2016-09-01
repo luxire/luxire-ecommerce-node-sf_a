@@ -211,6 +211,7 @@ angular.module('luxire')
             $window.location.href = data.data;
           }, function(error){
             $scope.loading = false;
+            $state.go('customer.payment_failed');
             console.error(error);
           });
         }
