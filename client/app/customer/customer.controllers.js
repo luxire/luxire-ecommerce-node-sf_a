@@ -5,9 +5,18 @@ avoid conflict with customer ctrl on admin side*/
   var prev_state = '';
   $scope.show_header = true;
   $scope.checkout_state = false;
+  $scope.is_customer_home_state = false;
+
   $scope.header_visibility = function(state){
     console.log('current state', state);
     if(state.name!==prev_state){
+      if(state.name === "customer.home"){
+        $scope.is_customer_home_state = true;
+      }
+      else{
+        $scope.is_customer_home_state = false;
+      }
+
       if(state.name.indexOf('checkout') !==-1){
         console.log('hide header');
         $scope.show_header = false;
@@ -40,6 +49,7 @@ avoid conflict with customer ctrl on admin side*/
     console.log('changing state', toState);
   })
 
+
   $timeout(function(){
 
     $(window).scroll(function(){
@@ -47,10 +57,33 @@ avoid conflict with customer ctrl on admin side*/
       //$("#customer-main-nav-header").height()
       // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
-        $("#customer-main-nav-header").addClass('customer-header-color');
+        $scope.is_window_scrolled = true;
+        if($scope.is_customer_home_state){
+          $timeout(function(){
+            $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
+          })
+        }
+        else{
+          $timeout(function(){
+            $(".customer-main-nav-header").addClass('changed-customer-header-color');
+
+          })
+        }
       }
       else{
-        $("#customer-main-nav-header").removeClass('customer-header-color');
+        $scope.is_window_scrolled = false;
+        if($scope.is_customer_home_state){
+          $timeout(function(){
+            $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
+          })
+
+        }
+        else{
+          $timeout(function(){
+            $(".customer-main-nav-header").removeClass('changed-customer-header-color');
+          })
+
+        }
       }
     })
 

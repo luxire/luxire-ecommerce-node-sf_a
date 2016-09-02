@@ -384,8 +384,15 @@ span.user-drop-down:hover{
 }*/
 .customer-header-color{
   background-color: white !important;
+}
 
-
+.changed-customer-header-color{
+  background-color: white !important;
+  opacity: 1;
+}
+.changed-customer-home-header-color{
+  background-color: white !important;
+  opacity: 0.85;
 }
 
 body{

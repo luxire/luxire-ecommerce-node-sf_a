@@ -46,6 +46,51 @@ angular.module('luxire')
   var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'TRANSPARENCY', 'CONSTRUCTION',];
   var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction'];
 
+  // $scope.color_variants = {
+  //   white: {
+  //     primary: '#FFFFFF',
+  //     secondary: '#FFFFFF',
+  //     display_color: '#FFFFFF'
+  //   },
+  //   pink: {
+  //     primary: '#5C0091',
+  //     secondary: '#FE26A1',
+  //     display_color: '#FC26A0'
+  //   },
+  //   blue: {
+  //     primary: '#001683',
+  //     secondary: '#00A7FF',
+  //     display_color: '#00A6FD'
+  //
+  //   },
+  //   black: {
+  //     primary: '#000000',
+  //     secondary: '#4F5054',
+  //     display_color: '#000000'
+  //   },
+  //   red: {
+  //     primary: '#880000',
+  //     secondary: '#FE0000',
+  //     display_color: '#FC0000'
+  //   },
+  //   yellow: {
+  //     primary: '#FFF300',
+  //     secondary: '#FEDF85',
+  //     display_color: '#FDF100'
+  //   },
+  //   green: {
+  //     primary: '#005200',
+  //     secondary: '#69BF26',
+  //     display_color: '#68BD26'
+  //   },
+  //   orange: {
+  //     primary: '#613309',
+  //     secondary: '#F36524',
+  //     display_color: '#613309'
+  //
+  //   }
+  // };
+
   $scope.color_variants = {
     white: {
       primary: '#FFFFFF',
@@ -68,16 +113,6 @@ angular.module('luxire')
       secondary: '#4F5054',
       display_color: '#000000'
     },
-    red: {
-      primary: '#880000',
-      secondary: '#FE0000',
-      display_color: '#FC0000'
-    },
-    yellow: {
-      primary: '#FFF300',
-      secondary: '#FEDF85',
-      display_color: '#FDF100'
-    },
     green: {
       primary: '#005200',
       secondary: '#69BF26',
@@ -87,9 +122,14 @@ angular.module('luxire')
       primary: '#613309',
       secondary: '#F36524',
       display_color: '#613309'
-
+    },
+    brown: {
+      primary: '',
+      secondary: '',
+      display_color: 'brown'
     }
   };
+
 
   $scope.loading_filters = true;
   CustomerProducts.filter_properties()

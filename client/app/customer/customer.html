@@ -1,4 +1,4 @@
-<div ng-if="show_header" id="customer-main-nav-header" class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: transparent;width: 100%;font-family: Roboto;">
+<div ng-if="(show_header && is_window_scrolled) || !is_customer_home_state"  class="customer-main-nav-header container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: transparent;width: 100%;font-family: Roboto;">
   <div class="row" id="customer-main-nav-sub-header1" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%;">
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
       <img ng-src="assets/images/customer/luxire_logo.png" ui-sref="customer.home" style="max-width: 100%;cursor: pointer">
@@ -8,7 +8,7 @@
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: left; font-size: 92%; font-weight: 300; margin-top: 1.4%">
           Luxury Bespoke Menswear
         </div>
-        <!-- Home Delivered. -->
+
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="text-align: right; margin-top: 0.5%">
           <angucomplete-alt style="height: 25px; position: absolute; top:0; left:0; z-index: 100;width: 100%"
             placeholder="Search products"
@@ -148,51 +148,27 @@
             <img style="max-width: 100%;position: absolute;bottom: 0;right: 0" src="assets/images/customer/mega-menu/shirts/shirt2.png" alt="" />
 
           </div>
-
-
-                    <!--
-          <div style="display: inline-block;width: 63%;float: right;font-size: 98%;font-weight: 300">
-            <div style="display: inline-block">
-              <img src="assets/images/customer/mega-menu-shirt.png" alt="" />
-            </div>
-
-          </div> -->
-          <!-- <div class="row-eq-height" style="display: inline-block;width: 15%;margin: 2% 0% 2% 2%;padding-right: 2%;float: left;border-right: solid 1px #DFDFDF">
-            <div class="taxon-name" style="text-align: right" ng-click="go_to_collection($event, taxon.permalink)" ng-repeat="taxon in taxonomy.root.taxons">
-              {{taxon.name}}
-            </div>
-          </div>
-          <div class="row-eq-height"
-          style="display: inline-block;width: 20%;
-          margin: 2% 0% 2% 0%;float: left;
-          border-right: solid 1px #DFDFDF;
-          background: #F3F3F3;
-          background: -webkit-linear-gradient(rgba(243,243,243,0),rgba(243,243,243,1),rgba(243,243,243,0));
-          background: -o-linear-gradient(rgba(243,243,243,0),rgba(243,243,243,1),rgba(243,243,243,0));
-          background: -moz-linear-gradient(rgba(243,243,243,0),rgba(243,243,243,1),rgba(243,243,243,0));
-          background: linear-gradient(rgba(243,243,243,0),rgba(243,243,243,1),rgba(243,243,243,0));">
-            <img src="assets/images/customer/gift_card.png" alt="" />
-          </div> -->
-
-          <!-- <div style="display: inline-block;width: 70%;padding-top:2%;padding-bottom: 2%;padding-left: 2%">
-            <div class="row-eq-height"  style="display: inline-block;width: 20%;text-align: right;border-right: solid 2px #D8D8D8;padding-right: 5%">
-              <div class="taxon-name" ng-click="go_to_collection($event, taxon.permalink)" ng-repeat="taxon in taxonomy.root.taxons">
-                {{taxon.name}}
-              </div>
-            </div>
-            <div class="row-eq-height" style="display: inline-block;width: 33%;">
-
-            </div>
-            <div class="row-eq-height" style="display: inline-block;width: 33%;">
-
-            </div>
-          </div> -->
-
         </div>
       </div>
     </span>
   </div>
 </div>
+
+<div ng-if="show_header && !is_window_scrolled && is_customer_home_state"  class="customer-main-nav-header container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: transparent;width: 100%;font-family: Roboto;">
+  <div class="row" id="customer-main-nav-sub-header1" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%;">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
+      <img ng-src="assets/images/customer/luxire_logo.png" ui-sref="customer.home" style="max-width: 100%;cursor: pointer">
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--Header for Checkout states/attributes help-->
 <div ng-if="!show_header" class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: #F5F5F5;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4">
   <div class="row" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%; ">
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
