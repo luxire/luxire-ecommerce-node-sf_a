@@ -203,6 +203,62 @@ span.user-drop-down:hover{
   padding-top: 2.8%
 }
 
+/*Gradient for color filters*/
+.gradient-white{
+  background: white; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, white, yellow); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, white , yellow); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, white , yellow); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, white , yellow); /* Standard syntax (must be last) */
+}
+.gradient-pink{
+  background: pink; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, pink , violet, purple); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, pink , violet, purple); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, pink , violet, purple); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, pink , violet, purple); /* Standard syntax (must be last) */
+}
+.gradient-orange{
+  background: white; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, orange , red); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, orange , red); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, orange , red); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, orange , red); /* Standard syntax (must be last) */
+
+}
+.gradient-blue{
+  background: blue; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, blue, navy); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, blue, navy); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, blue, navy); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, blue, navy); /* Standard syntax (must be last) */
+
+}
+.gradient-black{
+  background: black; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, grey, black); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, grey, black); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, grey, black); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, grey, black); /* Standard syntax (must be last) */
+
+}
+.gradient-green{
+  background: green; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, lightgreen , green); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, lightgreen , green); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, lightgreen , green); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, lightgreen , green); /* Standard syntax (must be last) */
+
+}
+.gradient-brown{
+  background: brown; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, tan, brown); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, tan, brown); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, tan, brown); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, tan, brown); /* Standard syntax (must be last) */
+
+}
+
 
 /*Side Menu*/
 

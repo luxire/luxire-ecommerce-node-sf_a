@@ -62,10 +62,10 @@
                     </div>
                     <div class="" style="display: inline-block">
                       <div ng-if="filter_option!='all'" class="" style="display: inline-block; position: relative">
-                        <div class="" style="display: inline-block; position: relative;bottom: -3.5px;background: {{color_variants[filter_option].display_color}};width: 11.5px; height: 11.5px;border: solid 1px {{color_variants[filter_option].display_color=='#FFFFFF'? grey: color_variants[filter_option].display_color}};">
+                        <div class="gradient-{{filter_option.toLowerCase()}}" style="display: inline-block; position: relative;bottom: -3.5px;width: 34.5px; height: 11.5px;border: solid 1px {{color_variants[filter_option].display_color=='#FFFFFF'? grey: color_variants[filter_option].display_color}};">
                         </div>
 
-                        <!-- <div class="" style="display: inline-block; background: {{color_variants[filter_option].primary}};width: 15px; height: 9px;border-top: solid 1px grey;border-bottom: solid 1px grey;border-left: solid 1px grey;">
+                        <!-- <div class="" style="display: inline-block; background: {{color_variants[filter_option].display_color}};width: 15px; height: 9px;border-top: solid 1px grey;border-bottom: solid 1px grey;border-left: solid 1px grey;">
                         </div>
                         <div class="" style="display: inline-block;background: {{color_variants[filter_option].secondary}};width: 11px; height: 9px;margin-left:-4px;border-top: solid 1px grey;border-bottom: solid 1px grey;border-right: solid 1px grey;">
                         </div> -->
