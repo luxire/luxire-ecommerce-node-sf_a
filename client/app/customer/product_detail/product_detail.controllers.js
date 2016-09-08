@@ -244,14 +244,26 @@ angular.module('luxire')
         if(val.name.toLowerCase().indexOf('fit type')!==-1){// neutralize fit type for shirt/pant/jacket eg, replacing shirts fit type with Fit type
           val.name = 'Fit Type';
         }
+        /*Neutralize attr from product type*/
+        if(val.name.indexOf('Shirt') !== -1){
+          val.name = val.name.split('Shirt')[0].trim();
+        }
+        if(val.name.indexOf('Pant') !== -1){
+          val.name = val.name.split('Pant')[0].trim();
+        }
+        if(val.name.indexOf('Jacket') !== -1){
+          val.name = val.name.split('Jacket')[0].trim();
+        }
+        /*Neutralize attr from product type*/
+
         if(angular.isObject(val.value)){
           $scope.cart_object[parent][val.name] = {value: '',options: {}};
         }
         else{
           $scope.cart_object[parent][val.name] = {value: val.value,options: {}};
         }
-
       }
+
       // else{
       //   $scope.cart_object[parent][val.name] = {};
       // }
@@ -879,20 +891,20 @@ angular.module('luxire')
           "step": 1.00
         }
       },
-      // "Waist": {
-      //   "regular": {
-      //     "base": 44.00,
-      //     "step": 1.00
-      //   },
-      //   "slim": {
-      //     "base": 40.00,
-      //     "step": 1.00
-      //   },
-      //   "super slim": {
-      //     "base": 39.00,
-      //     "step": 1.00
-      //   }
-      // },
+      "Waist": {
+        "regular": {
+          "base": 44.00,
+          "step": 1.00
+        },
+        "slim": {
+          "base": 40.00,
+          "step": 1.00
+        },
+        "super slim": {
+          "base": 39.00,
+          "step": 1.00
+        }
+      },
       "Bottom": {
         "regular": {
           "base": 47.00,
@@ -908,7 +920,7 @@ angular.module('luxire')
         }
 
       },
-      "Yoke Width": {
+      "Yoke": {
         "regular": {
           "base": 18.00,
           "step": 0.25
@@ -922,35 +934,35 @@ angular.module('luxire')
           "step": 0.25
         }
       },
-      // "Biceps": {
-      //   "regular": {
-      //     "base": 9.75,
-      //     "step": 0.13
-      //   },
-      //   "slim": {
-      //     "base": 9.00,
-      //     "step": 0.13
-      //   },
-      //   "super slim": {
-      //     "base": 8.50,
-      //     "step": 0.13
-      //   }
-      //
-      // },
-      // "Wrist": {
-      //   "regular": {
-      //     "base": 8.75,
-      //     "step": 0.13
-      //   },
-      //   "slim": {
-      //     "base": 8.75,
-      //     "step": 0.13
-      //   },
-      //   "super slim": {
-      //     "base": 8.75,
-      //     "step": 0.13
-      //   }
-      // },
+      "Sleeve Width": {
+        "regular": {
+          "base": 9.75,
+          "step": 0.13
+        },
+        "slim": {
+          "base": 9.00,
+          "step": 0.13
+        },
+        "super slim": {
+          "base": 8.50,
+          "step": 0.13
+        }
+
+      },
+      "Cuff Around": {
+        "regular": {
+          "base": 8.75,
+          "step": 0.13
+        },
+        "slim": {
+          "base": 8.75,
+          "step": 0.13
+        },
+        "super slim": {
+          "base": 8.75,
+          "step": 0.13
+        }
+      }
       // "Shirt Length": {
       //   "regular": {
       //     "base": 33.00,
@@ -1163,6 +1175,46 @@ angular.module('luxire')
           $scope.change_dependents('standard_measurement_attributes', attr, $scope.cart_object['standard_measurement_attributes'][attr]['value']);
 
         }
+        if(fit_type == "regular"){
+          if(selected_measurement_unit == "in"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+1.50)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
+
+          }
+          else if(selected_measurement_unit == "cm"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+3.81)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+          }
+
+        }
+        else if(fit_type == "slim"){
+          if(selected_measurement_unit == "in"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+2.50)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
+          }
+          else if(selected_measurement_unit == "cm"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+6.35)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+          }
+        }
+        else if(fit_type == "super slim"){
+          if(selected_measurement_unit == "in"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+3.00)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
+          }
+          else if(selected_measurement_unit == "cm"){
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+7.62)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+          }
+        }
+        $scope.change_dependents('standard_measurement_attributes', 'Armhole' , $scope.cart_object['standard_measurement_attributes']['Armhole']['value']);
+
 
       }
 
@@ -1212,6 +1264,29 @@ angular.module('luxire')
     $scope.change_dependents(attribute_type, attribute_key, attribute_value);
   };
 
+  /*Order to display attributes shirt measurement*/
+  $scope.cloth_measurement_attributes = {};
+  if($scope.product.product_type.product_type === "Shirts"){
+    $scope.cloth_measurement_attributes = {
+      "Chest": ["Chest(Front)", "Chest(Back)"],
+      "Waist": ["Waist(Front)", "Waist(Back)"],
+      "Bottom": ["Bottom(Front)", "Bottom(Back)"],
+      "Yoke": ["Yoke(Left)", "Yoke(Right)"],
+      "Sleeve Width": ["Sleeve Width(Left)", "Sleeve Width(Right)"],
+      "Armhole": ["Armhole(Left)", "Armhole(Right)"],
+      "Forearm": ["Forearm(Left)", "Forearm(Right)"],
+      "Cuff Around": ["Cuff Around(Left)", "Cuff Around(Right)"],
+      "Shoulder Slope": ["Shoulder Slope(Left)", "Shoulder Slope(Right)"],
+      "Back Panel Slope": ["Back Panel Slope(Left)", "Back Panel Slope(Right)"],
+      "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"]
+    };
+  }
+  else if($scope.product.product_type.product_type === "Pants"){
+
+  }
+
+  var attributes_order = ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope', 'back panel slope', 'sleeve length'];
+
   /*Check dependents and set dependents*/
   $scope.change_dependents = function(attr_type, attr_name, attr_value){
     console.log('attr type', attr_type, 'attr_name', attr_name, 'attr_value',attr_value);
@@ -1245,6 +1320,171 @@ angular.module('luxire')
         // console.log('cart_object',$scope.cart_object.standard_measurement_attributes);
 
   }
+
+  var body_measurement_rule = {
+    "shirts": {
+      "Neck Around": {
+        "map": "Collar Size",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Sleeve Length": {
+        "map": "Sleeve Length",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Shoulder Width": {
+        "map": "Yoke",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Chest Around": {
+        "map": "Chest",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Waist Around": {
+        "map": "Waist",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Hip Around": {
+        "map": "Bottom",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Shoulder Slope": {
+        "map": "Shoulder Slope",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Biceps Around": {
+        "map": "Sleeve Width",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Wrist Around": {
+        "map": "Cuff Around",
+        "rule": {
+          "regular": 1,
+          "slim": 1,
+          "super slim": 1
+        }
+      }
+    }
+  }
+
+
+
+  $scope.compute_cloth_measurement_from_body = function(){
+    if($scope.cart_object['body_measurement_attributes']['Fit Type']['value']){
+      var fit_type = $scope.cart_object['body_measurement_attributes']['Fit Type']['value'].toLowerCase().trim();
+      if($scope.product.product_type.product_type === "Shirts"){
+        if(selected_measurement_unit == "in"){
+          angular.forEach(body_measurement_rule['shirts'], function(val, key){
+            if($scope.cart_object['body_measurement_attributes'][key]['value'] && key !== 'Shoulder Slope'){
+              $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + val['rule'][fit_type];
+            }
+            else if($scope.cart_object['body_measurement_attributes'][key]['value'] && key == 'Shoulder Slope'){
+              if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Normal'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  2;
+              }
+              else if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Flat'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  1;
+              }
+              else if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Sloping'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  2.5;
+              }
+            }
+
+            if($scope.cart_object['standard_measurement_attributes'][val['map']] && $scope.cart_object['standard_measurement_attributes'][val['map']]['value']){
+              $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes'][val['map']]['value']))*1000)/1000).toFixed(3);
+              $scope.change_dependents('standard_measurement_attributes', val['map'], $scope.cart_object['standard_measurement_attributes'][val['map']]['value']);
+            }
+
+          })
+          if($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value']){
+            if(fit_type == "regular"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+1.50;
+            }
+            else if(fit_type == "slim"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+2.50;
+            }
+            else if(fit_type == "super slim"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+3.00;
+            }
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Armhole']['value']))*1000)/1000).toFixed(3);
+            $scope.change_dependents('standard_measurement_attributes', 'Armhole', $scope.cart_object['standard_measurement_attributes']['Armhole']['value']);
+          }
+
+        }
+        else if(selected_measurement_unit == "cm"){
+          angular.forEach(body_measurement_rule['shirts'], function(val, key){
+            if($scope.cart_object['body_measurement_attributes'][key]['value'] && key !== 'Shoulder Slope'){
+              $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + (val['rule'][fit_type]*2.54);
+            }
+            else if($scope.cart_object['body_measurement_attributes'][key]['value'] && key == 'Shoulder Slope'){
+              if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Normal'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  (2*2.54);
+              }
+              else if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Flat'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  (1*2.54);
+              }
+              else if($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Sloping'){
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] =  (2.5*2.54);
+              }
+            }
+            console.log('std computed value',   $scope.cart_object['standard_measurement_attributes'][val['map']]['value']);
+            if($scope.cart_object['standard_measurement_attributes'][val['map']] && $scope.cart_object['standard_measurement_attributes'][val['map']]['value']){
+              $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes'][val['map']]['value']))*10)/10).toFixed(2);
+              $scope.change_dependents('standard_measurement_attributes', val['map'], $scope.cart_object['standard_measurement_attributes'][val['map']]['value']);
+
+            }
+
+          })
+          if($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value']){
+            if(fit_type == "regular"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+(1.50*2.54);
+            }
+            else if(fit_type == "slim"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+(2.50*2.54);
+            }
+            else if(fit_type == "super slim"){
+              $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+(3.00*2.54);
+            }
+            $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Armhole']['value']))*10)/10).toFixed(2);
+            $scope.change_dependents('standard_measurement_attributes', 'Armhole', $scope.cart_object['standard_measurement_attributes']['Armhole']['value']);
+          }
+        }
+      }
+
+    }
+
+  };
 
   $scope.next_step = function(){
     var measurements = {};
@@ -1289,6 +1529,8 @@ angular.module('luxire')
       dependent_attrs[val.name.trim().toLowerCase().split('(')[0].trim()].push(val.name.trim().toLowerCase());
     }
   });
+  console.log('dependent attributes', dependent_attrs);
+  console.log('key map', key_name_map);
 
 }])
 .controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce){

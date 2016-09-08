@@ -1637,32 +1637,28 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
             <span>&nbsp;Edit Values</span>
           </span>
         </div>
-        <div class="row" style="margin: 0;padding: 0 2%;text-align-center">
-          <div ng-repeat="standard_measurement in product['standard_measurement_attributes']" style="margin-top: 1%;width: 25%;display: inline-block">
+        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+          <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 33%;display: inline-block">
             <div class="row" style="margin: 0">
-              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
-                {{standard_measurement.name}}
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+                {{cloth_measurement_attribute}}
               </div>
               <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
                 <div style="display: inline-block;width: 85%">
-                  <div ng-if="!checkIsArray(standard_measurement.value[measurement_unit.selected])">
+                  <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])">
                     <input type="text" ng-disabled="!allow_edit"
-                      class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])"
-                      ng-init="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']=standard_measurement.value[measurement_unit.selected]"
-                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
+                      class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute, cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'])"
+                      ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']=standard_measurement_attributes[cloth_measurement_attribute].value[measurement_unit.selected]"
+                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']" style="width: 100%">
                   </div>
-                  <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
-                     <!--//select ng-disabled="!allow_edit" class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']"
-                    // ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])" style="width: 100%">
-                    //   <option ng-repeat="option in standard_measurement.value[measurement_unit.selected]" value="{{option}}" style="width: 80%">{{option}}</option>
-                    // </select -->
+                  <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])" >
                     <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
                         <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
-                            {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
+                            {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] : 'Select'}}
                             <span style="margin-top: 5%" class="caret pull-right"></span>
                         </button>
                         <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                          <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                          <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
                         </ul>
                     </div>
                   </div>
@@ -1670,56 +1666,185 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 <div style="display: inline-block">
                   <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
                 </div>
-
               </div>
+            </div>
+            <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
+              <div class="row" style="margin: 0">
+                <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
+                  {{cloth_measurement_attribute_derivative}}
+                </div>
+                <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+                  <div style="display: inline-block;width: 85%">
+                    <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])">
+                      <input type="text" ng-disabled="!allow_edit"
+                        class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute_derivative, cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'])"
+                        ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']=standard_measurement_attributes[cloth_measurement_attribute_derivative].value[measurement_unit.selected]"
+                        placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']" style="width: 100%">
+                    </div>
+                    <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])" >
+                      <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                          <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                              {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] : 'Select'}}
+                              <span style="margin-top: 5%" class="caret pull-right"></span>
+                          </button>
+                          <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                            <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute_derivative, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display: inline-block">
+                    <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                  </div>
 
+                </div>
+              </div>
             </div>
           </div>
+          <!--//div ng-repeat="standard_measurement in product['standard_measurement_attributes']" style="margin-top: 1%;width: 25%;display: inline-block">
+          //   <div class="row" style="margin: 0">
+          //     <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
+          //       {{standard_measurement.name}}
+          //     </div>
+          //     <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+          //       <div style="display: inline-block;width: 85%">
+          //         <div ng-if="!checkIsArray(standard_measurement.value[measurement_unit.selected])">
+          //           <input type="text" ng-disabled="!allow_edit"
+          //             class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])"
+          //             ng-init="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']=standard_measurement.value[measurement_unit.selected]"
+          //             placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
+          //         </div>
+          //         <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
+          //           <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+          //               <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+          //                   {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
+          //                   <span style="margin-top: 5%" class="caret pull-right"></span>
+          //               </button>
+          //               <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+          //                 <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+          //               </ul>
+          //           </div>
+          //         </div>
+          //       </div>
+          //       <div style="display: inline-block">
+          //         <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+          //       </div>
+          //
+          //     </div>
+          //
+          //   </div>
+          // </div-->
         </div>
       </div>
     </div>
-    <div ng-show="active_measurement_type_id===2" class="measurement-option-2">
-      <div class="row" style="margin: 0;padding: 0 2%;text-align-center">
-        <div ng-repeat="standard_measurement in product['standard_measurement_attributes']" style="margin-top: 1%;width: 25%;display: inline-block">
-          <div class="row" style="margin: 0">
-            <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
-              {{standard_measurement.name}}
-            </div>
-            <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
-              <div style="display: inline-block;width: 85%">
-                <div ng-if="!checkIsArray(standard_measurement.value[measurement_unit.selected])">
-                  <input type="text"
-                    class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])"
-                    ng-init="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']=standard_measurement.value[measurement_unit.selected]"
-                    placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
-                </div>
-                <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
-                  <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
-                      <button id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
-                          {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
-                          <span style="margin-top: 5%" class="caret pull-right"></span>
-                      </button>
-                      <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                        <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
-                      </ul>
+    <div ng-show="active_measurement_type_id===2" class="measurement-option-2" style="background: #EEEEEE">
+      <div class="standard-measurement-fields">
+        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+          <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 33%;display: inline-block">
+            <div class="row" style="margin: 0">
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+                {{cloth_measurement_attribute}}
+              </div>
+              <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+                <div style="display: inline-block;width: 85%">
+                  <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])">
+                    <input type="text"
+                      class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute, cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'])"
+                      ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']=standard_measurement_attributes[cloth_measurement_attribute].value[measurement_unit.selected]"
+                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']" style="width: 100%">
+                  </div>
+                  <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])" >
+                    <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                        <button id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                            {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] : 'Select'}}
+                            <span style="margin-top: 5%" class="caret pull-right"></span>
+                        </button>
+                        <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                          <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                        </ul>
+                    </div>
                   </div>
                 </div>
+                <div style="display: inline-block">
+                  <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                </div>
               </div>
-              <div style="display: inline-block">
-                <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
-              </div>
-
             </div>
+            <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
+              <div class="row" style="margin: 0">
+                <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
+                  {{cloth_measurement_attribute_derivative}}
+                </div>
+                <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+                  <div style="display: inline-block;width: 85%">
+                    <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])">
+                      <input type="text"
+                        class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute_derivative, cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'])"
+                        ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']=standard_measurement_attributes[cloth_measurement_attribute_derivative].value[measurement_unit.selected]"
+                        placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']" style="width: 100%">
+                    </div>
+                    <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])" >
+                      <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                          <button id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                              {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] : 'Select'}}
+                              <span style="margin-top: 5%" class="caret pull-right"></span>
+                          </button>
+                          <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                            <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute_derivative, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display: inline-block">
+                    <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                  </div>
 
+                </div>
+              </div>
+            </div>
           </div>
+          <!--//div ng-repeat="standard_measurement in product['standard_measurement_attributes']" style="margin-top: 1%;width: 25%;display: inline-block">
+          //   <div class="row" style="margin: 0">
+          //     <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
+          //       {{standard_measurement.name}}
+          //     </div>
+          //     <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+          //       <div style="display: inline-block;width: 85%">
+          //         <div ng-if="!checkIsArray(standard_measurement.value[measurement_unit.selected])">
+          //           <input type="text" ng-disabled="!allow_edit"
+          //             class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', standard_measurement.name, cart_object['standard_measurement_attributes'][standard_measurement.name]['value'])"
+          //             ng-init="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']=standard_measurement.value[measurement_unit.selected]"
+          //             placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][standard_measurement.name]['value']" style="width: 100%">
+          //         </div>
+          //         <div ng-if="checkIsArray(standard_measurement.value[measurement_unit.selected])" >
+          //           <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+          //               <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+          //                   {{cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] ? cart_object['standard_measurement_attributes'][standard_measurement.name]['value'] : 'Select'}}
+          //                   <span style="margin-top: 5%" class="caret pull-right"></span>
+          //               </button>
+          //               <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+          //                 <li role="menuitem" ng-repeat="option in standard_measurement.value[measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', standard_measurement.name, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+          //               </ul>
+          //           </div>
+          //         </div>
+          //       </div>
+          //       <div style="display: inline-block">
+          //         <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+          //       </div>
+          //
+          //     </div>
+          //
+          //   </div>
+          // </div-->
         </div>
       </div>
+
 
     </div>
     <div ng-show="active_measurement_type_id===3" class="measurement-option-3">
-      <div class="standard-measurement-fields">
-        <div class="row" style="margin: 0;padding: 0 2%;text-align-center">
-          <div ng-repeat="body_measurement in product['body_measurement_attributes']" style="margin-top: 1%;width: 25%;display: inline-block">
+      <div>
+        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+          <div ng-repeat="body_measurement in product['body_measurement_attributes']" style="margin-top: 1%;width: 33%;display: inline-block">
               <div class="row" style="margin: 0">
                 <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
                   {{body_measurement.name}}
@@ -1727,10 +1852,11 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
                   <div style="display: inline-block;width: 85%">
                     <div ng-if="!checkIsArray(body_measurement.value)">
-                      <input type="text" class="form-control luxire-input-field" placeholder="{{body_measurement.name}}" ng-model="cart_object['body_measurement_attributes'][body_measurement.name]['value']" style="width: 100%">
+                      <input type="text" class="form-control luxire-input-field" placeholder="{{body_measurement.name}}" ng-change="compute_cloth_measurement_from_body()" ng-model="cart_object['body_measurement_attributes'][body_measurement.name]['value']" style="width: 100%">
                     </div>
                     <div ng-if="checkIsArray(body_measurement.value)" >
-                      <select class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['body_measurement_attributes'][body_measurement.name]['value']" style="width: 100%">
+                      <select class="form-control luxire-select-field"  name="repeatSelect" id="repeatSelect" ng-change="compute_cloth_measurement_from_body()" ng-model="cart_object['body_measurement_attributes'][body_measurement.name]['value']" style="width: 100%">
+                        <option value="" style="width: 80%" ng-selected="true">-Select-</option>
                         <option ng-repeat="option in body_measurement.value" value="{{option}}" style="width: 80%">{{option}}</option>
                       </select>
                     </div>
@@ -1741,6 +1867,80 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 </div>
               </div>
             </div>
+        </div>
+      </div>
+      <div class="standard-measurement-fields">
+        <div class = "row" style="margin: 0 0 1% 0;text-align: center">
+          <span>
+            <input style="position: relative;top: 3px"type="checkbox" ng-model="allow_edit">
+            <span>&nbsp;Edit Values</span>
+          </span>
+        </div>
+        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+          <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 33%;display: inline-block">
+            <div class="row" style="margin: 0">
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+                {{cloth_measurement_attribute}}
+              </div>
+              <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+                <div style="display: inline-block;width: 85%">
+                  <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])">
+                    <input type="text" ng-disabled="!allow_edit"
+                      class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute, cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'])"
+                      ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']=standard_measurement_attributes[cloth_measurement_attribute].value[measurement_unit.selected]"
+                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']" style="width: 100%">
+                  </div>
+                  <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])" >
+                    <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                        <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                            {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] : 'Select'}}
+                            <span style="margin-top: 5%" class="caret pull-right"></span>
+                        </button>
+                        <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                          <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+                <div style="display: inline-block">
+                  <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                </div>
+              </div>
+            </div>
+            <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
+              <div class="row" style="margin: 0">
+                <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
+                  {{cloth_measurement_attribute_derivative}}
+                </div>
+                <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+                  <div style="display: inline-block;width: 85%">
+                    <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])">
+                      <input type="text" ng-disabled="!allow_edit"
+                        class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute_derivative, cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'])"
+                        ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']=standard_measurement_attributes[cloth_measurement_attribute_derivative].value[measurement_unit.selected]"
+                        placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']" style="width: 100%">
+                    </div>
+                    <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])" >
+                      <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+                          <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                              {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] : 'Select'}}
+                              <span style="margin-top: 5%" class="caret pull-right"></span>
+                          </button>
+                          <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                            <li role="menuitem" ng-repeat="option in standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected]" ng-click="change_attribute_value('standard_measurement_attributes', cloth_measurement_attribute_derivative, option)"><a href="#" ng-click="$event.preventDefault()">{{option}}</a></li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display: inline-block">
+                    <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{standard_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
