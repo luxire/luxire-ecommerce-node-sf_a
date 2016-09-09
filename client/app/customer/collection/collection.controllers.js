@@ -267,7 +267,6 @@ angular.module('luxire')
 
 
   /*Redis caching mechanism*/
-    var active_res_page = 1;
     $scope.sort_by_price = function(is_desc){
       $scope.reverse_price = is_desc;
       var price_sort_order = is_desc === true ? 'desc' : 'asc';
@@ -305,11 +304,11 @@ angular.module('luxire')
       $scope.taxonomy_counts = data.data.taxonomies;
       console.log('fetched products', data.data);
       $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      $scope.selected_redis_filters.page++;
     }, function(error){
       $scope.loading_products = false;
       console.error(error);
     });
+    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
   };
 
   /*Redis caching mechanism*/
