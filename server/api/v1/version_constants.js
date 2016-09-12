@@ -28,7 +28,7 @@ module.exports = {
     zones: '/api/zones',
     shipping_methods: '/customized_shipping_methods',
     taxes: '/customized_tax_rates',
-    taxonomy: '/api/taxonomies',
+    taxonomy: '/api/taxonomies?set=nested',
     search: '/api/search',
     measurement_types: '/measurement_types',
     product_types: '/luxire_product_types',
