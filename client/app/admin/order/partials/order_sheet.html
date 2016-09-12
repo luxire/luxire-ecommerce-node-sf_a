@@ -199,6 +199,11 @@
                     </div>
                   </div>
                 </div>
+                <div ng-if="val.options['custom_notes']" class="">
+                  <div class="" style="margin-top: 2%" ng-repeat = "custom_note in val.options['custom_notes']">
+                    {{$index+1}}. {{custom_note.content}}
+                  </div>
+                </div>
 
               </div>
 
