@@ -160,7 +160,7 @@ span.user-drop-down:hover{
   display: inline-block;
   width: 40%;
   float:left;
-  padding: 2%;
+  padding: 0.5%;
   text-align: left;
   position: relative
 }
@@ -182,7 +182,7 @@ span.user-drop-down:hover{
   display: inline-block;
   width: 13%;
   padding: 0.5%;
-  font-size: 115%;
+  font-size: 92%;
   cursor: pointer;
   font-weight: 400;
   vertical-align: top;
