@@ -164,7 +164,7 @@ span.user-drop-down:hover{
   text-align: left;
   position: relative
 }
-.taxon-name{
+/*.taxon-name{
   padding: 0.5%;
   cursor: pointer;
   font-size: 98%;
@@ -175,8 +175,29 @@ span.user-drop-down:hover{
 .taxon-name:hover{
   color: #8A247C;
   font-weight: 500 !important;
+  letter-spacing: 1px;
+}*/
+
+.taxon-name{
+  display: inline-block;
+  width: 13%;
+  padding: 0.5%;
+  font-size: 115%;
+  cursor: pointer;
+  font-weight: 400;
+  vertical-align: top;
+}
+.taxon-naming:hover{
+  color: #8A247C;
+  font-weight: 500 !important;
+  cursor: pointer;
   /*letter-spacing: 1px;*/
 }
+/*.taxon-name:hover, .taxon-naming:hover{
+  color: #8A247C;
+  font-weight: 500 !important;
+  cursor: pointer;
+}*/
 .taxonomy-menu:hover .arrow-up{
   border-bottom: 8px solid white !important;
 }

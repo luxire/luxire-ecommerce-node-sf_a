@@ -11,24 +11,15 @@ angular.module('luxire')
   if($scope.active_permalink != ""){
     $scope.collection_bread_crumbs = [];
     var permalink_array = $scope.active_permalink.split('/');
-    if(permalink_array.length > 1){
+    var effective_permalink = "";
+    for(var i=0; i<permalink_array.length;i++){
+      effective_permalink = i? effective_permalink + "/" + permalink_array[i] : permalink_array[i];
       $scope.collection_bread_crumbs.push({
-        name: permalink_array[0],
-        permalink: permalink_array[0]
-      });
-      $scope.collection_bread_crumbs.push({
-        name: permalink_array[1],
-        permalink: permalink_array[0]+'/'+permalink_array[1]
+        name: permalink_array[i],
+        permalink: effective_permalink
       });
     }
-    else{
-      $scope.collection_bread_crumbs.push({
-        name: permalink_array[0],
-        permalink: permalink_array[0]
-      });
-    }
-
-  }
+  };
   $scope.go_to_collection = function(permalink){
     $location.url('/collections/'+permalink);
   };

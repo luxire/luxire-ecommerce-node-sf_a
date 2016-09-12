@@ -90,14 +90,28 @@
     </div>
   </div>
   <div class="row yamm" style="border-bottom: solid 1px #E4E4E4;border-top: solid 1px #E4E4E4;text-align: center;padding: 0.5% 1%;font-family: Roboto;" >
+    <!-- ng-mouseleave="is_open=false;"  -->
     <span id="dropdown-mega-menu" class="taxonomy-dropdown dropdown yamm-fw" ng-init="is_open=false" is-open="is_open" ng-mouseenter="change_arrow_pos($event)" ng-mouseover="is_open=true;" ng-mouseleave="is_open=false;" uib-dropdown ng-repeat="taxonomy in taxonomies" >
       <div class="taxonomy-menu dropdown-toggle"  ng-class="{'taxonomy-menu-hover': is_open===true}" ng-click="go_to_collection($event, taxonomy.root.permalink)" style="display: inline-block;padding: 0.25% 0.5%;border-radius: 2px;margin-left: 0.5%;cursor: pointer;text-align: center;font-size: 95%" uib-dropdown-toggle>
         {{taxonomy.name}}&nbsp;&nbsp;<i style="font-size: 80%;margin-top: -3%" ng-if="taxonomy.root.taxons.length" class="fa fa-chevron-down" aria-hidden="true"></i>
       </div>
       <div ng-mouseover="is_open=true;" ng-if="taxonomy.root.taxons.length" uib-dropdown-menu aria-labelledby="simple-dropdown" style="padding: 0px;margin-top: -0.7%;border: none;border-radius: 0px;border-top: solid 1px #8A247C;width: 100%">
         <div style="margin-left: {{arrow_margin_left+'px'}}" ng-if="taxonomy.root.taxons.length && is_open" class="arrow-up"></div>
-        <div class="row-eq-height" style="width: 100%">
-          <div class="" style="display: inline-block;width: 20%;float:left">
+        <div class="row-eq-height" style="width: 100%;">
+          <div class="" style="margin: auto;padding: 1%;width: 100%;text-align: center">
+            <div class="taxon-name" ng-repeat="taxon in taxonomy.root.taxons" >
+              <div class="taxon-naming" style="width: 100%;text-align: left;padding-left: 3%;">
+                <span ng-click="go_to_collection($event, taxon.permalink)" >{{taxon.name}}</span>
+              </div>
+              <div style="width: 100%;border-bottom: solid 1px #8A247C;margin-top: 3%">
+              </div>
+              <div class="taxon-naming" style="width: 100%;font-size: 90%;text-align: left; padding: 3%" ng-repeat="taxon in taxon.taxons">
+                <span ng-click="go_to_collection($event, taxon.permalink)" >{{taxon.name}}</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- <div class="" style="display: inline-block;width: 20%;float:left">
             <img style="max-width: 100%" src="assets/images/customer/mega-menu/shirts/shirt1.png" alt="" />
           </div>
           <div class="taxon-name-section" style="">
@@ -147,7 +161,7 @@
           <div class="" style="display:inline-block;width: 25%;text-align:right;position: relative">
             <img style="max-width: 100%;position: absolute;bottom: 0;right: 0" src="assets/images/customer/mega-menu/shirts/shirt2.png" alt="" />
 
-          </div>
+          </div> -->
         </div>
       </div>
     </span>
