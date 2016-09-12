@@ -1850,6 +1850,23 @@ angular.module('luxire')
     $scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images'].splice(index, 1);
   };
 
+  /*Add custom notes*/
+  $scope.add_custom_note = function(){
+    console.log('add custom notes');
+    if(!$scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']
+     || ($scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']
+     && !angular.isArray($scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']))){
+       $scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'] = [];
+     }
+     $scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'].push({
+       content: ''
+     });
+  };
+
+  $scope.delete_custom_note = function(index){
+    $scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'].splice(index, 1);
+  };
+
   /*Check whether to display in view r not*/
   $scope.check_unpermitted_customization_params = function(attribute, key){
     var unpermitted_params_non_custom = ['image','url','help','help_url', 'help_image', 'cost'];

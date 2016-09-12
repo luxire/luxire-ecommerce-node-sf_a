@@ -2239,7 +2239,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                   </div>
                                 </div>
                                 <div ng-if="cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()=='custom'" style="margin-top: 5%">
-                                  <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%" ng-click="add_custom_image()">Add Image</button>
+                                  <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block" ng-click="add_custom_image()">Add Image</button>
+                                  <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block" ng-click="add_custom_note()">Add Note</button>
+
                                   <uib-accordion close-others="true">
                                     <uib-accordion-group heading="custom-image- {{$index+1}}" ng-if="cart_object['customization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']" ng-repeat="custom_image in cart_object['customization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']">
                                       <div ng-if="custom_image.url!=''" style="width: 100%">
@@ -2258,7 +2260,18 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                       placeholder="notes:">
                                       </textarea>
 
-                                      <hr style="border-bottom: solid 1px #959595">
+                                      <!-- //hr style="border-bottom: solid 1px #959595"-->
+                                    </uib-accordion-group>
+                                  </uib-accordion>
+
+                                  <uib-accordion close-others="true">
+                                    <uib-accordion-group heading="custom-notes- {{$index+1}}" ng-if="cart_object['customization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']" ng-repeat="custom_note in cart_object['customization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']">
+                                      <textarea rows="2" cols="23" class="form-control" style="margin-top: 1%"
+                                      ng-model="custom_note.content"
+                                      placeholder="notes:">
+                                      </textarea>
+
+                                      <!--//hr style="border-bottom: solid 1px #959595"-->
                                     </uib-accordion-group>
                                   </uib-accordion>
                                 </div>
