@@ -219,6 +219,84 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.about_us',{
+		url:'/about_us',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/about_us.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.privacy_policy',{
+		url:'/privacy_policy',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/privacy_policy.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.shipping_returns',{
+		url:'/shipping_returns',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/shipping_returns.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.faqs',{
+		url:'/faq',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/faqs.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.quality',{
+		url:'/quality',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/quality.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	.state('customer.responsible_manufacturing',{
+		url:'/responsible_manufacturing',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/responsible_manufacturing.html"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
+	// .state('customer.contact_us',{
+	// 	url:'/about_us',
+	// 	views: {
+	// 		"customer": {
+	// 			templateUrl: "app/customer/static_content/about_us.html"
+	// 		},
+	// 	},
+	// 	data: {
+	// 		require_auth: false
+	// 	}
+	// })
+
 }])
 // .state('customer.invoice',{
 // 	url:'/invoice/:number?id',
