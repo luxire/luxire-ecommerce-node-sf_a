@@ -5,6 +5,10 @@ td , th{
   opacity: 0 !important;
 }
 
+.popover-content{
+  padding: 0 !important;
+}
+
 /*Product Search*/
 .highlight{
   color: black !important;
