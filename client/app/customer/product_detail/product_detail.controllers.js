@@ -238,6 +238,7 @@ angular.module('luxire')
   $scope.product = {};
   var json_array_to_obj = function(parent, arr){
     $scope[parent] = {};
+    $scope[parent+'_all'] = {};
     $scope.cart_object[parent] = {};
     angular.forEach(arr, function(val, key){
       if(parent !=='personalization_attributes'){
@@ -245,13 +246,13 @@ angular.module('luxire')
           val.name = 'Fit Type';
         }
         /*Neutralize attr from product type*/
-        if(val.name.indexOf('Shirt') !== -1){
+        if(val.name.indexOf('Shirt') !== -1 && !val.name.split('Shirt')[1]){
           val.name = val.name.split('Shirt')[0].trim();
         }
-        if(val.name.indexOf('Pant') !== -1){
+        if(val.name.indexOf('Pant') !== -1 && !val.name.split('Pant')[1]){
           val.name = val.name.split('Pant')[0].trim();
         }
-        if(val.name.indexOf('Jacket') !== -1){
+        if(val.name.indexOf('Jacket') !== -1 && !val.name.split('Jacket')[1]){
           val.name = val.name.split('Jacket')[0].trim();
         }
         /*Neutralize attr from product type*/
@@ -268,6 +269,7 @@ angular.module('luxire')
       //   $scope.cart_object[parent][val.name] = {};
       // }
       $scope[parent][val.name] = val.value;
+      $scope[parent+'_all'][val.name] = val;
     })
     // console.log('after_conv',parent , $scope[parent]);
     // console.log('after_conv cart',$scope['cart_object'][parent]);
@@ -291,7 +293,7 @@ angular.module('luxire')
     $scope.invalid_fields = [];
     var product_type_validations = {
       'shirts': '',//Collar Size,Sleeve Length,Fit Type
-      'pants': '',//Waist Size,In-seam,Fit Type
+      'pants': '',//Waist Size,Inseam,Fit Type
       'jackets': '',//Chest Size,Length,Fit Type
       'gift cards': '',
       'ties': '',//Tie Width,Tie Length
@@ -776,6 +778,10 @@ angular.module('luxire')
         body_measurement_attributes: function(){
           return $scope.body_measurement_attributes;
         },
+        standard_measurement_attributes_all: function(){
+          // return $scope.selected_measurement_unit === "in" ? $scope.standard_measurement_attributes : $scope.standard_measurement_attributes_in_cm;
+           return $scope.standard_measurement_attributes_all;
+        },
         selected_measurement_id: function(){
           return $scope.selected_measurement_id;
         },
@@ -810,6 +816,8 @@ angular.module('luxire')
     }, function () {
       console.info('Modal dismissed at: ' + new Date());
     });
+
+
   };
 
   $scope.invoke_choose_a_style = function(){
@@ -852,13 +860,18 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','selected_measurement_id', 'selected_measurement_unit',function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, selected_measurement_id, selected_measurement_unit){
-  console.log('product', product);
-  console.log('cart_object', cart_object);
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler',function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
+
+  console.log('standard attr', standard_measurement_attributes_all);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
+  $scope.standard_measurement_attributes_all = standard_measurement_attributes_all;
   $scope.product = product;
   $scope.measurement_unit = {
     selected: selected_measurement_unit
+  };
+
+  $scope.help_popover = {
+    template_url: "attribute_help_template.html"
   };
 
   var standard_size_chart = {
@@ -962,24 +975,24 @@ angular.module('luxire')
           "base": 8.75,
           "step": 0.13
         }
+      },
+      "Shirt Length": {
+        "regular": {
+          "base": 33.00,
+          "step": 0.25
+        },
+        "slim": {
+          "base": 31.00,
+          "step": 0.25
+        },
+        "super slim": {
+          "base": 31.00,
+          "step": 0.25
+        }
       }
-      // "Shirt Length": {
-      //   "regular": {
-      //     "base": 33.00,
-      //     "step": 0.25
-      //   },
-      //   "slim": {
-      //     "base": 31.00,
-      //     "step": 0.25
-      //   },
-      //   "super slim": {
-      //     "base": 31.00,
-      //     "step": 0.25
-      //   }
-      // }
     },
     "pants": {
-      "Waist(rounded)": {
+      "Waist": {
         "regular": {
           "base": 28.00,
           "step": 1.00
@@ -993,7 +1006,7 @@ angular.module('luxire')
           "step": 1.00
         }
       },
-      "Hip(rounded)": {
+      "Hips": {
         "regular": {
           "base": 36.75,
           "step": 1.00
@@ -1008,20 +1021,20 @@ angular.module('luxire')
         }
 
       },
-      "In-seam": {
-        "regular": {
-          "base": 32.00,
-          "step": 1.00
-        },
-        "slim": {
-          "base": 32.00,
-          "step": null
-        },
-        "super slim": {
-          "base": 32.00,
-          "step": 1.00
-        }
-      },
+      // "Inseam": {
+      //   "regular": {
+      //     "base": 32.00,
+      //     "step": 1.00
+      //   },
+      //   "slim": {
+      //     "base": 32.00,
+      //     "step": null
+      //   },
+      //   "super slim": {
+      //     "base": 32.00,
+      //     "step": 1.00
+      //   }
+      // },
       "Front Rise": {
         "regular": {
           "base": 10.00,
@@ -1052,7 +1065,7 @@ angular.module('luxire')
         }
 
       },
-      "Thigh(rounded)": {
+      "Thigh": {
         "regular": {
           "base": 22.25,
           "step": 0.50
@@ -1067,7 +1080,7 @@ angular.module('luxire')
         }
 
       },
-      "Knee(rounded)": {
+      "Knee": {
         "regular": {
           "base": 16.00,
           "step": 0.375
@@ -1082,7 +1095,7 @@ angular.module('luxire')
         }
 
       },
-      "Bottom(rounded)": {
+      "Bottom": {
         "regular": {
           "base": 13.75,
           "step": 0.25
@@ -1113,10 +1126,6 @@ angular.module('luxire')
       }
     }
   }
-
-
-
-
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
@@ -1220,21 +1229,22 @@ angular.module('luxire')
 
     }
     else if (product_type === "pants") {
-      if(fit_type && $scope.cart_object['standard_measurement_attributes']['Waist(rounded)']['value'] && $scope.cart_object['standard_measurement_attributes']['In-seam']['value']){
+      if(fit_type && $scope.cart_object['standard_measurement_attributes']['Waist']['value'] && $scope.cart_object['standard_measurement_attributes']['Inseam']['value']){
         fit_type = fit_type.toLowerCase();
+        console.log('fit_type', fit_type, 'waist', $scope.cart_object['standard_measurement_attributes']['Waist']['value'], 'inseam',$scope.cart_object['standard_measurement_attributes']['Inseam']['value']);
         for(var attr in standard_size_chart['pants']){
           if(attr !== "Outseam"){
             if(standard_size_chart['pants'][attr][fit_type]['step']){
               if(selected_measurement_unit == "in"){
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (($scope.cart_object['standard_measurement_attributes']['Waist(rounded)']['value']-standard_size_chart['pants']['Waist(rounded)'][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (($scope.cart_object['standard_measurement_attributes']['Waist']['value']-standard_size_chart['pants']['Waist'][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
               }
               else if(selected_measurement_unit == "cm"){
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Waist(rounded)']['value']/2.54)-standard_size_chart['pants'][attr][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Waist']['value']/2.54)-standard_size_chart['pants'][attr][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
               }
             }
           }
           else{
-            $scope.cart_object['standard_measurement_attributes']['Outseam']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['In-seam']['value']) + parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']) + 1;
+            $scope.cart_object['standard_measurement_attributes']['Outseam']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Inseam']['value']) + parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']) + 1;
           }
           if(selected_measurement_unit == "in"){
             $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes'][attr]['value']))*1000)/1000).toFixed(3);
@@ -1268,6 +1278,7 @@ angular.module('luxire')
   $scope.cloth_measurement_attributes = {};
   if($scope.product.product_type.product_type === "Shirts"){
     $scope.cloth_measurement_attributes = {
+      "Collar Size": [],
       "Chest": ["Chest(Front)", "Chest(Back)"],
       "Waist": ["Waist(Front)", "Waist(Back)"],
       "Bottom": ["Bottom(Front)", "Bottom(Back)"],
@@ -1278,11 +1289,23 @@ angular.module('luxire')
       "Cuff Around": ["Cuff Around(Left)", "Cuff Around(Right)"],
       "Shoulder Slope": ["Shoulder Slope(Left)", "Shoulder Slope(Right)"],
       "Back Panel Slope": ["Back Panel Slope(Left)", "Back Panel Slope(Right)"],
-      "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"]
+      "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"],
+      "Shirt Length": []
     };
   }
   else if($scope.product.product_type.product_type === "Pants"){
+    $scope.cloth_measurement_attributes = {
+      "Waist": [],
+      "Hips": ["Hips(Front)", "Hips(Back)"],
+      "Front Rise": [],
+      "Back Rise": [],
+      "Inseam": ["Inseam(Left)", "Inseam(Right)"],
+      "Outseam": ["Outseam(Left)", "Outseam(Right)"],
+      "Thigh": [],
+      "Knee": [],
+      "Bottom": [],
 
+    };
   }
 
   var attributes_order = ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope', 'back panel slope', 'sleeve length'];
@@ -1310,7 +1333,14 @@ angular.module('luxire')
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   };
-    $scope.cart_object = cart_object;
+
+  $scope.getOriginalImage = function(url){
+      if(url){
+        url = url.split("/small/").join("/original/");
+        return $scope.getImage(url);
+      }
+  };
+  $scope.cart_object = cart_object;
 
 
   $scope.cancel = function(){
@@ -1393,6 +1423,72 @@ angular.module('luxire')
           "regular": 1,
           "slim": 1,
           "super slim": 1
+        }
+      }
+    },
+    "pants": {
+      "Body Waist": {
+        "map": "Waist",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Body Hip": {
+        "map": "Hips",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Pant Length": {
+        "map": "Outseam",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Body Inseam": {
+        "map": "Inseam",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Body Rise": {
+        "map": "Waist",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Body Thigh": {
+        "map": "Thigh",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
+        }
+      },
+      "Body Knee": {
+        "map": "Knee",
+        "rule": {
+          "regular": 0,
+          "slim": 0,
+          "super slim": 0
+        }
+      },
+      "Body Ankle": {
+        "map": "Bottom",
+        "rule": {
+          "regular": 4,
+          "slim": 3,
+          "super slim": 2
         }
       }
     }
@@ -3112,7 +3208,7 @@ angular.module('luxire')
 //         $scope.cart_object['standard_measurement_attributes']['Sleeve Length']['value'] = $scope.newLowerMeasurement;
 //       }
 //       else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'pants'){
-//         $scope.cart_object['standard_measurement_attributes']['In-seam']['value'] = $scope.newLowerMeasurement;
+//         $scope.cart_object['standard_measurement_attributes']['Inseam']['value'] = $scope.newLowerMeasurement;
 //       }
 //       else if(product && product.product_type && product.product_type.product_type && product.product_type.product_type.toLowerCase() === 'jackets'){
 //         $scope.cart_object['standard_measurement_attributes']['Length']['value'] = $scope.newLowerMeasurement;
