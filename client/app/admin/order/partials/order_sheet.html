@@ -193,7 +193,7 @@
                 </div>
                 <div ng-if="val.options['custom_images']" class="">
                   <div class="" style="margin-top: 2%" ng-repeat = "custom_image in val.options['custom_images']">
-                    {{$index+1}}. {{custom_image.notes}}
+                    <b>Notes for image {{$index+1}}:</b> {{custom_image.notes}}
                     <div class="">
                       <img src="{{getImage(custom_image.url)}}" alt="" />
                     </div>
@@ -201,7 +201,7 @@
                 </div>
                 <div ng-if="val.options['custom_notes']" class="">
                   <div class="" style="margin-top: 2%" ng-repeat = "custom_note in val.options['custom_notes']">
-                    {{$index+1}}. {{custom_note.content}}
+                    <b>Notes {{$index+1}}:</b> {{custom_note.content}}
                   </div>
                 </div>
 
