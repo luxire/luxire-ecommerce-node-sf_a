@@ -198,15 +198,5 @@ angular.module('luxire')
   $scope.checkIsObject = function(val){
     return angular.isObject(val);
   };
-  $scope.collar = [{
-                    points: "3.0\"",
-                    spread: '5.0\"',
-                    tie_space: '0.5\"',
-                    nb_ht_back: '1.5\"',
-                    nb_ht_front: '1.25\"',
-                    collar_ht: '2.0\"',
-                    side_curve: "Yes",
-                    nb_const: "Fused Stiff",
-                    collar_const: 'Unfused soft'
-                   }];
+
 })
