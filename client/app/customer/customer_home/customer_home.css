@@ -3,11 +3,13 @@
   top:45%;
   left: 20%;
   font-size: 300%;
-  width: 30%;
+  width: 23%;
   text-align:left;
   font-weight: 100;
   color: #000000;
   font-family: Roboto;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 1%;
 }
 .right.carousel-control, .left.carousel-control{
   background: transparent !important;
@@ -20,7 +22,7 @@
   background-color: #8A247C;
   font-family: Roboto;
   font-weight: 100;
-  width: 80%;
+  width: 100%;
   font-size: 60%;
   border: none;
 }
