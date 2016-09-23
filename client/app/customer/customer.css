@@ -416,8 +416,7 @@ span.user-drop-down:hover{
   opacity: 1;
 }
 .changed-customer-home-header-color{
-  background-color: white !important;
-  opacity: 0.85;
+  background: rgba(255,255,255,0.85) !important;
 }
 
 body{
@@ -467,10 +466,7 @@ body{
   color: #8A247C !important;
 }
 
-.productImage, .new-product-image{
-  position: relative;
-  overflow: hidden;
-}
+
 .productImage img{
   max-width: 100%;
   -moz-transition: all 1.5s;
@@ -499,23 +495,39 @@ body{
   -webkit-transform: scale(1);
   transform: scale(1);
 }
+.productImage, .new-product-image{
+  position: relative;
+  overflow: hidden;
+}
 .new-product-image.zoomable-taxonomy img{
-  height: 100%;
-  width: 100%;
--webkit-transition: all 1s ease;
+  /*height: 100%;
+  width: 100%;*/
+/*-webkit-transition: all 1s ease;
 -moz-transition: all 1s ease;
 -o-transition: all 1s ease;
 -ms-transition: all 1s ease;
-transition: all 1s ease;
+transition: all 1s ease;*/
   /*-moz-transition: all 0.5s;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
   transform: scale(0.7);*/
+
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
 }
+/*.product-image-transparent{
+  opacity: 0.5;
+}*/
 .new-product-image.zoomable-taxonomy img:hover {
   /*height: 225%;
   width: 225%;*/
-  transform: scale(2, 2);
+
+  /*width: 200%;
+  height: auto;*/
+
+  /*transform: scale(1.01, 1.01);*/
   /*-moz-transform: scale(1);
   -webkit-transform: scale(1);
   transform: scale(1);*/
