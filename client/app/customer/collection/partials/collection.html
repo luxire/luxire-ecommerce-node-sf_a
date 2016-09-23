@@ -96,7 +96,7 @@
                     Start <span ng-if="$parent.price_start!==''">{{$parent.price_start}} {{selected_currency}}</span>
                   </div>
                   <div class="" style="display: inline-block;font-size:115%;font-weight: 100;">
-                    <input type="number" class="form-control" style="width: 80%" ng-model="$parent.price_start" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
+                    <input type="number" min="0" class="form-control" style="width: 80%;border-radius: 0" ng-model="$parent.price_start" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
                   </div>
                 </div>
                 <div ng-if="selected_filters[property.name].toLowerCase() == 'custom'" class="">
@@ -104,7 +104,7 @@
                     End <span ng-if="$parent.price_end!==''">{{$parent.price_end}} {{selected_currency}}</span>
                   </div>
                   <div class="" style="display: inline-block;font-size:115%;font-weight: 100;">
-                    <input type="number" class="form-control" style="width: 80%" ng-model="$parent.price_end" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
+                    <input type="number" min="0" class="form-control" style="width: 80%;border-radius: 0" ng-model="$parent.price_end" ng-change="filter_by_price($parent.price_start, $parent.price_end)">
                   </div>
                 </div>
 
@@ -149,9 +149,12 @@
                 <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
                 </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
-                <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].product_url)}}" style="cursor: pointer;"></img>
+                <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="height: 45vh;overflow: hidden">
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer;"></img>
                 </div>
+                <!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
+                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].original_url)}}" style="cursor: pointer;"></img>
+                </div> -->
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
                     <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>32? product.name.slice(0,32)+'...' : product.name}}</span></center>
