@@ -10,12 +10,14 @@
       <!-- Wrapper for slides -->
       <div class="carousel-inner" role="listbox" style="width: 100%">
         <div class="item" ng-class="{'active': $index==0}" ng-repeat="slide in product_type_carousels" >
-          <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%; height: 89vh"/>
+          <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%"/>
           <div class="carousel-caption">
 
           </div>
           <div class="carousel-collection">
-            {{slide.text}} <br>
+            <div class="">
+              {{slide.text}}
+            </div>
             <button id="viewCollectionButton" type="button" ng-click="go_to_collection(slide.permalink)" class="btn btn-default" name="button">
               View Collection
             </button>
@@ -58,8 +60,8 @@
     </uib-carousel> -->
   </div>
   <div class="click-baits-new" >
-    <img src="assets/images/customer/click-bait-image.png" style="width: 100%" alt="" />
-    <div class="" ng-repeat="click_bait in click_baits" >
+    <img src="assets/images/customer/click-bait-models.jpg" style="width: 100%" alt="" />
+    <!-- <div class="" ng-repeat="click_bait in click_baits" >
       <div class="click-bait-collar" style="top: {{click_bait.y_pos}}; left: {{click_bait.x_pos}}" >
         <div class="click-bait-pointer" ng-mouseover="change_active_click_bait(click_bait.id)">
           <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
@@ -84,7 +86,7 @@
         </div>
       </div>
 
-    </div>
+    </div> -->
 
   </div>
   <!-- <svg ng-show="show_suit_bait" class="" style="margin-top: 4%;margin-left: 2%">
