@@ -38,7 +38,7 @@ angular.module('luxire')
     var fd = new FormData();
     fd.append('source', 'measurement type');
     fd.append('image', image);
-    fd.append('size', size+'#');
+    fd.append('size', size);
     console.log('fd', fd);
     return $http.post('api/v1/admin/measurement_types/images', fd, {
         transformRequest: angular.identity,

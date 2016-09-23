@@ -73,7 +73,7 @@
             </div>
             Steps
             <textarea type="text" class="form-control" ng-model="range.steps"></textarea>
-      
+
           </div>
           <div class="placard">
             <h4 style="font-size: 20px;" class="required">Image Upload</h4>
@@ -88,8 +88,9 @@
             Url extractor<br>
 
             Size<br>
-            <input type="radio" ng-model="image_size" value="64x64" name="small">&nbsp;&nbsp;small &nbsp;
-            <input type="radio" ng-model="image_size" value="128x128" name="medium" >&nbsp;&nbsp;medium
+            <input type="radio" ng-model="image_size" value="64x64#" name="small">&nbsp;&nbsp;small(64X64)&nbsp;
+            <input type="radio" ng-model="image_size" value="128x128#" name="medium" >&nbsp;&nbsp;medium(128X128)&nbsp;
+            <input type="radio" ng-model="image_size" value="210x210" name="help" >&nbsp;&nbsp;help(210x)
             <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value=""><br>
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
             <img style="max-width: 100%" id="attr_image" src="" alt="" /><br><br>

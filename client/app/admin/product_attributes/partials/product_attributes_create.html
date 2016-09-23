@@ -61,7 +61,7 @@
             <li>Sub categories of Measurement Types: 'body' for body measurement attributes</li>
             <li>Use help field to add help text</li>
           </ul>
-          
+
           <div class="placard">
             <h4 style="font-size: 20px;" class="required">Compute Steps</h4>
             Start
@@ -76,7 +76,7 @@
             </div>
             Steps
             <textarea type="text" class="form-control" ng-model="range.steps"></textarea>
-      
+
           </div>
 
           <div class="placard">
@@ -92,8 +92,10 @@
             Url extractor <br>
 
             Size<br>
-            <input type="radio" ng-model="image_size" value="64x64" name="small">&nbsp;&nbsp;small &nbsp;
-            <input type="radio" ng-model="image_size" value="128x128" name="medium" >&nbsp;&nbsp;medium
+            <input type="radio" ng-model="image_size" value="64x64#" name="small">&nbsp;&nbsp;small(64X64)&nbsp;
+            <input type="radio" ng-model="image_size" value="128x128#" name="medium" >&nbsp;&nbsp;medium(128X128)&nbsp;
+            <input type="radio" ng-model="image_size" value="210x210" name="help" >&nbsp;&nbsp;help(210x)
+
 
             <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value=""><br>
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
