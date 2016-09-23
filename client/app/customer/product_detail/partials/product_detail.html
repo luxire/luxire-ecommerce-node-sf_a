@@ -2260,7 +2260,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                 <!--// {{selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']}}
                                 // {{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}} -->
                                 <div ng-if="selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']">
-                                  <img style="border: solid 1px grey; width: 90%" ng-src="{{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}}" />
+                                  <img style="border: solid 1px grey;height: auto" ng-src="{{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}}" />
                                 </div>
                                 <p style="font-size: 90%; color: #800e6f; cursor: pointer; margin: 2% 0% 1% 0%" ng-click="more_details(selected_bespoke_attribute.name, cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'])">View More Details&nbsp;<i class="fa fa-play-circle"></i></p>
 
