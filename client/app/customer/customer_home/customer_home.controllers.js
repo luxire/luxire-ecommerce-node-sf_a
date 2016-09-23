@@ -32,14 +32,14 @@ angular.module('luxire')
   $scope.go_to_product_listing = function(taxonomy_name, taxon_name){
     $state.go('customer.product_listing', default_collection);
   };
-  CustomerOrders.get_order_by_cookie()
-  .then(function(data){
-    console.log('fetched order', data.data);
-    $rootScope.luxire_cart = data.data;
-  },
-  function(error){
-    console.error(error);
-  });
+  // CustomerOrders.get_order_by_cookie()
+  // .then(function(data){
+  //   console.log('fetched order', data.data);
+  //   $rootScope.luxire_cart = data.data;
+  // },
+  // function(error){
+  //   console.error(error);
+  // });
 
   $scope.go_to_collection = function(permalink){
     console.log('set location for', permalink);
