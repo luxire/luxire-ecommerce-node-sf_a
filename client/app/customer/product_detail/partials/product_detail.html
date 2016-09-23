@@ -406,7 +406,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
 
 </style>
-<p class="text-center text-muted" ng-if="loading_product" style="margin-top: 10%; position: absolute; top: 20%;left: 50%; z-index: 99;color: #7F0E6E">
+<p class="text-center text-muted" ng-if="loading_product || loading_cart" style="margin-top: 10%; position: absolute; top: 20%;left: 50%; z-index: 99;color: #7F0E6E">
   <span class="fa fa-spinner fa-spin fa-4x"></span>
   <br /><br />
   Loading, please wait...
@@ -518,6 +518,15 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                         <i class="fa fa-check" aria-hidden="true"></i>
                         <span style="cursor: pointer" ng-click="show_summary()">More details</span>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-left: 0;margin-right: 0">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: center;margin-top: 2%;font-size: 200%;font-weight: 300;color: grey">
+                      +
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
                   </div>
                   <div class="row invoke-measurement" style="margin: 2% 0 0 0;">
@@ -800,11 +809,11 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
                 </div>
                 <div class="row" style="margin-left: 0px; margin-right: 0px;">
-                  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3">
                   </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                  </div>
-                  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding: 0">
+                  <!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  </div> -->
+                  <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding: 0;margin-left: 6%">
                     <div style="padding: 2%;border:1px solid #E1C9DD;margin:-right: 5%;margin-top: 10%">
                         <button type="button" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(product.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
                     </div>
@@ -2026,13 +2035,15 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
           </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" uib-collapse="hide_active_style_details" style="padding: 0 3%;" >
-          <div style="width: 0; height: 0; margin-left: 48%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 20px solid #EDEBEC;">
+          <div ng-show="!selected_style.name" style="width: 0; height: 0; margin-left: 48%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 20px solid transparent;">
 
           </div>
+          <div ng-show="selected_style.name" style="width: 0; height: 0; margin-left: 48%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 20px solid #EDEBEC;">
+          </div>
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right;background: #EDEBEC">
-            <div >
-              <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="hide_active_style_details=true"></i>
-            </div>
+            <!--//div >
+              //<i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="hide_active_style_details=true"></i>
+            //</div-->
           </div>
           <div class="row well well-lg" style="margin: 0px;border-radius: 0;margin-bottom: 1%;background: #EDEBEC">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -2055,8 +2066,8 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
           </div>
         </div>
         <div style="text-align: center;width: 100%;padding: 1%" >
-            <button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit</button>
-            <button class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="next_step()">Done</button>
+            <button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit Style</button>
+            <button ng-if="selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;" ng-click="next_step()">Select {{selected_style.name}}</button>
         </div>
       </div>
       <div ng-show="active_style_option === 'bespoke'" class="bespoke-styles-section">
@@ -2070,9 +2081,8 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
                       Price:
                     </div>
-                    <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
-                      >
-                      {{product.display_price}}
+                    <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E">
+                      {{product.master.prices[selected_currency].split(",").join("")}}
                     </div>
                   </div>
                   <div style="width: 100%; font-weight: 300">
@@ -2081,7 +2091,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     </div>
                     <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
                     animate-on-change="cart_object.personalization_cost">
-                      {{cart_object.personalization_cost}}
+                      <span ng-bind-html="currency_symbols(cart_object.personalization_cost[selected_currency], selected_currency)">
                     </div>
                   </div>
                   <div style="width: 100%; font-weight: 300">
@@ -2089,8 +2099,8 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                       Total Cost:
                     </div>
                     <div style="width: 48%;text-align: right;display: inline-block;display: inline-block;color: #7F0E6E"
-                      animate-on-change="cart_object.total_cost">
-                      {{cart_object.total_cost}}
+                      animate-on-change="cart_object.total_cost[selected_currency]">
+                      <span ng-bind-html="currency_symbols(cart_object.total_cost[selected_currency], selected_currency)"></span>
                     </div>
                   </div>
 
@@ -2187,7 +2197,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                           </div>
                           <div id="design-style" class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="">
                             <div class="row container-fluid" style="margin-top:2%;padding-left:2%;">
-                                <div><span style="font-size:120%;padding-left:3%;">Choose Design Style</span></div>
+                                <div><span style="font-size:120%;padding-left:3%;">Choose {{selected_bespoke_attribute.name}} Style</span></div>
                             </div>
                             <div class="row container-fluid" >
                               <div class="bespoke-style-top-align" style="display: block">
@@ -2230,7 +2240,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                             class="img-circle" style="border: solid 1.5px #E5E5E5; "
                                               onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                         </div>
-                                        <div style="font-size: 85%;text-align: center;padding-top:1%;">{{selected_bespoke_attribute.name}}[{{selected_bespoke_attribute.value.cost}}]</div>
+                                        <div style="font-size: 85%;text-align: center;padding-top:1%;">
+                                          {{selected_bespoke_attribute.name}}[<span ng-bind-html="currency_symbols(selected_bespoke_attribute.value['Monogram'].cost[selected_currency], selected_currency)"></span>]
+                                        </div>
                                     </div>
                                   </div>
                                 </div>
@@ -2318,9 +2330,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                 <div style="padding: 2%" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key]" ng-repeat="(personalisation_item_key, personalisation_item_value) in personalisation_item.value">
                                   <div ng-repeat="(key, val) in personalisation_item_value">
                                     <div style="padding: 2%" ng-if="key.toLowerCase() == 'fabric'" >
-                                      <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{option_key}} Fabric</p>
-                                      <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][option_key]['fabric']}}</p>
-                                      <angucomplete-alt id="{{'personalization_attributes#'+selected_bespoke_attribute.name+'#'+option_key+'#'+'fabric'}}" style="height: 25px"
+                                      <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{personalisation_item_key}} Fabric</p>
+                                      <p ng-if="option_value.fabric!=''" style="font-weight: 300; font-size: 90%; color: #9A408D;margin-bottom: 0px">{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key]['fabric']}}</p>
+                                      <angucomplete-alt id="{{'personalization_attributes#'+selected_bespoke_attribute.name+'#'+personalisation_item_key+'#'+'fabric'}}" style="height: 25px"
                                           placeholder="Search fabric"
                                           pause="400"
                                           selected-object="select_contrast_product"
@@ -2336,12 +2348,12 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                     <div style="padding: 2%" ng-if="key.toLowerCase() !== 'fabric' && check_unpermitted_customization_params(personalisation_item_key, key)">
                                       <p style="font-weight: 300; font-size: 120%; margin-bottom: 0px">{{personalisation_item_key}} {{key}}</p>
 
-                                      <div ng-if="!checkIsObject(val)">
+                                      <div ng-if="!checkIsObject(val.options)">
                                         <input type="text" class="form-control input-sm" placeholder="{{key}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]" >
                                       </div>
-                                      <div ng-if="checkIsObject(val)">
+                                      <div ng-if="checkIsObject(val.options)">
                                         <select class="form-control input-sm" ng-init="val.splice(0,0,'-select-')" name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]">
-                                          <option ng-repeat="option in val" value="{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]}}" >{{option}}</option>
+                                          <option ng-repeat="option in val.options" value="{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]}}" >{{option}}</option>
                                         </select>
                                       </div>
                                     </div>
@@ -2950,7 +2962,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
         <div class="angucomplete-row" style="border-bottom: solid 1px black; display: block;padding: 1%" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
           <div class="angucomplete-image-holder" style="display: inline-block; width: 20%;vertical-align: top">
-            <img id="fabric-image" ng-src="{{result.originalObject.variant.spree_assets[0].small_url.indexOf('http')>-1?result.originalObject.variant.spree_assets[0].small_url:'http://104.215.254.150:3000'+result.originalObject.variant.spree_assets[0].small_url}}" style="max-width: 100%"  class="angucomplete-image"/>
+            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.master.images[0].small_url.indexOf('http')>-1?result.originalObject.master.images[0].small_url: 'https://test.store.luxire.com'+result.originalObject.master.images[0].small_url}}"/>
           </div>
           <div style="display: inline-block; width: 78%">
             <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>

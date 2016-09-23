@@ -79,11 +79,13 @@ angular.module('luxire')
   });
 
   /*Multi currency support*/
-  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  $scope.selected_currency = $rootScope.luxire_cart.currency ? $rootScope.luxire_cart.currency : CustomerUtils.get_local_currency_in_app();
+  console.log('selected currency in controller', $scope.selected_currency);
   $scope.$on('currency_change', function(event, data){
     console.log('currency changed', data)
     $scope.selected_currency = data;
   });
+
 
 
   /*Get weight icon*/
@@ -236,6 +238,20 @@ angular.module('luxire')
   $scope.luxire_styles = [];
   $rootScope.customer_alerts = [];
   $scope.product = {};
+  var personalisation_cost_init = {
+    "INR": 0.00,
+    "USD": 0.00,
+    "EUR": 0.00,
+    "SGD": 0.00,
+    "AUD": 0.00,
+    "SEK": 0.00,
+    "DKK": 0.00,
+    "NOK": 0.00,
+    "CHF": 0.00
+  };
+
+  $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
+
   var json_array_to_obj = function(parent, arr){
     $scope[parent] = {};
     $scope[parent+'_all'] = {};
@@ -326,6 +342,7 @@ angular.module('luxire')
     }
   };
   $scope.add_to_cart = function(variant){
+    $scope.loading_cart = true;
     console.log('add to cart', variant);
     console.log('luxire_cart', $rootScope.luxire_cart);
     console.log('has valid measurements', has_valid_measurements());
@@ -335,13 +352,16 @@ angular.module('luxire')
         .then(function(data){
           CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
             $rootScope.luxire_cart = data.data;
+            $scope.loading_cart = false;
             $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
             $state.go('customer.pre_cart');
           }, function(error){
+            $scope.loading_cart = false;
             console.error(error);
           });
           console.log(data);
         },function(error){
+          $scope.loading_cart = false;
           $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
           console.error(error);
         });
@@ -350,10 +370,12 @@ angular.module('luxire')
         CustomerOrders.create_order($scope.cart_object, variant, $scope.measurement_sample)
         .then(function(data){
           $rootScope.luxire_cart = data.data;
+          $scope.loading_cart = false;
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
           $state.go('customer.pre_cart');
           console.log(data);
         },function(error){
+          $scope.loading_cart = false;
           $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
           console.error(error);
         });
@@ -842,6 +864,9 @@ angular.module('luxire')
         },
         parent_scope: function(){
           return $scope;
+        },
+        selected_currency: function(){
+          return $scope.selected_currency;
         }
 
       }
@@ -860,7 +885,7 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler',function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
 
   console.log('standard attr', standard_measurement_attributes_all);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
@@ -869,6 +894,7 @@ angular.module('luxire')
   $scope.measurement_unit = {
     selected: selected_measurement_unit
   };
+
 
   $scope.help_popover = {
     template_url: "attribute_help_template.html"
@@ -1158,6 +1184,7 @@ angular.module('luxire')
     $scope.active_measurement_type_id = id;
 
   };
+  var rounded_pant_attr = ["Waist", "Hips", "Thigh", "Knee", "Bottom"];
 
   var set_standard_sizes = function(){
     var product_type = $scope.product.product_type.product_type.toLowerCase();
@@ -1236,10 +1263,13 @@ angular.module('luxire')
           if(attr !== "Outseam"){
             if(standard_size_chart['pants'][attr][fit_type]['step']){
               if(selected_measurement_unit == "in"){
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (($scope.cart_object['standard_measurement_attributes']['Waist']['value']-standard_size_chart['pants']['Waist'][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Waist']['value']*2)-standard_size_chart['pants']['Waist'][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
               }
               else if(selected_measurement_unit == "cm"){
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Waist']['value']/2.54)-standard_size_chart['pants'][attr][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (((($scope.cart_object['standard_measurement_attributes']['Waist']['value']*2)/2.54)-standard_size_chart['pants'][attr][fit_type]['base'])*standard_size_chart['pants'][attr][fit_type]['step'])+standard_size_chart['pants'][attr][fit_type]['base'];
+              }
+              if(rounded_pant_attr.indexOf(attr) != -1){
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = $scope.cart_object['standard_measurement_attributes'][attr]['value']/2;
               }
             }
           }
@@ -1629,8 +1659,9 @@ angular.module('luxire')
   console.log('key map', key_name_map);
 
 }])
-.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce){
-  console.log('product', product);
+.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', 'selected_currency',function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce, selected_currency){
+  $scope.selected_currency = selected_currency;
+  console.log('selected_currency', selected_currency);
   $scope.active_style_option = "system_preset";
   $scope.change_active_style_option = function(option){
     $scope.active_style_option = option;
@@ -2004,21 +2035,88 @@ angular.module('luxire')
     });
   };
 
-  $scope.cart_object.personalization_cost = '$0.00';
-  $scope.add_personalization_cost = function(cost){
-    console.log(parseFloat($scope.cart_object.personalization_cost.split('$')[1]));
-    console.log(parseFloat(cost.split('$')[1]));
-    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat(cost.split('$')[1])).toFixed(2);
-    $scope.total_price();
+
+  $scope.currency_symbols = function(val ,currency){
+    if(currency == "INR"){
+      return $sce.trustAsHtml('&#8377;'+val);
+    }
+    else if(currency == "USD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+    else if(currency == "EUR"){
+      return $sce.trustAsHtml('&euro;'+val);
+    }
+    else if(currency == "SGD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+    else if(currency == "AUD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+    else if(currency == "SEK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
+    else if(currency == "DKK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
+    else if(currency == "CHF"){
+      return $sce.trustAsHtml('CHF'+val);
+    }
+    else if(currency == "NOK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
   };
 
-  $scope.cart_object.total_cost = $scope.product.display_price;
-  $scope.total_price = function(){
-    $scope.cart_object.total_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat($scope.product.display_price.split('$')[1])).toFixed(2);
+  var personalisation_cost_init = {
+    "INR": 0.00,
+    "USD": 0.00,
+    "EUR": 0.00,
+    "SGD": 0.00,
+    "AUD": 0.00,
+    "SEK": 0.00,
+    "DKK": 0.00,
+    "NOK": 0.00,
+    "CHF": 0.00
   };
+
+  $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
+  var product_prices = {};
+  angular.forEach($scope.product.master.prices, function(value, currency){
+    if((currency == "USD") || (currency == "SGD") || (currency == "AUD")){
+      product_prices[currency] = parseFloat(value.split(",").join("").split("$")[1]);
+    }
+    else if((currency == "SEK") || (currency == "NOK") || (currency == "DKK")){
+      product_prices[currency] = parseFloat(value.split(",").join("").split(" kr")[0]);
+    }
+    else if(currency == "CHF"){
+      product_prices[currency] = parseFloat(value.split(",").join("").split("CHF")[1]);
+    }
+    else if(currency == "EUR"){
+      product_prices[currency] = parseFloat(value.split(",").join("").split("\u20ac")[1]);
+    }
+    else if(currency == "INR"){
+      product_prices[currency] = parseFloat(value.split(",").join("").split("\u20b9")[1]);
+    }
+  });
+  $scope.add_personalization_cost = function(cost){
+    angular.forEach(cost, function(value, currency){
+      $scope.cart_object.personalization_cost[currency] = parseFloat($scope.cart_object.personalization_cost[currency]) + parseFloat(value);
+      $scope.cart_object.total_cost[currency] = parseFloat($scope.cart_object.total_cost[currency]) + parseFloat(value);
+    });
+    // $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat(cost.split('$')[1])).toFixed(2);
+    // $scope.total_price();
+  };
+
+  $scope.cart_object.total_cost = $scope.cart_object.total_cost ? $scope.cart_object.total_cost : product_prices;
+  // $scope.total_price = function(){
+  //   $scope.cart_object.total_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])+parseFloat($scope.product.display_price.split('$')[1])).toFixed(2);
+  // };
   $scope.remove_personalization_cost = function(cost){
-    $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])-parseFloat(cost.split('$')[1])).toFixed(2);
-    $scope.total_price();
+    angular.forEach(cost, function(value, currency){
+      $scope.cart_object.personalization_cost[currency] = parseFloat($scope.cart_object.personalization_cost[currency]) - parseFloat(value);
+      $scope.cart_object.total_cost[currency] = parseFloat($scope.cart_object.total_cost[currency]) - parseFloat(value);
+    });
+    // $scope.cart_object.personalization_cost = '$'+(parseFloat($scope.cart_object.personalization_cost.split('$')[1])-parseFloat(cost.split('$')[1])).toFixed(2);
+    // $scope.total_price();
   };
 
 
@@ -2091,15 +2189,16 @@ angular.module('luxire')
     else if(attr_type == 'personalize'){
       console.log('style obj', style_object);
       console.log('style name', style_name);
+      console.log('selected attr', $scope.selected_bespoke_attribute);
       console.log('personalize', $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]);
       if($scope.selected_bespoke_attribute.name.toLowerCase()=='monogram'){
         if(!$scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
           $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name] = {};
           $scope.monogram_options = $scope.selected_bespoke_attribute.value;
-          $scope.add_personalization_cost($scope.selected_bespoke_attribute.value['cost']);
+          $scope.add_personalization_cost($scope.selected_bespoke_attribute.value['Monogram']['cost']);
         }
         else{
-          $scope.remove_personalization_cost($scope.selected_bespoke_attribute.value['cost']);
+          $scope.remove_personalization_cost($scope.selected_bespoke_attribute.value['Monogram']['cost']);
           delete $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name];
         }
       }
