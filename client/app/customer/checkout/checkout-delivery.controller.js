@@ -8,6 +8,7 @@ angular.module('luxire')
         state: "delivery"
       })
       .then(function(data){
+        console.log('data', data);
         console.log('updated cart state to ', data.data.state);
       }, function(error){
         console.log('update cart failed', error);
@@ -57,9 +58,11 @@ angular.module('luxire')
     console.log($scope.selected_shipping_rate_id);
   };
   $scope.proceed_to_checkout_payment = function(){
+    $scope.loading = true;
     CustomerOrders.proceed_to_checkout_payment($rootScope.luxire_cart, $scope.shipment_id, $scope.selected_shipping_rate_id)
     .then(function(data){
       console.log(data);
+      $scope.loading = false;
       $rootScope.luxire_cart = data.data;
       if(data.data.state === "complete"){
         $state.go('invoices', {number: data.data.number, token: data.data.token});
@@ -68,6 +71,7 @@ angular.module('luxire')
       }
       else{
         $state.go('customer.checkout_payment');
+        $scope.loading = false;
       }
     },function(error){
       console.error(error);

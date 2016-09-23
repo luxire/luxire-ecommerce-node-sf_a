@@ -177,12 +177,15 @@ angular.module('luxire')
   $scope.checkout = function(){
     console.log('proceed_to_checkout');
     console.log($rootScope.luxire_cart);
+    $scope.loading_cart = true;
     CustomerOrders.proceed_to_checkout($rootScope.luxire_cart)
     .then(function(data){
       $rootScope.luxire_cart = data.data;
+      $scope.loading_cart = false;
       $state.go('customer.checkout_address');
       console.log(data);
     }, function(error){
+      $scope.loading_cart = false;
       console.error(error);
     })
   };
