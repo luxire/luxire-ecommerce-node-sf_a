@@ -59,15 +59,13 @@ avoid conflict with customer ctrl on admin side*/
       if($(window).scrollTop()>0){
         $scope.is_window_scrolled = true;
         if($scope.is_customer_home_state){
-          $timeout(function(){
             $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
-          })
         }
         else{
-          $timeout(function(){
+            if($(".changed-customer-home-header-color").length){
+              $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
+            }
             $(".customer-main-nav-header").addClass('changed-customer-header-color');
-
-          })
         }
       }
       else{
@@ -270,11 +268,31 @@ avoid conflict with customer ctrl on admin side*/
     }
   ];
 
+
+
   $scope.selected_measurement_unit = $scope.measurement_units[0];
+
+  var update_order_measurement_unit = function(unit){
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items.length){
+      for(var i=0;i<$rootScope.luxire_cart.line_items.length;i++){
+        if(unit == "cm"){
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.customized_data = CustomerUtils.convert_in_to_cm($rootScope.luxire_cart.line_items[i].luxire_line_item.customized_data);
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.measurement_data = CustomerUtils.convert_in_to_cm($rootScope.luxire_cart.line_items[i].luxire_line_item.measurement_data);
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.personalize_data = CustomerUtils.convert_in_to_cm($rootScope.luxire_cart.line_items[i].luxire_line_item.personalize_data);
+        }
+        else if(unit == "in"){
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.customized_data = CustomerUtils.convert_cm_to_in($rootScope.luxire_cart.line_items[i].luxire_line_item.customized_data);
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.measurement_data = CustomerUtils.convert_cm_to_in($rootScope.luxire_cart.line_items[i].luxire_line_item.measurement_data);
+          $rootScope.luxire_cart.line_items[i].luxire_line_item.personalize_data = CustomerUtils.convert_cm_to_in($rootScope.luxire_cart.line_items[i].luxire_line_item.personalize_data);
+        }
+      };
+    }
+  };
 
   $scope.change_measurement_unit = function(measurement_unit){
     $scope.selected_measurement_unit = measurement_unit;
     console.log('selected unit', measurement_unit);
+    // update_order_measurement_unit(measurement_unit.symbol.toLowerCase());
     $rootScope.$broadcast('measurement_unit_change', measurement_unit);
   };
 
