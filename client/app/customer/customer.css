@@ -449,7 +449,7 @@ span.user-drop-down:hover{
 .customer-main-nav-header.changed-customer-home-header-color{
   background: rgba(255,255,255,0.85) !important;
   animation-name: customer-header-animation;
-	animation-duration: 2000ms;
+	animation-duration: 1000ms;
 	animation-timing-function: linear;
 }
 
