@@ -1,6 +1,7 @@
 angular.module('luxire')
 .controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location, CustomerOrders, $timeout){
 
+  $scope.loading = true;
   var default_collection = {
     taxonomy_name: CustomerConstants.default.taxonomy_name,
     taxon_name: CustomerConstants.default.taxon_name,
@@ -204,6 +205,7 @@ angular.module('luxire')
 
   ]
 
+  $scope.loading = false;
 
 
   $scope.active_customer_review_index = 0;
