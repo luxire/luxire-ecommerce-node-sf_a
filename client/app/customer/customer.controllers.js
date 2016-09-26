@@ -49,6 +49,11 @@ avoid conflict with customer ctrl on admin side*/
     console.log('changing state', toState);
   })
 
+  $scope.changeHeader = function(){
+      $scope.show_header = true;
+      $scope.is_window_scrolled = true;
+      $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
+  };
 
   $timeout(function(){
 
@@ -87,6 +92,8 @@ avoid conflict with customer ctrl on admin side*/
 
   }, 0);
   $scope.arrow_margin_left = 0;
+
+
 
   /*Tool tip for taxonomy */
   $scope.change_arrow_pos = function(event){
