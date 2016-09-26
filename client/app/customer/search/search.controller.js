@@ -7,9 +7,9 @@ angular.module('luxire')
   $scope.filter_properties = [];
   var filter_index = '';
   //weight, brand & material removed, thickness needs to be added in properties
-  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'transparency', 'construction'];
-  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'TRANSPARENCY', 'CONSTRUCTION',];
-  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction'];
+  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'transparency', 'construction', 'No of Colors'];
+  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'TRANSPARENCY', 'CONSTRUCTION','No of Colors'];
+  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction', 'no_of_color'];
 
   $scope.color_variants = {
     white: {
@@ -251,12 +251,13 @@ angular.module('luxire')
       $scope.taxonomy_counts = data.data.taxonomies;
       console.log('fetched products', data.data);
       $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      $scope.selected_redis_filters.page++;
     }, function(error){
       $scope.loading_products = false;
       console.error(error);
     });
+    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
   };
+
 
 
   /*Redis caching mechanism*/
@@ -271,6 +272,7 @@ angular.module('luxire')
     };
 
   /**/
+
 
 
 
