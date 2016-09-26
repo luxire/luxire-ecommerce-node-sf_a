@@ -59,9 +59,25 @@
       </uib-slide>
     </uib-carousel> -->
   </div>
+  <div class="product-collections">
+    <div class="view-collection-title">
+      View Men’s Collection
+    </div>
+    <div class="taxonomyCards" >
+      <div class="taxonomyCard" ng-click="go_to_collection(taxonomy.root.permalink)" ng-repeat="taxonomy in product_taxonomies" style="display: inline-block;border: solid 0.5px grey;margin-left: 3%" >
+        <div class="">
+          <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
+        </div>
+        <div class="taxonomy-name" >
+          {{taxonomy.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="click-baits-new" >
     <img src="assets/images/customer/click-bait-models.jpg" style="width: 100%" alt="" />
-    <!-- <div class="" ng-repeat="click_bait in click_baits" >
+    <div ng-if="!loading" class="" ng-repeat="click_bait in click_baits" >
       <div class="click-bait-collar" style="top: {{click_bait.y_pos}}; left: {{click_bait.x_pos}}" >
         <div class="click-bait-pointer" ng-mouseover="change_active_click_bait(click_bait.id)">
           <span class="click-bait-outer-circle" style="translate3d(-36px, -36px, 0px)">
@@ -74,7 +90,7 @@
         </div>
         <div ng-show="active_click_bait.id==click_bait.id" ng-class="{'active-click-bait-text': active_click_bait.id==click_bait.id}" class="click-bait-text" style="display: block; position: absolute;width: 100%;margin-top:-10%">
             <img src="assets/images/customer/luxire_icon.png" style="max-width: 30%;" alt="" />
-            <span style="margin-left: 2%;font-family: Roboto;font-size: 100%">{{click_bait.name}}</span>
+            <span style="margin-left: 2%;font-family: Roboto;font-size: 100%;color: whitesmoke;font-weight: 400">{{click_bait.name}}</span>
         </div>
         <div style="transform:rotate(5deg);transform-origin: 0% 0%;" ng-show="active_click_bait.id==click_bait.id" ng-class="{'click-bait-connection': active_click_bait.id==click_bait.id}">
           {{click_bait.text_line}}&nbsp;&nbsp;
@@ -86,7 +102,7 @@
         </div>
       </div>
 
-    </div> -->
+    </div>
 
   </div>
   <!-- <svg ng-show="show_suit_bait" class="" style="margin-top: 4%;margin-left: 2%">
@@ -156,21 +172,7 @@
 
     </div>
   </div> -->
-  <div class="product-collections">
-    <div class="view-collection-title">
-      View Men’s Collection
-    </div>
-    <div class="taxonomyCards" >
-      <div class="taxonomyCard" ng-click="go_to_collection(taxonomy.root.permalink)" ng-repeat="taxonomy in product_taxonomies" style="display: inline-block;border: solid 0.5px grey;margin-left: 3%" >
-        <div class="">
-          <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: 128px"alt="" />
-        </div>
-        <div class="taxonomy-name" >
-          {{taxonomy.name}}
-        </div>
-      </div>
-    </div>
-  </div>
+
   <div class="customer-reviews">
     <div class="customer-review-image">
       <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width: 100%" alt="" />
