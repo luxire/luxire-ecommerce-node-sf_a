@@ -62,11 +62,13 @@ avoid conflict with customer ctrl on admin side*/
       //$("#customer-main-nav-header").height()
       // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
-        $scope.is_window_scrolled = true;
         if($scope.is_customer_home_state){
-            $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
+          // $scope.changeHeader();
+            // $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
         }
         else{
+            $scope.is_window_scrolled = true;
+
             if($(".changed-customer-home-header-color").length){
               $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
             }
