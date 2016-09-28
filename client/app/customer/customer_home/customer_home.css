@@ -409,33 +409,38 @@
 }
 .taxonomy-name{
   font-family: Roboto;
-  color: #000000;
-  font-weight: 100;
+  color: #800E6F;
+  font-weight: 400;
   font-size: 100%; /* Approximation due to font substitution */
   text-align: center;
 }
 .taxonomyCard:hover {
   cursor: pointer;
-  box-shadow: 1px 1px 1px 2px #D3D3D3;
+  box-shadow: 2px 2px 2px 2px #D3D3D3;
 }
 .taxonomyCard{
   padding: 1%;
   z-index: 99;
-  background-color: #FDFDFD;
+  background-color: #FFFFFF;
   box-shadow: 1px 1px 1px 1px #E1D9D4;
-  margin-top: 5%;
+  margin-top: 2%;
+  margin-bottom: 4%;
+  border: solid 1px grey !important;
 }
 .taxonomyCards{
   margin-left: 4%;
 }
 .taxonomy-name{
-  padding-top: 3%;
+  padding-top: 1%;
+  margin-top: 6%;
 }
 .product-collections{
-  margin-top: 2%;
+  padding-top: 2%;
+  padding-bottom: 1%;
 }
 .customer-reviews{
-  margin-top: 7%;
+  margin-bottom: 4%;
+  /*margin-top: 7%;*/
   background: #F6F7F6;
   position: relative;
   background: -webkit-linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* For Safari 5.1 to 6.0 */
@@ -444,10 +449,10 @@
   background: linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* Standard syntax */
 }
 .row.customer-review-section{
-  width: 53%;
+  width: 35%;
   position: absolute;
-  top: 15%;
-  left: 40%
+  top: 25%;
+  left: 64%
 }
 .customer-speak-text{
   margin-top: 8%;
@@ -456,6 +461,14 @@
   font-size: 300%; /* Approximation due to font substitution */
   font-weight: 100;
   text-align: left;
+}
+.customer-testimonials-text{
+  font-family: Roboto;
+  color: #000000;
+  font-size: 300%; /* Approximation due to font substitution */
+  font-weight: 100;
+  text-align: center;
+  padding: 3% 0;
 }
 .customer-review-quote{
   margin-top: 8%;
@@ -470,15 +483,15 @@
   font-family: Roboto;
   color: #000000;
   font-size: 112.5%; /* Approximation due to font substitution */
-  font-weight: 100;
+  font-weight: 500;
   text-align: left;
 }
 .customer-review-source{
   margin-top: 2%;
   font-family: Roboto;
   color: #000000;
-  font-size: 75%; /* Approximation due to font substitution */
-  font-weight: 100;
+  font-size: 100%; /* Approximation due to font substitution */
+  font-weight: 500;
   text-align: left;
 }
 .review-indexes, #review_index{

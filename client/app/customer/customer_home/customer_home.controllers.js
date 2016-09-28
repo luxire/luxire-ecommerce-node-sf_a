@@ -276,22 +276,46 @@ angular.module('luxire')
 
   $scope.customer_reviews = [
     {
-      image: 'assets/images/customer/luxire-customer-reviews/customer_review_1.png',
-      review: 'When I placed the order for my suit and shirt, i did not expect it to arrive in 10 days.That too, with a perfect finish.',
-      name: 'John Williams',
-      source: 'Style Forum'
+      image: 'assets/images/customer/luxire-customer-reviews/customer_review_1.jpg',
+      review: 'Editor Andreas Weinas wearing Luxire pants to Pitti Uomo 88',
+      name: 'Andreas Weinas',
+      source: 'vogue',
+      sourceRef: 'http://www.vogue.com/13370947/pitti-uomo-january-2016-events/'
     },
     {
-      image: 'assets/images/customer/luxire-customer-reviews/customer_review_1.png',
-      review: 'When I placed the order for my suit and shirt, i did not expect it to arrive in 10 days.That too, with a perfect finish.',
-      name: 'Lionel Messi',
-      source: 'Style Forum'
+      image: 'assets/images/customer/luxire-customer-reviews/customer_review_2.jpeg',
+      review: 'Just in case anyone\'s still not clear on the whole \"Luxire can do anything\" mantra: I asked them to make a knit top for a young woman with built-in fingerless gloves so that she can roll like a Dickensian street urchin. Nailed it.',
+      name: 'CruzAzul',
+      source: 'Style Forum',
+      sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/23600_100#post_8553315'
     },
     {
-      image: 'assets/images/customer/luxire-customer-reviews/customer_review_1.png',
-      review: 'When I placed the order for my suit and shirt, i did not expect it to arrive in 10 days.That too, with a perfect finish.',
-      name: 'Christiano Ronaldo',
-      source: 'Style Forum'
+      image: 'http://cdn.styleforum.net/5/5c/900x900px-LL-5c99b818_image.jpeg',
+      review: 'I ordered this shirt with the NOBDII collar and a "medium" wash. I wear a lot of sportcoats and odd trousers so the collar type made sense for me. It\'s honestly my favorite Luxire shirt along with the Blue Denim Slubby Chambray.',
+      name: 'Anonymous',
+      source: 'Style Forum',
+      sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/21700_100#post_8338716'
+    },
+    {
+      image: 'http://www.styleforum.net/image/id/11288434',
+      review: '',
+      name: 'Anonymous',
+      source: 'Style Forum',
+      sourceRef: 'http://www.styleforum.net/t/518949/luxire-and-styleforum-leather-jackets-official-thread/0_100#post_8510168'
+    },
+    {
+      image: 'http://cdn.styleforum.net/9/97/97d28283_DSC02722.jpeg',
+      review: 'A little project Luxire did for me in Dugdale black plain linen',
+      name: 'Anonymous',
+      source: 'Style Forum',
+      sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/19600_100#post_8088795'
+    },
+    {
+      image: 'https://parisiangentleman.fr/wp-content/uploads/2015/02/paulcollarstanding.jpg',
+      review: '',
+      name: 'Anonymous',
+      source: 'Parisian Gentleman',
+      sourceRef: 'https://parisiangentleman.co.uk/2015/02/23/q-a-with-pg-editors-what-type-of-shirt-collar-should-i-buy/'
     }
   ];
 

@@ -172,37 +172,39 @@
 
     </div>
   </div> -->
-
+  <div class="customer-testimonials-text">
+    Customers Speak
+  </div>
   <div class="customer-reviews">
     <div class="customer-review-image">
-      <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width: 100%" alt="" />
+      <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width:100%" alt="" />
     </div>
     <div class="row customer-review-section" style="">
-      <div class="col col-sm-8 col-md-8 col-lg-8 col-xs-8">
-        <div class="customer-speak-text">
+      <div class="col col-sm-11 col-md-11 col-lg-11 col-xs-11" style="padding-left: 25%">
+        <!-- <div class="customer-speak-text">
           Customers Speak
-        </div>
+        </div> -->
         <div class="customer-review-quote">
-          "{{customer_reviews[active_customer_review_index].review}}"
+          {{customer_reviews[active_customer_review_index].review}}
         </div>
         <div class="customer-name">
           {{customer_reviews[active_customer_review_index].name}}
         </div>
         <div class="customer-review-source">
-          {{customer_reviews[active_customer_review_index].source}}
+          <a href="{{customer_reviews[active_customer_review_index].sourceRef}}" target="_blank">{{customer_reviews[active_customer_review_index].source}}</a>
         </div>
       </div>
-      <div class="col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="border-right: solid 1px grey; height: 50vh">
+      <!-- <div class="col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="border-right: solid 1px grey; height: 50vh">
 
-      </div>
-      <div class="review-indexes col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="">
+      </div> -->
+      <div class="review-indexes col col-sm-1 col-md-1 col-lg-1 col-xs-1" style="">
         <div class="" ng-click="change_active_review_index(review_index)" ng-class="{'active-review-index': review_index==active_customer_review_index}" ng-repeat="review_index in review_indexes">
           <p style="margin-bottom: 5%">{{review_index+1}}</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="collection-uniqueness">
+  <!-- <div class="collection-uniqueness">
     <uib-carousel active="0" interval="2000" style="width: 100%">
       <uib-slide ng-cloak ng-repeat="slide in unique_collections" style="width: 100%">
         <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%;"/>
@@ -221,7 +223,7 @@
       </uib-slide>
     </uib-carousel>
 
-  </div>
+  </div> -->
 </div>
 <div ng-if="!loading"id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
