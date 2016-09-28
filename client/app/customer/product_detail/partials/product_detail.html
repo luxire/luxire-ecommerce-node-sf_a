@@ -403,6 +403,15 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
   left: -230% !important;
 }
 
+.btn-description{
+  background: #7F0E6E !important;
+  color: white !important;
+}
+.btn-description-before{
+  background: white !important;
+  color: #7F0E6E !important;
+}
+
 
 
 </style>
@@ -429,7 +438,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
   <div class="row" style="margin-left: 0px; margin-right: 0px;padding-top: 12.3%;background-color: #FDFDFD;font-family: Roboto; ">
     <!--Page1-->
     <div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 1%; padding-bottom: 1.8%">
-      <div id="shirt-detail-image-part" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-left:0%;margin-left:0%;border-right: solid 1px #CCCCCC">
+      <div id="shirt-detail-image-part" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-left:0%;margin-left:0%;">
         <div class="row " style="margin: 2% 4% 0% 8%">
           <img id="product_description_image_id" src="{{getImage(active_product_description_image['product_url'])}}" data-zoom-image="{{getImage(active_product_description_image['original_url'])}}" alt="{{slide.alt}}" ng-mouseover="reg_enlarged_image($event)" ng-mouseleave="dereg_enlarged_image($event)" style="max-width: 100%; margin: auto">
 
@@ -454,7 +463,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
       </div>
         <!--DETAIL VIEW DESCRIPTION PART  for fabric products-->
-      <div  class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 5%;padding-right: 2%;margin-top: 0.8%">
+      <div  class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 5%;padding-right: 2%;margin-top: 0.8%;border-left: solid 1px #CCCCCC">
         <!--Detail for fabric data types-->
         <div ng-if="is_fabric_product" class="row" style="margin-left: 0px; margin-right: 0px">
           <!--Conditional layouting for product type-->
@@ -511,7 +520,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
-                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
+                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !active_style.name, 'btn-description-before': active_style.name}" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: left">
                       <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
@@ -523,7 +532,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                   <div class="row" style="margin-left: 0;margin-right: 0">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: center;margin-top: 2%;font-size: 200%;font-weight: 300;color: grey">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: center;margin-top: 2%;font-size: 200%;font-weight: 300;color: #7F0E6E">
                       +
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -533,7 +542,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
-                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-click="invoke_choose_fit_and_measurement()">Choose Fit & Measurements</button>
+                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !selected_measurement_id, 'btn-description-before': selected_measurement_id}" ng-click="invoke_choose_fit_and_measurement()">Choose Fit & Measurements</button>
                     </div>
                   </div>
 
