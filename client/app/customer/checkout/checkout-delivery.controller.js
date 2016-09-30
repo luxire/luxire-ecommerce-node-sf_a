@@ -9,6 +9,7 @@ angular.module('luxire')
       })
       .then(function(data){
         console.log('data', data);
+        $state.go("customer.checkout_"+data.data.state.toLowerCase());
         console.log('updated cart state to ', data.data.state);
       }, function(error){
         console.log('update cart failed', error);
