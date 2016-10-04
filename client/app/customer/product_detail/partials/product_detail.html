@@ -302,7 +302,7 @@ style carousel
 
 .standard-sizes-selector{
   margin: 0;
-  padding: 4% 0 0 0;
+  padding: 2% 0 0 0;
 }
 .standard-sizes-selector.dropdown.open{
   border: none !important;
@@ -366,11 +366,18 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 }
 .style-option-holder{
   text-align: center;
-  border-bottom: solid 2px #E9E9E9;
-  margin: 0 3% 2% 3%;
+  margin: 0.5% 0;
 
 }
 .style-option{
+  display: inline-block;
+  font-size: 150%;
+  font-weight: 300;
+  margin: 1% 0;
+  padding: 0 1%;
+  cursor: pointer;
+}
+.style-modal-nav-option{
   display: inline-block;
   font-size: 150%;
   font-weight: 300;
@@ -410,7 +417,32 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 .btn-description-before{
   background: white !important;
   color: #7F0E6E !important;
+  font-weight: 400 !important;
 }
+.shrink-style-details{
+  height: 15vh;
+  overflow: hidden;
+  background-image: -webkit-gradient(
+          linear, left top, left bottom, from(rgba(255, 255, 255, 1)),
+          to(rgba(255, 255, 255, 0.3))
+        );
+}
+button.slick-arrow{
+  display: none !important;
+}
+.active-bespoke-attributes-slide{
+  color: white !important;
+  background: #cb34b7 !important;
+}
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+
+  border-left: 8px solid white;
+}
+
 
 
 
@@ -1462,13 +1494,21 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
 <script type="text/ng-template" id="choose_fit_and_measurement.html">
   <div class="row" style="margin: 0;background: #FDFDFD;font-family: Roboto">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right">
-      <div >
-        <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
+    <div style="width: 100%;border-bottom: solid 2px #E9E9E9;padding: 0.5%">
+      <div style="width: 33%;display: inline-block">
       </div>
-    </div>
-    <div class="measurement-select-header">
-      Select Your Option
+      <div class="measurement-select-header" style="width: 33%;display: inline-block">
+        Select Your Option
+      </div>
+      <div style="width: 33%;display: inline-block;text-align: right;padding-right: 2%;color: #8a247c">
+        <div class="style-modal-nav-option" ng-click="next_step()" style="border-right: solid 1px #E9E9E9;padding-right: 2%">
+          Save & Close
+        </div>
+        <div class="style-modal-nav-option" ng-click="cancel()">
+          Close
+        </div>
+      </div>
+
     </div>
     <div class="measurement-option-holder" style="">
       <div class="measurement-option" ng-class="{'active-measurement-type': measurement_type.id===active_measurement_type_id}" ng-click="change_measurement_type(measurement_type.id)" ng-repeat="measurement_type in measurement_types">
@@ -1502,14 +1542,10 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div ng-if="cart_object['standard_measurement_attributes']['Collar Size']['value']!=''&&cart_object['standard_measurement_attributes']['Collar Size']['value']!=undefined" class="btn-group">
-                Collar size
-              </div>
+                {{cart_object['standard_measurement_attributes']['Collar Size']['value'] ? 'Collar size' : ''}}
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div ng-if="cart_object['standard_measurement_attributes']['Sleeve Length']['value']!==''&&cart_object['standard_measurement_attributes']['Sleeve Length']['value']!==undefined" class="btn-group">
-                Sleeve length
-              </div>
+                {{cart_object['standard_measurement_attributes']['Sleeve Length']['value'] ? 'Sleeve length' : ''}}
             </div>
 
           </div>
@@ -1518,7 +1554,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+              <div class="btn-group" style="display: inline-block;width: 82%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                       {{cart_object['standard_measurement_attributes']['Collar Size']['value']==''||cart_object['standard_measurement_attributes']['Collar Size']['value']==undefined?'Collar Size':cart_object['standard_measurement_attributes']['Collar Size']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1527,9 +1563,12 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Collar Size'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Collar Size', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
                   </ul>
               </div>
+              <div style="display: inline-block;width: 15%" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
+                <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="collar_help_popover.template_url" popover-placement="bottom-right" popover-trigger="mouseenter"></i></span>
+              </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
+              <div class="btn-group" style="display: inline-block;width: 82%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                     {{cart_object['standard_measurement_attributes']['Sleeve Length']['value']==''||cart_object['standard_measurement_attributes']['Sleeve Length']['value']==undefined?'Sleeve Length':cart_object['standard_measurement_attributes']['Sleeve Length']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1537,6 +1576,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                   <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
                     <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Sleeve Length'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Sleeve Length', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
                   </ul>
+              </div>
+              <div style="display: inline-block;width: 15%" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
+                <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="sleeve_help_popover.template_url" popover-placement="bottom-right" popover-trigger="mouseenter"></i></span>
               </div>
             </div>
           </div>
@@ -1563,13 +1605,13 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div ng-if="cart_object['standard_measurement_attributes']['Waist']['value']!=''&&cart_object['standard_measurement_attributes']['Waist']['value']!=undefined" class="btn-group">
-                Waist
+              <div  class="btn-group">
+                {{cart_object['standard_measurement_attributes']['Waist']['value'] ? 'Waist' : ''}}
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div ng-if="cart_object['standard_measurement_attributes']['In-seam']['value']!==''&&cart_object['standard_measurement_attributes']['In-seam']['value']!==undefined" class="btn-group">
-                Inseam
+              <div class="btn-group">
+                {{cart_object['standard_measurement_attributes']['Inseam']['value'] ? 'Inseam' : ''}}
               </div>
             </div>
 
@@ -1580,7 +1622,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
+              <div class="btn-group" style="display: inline-block;width: 82%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                       {{cart_object['standard_measurement_attributes']['Waist']['value']==''||cart_object['standard_measurement_attributes']['Waist']['value']==undefined?'Waist':cart_object['standard_measurement_attributes']['Waist']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1589,9 +1631,12 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Waist'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Waist', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
                   </ul>
               </div>
+              <div style="display: inline-block;width: 15%" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
+                <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="waist_help_popover.template_url" popover-placement="bottom-right" popover-trigger="mouseenter"></i></span>
+              </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
-              <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown uib-keyboard-nav>
+              <div class="btn-group" style="display: inline-block;width: 82%" style="width: 100%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
                     {{cart_object['standard_measurement_attributes']['Inseam']['value']==''||cart_object['standard_measurement_attributes']['Inseam']['value']==undefined?'Inseam':cart_object['standard_measurement_attributes']['Inseam']['value']}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
@@ -1599,6 +1644,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                   <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
                     <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Inseam'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Inseam', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
                   </ul>
+              </div>
+              <div style="display: inline-block;width: 15%" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
+                <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="inseam_help_popover.template_url" popover-placement="bottom-right" popover-trigger="mouseenter"></i></span>
               </div>
             </div>
 
@@ -1685,26 +1733,26 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class = "row" style="margin: 0 0 1% 0;text-align: center">
           <span>
             <input style="position: relative;top: 3px"type="checkbox" ng-model="allow_edit">
-            <span>&nbsp;Edit Values</span>
+            <span>&nbsp;View & Edit calculated measurements</span>
           </span>
         </div>
-        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+        <div uib-collapse="!allow_edit" class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
           <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 24.5%;display: inline-block;vertical-align: top">
             <div class="row" style="margin: 0">
-              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 500;font-size:92%;text-align: right">
                 {{cloth_measurement_attribute}}
               </div>
-              <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
+              <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 98%">
                 <div style="display: inline-block;width: 85%">
                   <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])">
-                    <input type="text" ng-disabled="!allow_edit"
+                    <input type="text" ng-disabled="!allow_edit" style="width: 100%;padding: 3% 6%"
                       class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute, cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'])"
                       ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']=standard_measurement_attributes[cloth_measurement_attribute].value[measurement_unit.selected]"
-                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']" style="width: 100%">
+                      placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value']" >
                   </div>
                   <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute][measurement_unit.selected])" >
                     <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
-                        <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                        <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;padding: 3% 6%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
                             {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute]['value'] : 'Select'}}
                             <span style="margin-top: 5%" class="caret pull-right"></span>
                         </button>
@@ -1719,22 +1767,22 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 </div>
               </div>
             </div>
-            <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
+            <div style="margin: 0% 0" ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
               <div class="row" style="margin: 0">
                 <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
-                  {{cloth_measurement_attribute_derivative}}
+                  {{cloth_measurement_attribute_derivative.split('(')[1].split(')')[0]}}
                 </div>
                 <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
                   <div style="display: inline-block;width: 85%">
                     <div ng-if="!checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])">
-                      <input type="text" ng-disabled="!allow_edit"
+                      <input type="text" ng-disabled="!allow_edit" style="width: 90%;margin-left: 10%;border-radius:0;font-size:92%"
                         class="form-control luxire-input-field" ng-change="change_dependents('standard_measurement_attributes', cloth_measurement_attribute_derivative, cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'])"
                         ng-init="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']=standard_measurement_attributes[cloth_measurement_attribute_derivative].value[measurement_unit.selected]"
-                        placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']" style="width: 100%">
+                        placeholder="{{standard_measurement.name}}" ng-model="cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']" >
                     </div>
                     <div ng-if="checkIsArray(standard_measurement_attributes[cloth_measurement_attribute_derivative][measurement_unit.selected])" >
                       <div class="btn-group" style="width: 100%" uib-dropdown uib-keyboard-nav>
-                          <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 100%;border-radius: 0px" type="button" class="btn btn-default" uib-dropdown-toggle>
+                          <button ng-disabled="!allow_edit" id="simple-btn-keyboard-nav" style="width: 90%;margin-left: 10%;padding: 3% 6%;border-radius: 0;font-size:92%" type="button" class="btn btn-default" uib-dropdown-toggle>
                               {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] ? cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value'] : 'Select'}}
                               <span style="margin-top: 5%" class="caret pull-right"></span>
                           </button>
@@ -1793,7 +1841,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
           <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 24.5%;display: inline-block;vertical-align: top">
             <div class="row" style="margin: 0">
-              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 500;padding: 0 0 0 3%;font-size:92%;text-align: center">
                 {{cloth_measurement_attribute}}
               </div>
               <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
@@ -1824,7 +1872,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
             <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
               <div class="row" style="margin: 0">
                 <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
-                  {{cloth_measurement_attribute_derivative}}
+                  {{cloth_measurement_attribute_derivative.split('(')[1].split(')')[0]}}
                 </div>
                 <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
                   <div style="display: inline-block;width: 85%">
@@ -1897,7 +1945,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
           <div ng-repeat="body_measurement in product['body_measurement_attributes']" style="margin-top: 1%;width: 24.5%;display: inline-block">
               <div class="row" style="margin: 0">
-                <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 0 0 3%;font-size:92%">
+                <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 500;padding: 0 0 0 3%;font-size:92%;text-align: center">
                   {{body_measurement.name}}
                 </div>
                 <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
@@ -1912,8 +1960,8 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                       </select>
                     </div>
                   </div>
-                  <div style="display: inline-block">
-                    <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover="{{body_measurement.help}}" popover-trigger="mouseenter"></i></span>
+                  <div style="display: inline-block" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
+                    <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="body_help_popover.template_url" popover-placement="bottom-right" popover-trigger="mouseenter"></i></span>
                   </div>
                 </div>
               </div>
@@ -1924,13 +1972,13 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         <div class = "row" style="margin: 0 0 1% 0;text-align: center">
           <span>
             <input style="position: relative;top: 3px"type="checkbox" ng-model="allow_edit">
-            <span>&nbsp;Edit Values</span>
+            <span>&nbsp;View & Edit calculated measurements</span>
           </span>
         </div>
-        <div class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
+        <div uib-collapse="!allow_edit" class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
           <div ng-repeat="(cloth_measurement_attribute, cloth_measurement_attribute_derivatives)  in cloth_measurement_attributes" style="margin-top: 1%;width: 24.5%;display: inline-block;vertical-align: top">
             <div class="row" style="margin: 0">
-              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 600;padding: 0 0 0 3%;font-size:92%">
+              <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 500;padding: 0 0 0 3%;font-size:92%;text-align: center">
                 {{cloth_measurement_attribute}}
               </div>
               <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
@@ -1954,14 +2002,14 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                   </div>
                 </div>
                 <div style="display: inline-block" class="attribute-help-popover" ng-class="{'third-child': ($index+1)%3 == 0, 'second-child': ($index+1+1)%3 == 0, 'first-child': ($index+2+1)%3 == 0}">
-                  <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="help_popover.template_url" popover-placement="top-right" popover-trigger="mouseenter"></i></span>
+                  <span><i class="fa fa-question-circle" style="font-size:160%; color: #D3AFCE; cursor: pointer" uib-popover-template="help_popover.template_url" popover-placement="top-right" popover-trigger="mouseover"></i></span>
                 </div>
               </div>
             </div>
             <div ng-repeat="cloth_measurement_attribute_derivative  in cloth_measurement_attribute_derivatives" >
               <div class="row" style="margin: 0">
                 <div class="col col-xs-5 col-sm-5 col-md-5 col-lg-5" style="font-weight: 300;padding: 0 3%;font-size:92%;text-align: right">
-                  {{cloth_measurement_attribute_derivative}}
+                  {{cloth_measurement_attribute_derivative.split('(')[1].split(')')[0]}}
                 </div>
                 <div class="col col-xs-7 col-sm-7 col-md-7 col-lg-7" style="padding: 0 3% 0 0;font-size: 92%">
                   <div style="display: inline-block;width: 85%">
@@ -1995,32 +2043,80 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
         </div>
       </div>
     </div>
-    <div ng-show="active_measurement_type_id===4" class="measurement-option-4" style="text-align: center">
-      Instruction to send sample
+    <div ng-show="active_measurement_type_id===4" class="measurement-option-4" style="padding: 1% 4.5%;background: #EEEEEE">
+      <p>We will be glad to exactly replicate a shirt or pant you would send, with or without any modifications you may like. We then save the measurements and make a paper pattern for your future orders. Send us the shirt/pant at the the following address. Do make sure the item is laundered before sending across. Include your order number with the garment.</p>
+      <div style="text-align: center">
+        <h4>**Mark the packet as "SAMPLE CLOTHING"**</h4>
+        <h4>**Please DO NOT include a printout of your order with the sample. Only include your order number on a piece of paper. **</h4>
+
+      </div>
+
+      <div style="width: 100%;text-align: left">
+        <h5>Attn: Srinivas Reddy</h5>
+        <h5>Avacci Telagio Pvt Ltd</h5>
+        <h5>1st Floor, Balu Mansion, No. 408, </h5>
+        <h5>3rd Cross, Singayana Palya,</h5>
+        <h5>Lane next to Phoenix Mall,</h5>
+        <h5>Mahadevpura, Bangalore 560048 INDIA</h5>
+      </div>
+
+      <p>
+        You can use a shipper of your choice. We recommend this service as we have subsidized the cost of our Fedex/DHL return shipping, resulting in a faster and reliable service. <a href="http://custom.luxire.com/products/prepay-for-shipping-an-item-to-us">http://custom.luxire.com/products/prepay-for-shipping-an-item-to-us</a>
+      </p>
+
+      <p>
+        We ship back the measurement item along with the ordered clothes. Usually takes 2 -3 weeks after the measurement item is received.
+      </p>
+
+      <h6>
+        Packaging:
+      </h6>
+
+      <p>
+        Always use a poly mailer / poly bubble mailer for the clothes. Do not use cardboard or other boxes.
+      </p>
+
+      <p>
+        Boxes add weight and also add to the volumetric weight of the packet. This increases the cost of shipping.
+      </p>
+
     </div>
 
-    <div class="fit-next-step">
-      <div style="padding: 0.5%;border:1px solid #E1C9DD;width: 25%;margin-left: 36%">
-        <button type="button" ng-click="next_step()" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" >
-          Next
-        </button>
-      </div>
-    </div>
+    <!--//div class="fit-next-step">
+      //<div style="padding: 0.5%;border:1px solid #E1C9DD;width: 25%;margin-left: 36%">
+        //<button type="button" ng-click="next_step()" class="btn btn-default" style="width:100%;font-size:170%;font-weight: 100;background-color: #7F0E6E;border-radius:0px;color:white;" >
+          //Next
+        //</button>
+      //</div>
+    //</div-->
   </div>
 </script>
 <script type="text/ng-template" id="select_a_style.html">
   <div class="row" style="margin: 0;background: #FDFDFD;font-family: Roboto">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;">
-      <div style="width: 100%;text-align: right">
-        <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
-      </div>
-      <div class="style-option-holder" style="">
-        <div ng-class="{'active-style-option': active_style_option==='system_preset'}"  ng-click="change_active_style_option('system_preset')" class="style-option" style="border-right: solid 1px #E9E9E9">
-          Preset Styles
+      <!--//div style="width: 100%;text-align: right">
+        //<i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
+      //</div-->
+      <div style="width: 100%;border-bottom: solid 2px #E9E9E9;margin-bottom: 1%">
+        <div style="width: 33%;display: inline-block">
         </div>
-        <div ng-class="{'active-style-option': active_style_option==='bespoke'}"  ng-click="change_active_style_option('bespoke')" class="style-option">
-          Make New Styles
+        <div class="style-option-holder" style="width: 33%;display: inline-block">
+          <div ng-class="{'active-style-option': active_style_option==='system_preset'}"  ng-click="change_active_style_option('system_preset')" class="style-option" style="border-right: solid 1px #E9E9E9;padding-right: 2%">
+            Preset Styles
+          </div>
+          <div ng-class="{'active-style-option': active_style_option==='bespoke'}"  ng-click="change_active_style_option('bespoke')" class="style-option">
+            {{selected_style.name ? 'Edit Style' : 'Make New Style'}}
+          </div>
         </div>
+        <div style="width: 33%;display: inline-block;text-align: right;padding-right: 2%;color: #8a247c">
+          <div class="style-modal-nav-option" ng-click="next_step()" style="border-right: solid 1px #E9E9E9;padding-right: 2%">
+            Save & Close
+          </div>
+          <div class="style-modal-nav-option" ng-click="cancel()">
+            Close
+          </div>
+        </div>
+
       </div>
       <div ng-show="active_style_option === 'system_preset'" class="preset-styles-section">
         <div class="style-nav">
@@ -2032,7 +2128,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
               <div class="slick-bespoke-style-slide" ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%"
                 ng-mouseenter="activate_style_details(luxire_style)" ng-click="select_style($index, luxire_style)">
                 <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="text-align: center;position: relative" >
-                  <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 90%">
+                  <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 85%;margin: 1%">
                   <i ng-if="selected_style.name==luxire_style.name" class="fa fa-check-circle" style="font-size:160%;color: green;position: absolute;top: 5%;right: 5%"></i>
                 </div>
                 <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name}}</div>
@@ -2059,7 +2155,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
               <div class="style-nav">
                 <div uib-carousel>
                   <div uib-slide ng-repeat="style_image in aggregated_style_images">
-                    <img src="{{getImage(style_image.large)}}" style="margin:auto;">
+                    <img src="{{getImage(style_image.large)}}" style="margin:auto">
                   </div>
                 </div>
               </div>
@@ -2069,19 +2165,22 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                 {{active_detail_style.name}}
               </div>
               <div style="text-align: center;margin-top: 3%;">
-                <div ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
+                <div ng-class="{'shrink-style-details': !more_details_on_style}" ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
+              </div>
+              <div ng-show="!more_details_on_style" style="text-align: left">
+                <p style="color: #8a247c;cursor: pointer;margin-top: 1%" ng-click="more_details_on_style=true">+more details</p>
               </div>
             </div>
           </div>
         </div>
-        <div style="text-align: center;width: 100%;padding: 1%" >
-            <button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit Style</button>
-            <button ng-if="selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;" ng-click="next_step()">Select {{selected_style.name}}</button>
-        </div>
+        <!--//div style="text-align: center;width: 100%;padding: 1%" >
+            //<button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit Style</button>
+            //<button ng-if="selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;" ng-click="next_step()">Select {{selected_style.name}}</button>
+        //</div-->
       </div>
       <div ng-show="active_style_option === 'bespoke'" class="bespoke-styles-section">
         <div class="row container-fluid" style="width: 96.5%;height:100%;margin: 0 1% 2% 1%">
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="position: fixed; padding-left:2.5%;z-index: 99;">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="position: fixed; padding: 1% 2%;z-index: 99;margin-left: 1.5%;background: #F2F2F2">
                 <div class="row" style="margin-top:1%;text-align: center">
                     <img ng-src="{{getImage(product.master.images[0].mini_url)}}" alt="{{product.master.images[0].alt}}" style="max-width: 100%"/>
                 </div>
@@ -2115,7 +2214,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 
 
                 </div>
-                <div class="row detail-summary" style="margin-top:4%; border-bottom: 1px solid #DDDCDA;padding-bottom:10%;">
+                <div class="row detail-summary" style="margin-top:4%; padding-bottom:10%;">
                     <span>Selected Options</span>
                     <div ng-repeat="attribute in product['customization_attributes']" style="width: 100%; font-weight: 300;font-size: 80%">
                       <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
@@ -2152,11 +2251,11 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                     </div>
 
                 </div>
-                <div class="row">
-                  <div class=""  style="padding: 2%;margin-top: 4%;border:1px solid #DDDCDA;bottom:3%;">
-                    <button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
-                  </div>
-                </div>
+                <!--//div class="row">
+                  //<div class=""  style="padding: 2%;margin-top: 4%;border:1px solid #DDDCDA;bottom:3%;">
+                    //<button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
+                  //</div>
+                //</div-->
 
 
 
@@ -2166,7 +2265,7 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:2.5%">
             </div>
-            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="padding-left: 5.5%">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="padding-left: 5%">
                 <div class="row container-fluid">
                     <!--<div class="row" style="margin-left: 0px; margin-right: 0px;text-align: left; font-size: 140%; font-weight: 300">
                       Customization
@@ -2174,9 +2273,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                   <div class="row" style="margin-left: 0px; margin-right: 0px;font-weight: 300">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border: 1px solid #DDDCDA;width: 100%">
                         <div id="option-design-details" class="row row-eq-height">
-                          <div id="option-part" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border-right: 1px solid #DDDCDA;">
+                          <div id="option-part" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border-right: 1px solid #DDDCDA;background: #d9d9d9">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:4%;">
-                              <div class="row" style="margin-top:3%;">
+                              <div class="row" style="margin-top:3%;text-align: center">
                                 <div><span style="font-size:120%;margin-top:3%;">Options</span></div>
                               </div>
                               <div class="row" style="text-align: center">
@@ -2184,9 +2283,9 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                               </div>
                               <div class="row container-fluid" style="">
                                 <div class="bespoke-attributes-slider">
-                                  <div class="bespoke-attributes-slide" ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
+                                  <div class="bespoke-attributes-slide"  ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
                                     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
-                                      <div class="luxireStyle" style="width: 100%;background-color: #FDFDFD;text-align: center">
+                                      <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': bespoke_attribute.name==selected_bespoke_attribute.name}" style="width: 100%;background-color: #FDFDFD;text-align: center">
                                         <img ng-src="{{getImage(bespoke_attribute.image)}}||assets/images/customer/grey_circle.png"
                                         class="img-circle"
                                         ng-class="{'active-bespoke': bespoke_attribute.name==selected_bespoke_attribute.name}"
@@ -2204,17 +2303,17 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                               </div>
                             </div>
                           </div>
-                          <div id="design-style" class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="">
-                            <div class="row container-fluid" style="margin-top:2%;padding-left:2%;">
+                          <div id="design-style" class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="background: #e6e6e6;position: relative">
+                            <div class="row container-fluid" style="margin-top:2%;padding-left:2%;text-align: center">
                                 <div><span style="font-size:120%;padding-left:3%;">Choose {{selected_bespoke_attribute.name}} Style</span></div>
                             </div>
-                            <div class="row container-fluid" >
+                            <div class="row container-fluid"  style="margin-top: 3%">
                               <div class="bespoke-style-top-align" style="display: block">
                                 <div class="bespoke-style-top-align" ng-if="selected_bespoke_attribute.category=='c'"
                                   ng-click="activate_bespoke_style('customize', style_object, $index, style_name)"
                                   ng-repeat="(style_name, style_object) in selected_bespoke_attribute.value"
                                     style="display:inline-block;margin-left: 4%;cursor: pointer; width: 20%;margin-top: 2%;height: 12%;text-align: center" >
-                                    <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5% 0%;display: block" >
+                                    <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': style_name.toLowerCase()===cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()}" style="background-color: #FDFDFD;padding: 5% 0%;display: block" >
                                       <img class="img-circle" ng-src="{{getImage(style_object.image)||'assets/images/customer/grey_circle.png'}}" alt="getImage(style_object.image)"
                                         ng-class="{'active-bespoke': style_name.toLowerCase()===cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()}"
                                         style="border: solid 2px #DADADA" onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
@@ -2257,13 +2356,16 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
                                 </div>
                               </div>
                             </div>
+                            <div style="position: absolute;top: 40%; left: 0">
+                              <div class="arrow-right"></div>
+                            </div>
                           </div>
-                          <div id="details" class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-left: 1px solid #DDDCDA;padding: 0px;background: #F4F5F5">
-                            <div class="row" style="margin-left: 0px; margin-right: 0px;font-size:110%;font-weight: 300;padding: 8% 4% 0% 4%" >
+                          <div id="details" class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-left: 1px solid #DDDCDA;padding: 0px;background: #f2f2f2">
+                            <div class="row" style="margin-left: 0px; margin-right: 0px;font-size:120%;font-weight: 300;padding: 4% 4% 0% 4%;text-align: center" >
                               Details
                             </div>
                             <div ng-show="selected_bespoke_attribute.category=='c'&&cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != undefined && cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != ''" class="row" style="height: 100%;margin-left: 0px; margin-right: 0px" >
-                              <div style="border-bottom: solid 1px #E0E0E0; padding: 3% 5%">
+                              <div style="border-bottom: solid 1px #E0E0E0; padding: 10% 5%">
                                 <p style="margin-bottom: 0px; text-decoration: underline;">{{cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']}}</p>
                                 <p style="margin-bottom: 0px" ng-repeat="help in selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help'].split(';')">{{help}}</p>
                                 <!--// {{selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']}}
@@ -2931,6 +3033,31 @@ input.luxire-input-field:focus, select.luxire-select-field:focus,input.luxire-in
 <script type="text/ng-template" id="attribute_help_template.html">
   <div>
     <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all[cloth_measurement_attribute]['help'])}}">
+  </div>
+</script>
+<script type="text/ng-template" id="collar_help_template.html">
+  <div>
+    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Collar Size']['help'])}}"/>
+  </div>
+</script>
+<script type="text/ng-template" id="sleeve_help_template.html">
+  <div>
+    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Sleeve Length']['help'])}}"/>
+  </div>
+</script>
+<script type="text/ng-template" id="waist_help_template.html">
+  <div>
+    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Waist']['help'])}}"/>
+  </div>
+</script>
+<script type="text/ng-template" id="inseam_help_template.html">
+  <div>
+    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Inseam']['help'])}}"/>
+  </div>
+</script>
+<script type="text/ng-template" id="body_attribute_help_template.html">
+  <div>
+    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(body_measurement_attributes_all[body_measurement.name]['help'])}}">
   </div>
 </script>
 <div  ng-class="{'offset-top-loading': loading_product === true}"  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">

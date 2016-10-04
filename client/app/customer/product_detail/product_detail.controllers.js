@@ -799,8 +799,10 @@ angular.module('luxire')
           return $scope.body_measurement_attributes;
         },
         standard_measurement_attributes_all: function(){
-          // return $scope.selected_measurement_unit === "in" ? $scope.standard_measurement_attributes : $scope.standard_measurement_attributes_in_cm;
            return $scope.standard_measurement_attributes_all;
+        },
+        body_measurement_attributes_all: function(){
+           return $scope.body_measurement_attributes_all;
         },
         selected_measurement_id: function(){
           return $scope.selected_measurement_id;
@@ -883,11 +885,12 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
 
   console.log('standard attr', standard_measurement_attributes_all);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
   $scope.standard_measurement_attributes_all = standard_measurement_attributes_all;
+  $scope.body_measurement_attributes_all = body_measurement_attributes_all;
   $scope.product = product;
   $scope.measurement_unit = {
     selected: selected_measurement_unit
@@ -897,6 +900,24 @@ angular.module('luxire')
   $scope.help_popover = {
     template_url: "attribute_help_template.html"
   };
+
+  $scope.body_help_popover = {
+    template_url: "body_attribute_help_template.html"
+  };
+
+  $scope.collar_help_popover = {
+    template_url: "collar_help_template.html"
+  };
+  $scope.sleeve_help_popover = {
+    template_url: "sleeve_help_template.html"
+  };
+  $scope.waist_help_popover = {
+    template_url: "waist_help_template.html"
+  };
+  $scope.inseam_help_popover = {
+    template_url: "inseam_help_template.html"
+  };
+
 
   var standard_size_chart = {
     "shirts": {
@@ -1737,6 +1758,8 @@ angular.module('luxire')
     $('#prev-attr').click();
   };
 
+
+
   /*Select Style functionality */
   console.log(luxire_styles);
   $scope.luxire_styles = luxire_styles;
@@ -1828,11 +1851,12 @@ angular.module('luxire')
     return $sce.trustAsHtml(description);
   };
 
-
+  $scope.more_details_on_style = false;
 
 
   $scope.style_detail_images = [];
   $scope.activate_style_details = function(style){
+    $scope.more_details_on_style = false;
     if(!$scope.selected_style.name){
       $scope.style_detail_images = [];
       $scope.hide_active_style_details = false;
@@ -1840,6 +1864,15 @@ angular.module('luxire')
       $scope.style_detail_images = $scope.active_detail_style.sketch_images;
       $scope.set_aggregated_style_images(style);
     }
+  }
+
+  if(active_style && active_style.name){
+    $scope.more_details_on_style = false;
+    $scope.style_detail_images = [];
+    $scope.hide_active_style_details = false;
+    $scope.active_detail_style = active_style;
+    $scope.style_detail_images = $scope.active_detail_style.sketch_images;
+    $scope.set_aggregated_style_images(active_style);
   }
 
   $(document).ready(function(){
@@ -1882,7 +1915,8 @@ angular.module('luxire')
           infinite: false,
           slidesToShow: 4,
           slidesToScroll: 1,
-          vertical: true
+          vertical: true,
+          adaptiveHeight: true
         });
         $('#prev-attr').addClass('slick-arrow');
         $('#next-attr').addClass('slick-arrow');
@@ -1973,8 +2007,12 @@ angular.module('luxire')
   $scope.product = product;
   $scope.cart_object = cart_object;
   $scope.product['bespoke_attributes'] = product['customization_attributes'].concat(product['personalization_attributes']);
-  $scope.product['bespoke_attributes'] = $filter('orderBy')($scope.product['bespoke_attributes'], 'id');
-  $scope.product['customization_attributes'] = $filter('orderBy')($scope.product['customization_attributes'], 'id');
+  // $scope.product['bespoke_attributes'] = $filter('orderBy')($scope.product['bespoke_attributes'], 'id');
+  // $scope.product['customization_attributes'] = $filter('orderBy')($scope.product['customization_attributes'], 'id');
+  $scope.product_customization_attributes = {};
+  angular.forEach($scope.product['customization_attributes'],function(val,key){
+    $scope.product_customization_attributes[val.name] = val.value;
+  })
   $scope.active_style = active_style;
   $scope.getImage = function(url){
     return ImageHandler.url(url);
