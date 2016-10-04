@@ -31,6 +31,27 @@ angular.module('luxire', ['ui.router','ngRoute',
 	$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
 			console.log('tostate', toState);
 			console.log('toStateParams', toStateParams);
+			if(toState.name.indexOf('admin') !== -1){
+				if(window.localStorage.luxire_token || window.sessionStorage.luxire_token){
+					var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
+					var roles = JSON.parse(atob(token.split('.')[1])).spree_roles;
+					var is_admin = false;
+					for(var i=0;i<roles.length;i++){
+						if(roles[i].name.toLowerCase() == "admin"){
+							is_admin = true;
+						}
+					}
+					if(!is_admin){
+						event.preventDefault();
+						$rootScope.alerts.push({type: 'warning', message: 'Unauthorised'});
+					}
+				}
+				else{
+					event.preventDefault();
+					$state.go('login');
+				}
+			}
+
 			if(toState.name == 'test'){
 				window.sessionStorage.luxire_token = toStateParams.id;
 				console.log('state.go to admin');
