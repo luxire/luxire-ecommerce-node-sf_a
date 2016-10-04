@@ -1,6 +1,7 @@
 angular.module('luxire')
-.controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location, CustomerOrders, $timeout){
+.controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location, CustomerOrders, $timeout, $sce){
 
+  $scope.sce = $sce;
   $scope.loading = true;
   var default_collection = {
     taxonomy_name: CustomerConstants.default.taxonomy_name,
@@ -9,6 +10,7 @@ angular.module('luxire')
     taxon_id: CustomerConstants.default.taxon_id,
   };
   $scope.product_taxonomies = [];
+
 
   $timeout(function(){
     $('.carousel').carousel();
@@ -141,7 +143,7 @@ angular.module('luxire')
   $scope.click_baits = [
     {
       id: 1,
-      y_pos: '44%',
+      y_pos: '48%',
       x_pos: '23.5%',
       name: 'Shirt',
       text_line: 'This is a sample text animation for Shirt Style'
@@ -160,14 +162,13 @@ angular.module('luxire')
       name: 'Jacket',
       text_line: 'This is a sample text animation for Jacket Style'
     },
-    // ,
-    // {
-    //   id: 4,
-    //   y_pos: '37.5%',
-    //   x_pos: '49.5%',
-    //   name: 'Tie',
-    //   text_line: 'This is a sample text animation for Tie'
-    // },
+    {
+      id: 4,
+      y_pos: '35.5%',
+      x_pos: '43%',
+      name: 'Tie',
+      text_line: 'This is a sample text animation for Tie'
+    },
     {
       id: 5,
       y_pos: '73%',
@@ -188,15 +189,14 @@ angular.module('luxire')
       x_pos: '40%',
       name: 'Outerwear',
       text_line: 'This is a sample text animation for Trousser Fit'
+    },
+    {
+      id: 8,
+      y_pos: '43%',
+      x_pos: '26.5%',
+      name: 'Pocket Square',
+      text_line: 'This is a sample text animation for Pocket Square'
     }
-    // ,
-    // {
-    //   id: 8,
-    //   y_pos: '40%',
-    //   x_pos: '45.5%',
-    //   name: 'Pocket Square',
-    //   text_line: 'This is a sample text animation for Pocket Square'
-    // }
 
 
   ]
@@ -312,10 +312,34 @@ angular.module('luxire')
     },
     {
       image: 'https://parisiangentleman.fr/wp-content/uploads/2015/02/paulcollarstanding.jpg',
-      review: '',
+      review: 'Hi Paul, I really like the collar on the Luxire shirt you’re wearing on your most recent posts.  I’m a Luxire customer as well. I’d appreciate it if you can provide me with some details on the collar. What collar is it?<br>Thanks in advance.<br>~periodicreview<br>Dear periodicreview,This is probably the most reoccurring question that I\’ve had for months !To get directly to the point, I only use two types of collars with the Luxire brand:1. An English spread with 3.5” collar wings:2. A button-down with 3.5” collar wings based on the “Barba shirt” button-down collar. Sometimes, I like a nice S-shape roll on my button-down with a slightly longer collar wings. Other times, I prefer a perfectly straight button down collar',
       name: 'Anonymous',
       source: 'Parisian Gentleman',
-      sourceRef: 'https://parisiangentleman.co.uk/2015/02/23/q-a-with-pg-editors-what-type-of-shirt-collar-should-i-buy/'
+      sourceRef: 'https://parisiangentleman.co.uk/2015/02/23/q-a-with-pg-editors-what-type-of-shirt-collar-should-i-buy/',
+      font_size: '88'
+    },
+    {
+      image: 'http://blueloafers.com/wp-content/uploads/2015/01/IMG_1652-1024x668.jpg',
+      review: 'Every time I asked for or specified details Luxire followed them flawlessly and delivered a product which I was very happy with. This time was no exception. They did a great job and I already ordered the exact same copy of this shirt but in darker shade of blue.',
+      name: 'Anonymous',
+      source: 'Blue Loafers',
+      sourceRef: 'http://blueloafers.com/quality-products/mtm-denim-shirt/'
+    },
+    {
+      image: 'http://cdn.styleforum.net/c/c9/500x1000px-LL-c9bc6145_interior-torso-2.jpeg',
+      review: 'Holland & Sherry Tweed, fully lined. This is the first I\'ve had made from wool. Ashish, to his credit, tried to give me a less expensive option by showing me a bunch of lovely Campore plaids. And so I had them make a pair of magnificent pants from one of the Campore light tweeds. They\'re obviously beautiful and I\'d recommend that fabric line to anyone. But ultimately I decided the Holland & Sherry I chose was something special, with a unique richness of colour and complexity of pattern, and life is short so I might as well go for it.',
+      name: 'Anonymous',
+      source: 'Style Forum',
+      sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/22200_100#post_8390415',
+      font_size: '100'
+    },
+    {
+      image: 'http://d2ihp3fq52ho68.cloudfront.net/YTo2OntzOjI6ImlkIjtpOjEyMTk2Nzg7czoxOiJ3IjtpOjQzODtzOjE6ImgiO2k6MzIwMDtzOjE6ImMiO2k6MDtzOjE6InMiO2k6MDtzOjE6ImsiO3M6NDA6IjcyNTliZmFmMWZjMTc4MWI0MTMzZmUzNzQzMzQ0MWFlOTVjMzg5ODciO30=',
+      review: 'Det kanske mest intressanta bortsett från priserna är att man kan välja mellan otroligt mycket intressanta detaljer och val på byxorna. Man kan göra närmare 5 olika sorters plisséringar, mängder med olika knäppningar, detaljer som uppknäppning av slag m.m som även exklusiva tillverkare inte alltid erbjuder. Man kan exempelvis beställa olika längd på knäsiden eller om man vill undvika det helt. Vårt råd är att om man vill testa tjänsten gör man så med någon av de lite billigare tygkvaliteterna i exempelvis bomull eller linne först. Även om man kan korrigera resultatet hos en ändringsskräddare är det klart bättre att vänta till andra eller t om tredje byxan innan man beställer i exempelvis flanell från Fox eller Dugdale som ligger något högre i pris. ',
+      name: 'Anonymous',
+      source: 'manolo.se',
+      sourceRef: 'http://www.manolo.se/artiklar/artikel/20160107/basta-budgetkopen-luxire',
+      font_size: '85'
     }
   ];
 

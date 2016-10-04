@@ -449,10 +449,10 @@
   background: linear-gradient(-90deg, #F1F1F1, #F6F7F6); /* Standard syntax */
 }
 .row.customer-review-section{
-  width: 35%;
+  width: 28%;
   position: absolute;
-  top: 25%;
-  left: 64%
+  top: 12%;
+  left: 68%
 }
 .customer-speak-text{
   margin-top: 8%;
@@ -474,7 +474,7 @@
   margin-top: 8%;
   font-family: Roboto;
   color: #000000;
-  font-size: 150%; /* Approximation due to font substitution */
+  font-size: 115%; /* Approximation due to font substitution */
   font-weight: 300;
   text-align: left;
 }

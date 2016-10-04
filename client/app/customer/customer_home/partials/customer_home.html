@@ -177,27 +177,26 @@
   </div>
   <div class="customer-reviews">
     <div class="customer-review-image">
-      <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width:100%" alt="" />
+      <img src="{{customer_reviews[active_customer_review_index].image}}" style="max-width:100%;height: 80vh;width: auto" alt="" />
     </div>
     <div class="row customer-review-section" style="">
-      <div class="col col-sm-11 col-md-11 col-lg-11 col-xs-11" style="padding-left: 25%">
+      <div class="col col-sm-11 col-md-11 col-lg-11 col-xs-11" style="padding-left: 35%">
         <!-- <div class="customer-speak-text">
           Customers Speak
         </div> -->
-        <div class="customer-review-quote">
-          {{customer_reviews[active_customer_review_index].review}}
+        <div class="customer-review-quote" ng-bind-html="sce.trustAsHtml(customer_reviews[active_customer_review_index].review)" style="font-size: {{customer_reviews[active_customer_review_index].font_size ? customer_reviews[active_customer_review_index].font_size+'% !important' : ''}}">
         </div>
         <div class="customer-name">
           {{customer_reviews[active_customer_review_index].name}}
         </div>
         <div class="customer-review-source">
-          <a href="{{customer_reviews[active_customer_review_index].sourceRef}}" target="_blank">{{customer_reviews[active_customer_review_index].source}}</a>
+          <a style="color: #8A247C" href="{{customer_reviews[active_customer_review_index].sourceRef}}" target="_blank">{{customer_reviews[active_customer_review_index].source}}</a>
         </div>
       </div>
       <!-- <div class="col col-sm-2 col-md-2 col-lg-2 col-xs-2" style="border-right: solid 1px grey; height: 50vh">
 
       </div> -->
-      <div class="review-indexes col col-sm-1 col-md-1 col-lg-1 col-xs-1" style="">
+      <div class="review-indexes col col-sm-1 col-md-1 col-lg-1 col-xs-1" >
         <div class="" ng-click="change_active_review_index(review_index)" ng-class="{'active-review-index': review_index==active_customer_review_index}" ng-repeat="review_index in review_indexes">
           <p style="margin-bottom: 5%">{{review_index+1}}</p>
         </div>
