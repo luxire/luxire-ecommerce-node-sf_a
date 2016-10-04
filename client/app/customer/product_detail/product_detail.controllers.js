@@ -346,7 +346,7 @@ angular.module('luxire')
     console.log('has valid measurements', has_valid_measurements());
     if(has_valid_measurements()){
       if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
-        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
+        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false)
         .then(function(data){
           CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
             $rootScope.luxire_cart = data.data;
@@ -365,7 +365,7 @@ angular.module('luxire')
         });
       }
       else{
-        CustomerOrders.create_order($scope.cart_object, variant, $scope.measurement_sample)
+        CustomerOrders.create_order($scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false)
         .then(function(data){
           $rootScope.luxire_cart = data.data;
           $scope.loading_cart = false;
