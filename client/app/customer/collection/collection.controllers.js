@@ -244,6 +244,7 @@ angular.module('luxire')
   });
 
   /*Multi currency support*/
+  console.log('in app currency', CustomerUtils.get_local_currency_in_app());
   $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
   $scope.$on('currency_change', function(event, data){
     console.log('currency changed', data)
