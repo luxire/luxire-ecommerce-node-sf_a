@@ -245,7 +245,9 @@ angular.module('luxire')
     "SEK": 0.00,
     "DKK": 0.00,
     "NOK": 0.00,
-    "CHF": 0.00
+    "CHF": 0.00,
+    "GBP": 0.00,
+    "CAD": 0.00
   };
 
   $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
@@ -2171,6 +2173,12 @@ angular.module('luxire')
     else if(currency == "NOK"){
       return $sce.trustAsHtml(val+' kr');
     }
+    else if(currency == "GBP"){
+      return $sce.trustAsHtml('&pound;'+val);
+    }
+    else if(currency == "CAD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
   };
 
   var personalisation_cost_init = {
@@ -2182,13 +2190,15 @@ angular.module('luxire')
     "SEK": 0.00,
     "DKK": 0.00,
     "NOK": 0.00,
-    "CHF": 0.00
+    "CHF": 0.00,
+    "CAD": 0.00,
+    "GBP": 0.00
   };
 
   $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
   var product_prices = {};
   angular.forEach($scope.product.master.prices, function(value, currency){
-    if((currency == "USD") || (currency == "SGD") || (currency == "AUD")){
+    if((currency == "USD") || (currency == "SGD") || (currency == "AUD") || (currency == "CAD")){
       product_prices[currency] = parseFloat(value.split(",").join("").split("$")[1]);
     }
     else if((currency == "SEK") || (currency == "NOK") || (currency == "DKK")){
@@ -2199,6 +2209,9 @@ angular.module('luxire')
     }
     else if(currency == "EUR"){
       product_prices[currency] = parseFloat(value.split(",").join("").split("\u20ac")[1]);
+    }
+    else if(currency == "GBP"){
+      product_prices[currency] = parseFloat(value.split(",").join("").split("\u20a3")[1]);
     }
     else if(currency == "INR"){
       product_prices[currency] = parseFloat(value.split(",").join("").split("\u20b9")[1]);
