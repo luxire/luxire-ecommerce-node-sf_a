@@ -166,9 +166,10 @@ exports.update = function(req, res){
   })
 };
 
-var token = "";
+
 /*Update order currency */
 exports.update_order_currency = function(req, res){
+  var token = "";
   console.log('params', req.params);
   console.log('query', req.query);
   console.log('body', req.body);
@@ -189,6 +190,31 @@ exports.update_order_currency = function(req, res){
       res.status(500).send(error.syscall);
     }
     else{
+      res.status(response.statusCode).send(body);
+    };
+  })
+};
+
+/*Update order currency */
+exports.update_order_measurement_unit = function(req, res){
+  console.log('updating meaurement unit', req.body);
+  console.log('url', constants.spree.host+'/api/luxire_line_items/update');
+  http.put({
+    uri: constants.spree.host+'/api/luxire_line_items/update',
+    headers:{
+      'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    },
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    console.log(body);
+    if(error){
+      console.log('error', error);
+      res.status(500).send(error.syscall);
+    }
+    else{
+      console.log('data', body);
       res.status(response.statusCode).send(body);
     };
   })

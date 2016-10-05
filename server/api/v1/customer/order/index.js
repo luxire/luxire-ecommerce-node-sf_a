@@ -15,6 +15,7 @@ router.put('/:number', controller.update);//order_token passed as query param
 router.put('/:number/empty', controller.empty_cart);//order_token passed as query param
 
 router.put('/:number/update_order_currency', controller.update_order_currency);
+router.put('/:number/update_order_measurement_unit', controller.update_order_measurement_unit);
 
 
 /**Line Items**/
