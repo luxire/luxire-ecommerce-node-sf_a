@@ -158,6 +158,7 @@ angular.module('luxire')
             luxire_line_item:{
               total_personalisation_cost_in_currencies: cartObject.personalization_cost,
               total_personalization_cost: 0,
+              send_sample: sample ? true : false,
               customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
               personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
               measurement_data: {
@@ -185,7 +186,7 @@ angular.module('luxire')
 
   /*line_items*/
 
-  this.add_line_item = function(order, cartObject, variant){
+  this.add_line_item = function(order, cartObject, variant, send_sample){
     var line_item = {
       line_item: {
         variant_id: variant.id,
@@ -193,7 +194,7 @@ angular.module('luxire')
         luxire_line_item:{
           total_personalisation_cost_in_currencies: cartObject.personalization_cost,
           total_personalization_cost: 0,
-
+          send_sample: send_sample ? true : false,
           customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
           personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
           measurement_data: {
@@ -221,13 +222,15 @@ angular.module('luxire')
 		return $http.put(CustomerConstants.api.orders+'/'+order.number+'/line_items/'+line_item_id+'?order_token='+order.token, angular.toJson(updated_cart));
 	};
 
-  this.updated_order_measurement_unit = function(order){
+  this.updated_order_measurement_unit = function(order, luxire_line_items){
     var order_obj = {
-      order_number: order.number,
-      order_token: order.token,
-      line_items: order.line_items
+      order: {
+        number: order.number,
+        token: order.token,
+        luxire_line_items : luxire_line_items
+      }
     };
-    return $http.put(CustomerConstants.api.orders+'/'+order.number+'/update_order_currency', angular.toJson(order_obj));
+    return $http.put(CustomerConstants.api.orders+'/'+order.number+'/update_order_measurement_unit', angular.toJson(order_obj));
   }
 
   this.update_order_currency = function(order){
