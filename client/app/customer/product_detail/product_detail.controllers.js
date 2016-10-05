@@ -821,8 +821,8 @@ angular.module('luxire')
       console.log('cart object prototype', $scope.cart_object_prototype);
       $scope.selected_measurement_id = measurements_object.selected_measurement_id;
       if($scope.selected_measurement_id===3){
-        $scope.cart_object.body_measurement_attributes = angular.copy(measurements_object.selected_measurements);
-        $scope.cart_object.standard_measurement_attributes = angular.copy($scope.cart_object_prototype.standard_measurement_attributes);
+        $scope.cart_object.body_measurement_attributes = angular.copy(measurements_object.selected_measurements.body);
+        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
       }
       else if($scope.selected_measurement_id===4){
         $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
@@ -831,7 +831,7 @@ angular.module('luxire')
       else{
         console.log('case 1 or 2', $scope.cart_object_prototype)
         $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
-        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements);
+        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
       }
 
       // console.log('cart object after', $scope.cart_object);
@@ -1705,15 +1705,27 @@ angular.module('luxire')
   };
 
   $scope.next_step = function(){
-    var measurements = {};
+    var measurements = {
+      body: {},
+      standard: {}
+    };
     if($scope.active_measurement_type_id === 3){
-      measurements = $scope.cart_object.body_measurement_attributes;
+      measurements = {
+        body: $scope.cart_object.body_measurement_attributes,
+        standard: $scope.cart_object.standard_measurement_attributes
+      };
     }
     else if($scope.active_measurement_type_id === 4){
-      measurements = {};
+      measurements = {
+        body: {},
+        standard: {}
+      };
     }
     else{
-      measurements = $scope.cart_object.standard_measurement_attributes;
+      measurements = {
+        body: {},
+        standard: $scope.cart_object.standard_measurement_attributes
+      };
     }
 
 
