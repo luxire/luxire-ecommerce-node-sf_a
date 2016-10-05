@@ -306,11 +306,14 @@
       </div>
       <div class="row">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px; padding-right: 0px">
-          <uib-carousel active="active" interval="3000" >
-            <uib-slide ng-repeat="slideImage in quickViewProduct.master.images track by slideImage.id" index="slideImage.id">
-              <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
-                <img ng-src="{{getImage(slideImage.large_url)}}" style="cursor: pointer">
+          <uib-carousel interval="3000" >
+            <uib-slide ng-repeat="slideImage in quickViewProduct.master.images" index="slideImage.id">
+              <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
+                <img ng-src="{{getImage(slideImage.large_url)}}"></img>
               </div>
+              <!--//div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
+              //  <img ng-src="{{getImage(slideImage.large_url)}}" style="cursor: pointer">
+            //  </div-->
             </uib-slide>
           </uib-carousel>
         </div>
