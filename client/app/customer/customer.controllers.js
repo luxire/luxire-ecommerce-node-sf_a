@@ -7,6 +7,98 @@ avoid conflict with customer ctrl on admin side*/
   $scope.checkout_state = false;
   $scope.is_customer_home_state = false;
 
+
+  /*Bread crumbs */
+  $scope.checkout_steps = {
+    'address': {
+      id: 0,
+      name: 'ADDRESS',
+    },
+    'delivery': {
+      id: 1,
+      name: 'DELIVERY'
+    },
+    'payment': {
+      id: 2,
+      name: 'PAYMENT'
+    }
+  };
+
+  /*Measurement Unit*/
+  $scope.measurement_units = [
+    {
+      id: 1,
+      label: 'Inch',
+      symbol: 'In'
+    },
+    {
+      id: 2,
+      label: 'Cm',
+      symbol: 'cm'
+    }
+  ];
+
+  /*Multi Currency */
+  $scope.currencies = {
+    "USD": {
+      id: 1,
+      label: "US Dollar",
+      symbol: "USD"
+    },
+    "EUR": {
+      id: 2,
+      label: "EURO",
+      symbol: "EUR"
+    },
+    "AUD": {
+      id: 3,
+      label: "Australian Dollar",
+      symbol: "AUD"
+    },
+    "SGD": {
+      id: 4,
+      label: "Singapore Dollar",
+      symbol: "SGD"
+    },
+    "NOK": {
+      id: 5,
+      label: "Norway Krone",
+      symbol: "NOK"
+    },
+    "DKK": {
+      id: 6,
+      label: "Danish Krone",
+      symbol: "DKK"
+    },
+    "SEK": {
+      id: 7,
+      label: "Sweden Krona",
+      symbol: "SEK"
+    },
+    "CHF": {
+      id: 8,
+      label: "Swiss Franc",
+      symbol: "CHF"
+    },
+    "INR": {
+      id: 9,
+      label: "Indian Rupee",
+      symbol: "INR"
+    },
+    "GBP": {
+      id: 10,
+      label: "British Pound",
+      symbol: "GBP"
+    },
+    "CAD": {
+      id: 11,
+      label: "Canadian Dollar",
+      symbol: "CAD"
+    }
+
+  };
+
+
   $scope.header_visibility = function(state){
     console.log('current state', state);
     if(state.name!==prev_state){
@@ -229,10 +321,10 @@ avoid conflict with customer ctrl on admin side*/
     }
 
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items &&$rootScope.luxire_cart.line_items.length){
-      if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
+      if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
         $scope.selected_measurement_unit = $scope.measurement_units[0];
       }
-      else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
+      else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
         $scope.selected_measurement_unit = $scope.measurement_units[1];
       }
     }
@@ -260,35 +352,8 @@ avoid conflict with customer ctrl on admin side*/
   });
   $rootScope.luxire_cart = angular.isUndefined($rootScope.luxire_cart)? {} : $rootScope.luxire_cart;
 
-  /*Bread crumbs */
-  $scope.checkout_steps = {
-    'address': {
-      id: 0,
-      name: 'ADDRESS',
-    },
-    'delivery': {
-      id: 1,
-      name: 'DELIVERY'
-    },
-    'payment': {
-      id: 2,
-      name: 'PAYMENT'
-    }
-  };
 
-  /*Measurement Unit*/
-  $scope.measurement_units = [
-    {
-      id: 1,
-      label: 'Inch',
-      symbol: 'In'
-    },
-    {
-      id: 2,
-      label: 'Cm',
-      symbol: 'cm'
-    }
-  ];
+
 
   if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items &&$rootScope.luxire_cart.line_items.length){
     if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
@@ -341,66 +406,6 @@ avoid conflict with customer ctrl on admin side*/
     console.log('selected unit', measurement_unit);
     update_order_measurement_unit(measurement_unit.symbol.toLowerCase());
     $rootScope.$broadcast('measurement_unit_change', measurement_unit);
-  };
-
-  /*Multi Currency */
-  $scope.currencies = {
-    "USD": {
-      id: 1,
-      label: "US Dollar",
-      symbol: "USD"
-    },
-    "EUR": {
-      id: 2,
-      label: "EURO",
-      symbol: "EUR"
-    },
-    "AUD": {
-      id: 3,
-      label: "Australian Dollar",
-      symbol: "AUD"
-    },
-    "SGD": {
-      id: 4,
-      label: "Singapore Dollar",
-      symbol: "SGD"
-    },
-    "NOK": {
-      id: 5,
-      label: "Norway Krone",
-      symbol: "NOK"
-    },
-    "DKK": {
-      id: 6,
-      label: "Danish Krone",
-      symbol: "DKK"
-    },
-    "SEK": {
-      id: 7,
-      label: "Sweden Krona",
-      symbol: "SEK"
-    },
-    "CHF": {
-      id: 8,
-      label: "Swiss Franc",
-      symbol: "CHF"
-    },
-    "INR": {
-      id: 9,
-      label: "Indian Rupee",
-      symbol: "INR"
-    },
-    "GBP": {
-      id: 10,
-      label: "British Pound",
-      symbol: "GBP"
-    },
-    "CAD": {
-      id: 11,
-      label: "Canadian Dollar",
-      symbol: "CAD"
-    }
-
   };
 
 
