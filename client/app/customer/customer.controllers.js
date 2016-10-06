@@ -409,17 +409,17 @@ avoid conflict with customer ctrl on admin side*/
 
 
   $scope.change_currency = function(currency){
-    $scope.loading = true;
     $scope.selected_currency = currency;
     console.log('selected currency', currency);
     CustomerUtils.set_local_currency_in_app(currency.symbol);
     $rootScope.$broadcast('currency_change', currency.symbol);
-    if($rootScope.luxire_cart && $rootScope.luxire_cart.currency && $rootScope.luxire_cart.currency !== currency.symbol){
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.currency && $rootScope.luxire_cart.currency !== currency.symbol){
+      $scope.loading = true;
       CustomerOrders.update_order_currency($rootScope.luxire_cart).then(function(data){
         console.log('success', data);
         $rootScope.luxire_cart = data.data;
-        $rootScope.$broadcast('fetched_order_from_cookie', data);
         $scope.loading = false;
+        $rootScope.$broadcast('fetched_order_from_cookie', data);
       }, function(error){
         console.log('error', error);
         $scope.loading = false;
