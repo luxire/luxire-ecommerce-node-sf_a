@@ -7,9 +7,9 @@ angular.module('luxire')
   $scope.filter_properties = [];
   var filter_index = '';
   //weight, brand & material removed, thickness needs to be added in properties
-  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'transparency', 'construction', 'No of Colors'];
-  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'TRANSPARENCY', 'CONSTRUCTION','No of Colors'];
-  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness', 'transparency', 'construction', 'no_of_color'];
+  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'No of Colors'];
+  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS','CONSTRUCTION','No of Colors'];
+  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color'];
 
   $scope.color_variants = {
     white: {
