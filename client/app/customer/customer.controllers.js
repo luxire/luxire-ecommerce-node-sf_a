@@ -356,10 +356,10 @@ avoid conflict with customer ctrl on admin side*/
 
 
   if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items &&$rootScope.luxire_cart.line_items.length){
-    if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
+    if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
       $scope.selected_measurement_unit = $scope.measurement_units[0];
     }
-    else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
+    else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
       $scope.selected_measurement_unit = $scope.measurement_units[1];
     }
   }
