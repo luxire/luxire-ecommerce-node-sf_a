@@ -23,7 +23,7 @@
           <br>
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <input type="email" name="email" autocomplete="email"  class="form-control" ng-model="customer_email" placeholder="Email" required="">
-            <p ng-hide="isLoggedIn">Already have an account with us? <a ui-sref="customer.login({nav_to_state: 'customer.checkout_address'})" ng-click="event.preventDefault()">Log in</a></p>
+            <p ng-hide="isLoggedIn">Already have an account with us? <a style="color: #8A247C" ui-sref="customer.login({nav_to_state: 'customer.checkout_address'})" ng-click="event.preventDefault()">Log in</a></p>
           </div>
           <!-- <div id="checkout_states" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             <span>Customer information</span>&nbsp;&nbsp;<span style="color: #9F9F9F">></span>&nbsp;&nbsp;<span><a ng-if="luxire_cart && luxire_cart.ship_address!={}" style="cursor: pointer" href="#" ng-click="go_to_delivery($event)">Delivery</a><span style="color: #A2A5C5">Delivery</span></span>&nbsp;&nbsp;<span style="color: #9F9F9F">></span>&nbsp;&nbsp;<span><a ng-click="go_to_payment($event)" style="cursor: pointer" ng-click="go_to_payment($event)">Payment</a><span style="color: #A2A5C5">Payment</span></span>
@@ -38,10 +38,10 @@
         <div id="luxire-checkout-address-body">
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input placeholder="Firstname" class="form-control" name="ship_fname" autocomplete="fname" ng-model="shipping.firstname" style="margin-top: 2%" required>
+              <input placeholder="Firstname*" class="form-control" name="ship_fname" autocomplete="fname" ng-model="shipping.firstname" style="margin-top: 2%" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input placeholder="Lastname" class="form-control" name="ship_lname" autocomplete="lname" ng-model="shipping.lastname" style="margin-top: 2%" required>
+              <input placeholder="Lastname*" class="form-control" name="ship_lname" autocomplete="lname" ng-model="shipping.lastname" style="margin-top: 2%" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <input placeholder="Company(optional)" class="form-control" name="ship_company" autocomplete="company" ng-model="shipping.company" style="margin-top: 2%" >
@@ -49,13 +49,13 @@
           </div>
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1" name="ship_address1" autocomplete="address-line1" required>
+              <input style="margin-top: 2%" class="form-control" ng-model="shipping.address1" placeholder="Address 1*" name="ship_address1" autocomplete="address-line1" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <input style="margin-top: 2%" class="form-control" ng-model="shipping.address2" placeholder="Address 2(optional)" name="ship_address2" autocomplete="address-line2">
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City" name="ship_city" autocomplete="city" required>
+              <input style="margin-top: 2%" class="form-control" ng-model="shipping.city" placeholder="City*" name="ship_city" autocomplete="city" required>
             </div>
           </div>
           <div class="row">
@@ -74,12 +74,12 @@
 
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="shipping.zipcode" name="ship_zip code" autocomplete="zip code" required>
+              <input style="margin-top: 2%" placeholder="postal code*" class="form-control" ng-model="shipping.zipcode" name="ship_zip code" autocomplete="zip code" required>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="shipping.phone" name="ship_phone" autocomplete="phone" required>
+              <input style="margin-top: 2%" placeholder="phone*" class="form-control" ng-model="shipping.phone" name="ship_phone" autocomplete="phone" required>
             </div>
           </div>
         </div>
@@ -95,10 +95,10 @@
         <div ng-hide="same" id="luxire-checkout-address-body">
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input placeholder="Firstname" class="form-control" name="bill_fname" autocomplete="fname" ng-model="billing.firstname" style="margin-top: 2%" required>
+              <input placeholder="Firstname*" class="form-control" name="bill_fname" autocomplete="fname" ng-model="billing.firstname" style="margin-top: 2%" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input placeholder="Lastname" class="form-control" name="bill_lname" autocomplete="lname" ng-model="billing.lastname" style="margin-top: 2%" required>
+              <input placeholder="Lastname*" class="form-control" name="bill_lname" autocomplete="lname" ng-model="billing.lastname" style="margin-top: 2%" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <input placeholder="Company(optional)" class="form-control" name="bill_company" autocomplete="company" ng-model="billing.company" style="margin-top: 2%">
@@ -106,13 +106,13 @@
           </div>
            <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" class="form-control" ng-model="billing.address1" placeholder="Address 1" name="bill_address1" autocomplete="address-line1" required>
+              <input style="margin-top: 2%" class="form-control" ng-model="billing.address1" placeholder="Address 1*" name="bill_address1" autocomplete="address-line1" required>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <input style="margin-top: 2%" class="form-control" ng-model="billing.address2" placeholder="Address 2(optional)" name="bill_address2" autocomplete="address-line2">
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" class="form-control" ng-model="billing.city" placeholder="City" name="bill_city" autocomplete="city" required>
+              <input style="margin-top: 2%" class="form-control" ng-model="billing.city" placeholder="City*" name="bill_city" autocomplete="city" required>
             </div>
           </div>
           <div class="row">
@@ -132,12 +132,12 @@
              </select>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" placeholder="postal code" class="form-control" ng-model="billing.zipcode" name="bill_zip code" autocomplete="zip code" required>
+              <input style="margin-top: 2%" placeholder="postal code*" class="form-control" ng-model="billing.zipcode" name="bill_zip code" autocomplete="zip code" required>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-              <input style="margin-top: 2%" placeholder="phone" class="form-control" ng-model="billing.phone" name="phone" autocomplete="phone" required>
+              <input style="margin-top: 2%" placeholder="phone*" class="form-control" ng-model="billing.phone" name="phone" autocomplete="phone" required>
             </div>
           </div>
         </div>
