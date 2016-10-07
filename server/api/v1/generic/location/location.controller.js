@@ -48,17 +48,6 @@ exports.geo_location = function(req, res){
 
   var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD"];
   console.log('geo_location', req_ip, constants.location_by_ip.host+'/'+req_ip);
-  // http.get({
-  //   uri: constants.location_by_ip.host+'/'+req_ip
-  // },function(error, response, body){
-  //   if(error){
-  //     res.status(500).send(error.syscall);
-  //   }
-  //   else{
-  //     console.log('req country', body);
-  //   }
-  //
-  // });
   http
     .get({
       uri: constants.location_by_ip.host+'/'+req_ip
@@ -79,6 +68,7 @@ exports.geo_location = function(req, res){
                       res.status(200).send("USD");
                     }
                     else{
+                      console.log('req country', JSON.parse(res_body));
                       req_cur = JSON.parse(res_body).currency.toUpperCase();
                       console.log('res currency', req_cur);
                       res.status(resp.statusCode).send(supported_currencies.indexOf(req_cur) === -1 ? "USD" : req_cur);
