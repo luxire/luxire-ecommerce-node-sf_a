@@ -41,7 +41,7 @@
               <button type="submit" class="btn btn-default" style="width:100%;font-family: Arial;height:2.5em;font-size:100%;background-color:#7F0E6E;color: #FDFDFD;border-radius:0px;" >Login<i style="margin-left:2%;"class="glyphicon glyphicon-arrow-right"></i></button>
           </div>
           <div style="margin: 2%; font-family: ArialNarrow; font-weight: 400">
-            No Account ? <span style="color: #7F0E6E; cursor: pointer" ui-sref="customer.signup">Register <i class="fa fa-play" style="font-size: 70%"></i></span>
+            No Account ? <span style="color: #7F0E6E; cursor: pointer" ui-sref="customer.signup">Register <i class="fa fa-play" style="font-size: 70%"></i></span>&nbsp;<span ng-if="nav_to_state== 'customer.checkout_address'">&nbsp;&nbsp;&nbsp;or</span>&nbsp;<span ng-if="nav_to_state== 'customer.checkout_address'" style="color: #7F0E6E; cursor: pointer" ui-sref="customer.checkout_address">&nbsp;&nbsp;&nbsp;Checkout as guest&nbsp;&nbsp;<i class="fa fa-play" style="font-size: 70%"></i></span>
           </div>
         </form>
 

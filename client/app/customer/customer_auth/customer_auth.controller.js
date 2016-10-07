@@ -16,6 +16,7 @@ angular.module('luxire')
   $scope.remember_me = false;
   $scope.error = '';
   $scope.popover_template = 'forgot_password_popover.html';
+  $scope.nav_to_state = $state.params.nav_to_state;
   /*Login function*/
   $scope.login = function(){
     console.log('login');
