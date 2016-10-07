@@ -38,6 +38,8 @@ avoid conflict with customer ctrl on admin side*/
     }
   ];
 
+  $scope.selected_measurement_unit = $scope.measurement_units[0];
+
   /*Multi Currency */
   $scope.currencies = {
     "USD": {
@@ -155,6 +157,10 @@ avoid conflict with customer ctrl on admin side*/
       // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
         if($scope.is_customer_home_state){
+          console.log('home state scroll>0');
+          $timeout(function(){
+            $scope.changeHeader();
+          },0)
           // $scope.changeHeader();
             // $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
         }
@@ -362,6 +368,9 @@ avoid conflict with customer ctrl on admin side*/
     else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
       $scope.selected_measurement_unit = $scope.measurement_units[1];
     }
+    else{
+      $scope.selected_measurement_unit = $scope.measurement_units[0];
+    }
   }
   else{
     $scope.selected_measurement_unit = $scope.measurement_units[0];
@@ -370,6 +379,7 @@ avoid conflict with customer ctrl on admin side*/
 
   var update_order_measurement_unit = function(unit){
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items.length){
+      $scope.loading = true;
       var luxire_line_items = [];
       for(var i=0;i<$rootScope.luxire_cart.line_items.length;i++){
         if(unit == "cm"){
@@ -401,7 +411,6 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   $scope.change_measurement_unit = function(measurement_unit){
-    $scope.loading = true;
     $scope.selected_measurement_unit = measurement_unit;
     console.log('selected unit', measurement_unit);
     update_order_measurement_unit(measurement_unit.symbol.toLowerCase());
