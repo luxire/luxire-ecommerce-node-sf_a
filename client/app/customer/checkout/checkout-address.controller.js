@@ -7,10 +7,38 @@ angular.module('luxire')
   /*Fetch countries*/
   $scope.load_countries = true;
   $scope.load_address = true;
+  $scope.billing = {};
+  $scope.shipping = {};
   countries.all().then(function(data){
     $scope.load_countries = false;
-    console.log('countries',data);
-    $scope.countries = data.data;
+    $scope.countries = JSON.parse(data.data.countries);
+    requested_country = JSON.parse(data.data.requested_country);
+    console.log('req country', requested_country);
+    console.log('order', $rootScope.luxire_cart);
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && !$rootScope.luxire_cart.ship_address){
+      console.log('address not there');
+      if(!$scope.shipping){
+        $scope.shipping = {};
+      }
+      if(!$scope.billing){
+        $scope.billing = {};
+      }
+      for(var i=0;i<$scope.countries.length;i++){
+        if($scope.countries[i].iso == requested_country.country_code){
+          console.log('shipping', $scope.shipping);
+          $scope.shipping.country = $scope.countries[i];
+          $scope.billing.country = $scope.countries[i];
+          for(var j=0;j<$scope.shipping.country.states.length;j++){
+            if($scope.shipping.country.states[j].abbr == requested_country.region_code){
+              $scope.shipping.state = $scope.shipping.country.states[j];
+              $scope.billing.state = $scope.shipping.country.states[j];
+              j = $scope.shipping.country.states.length;
+              i = $scope.countries.length;
+            }
+          }
+        }
+      }
+    }
   },function(error){
     $scope.load_countries = false;
     console.log('error',error);
@@ -30,8 +58,7 @@ angular.module('luxire')
     }
   };
 
-  $scope.billing = {};
-  $scope.shipping = {};
+
   function checkout_address_init(order){
     console.log('checkout address init', order);
     if(order.line_items.length){
@@ -39,6 +66,7 @@ angular.module('luxire')
       $scope.customer_email = order.email;
       $scope.billing = order.bill_address;
       $scope.shipping = order.ship_address;
+
     }
     else{
       $state.go('customer.cart');
@@ -53,6 +81,7 @@ angular.module('luxire')
   else{
     console.log('rootScope cart', $rootScope.luxire_cart);
     $scope.$on('fetched_order_from_cookie', function(event, data){
+      console.log('fetched order', data.data);
       if(data.status == 404){
         $state.go('customer.home');
       }
@@ -65,6 +94,7 @@ angular.module('luxire')
   $scope.populate_states = function(country){
     console.log('selected country', country);
   };
+
 
 
   $scope.go_to_delivery = function(event){
