@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CustomerCheckoutPaymentController',function($scope, $state, $window, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders){
+.controller('CustomerCheckoutPaymentController',function($scope, $state, $window, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $timeout){
   window.scrollTo(0, 0);
   console.log('luxire_cart after payment', $rootScope.luxire_cart);
   $scope.loading = true;
@@ -18,64 +18,111 @@ angular.module('luxire')
     console.log('error', error);
   };
 
+  $scope.brain_tree_payment_method_id = -1;
+  $scope.brain_tree_client_token = "";
+  var set_brain_tree_payment_method_id = function(order){
+    if(order && order.payment_methods && order.payment_methods.length){
+      for(var i=0;i<order.payment_methods.length;i++){
+        if(order.payment_methods[i].method_type=== "braintree_vzero_hosted_fields"){
+          $scope.brain_tree_payment_method_id = order.payment_methods[i].id;
+        };
+      };
+    }
+  };
+
+
+
 
   function brain_tree_init(order, payment_method_id){
     console.log('cart', order);
     $scope.loading = true;
 
-    var brain_tree_payment_method_id = -1;
-
-    if(payment_method_id){
-      brain_tree_payment_method_id = payment_method_id;
-    }
-    else if(order && order.payment_methods && order.payment_methods.length){
-      for(var i=0;i<order.payment_methods.length;i++){
-        if(order.payment_methods[i].method_type=== "braintree_vzero_paypal_express"){
-          brain_tree_payment_method_id = order.payment_methods[i].id;
-        };
-      };
-    }
-    var merchant_configuration = {
-      // container: "paypal-container",
-      paypal: {
-        container: "paypal-container",
-        singleUse: false,
-        amount: parseFloat(order.total),
-        currency: order.currency,
-        locale: "en_us",
-        displayName: "",
-        enableShippingAddress: true,
-        shippingAddressOverride: {
-          recipientName: order.ship_address.full_name,
-          streetAddress: order.ship_address.address1,
-          extendedAddress: order.ship_address.address2,
-          locality: order.ship_address.city,
-          countryCodeAlpha2: order.ship_address.country.iso,
-          postalCode: order.ship_address.zipcode,
-          region: order.ship_address.state.abbr,
-          phone: order.ship_address.phone,
-          editable: false
-        }
-      },
-      onReady: brain_tree_ready,
-      onPaymentMethodReceived: brain_tree_payment_received,
-      onError: brain_tree_error,
-      onCancelled: function(){
-        console.log('cancelled');
-        $scope.loading = false;
-      }
-    };
-    CustomerOrders.brain_tree_init(brain_tree_payment_method_id, order)
+    CustomerOrders.brain_tree_init(payment_method_id, order)
     .then(function(data){
-      // $scope.loading = false;
-      braintree.setup(data.data.token, 'custom', merchant_configuration);
-      console.log(data);
+      $timeout(function(){
+        braintree.client.create({
+        authorization: data.data.token
+        }, function (err, clientInstance) {
+          if (err) {
+            console.error(err);
+            $scope.loading = false;
+            $rootScope.alerts.push({type: 'danger', message: err});
+            return;
+          }
+          braintree.hostedFields.create({
+            client: clientInstance,
+            styles: {
+              'input': {
+                'font-size': '14px',
+                'font-family': 'helvetica, tahoma, calibri, sans-serif',
+                'color': '#3a3a3a'
+              },
+              ':focus': {
+                'color': 'black'
+              }
+            },
+            fields: {
+              number: {
+                selector: '#card-number',
+                placeholder: '4111 1111 1111 1111'
+              },
+              cvv: {
+                selector: '#cvv',
+                placeholder: '123'
+              },
+              expirationMonth: {
+                selector: '#expiration-month',
+                placeholder: 'MM'
+              },
+              expirationYear: {
+                selector: '#expiration-year',
+                placeholder: 'YY'
+              }
+              // ,
+              // postalCode: {
+              //   selector: '#postal-code',
+              //   placeholder: '08820'
+              // }
+            }
+          }, function (err, hostedFieldsInstance) {
+            if (err) {
+              console.error(err);
+              $scope.loading = false;
+              $rootScope.alerts.push({type: 'danger', message: err});
+              return;
+            }
+
+            console.log('hostedFieldsInstance', hostedFieldsInstance);
+
+            $timeout(function(){
+              $scope.loading = false;
+            },0)
+            $scope.brain_tree_client_token = data.data.token;
+            $scope.brain_tree_hosted_field_instance = hostedFieldsInstance;
+
+
+          });
+        });
+        console.log(data);
+      })
+
     }, function(error){
       $scope.loading = false;
       console.error(error);
     });
 
   }
+
+  $scope.change_payment_method = function(payment_id){
+    $scope.selected_payment_method_id = payment_id;
+    if(($scope.brain_tree_payment_method_id == payment_id) && !$scope.brain_tree_client_token){
+      brain_tree_init($rootScope.luxire_cart, $scope.brain_tree_payment_method_id)
+    }
+
+  };
+
+
+
   function update_state(order){
     if(order.state!="payment"){
       CustomerOrders.update(order, {
@@ -99,6 +146,7 @@ angular.module('luxire')
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
     if($rootScope.luxire_cart && $rootScope.luxire_cart.number){
       update_state($rootScope.luxire_cart);
+      set_brain_tree_payment_method_id($rootScope.luxire_cart);
       console.log('cart exists');
       $scope.loading = false;
 
@@ -113,6 +161,7 @@ angular.module('luxire')
         var order = data.data;
         if(order && order.number){
           update_state(order);
+          set_brain_tree_payment_method_id(order);
           console.log('cart doesnt exists');
           $scope.loading = false;
 
@@ -175,7 +224,7 @@ angular.module('luxire')
         ],
         coupon_code: ""
       },
-      paypal_email: "bt_buyer_us@paypal.com",
+      // paypal_email: "bt_buyer_us@paypal.com",
       state: "payment"
     }
     CustomerOrders.checkout_paypal_brain_tree($rootScope.luxire_cart, brain_tree_object)
@@ -187,6 +236,14 @@ angular.module('luxire')
     }, function(error){
       $scope.loading = false;
       console.error(error);
+      if(error.data.errors && error.data.errors.base && error.data.errors.base.length){
+        $rootScope.alerts.push({type: 'danger', message: error.data.errors.base[0]});
+      }
+      else{
+        $rootScope.alerts.push({type: 'danger', message: error.data.error});
+      }
+
+
     });
 
   };
@@ -226,10 +283,27 @@ angular.module('luxire')
             $scope.loading = false;
             $state.go('customer.payment_failed');
             console.error(error);
+            $rootScope.alerts.push({type: 'danger', message: error.data.msg});
+
           });
         }
-        else if(selected_payment_method_type.toLowerCase().indexOf('braintree_vzero') != -1){
-          brain_tree_init($rootScope.luxire_cart, $scope.selected_payment_method_id);
+        else if(selected_payment_method_type.toLowerCase().indexOf('braintree_vzero') != -1 && $scope.brain_tree_client_token){
+          $scope.brain_tree_hosted_field_instance.tokenize(function (err, payload) {
+            $timeout(function(){
+              if (err) {
+                console.error(err);
+                $scope.loading = false;
+                $rootScope.alerts.push({type: 'danger', message: err.message});
+                return;
+              }
+              console.log('payload', payload);
+              $scope.proceed_to_brain_tree_payment(payload.nonce);
+
+            },0)
+
+
+          });
+          // brain_tree_init($rootScope.luxire_cart, $scope.selected_payment_method_id);
           // $("#braintree-paypal-button")[0].click();
 
         }
