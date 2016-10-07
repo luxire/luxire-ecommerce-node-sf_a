@@ -168,7 +168,7 @@ function printDiv(divName) {
 <!-- <div ><h4>Thank you for your business. Please print out a copy of this confirmation page for your records. -->
 </h4></div>
 <div class="" style="text-align: center">
-  <button type="button" ui-sref="customer.home">Home</button>
+  <button type="button" ui-sref="customer.home" ui-sref-opts="{reload: true}">Home</button>
   <button type="button" name="button"onclick="printDiv('printableArea')">Print</button>
 </div>
 <!-- <input type="button" class="btn btn-primary" onclick="printDiv('printableArea')" value="Print" /> -->
