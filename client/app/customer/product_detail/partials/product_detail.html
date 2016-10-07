@@ -552,7 +552,7 @@ button.slick-arrow{
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
-                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !active_style.name, 'btn-description-before': active_style.name}" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style':active_style.name}}</button>
+                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !active_style.name, 'btn-description-before': active_style.name}" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style': 'Style Saved'}}</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: left">
                       <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
@@ -574,7 +574,7 @@ button.slick-arrow{
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="font-weight: 300">
-                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !selected_measurement_id, 'btn-description-before': selected_measurement_id}" ng-click="invoke_choose_fit_and_measurement()">Choose Fit & Measurements</button>
+                      <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !selected_measurement_id, 'btn-description-before': selected_measurement_id}" ng-click="invoke_choose_fit_and_measurement()">{{!selected_measurement_id ? 'Choose Fit & Measurements' : 'Measurements Saved'}}</button>
                     </div>
                   </div>
 
@@ -2028,7 +2028,7 @@ button.slick-arrow{
                       </div>
                     </div>
                   </div>
-                  
+
 
                 </div>
               </div>
@@ -2350,9 +2350,6 @@ button.slick-arrow{
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div style="position: absolute;top: 40%; left: 0">
-                              <div class="arrow-right"></div>
                             </div>
                           </div>
                           <div id="details" class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="border-left: 1px solid #DDDCDA;padding: 0px;background: #f2f2f2">
