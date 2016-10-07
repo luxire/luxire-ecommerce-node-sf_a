@@ -337,15 +337,18 @@ angular.module('luxire')
 
   $scope.order_swatch = function(variant){
     console.log(variant);
+    $scope.loading_products = true;
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
       CustomerOrders.add_line_item($rootScope.luxire_cart, {}, variant)
       .then(function(data){
         CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
           $rootScope.luxire_cart = data.data;
+          $scope.loading_products = false;
           // $state.go('customer.cart');
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
-          $state.go('customer.pre_cart');
+          // $state.go('customer.pre_cart');
         }, function(error){
+          $scope.loading_products = false;
           console.error(error);
         });
         console.log(data);
@@ -357,11 +360,13 @@ angular.module('luxire')
       CustomerOrders.create_order({}, variant, false)
       .then(function(data){
         $rootScope.luxire_cart = data.data;
+        $scope.loading_products = false;
         // $state.go('customer.cart');
         $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
-        $state.go('customer.pre_cart');
+        // $state.go('customer.pre_cart');
         console.log(data);
       },function(error){
+        $scope.loading_products = false;
         console.error(error);
       });
     }
