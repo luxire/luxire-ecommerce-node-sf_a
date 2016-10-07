@@ -423,12 +423,13 @@
   z-index: 99;
   background-color: #FFFFFF;
   box-shadow: 1px 1px 1px 1px #E1D9D4;
-  margin-top: 2%;
-  margin-bottom: 4%;
   border: solid 1px grey !important;
+  display: inline-block;
+  margin: 1%
 }
 .taxonomyCards{
-  margin-left: 4%;
+  /*margin-left: 4%;*/
+  text-align: center;
 }
 .taxonomy-name{
   padding-top: 1%;
