@@ -91,12 +91,13 @@ avoid conflict with customer ctrl on admin side*/
       id: 10,
       label: "British Pound",
       symbol: "GBP"
-    },
-    "CAD": {
-      id: 11,
-      label: "Canadian Dollar",
-      symbol: "CAD"
     }
+    // ,
+    // "CAD": {
+    //   id: 11,
+    //   label: "Canadian Dollar",
+    //   symbol: "CAD"
+    // }
 
   };
 
