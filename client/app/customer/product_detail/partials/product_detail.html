@@ -456,8 +456,8 @@ button.slick-arrow{
   <!-- <div ng-if="is_fabric_product&&display_summary" class="" style="position: fixed;top: 42%;right: 0%;z-index: 10;text-align: right;cursor: pointer" >
     <img ng-src="assets/images/customer/my-style-button.gif" style="max-width: 80%" alt="" />
   </div> -->
-  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.5%;z-index: 10">
-    <div class="row" style="margin: 0.75% 0.25%">
+  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.2%;z-index: 10">
+    <div class="row" style="margin: 1% 0.25% 0.5% 0.25%">
       <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"  style="color: #000000; font-size: 140%; font-weight: 100">
         {{product.name.toUpperCase()}}
       </div>
@@ -2120,13 +2120,16 @@ button.slick-arrow{
           </div>
           <div class="row-eq-height" style="display: inline-block;width: 82%">
             <div class="slick-bespoke-style-slider">
-              <div class="slick-bespoke-style-slide" ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%"
-                ng-mouseenter="activate_style_details(luxire_style)" ng-click="select_style($index, luxire_style)">
+              <div class="slick-bespoke-style-slide" ng-init="mouse_over_style=false" ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%"
+                ng-mouseenter="activate_style_details(luxire_style);mouse_over_style=true" ng-mouseleave="mouse_over_style=false" ng-click="select_style($index, luxire_style)">
                 <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="text-align: center;position: relative" >
                   <img ng-src="{{getImage(luxire_style.images.large_url)}}" style="max-width: 85%;margin: 1%">
                   <i ng-if="selected_style.name==luxire_style.name" class="fa fa-check-circle" style="font-size:160%;color: green;position: absolute;top: 5%;right: 5%"></i>
+                  <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name}}</div>
                 </div>
-                <div style="text-align:center;font-size:100%;color:black;">{{luxire_style.name}}</div>
+                <div style="height: 20px">
+                  <div ng-if="(selected_style.name==luxire_style.name) || (!selected_style.name && mouse_over_style)" style="width: 0; height: 0; margin-left: 38%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 20px solid #EDEBEC;"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -2138,14 +2141,13 @@ button.slick-arrow{
           <div ng-show="!selected_style.name" style="width: 0; height: 0; margin-left: 48%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 20px solid transparent;">
 
           </div>
-          <div ng-show="selected_style.name" style="width: 0; height: 0; margin-left: 48%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 20px solid #EDEBEC;">
           </div>
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;text-align: right;background: #EDEBEC">
             <!--//div >
               //<i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="hide_active_style_details=true"></i>
             //</div-->
           </div>
-          <div class="row well well-lg" style="margin: 0px;border-radius: 0;margin-bottom: 1%;background: #EDEBEC">
+          <div uib-collapse="!active_detail_style.name" class="row well well-lg" style="margin: 0px;border-radius: 0;margin-bottom: 1%;background: #EDEBEC">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <div class="style-nav">
                 <div uib-carousel>
@@ -2175,7 +2177,7 @@ button.slick-arrow{
       </div>
       <div ng-show="active_style_option === 'bespoke'" class="bespoke-styles-section">
         <div class="row container-fluid" style="width: 96.5%;height:100%;margin: 0 1% 2% 1%">
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="position: fixed; padding: 1% 2%;z-index: 99;margin-left: 1.5%;background: #F2F2F2">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="position: fixed; padding: 1% 2%;z-index: 99;margin-left: 1.5%;background: #F2F2F2;margin-top: 5.25%">
                 <div class="row" style="margin-top:1%;text-align: center">
                     <img ng-src="{{getImage(product.master.images[0].mini_url)}}" alt="{{product.master.images[0].alt}}" style="max-width: 100%"/>
                 </div>
@@ -2313,7 +2315,7 @@ button.slick-arrow{
                                         ng-class="{'active-bespoke': style_name.toLowerCase()===cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()}"
                                         style="border: solid 2px #DADADA" onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                     </div>
-                                    <div style="font-size: 85%;text-align: center;padding-top:1%;">{{style_name}}<span ng-if="style_object.cost">[{{style_object.cost}}]</span></div>
+                                    <div style="font-size: 85%;text-align: center;padding-top:1%;">{{style_name}}<span ng-if="style_object.cost">[<span ng-bind-html="currency_symbols(style_object.cost[selected_currency], selected_currency)"></span>]</span></div>
                                 </div>
                                 <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()!='monogram'" style="margin-left:2%;cursor: pointer" >
                                   <div class="row container-fluid" style="margin-top:2%;">
@@ -2327,7 +2329,7 @@ button.slick-arrow{
                                             class="img-circle" style="border: solid 1.5px #E5E5E5;"
                                               onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                         </div>
-                                        <div style="font-size: 85%;text-align: center;padding-top:1%;">{{personalization_attribute_child}}[{{personalization_attribute_child_value.cost}}]</div>
+                                        <div style="font-size: 85%;text-align: center;padding-top:1%;">{{personalization_attribute_child}}[<span ng-bind-html="currency_symbols(personalization_attribute_child_value.cost[selected_currency], selected_currency)"></span>]</div>
                                     </div>
                                   </div>
 
