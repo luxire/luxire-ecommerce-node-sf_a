@@ -1606,7 +1606,7 @@ button.slick-arrow{
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
               <div  class="btn-group">
-                {{cart_object['standard_measurement_attributes']['Waist']['value'] ? 'Waist' : ''}}
+                {{cart_object['standard_measurement_attributes']['Waist']['value'] ? 'Body Waist' : ''}}
               </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
@@ -1624,11 +1624,11 @@ button.slick-arrow{
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
               <div class="btn-group" style="display: inline-block;width: 82%" uib-dropdown uib-keyboard-nav>
                   <button id="simple-btn-keyboard-nav" style="width: 100%" type="button" class="btn btn-default btn-lux" uib-dropdown-toggle>
-                      {{cart_object['standard_measurement_attributes']['Waist']['value']==''||cart_object['standard_measurement_attributes']['Waist']['value']==undefined?'Waist':cart_object['standard_measurement_attributes']['Waist']['value']}}
+                      {{cart_object['standard_measurement_attributes']['Waist']['value']==''||cart_object['standard_measurement_attributes']['Waist']['value']==undefined?'Body Waist':(cart_object['standard_measurement_attributes']['Waist']['value']*2).toFixed(3)}}
                       <span style="margin-top: 5%" class="caret pull-right"></span>
                   </button>
                   <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                    <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Waist'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Waist', value)"><a href="#" ng-click="$event.preventDefault()">{{value}}</a></li>
+                    <li role="menuitem" ng-repeat="(key,value) in standard_measurement_attributes['Waist'][measurement_unit.selected]" ng-click="set_attribute_value('standard_measurement_attributes', 'Waist', value)"><a href="#" ng-click="$event.preventDefault()">{{(value*2).toFixed(2)}}</a></li>
                   </ul>
               </div>
               <div style="display: inline-block;width: 15%" class="attribute-help-popover" ng-class="{'fourth-child': ($index+1)%4 == 0,'third-child': ($index+1)%4 == 3, 'second-child': ($index+1+1)%4 == 2, 'first-child': ($index+2+1)%4 == 1}">
@@ -1733,7 +1733,7 @@ button.slick-arrow{
         <div class = "row" style="margin: 0 0 1% 0;text-align: center">
           <span>
             <input style="position: relative;top: 3px"type="checkbox" ng-model="allow_edit">
-            <span>&nbsp;View & Edit calculated measurements</span>
+            <span>&nbsp;View & Edit calculated {{product_type}} measurements</span>
           </span>
         </div>
         <div uib-collapse="!allow_edit" class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
@@ -1969,7 +1969,7 @@ button.slick-arrow{
         <div class = "row" style="margin: 0 0 1% 0;text-align: center">
           <span>
             <input style="position: relative;top: 3px"type="checkbox" ng-model="allow_edit">
-            <span>&nbsp;View & Edit calculated measurements</span>
+            <span>&nbsp;View & Edit calculated {{product_type}} measurements</span>
           </span>
         </div>
         <div uib-collapse="!allow_edit" class="row" style="margin: 0;padding: 0 2% 0 4%;text-align-center">
@@ -3041,7 +3041,9 @@ button.slick-arrow{
 </script>
 <script type="text/ng-template" id="waist_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Waist']['help'])}}"/>
+    <!--//img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Waist']['help'])}}"/-->
+    <img  style="max-width: 270%;border: solid 1px black" src="assets/images/customer/measurement_guides/body/pants/waist .jpg"/>
+
   </div>
 </script>
 <script type="text/ng-template" id="inseam_help_template.html">

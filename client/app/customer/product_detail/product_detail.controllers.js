@@ -897,6 +897,11 @@ angular.module('luxire')
   $scope.measurement_unit = {
     selected: selected_measurement_unit
   };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+  var product_type = capitalizeFirstLetter($scope.product.product_type.product_type.slice(0,-1));
+  $scope.product_type = product_type;
 
 
   $scope.help_popover = {
@@ -1173,10 +1178,6 @@ angular.module('luxire')
       }
     }
   }
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-  var product_type = capitalizeFirstLetter($scope.product.product_type.product_type.slice(0,-1));
   $scope.allow_edit = false;
   $scope.measurement_types = [
     {
