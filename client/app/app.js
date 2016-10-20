@@ -10,7 +10,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 													'AngularPrint', 'monospaced.qrcode',
 												  'ui.tree','infinite-scroll', 'ngAside',
 													'angucomplete-alt', 'angularAwesomeSlider',
-													'angular-cache', 'ui.slider', 'mega-menu'])//removed ng-animate to resolve carousel issue
+													'angular-cache', 'ui.slider', 'mega-menu', 'rzModule'])//removed ng-animate to resolve carousel issue
 
 
 .run(function($location,$rootScope, $state){
