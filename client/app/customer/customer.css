@@ -121,7 +121,7 @@ span.user-drop-down:hover{
 }
 
 .standard-sizes-selector ul.dropdown-menu, .standard-measurement-fields  ul.dropdown-menu{
-    height: 50vh;
+    height: 30vh;
     overflow-y: auto;
 }
 
