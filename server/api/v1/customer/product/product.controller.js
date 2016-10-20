@@ -93,19 +93,54 @@ exports.search = function(req, res) {
 
 
 //Get product by id
+// exports.show = function(req, res){
+//   console.log('req params', req.params);
+//   console.log('req cookies', req.cookies.guest_token);
+//   http
+//     .get({
+//       uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
+//       headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+//     }
+//       , function(error, response, body){
+//         if(error){
+//           res.status(500).send(error.syscall);
+//         }
+//         else{
+//           prediction.create({
+//             "event" : "view",
+//             "entityType" : "user",
+//             "entityId" : "1",       //need to change for guest user
+//             "targetEntityType" : "item",
+//             "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
+//           });
+//           console.log('response cookies', response.headers['set-cookie']);
+//           if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
+//             for(var i=0; i<response.headers['set-cookie'].length; i++){
+//               spree_cookie = response.headers['set-cookie'][i].split(';');
+//               if(spree_cookie[0].split('=')[0]==='guest_token'){
+//                 res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
+//               }
+//             }
+//           }
+//           res.status(response.statusCode).send(body);
+//         };
+//   });
+// };
 exports.show = function(req, res){
   console.log('req params', req.params);
   console.log('req cookies', req.cookies.guest_token);
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+      uri: constants.redis.host+'/api/redis/v1/products/'+req.params.id,
     }
       , function(error, response, body){
         if(error){
-          res.status(500).send(error.syscall);
+          res.status(response.status).json(body);
+          console.log('response from redis failed', body);
         }
         else{
+          console.log('response from redis success', body, response.statusCode);
+          res.status(response.statusCode).send(body);
           prediction.create({
             "event" : "view",
             "entityType" : "user",
@@ -113,16 +148,6 @@ exports.show = function(req, res){
             "targetEntityType" : "item",
             "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
           });
-          console.log('response cookies', response.headers['set-cookie']);
-          if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
-            for(var i=0; i<response.headers['set-cookie'].length; i++){
-              spree_cookie = response.headers['set-cookie'][i].split(';');
-              if(spree_cookie[0].split('=')[0]==='guest_token'){
-                res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
-              }
-            }
-          }
-          res.status(response.statusCode).send(body);
         };
   });
 };
