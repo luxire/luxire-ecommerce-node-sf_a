@@ -272,7 +272,7 @@
         <div class="angucomplete-row" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: left;color: #8A247C;font-weight: 500;cursor: pointer" ng-repeat="result in results | limitTo: 10"
           ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" >
           <div style="width: 10%;display: inline-block">
-            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.master.images[0].small_url.indexOf('http')>-1?result.originalObject.master.images[0].small_url: 'https://test.store.luxire.com'+result.originalObject.master.images[0].small_url}}"/>
+            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.master.images[0].small_url.indexOf('http')>-1?result.originalObject.master.images[0].small_url: 'http://luxire-store.cloudhop.in'+result.originalObject.master.images[0].small_url}}"/>
           </div>
           <div style="width: 85%;display: inline-block;vertical-align: top">
             <div style="display: inline-block" class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
