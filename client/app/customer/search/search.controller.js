@@ -225,6 +225,8 @@ angular.module('luxire')
     console.log('currency changed', data)
     $scope.selected_currency = data;
     $scope.selected_redis_filters.currency = $scope.selected_currency;
+    init_price_range_sliders($scope.selected_currency);
+
   });
 
 
@@ -238,6 +240,84 @@ angular.module('luxire')
   $rootScope.$on('fetched_order_from_cookie', function(event, data){
     console.log('event fired', data);
   });
+
+  $scope.currency_symbols = function(val ,currency){
+    if(currency == "INR"){
+      return '&#8377;'+val;
+    }
+    else if(currency == "USD"){
+      return '&#36;'+val;
+    }
+    else if(currency == "EUR"){
+      return '&euro;'+val;
+    }
+    else if(currency == "SGD"){
+      return '&#36;'+val;
+    }
+    else if(currency == "AUD"){
+      return '&#36;'+val;//$
+    }
+    else if(currency == "SEK"){
+      return val+' kr';
+    }
+    else if(currency == "DKK"){
+      return val+' kr';
+    }
+    else if(currency == "CHF"){
+      return 'CHF'+val;
+    }
+    else if(currency == "NOK"){
+      return val+' kr';
+    }
+    else if(currency == "GBP"){
+      return '&pound;'+val;
+    }
+    else if(currency == "CAD"){
+      return '&#36;'+val;
+    }
+  };
+
+function init_slider(low, high, currency){
+  $scope.filter_by_price(low, high, currency);
+  $scope.slider = {
+    low_value: isNaN(low) ? 0 : low,
+    high_value: isNaN(high) ? 10000 : high,
+    options: {
+      floor: isNaN(low) ? 0 : low,
+      ceil: isNaN(high) ? 10000 : high,
+      step: 10,
+      translate: function(value) {
+        return $scope.currency_symbols(value, currency);
+      },
+      noSwitching: true,
+      getPointerColor: function(value){
+          return '#DD9FDF'
+      },
+      onEnd: function(sliderId, modelValue, highValue, pointerType){
+        console.log('min', modelValue, 'max', highValue);
+        $scope.filter_by_price(modelValue, highValue, currency)
+      }
+    }
+  };
+};
+function init_price_range_sliders(currency){
+  var one_to_one_currencies = ["USD", "CHF", "EUR", "GBP", "CAD"];
+  var one_to_two_currencies = ["AUD", "SGD"];
+  var one_to_ten_currencies = ["NOK", "DKK", "SEK"];
+  if(one_to_one_currencies.indexOf(currency) != -1){
+    init_slider(0, 500, currency);
+  }
+  else if(one_to_two_currencies.indexOf(currency) != -1){
+    init_slider(0, 1000, currency);
+  }
+  else if(one_to_ten_currencies.indexOf(currency) != -1){
+    init_slider(0,10000, currency);
+  }
+  else if(currency == "INR"){
+    init_slider(0,10000, currency);
+  }
+};
+
 
   $scope.allProductsData=[];
 
