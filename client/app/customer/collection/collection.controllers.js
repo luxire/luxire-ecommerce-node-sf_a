@@ -1,6 +1,7 @@
 angular.module('luxire')
 .controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils){
 
+
   $scope.active_permalink = $location.url().split('/collections/')[1];
   console.log('active_permalink', $scope.active_permalink);
   $scope.active_taxonomy = $scope.active_permalink.indexOf('/') > -1? $scope.active_permalink.split('/')[0] : $scope.active_permalink;
@@ -36,51 +37,6 @@ angular.module('luxire')
   var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'No of Colors'];
   var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors'];
   var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color'];
-
-  // $scope.color_variants = {
-  //   white: {
-  //     primary: '#FFFFFF',
-  //     secondary: '#FFFFFF',
-  //     display_color: '#FFFFFF'
-  //   },
-  //   pink: {
-  //     primary: '#5C0091',
-  //     secondary: '#FE26A1',
-  //     display_color: '#FC26A0'
-  //   },
-  //   blue: {
-  //     primary: '#001683',
-  //     secondary: '#00A7FF',
-  //     display_color: '#00A6FD'
-  //
-  //   },
-  //   black: {
-  //     primary: '#000000',
-  //     secondary: '#4F5054',
-  //     display_color: '#000000'
-  //   },
-  //   red: {
-  //     primary: '#880000',
-  //     secondary: '#FE0000',
-  //     display_color: '#FC0000'
-  //   },
-  //   yellow: {
-  //     primary: '#FFF300',
-  //     secondary: '#FEDF85',
-  //     display_color: '#FDF100'
-  //   },
-  //   green: {
-  //     primary: '#005200',
-  //     secondary: '#69BF26',
-  //     display_color: '#68BD26'
-  //   },
-  //   orange: {
-  //     primary: '#613309',
-  //     secondary: '#F36524',
-  //     display_color: '#613309'
-  //
-  //   }
-  // };
 
   $scope.color_variants = {
     white: {
@@ -142,6 +98,44 @@ angular.module('luxire')
     $scope.loading_filters = false;
   });
 
+  $scope.allProductsData=[];
+
+  $scope.reverse_price = false;//predicate for sorting products by price
+
+
+  var load_products = function(){
+    $scope.loading_products = true;
+    console.log('filters before post', $scope.selected_redis_filters);
+    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
+    .then(function(data){
+      $scope.loading_products = false;
+      $scope.total_collection_pages = data.data.pages;
+      $scope.taxonomy_counts = data.data.taxonomies;
+      console.log('fetched products', data.data);
+      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+      if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
+        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+      }
+    }, function(error){
+      $scope.loading_products = false;
+      console.error(error);
+    });
+    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
+  };
+
+  /*Redis caching mechanism*/
+    $scope.total_collection_pages = 1;
+    $scope.load_more = function(){
+      console.log('load more');
+      console.log('total pages', $scope.total_collection_pages);
+      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
+        load_products();
+      }
+      console.log('scrolling');
+    };
+
+  /**/
+
 
   $scope.selected_redis_filters = {
     sort: 'asc',
@@ -149,7 +143,122 @@ angular.module('luxire')
     taxonomy: $scope.active_permalink,
     price_start: $scope.price_start,
     price_end: $scope.price_end,
+    currency: CustomerUtils.get_local_currency_in_app()
   };
+
+  /*Multi currency support*/
+  $scope.currency_symbols = function(val ,currency){
+    if(currency == "INR"){
+      return '&#8377;'+val;
+    }
+    else if(currency == "USD"){
+      return '&#36;'+val;
+    }
+    else if(currency == "EUR"){
+      return '&euro;'+val;
+    }
+    else if(currency == "SGD"){
+      return '&#36;'+val;
+    }
+    else if(currency == "AUD"){
+      return '&#36;'+val;//$
+    }
+    else if(currency == "SEK"){
+      return val+' kr';
+    }
+    else if(currency == "DKK"){
+      return val+' kr';
+    }
+    else if(currency == "CHF"){
+      return 'CHF'+val;
+    }
+    else if(currency == "NOK"){
+      return val+' kr';
+    }
+    else if(currency == "GBP"){
+      return '&pound;'+val;
+    }
+    else if(currency == "CAD"){
+      return '&#36;'+val;
+    }
+  };
+
+  /*Redis caching mechanism*/
+    $scope.sort_by_price = function(is_desc){
+      $scope.reverse_price = is_desc;
+      var price_sort_order = is_desc === true ? 'desc' : 'asc';
+      $scope.selected_redis_filters.sort = price_sort_order;
+      $scope.selected_redis_filters.page = 1;
+      $scope.allProductsData = [];
+      load_products();
+      $('html, body').animate({ scrollTop: 0}, 500);
+    };
+
+    $scope.filter_by_price = function(price_start, price_end, currency){
+      $scope.allProductsData = [];
+      $scope.selected_redis_filters.price_start = price_start;
+      $scope.selected_redis_filters.price_end = price_end;
+      $scope.selected_redis_filters.page = 1;
+      $scope.selected_redis_filters.currency = currency;
+      load_products();
+    }
+  /**/
+
+  function init_slider(low, high, currency){
+    console.log('low', low, 'high', high, 'currency', currency);
+    $scope.filter_by_price(low, high, currency);
+    $("#priceSlider").remove();
+    $scope.slider = {
+      low_value: isNaN(low) ? 0 : low,
+      high_value: isNaN(high) ? 10000 : high,
+      options: {
+        floor: isNaN(low) ? 0 : low,
+        ceil: isNaN(high) ? 10000 : high,
+        step: 10,
+        translate: function(value) {
+          return $scope.currency_symbols(value, currency);
+        },
+        noSwitching: true,
+        getPointerColor: function(value){
+            return '#DD9FDF'
+        },
+        onEnd: function(sliderId, modelValue, highValue, pointerType){
+          console.log('min', modelValue, 'max', highValue);
+          $scope.filter_by_price(modelValue, highValue, currency)
+        }
+      }
+    };
+  };
+  function init_price_range_sliders(currency){
+    console.log('currency changed init', currency);
+    var one_to_one_currencies = ["USD", "CHF", "EUR", "GBP", "CAD"];
+    var one_to_two_currencies = ["AUD", "SGD"];
+    var one_to_ten_currencies = ["NOK", "DKK", "SEK"];
+    if(one_to_one_currencies.indexOf(currency) != -1){
+      init_slider(0, 500, currency);
+    }
+    else if(one_to_two_currencies.indexOf(currency) != -1){
+      init_slider(0, 1000, currency);
+    }
+    else if(one_to_ten_currencies.indexOf(currency) != -1){
+      init_slider(0,10000, currency);
+    }
+    else if(currency == "INR"){
+      init_slider(0,10000, currency);
+    }
+  };
+
+  console.log('in app currency', CustomerUtils.get_local_currency_in_app());
+  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  init_price_range_sliders($scope.selected_currency);
+  $scope.$on('currency_change', function(event, data){
+    console.log('currency changed', data)
+    $scope.selected_currency = data;
+    $scope.selected_redis_filters.currency = $scope.selected_currency;
+    $scope.select_filter_option('price', 'all', 'display_price');
+    init_price_range_sliders($scope.selected_currency);
+  });
+
   var price_range = function(price_string){
     var range = price_string.split(',');
     var prices = [];
@@ -244,93 +353,6 @@ angular.module('luxire')
   });
 
 
-    $scope.currency_symbols = function(val ,currency){
-      if(currency == "INR"){
-        return '&#8377;'+val;
-      }
-      else if(currency == "USD"){
-        return '&#36;'+val;
-      }
-      else if(currency == "EUR"){
-        return '&euro;'+val;
-      }
-      else if(currency == "SGD"){
-        return '&#36;'+val;
-      }
-      else if(currency == "AUD"){
-        return '&#36;'+val;//$
-      }
-      else if(currency == "SEK"){
-        return val+' kr';
-      }
-      else if(currency == "DKK"){
-        return val+' kr';
-      }
-      else if(currency == "CHF"){
-        return 'CHF'+val;
-      }
-      else if(currency == "NOK"){
-        return val+' kr';
-      }
-      else if(currency == "GBP"){
-        return '&pound;'+val;
-      }
-      else if(currency == "CAD"){
-        return '&#36;'+val;
-      }
-    };
-
-  function init_slider(low, high, currency){
-    $scope.filter_by_price(low, high, currency);
-    $scope.slider = {
-      low_value: isNaN(low) ? 0 : low,
-      high_value: isNaN(high) ? 10000 : high,
-      options: {
-        floor: isNaN(low) ? 0 : low,
-        ceil: isNaN(high) ? 10000 : high,
-        step: 10,
-        translate: function(value) {
-          return $scope.currency_symbols(value, currency);
-        },
-        noSwitching: true,
-        getPointerColor: function(value){
-            return '#DD9FDF'
-        },
-        onEnd: function(sliderId, modelValue, highValue, pointerType){
-          console.log('min', modelValue, 'max', highValue);
-          $scope.filter_by_price(modelValue, highValue, currency)
-        }
-      }
-    };
-  };
-  function init_price_range_sliders(currency){
-    var one_to_one_currencies = ["USD", "CHF", "EUR", "GBP", "CAD"];
-    var one_to_two_currencies = ["AUD", "SGD"];
-    var one_to_ten_currencies = ["NOK", "DKK", "SEK"];
-    if(one_to_one_currencies.indexOf(currency) != -1){
-      init_slider(0, 500, currency);
-    }
-    else if(one_to_two_currencies.indexOf(currency) != -1){
-      init_slider(0, 1000, currency);
-    }
-    else if(one_to_ten_currencies.indexOf(currency) != -1){
-      init_slider(0,10000, currency);
-    }
-    else if(currency == "INR"){
-      init_slider(0,10000, currency);
-    }
-  };
-
-  /*Multi currency support*/
-  console.log('in app currency', CustomerUtils.get_local_currency_in_app());
-  $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
-  $scope.$on('currency_change', function(event, data){
-    console.log('currency changed', data)
-    $scope.selected_currency = data;
-    $scope.selected_redis_filters.currency = $scope.selected_currency;
-    init_price_range_sliders($scope.selected_currency);
-  });
-
   /*Filters from redis*/
 
   /*Redis Filters-start*/
@@ -338,66 +360,10 @@ angular.module('luxire')
   $scope.total_collection_pages = 1;
 
 
-  /*Redis caching mechanism*/
-    $scope.sort_by_price = function(is_desc){
-      $scope.reverse_price = is_desc;
-      var price_sort_order = is_desc === true ? 'desc' : 'asc';
-      $scope.selected_redis_filters.sort = price_sort_order;
-      $scope.selected_redis_filters.page = 1;
-      $scope.allProductsData = [];
-      load_products();
-      $('html, body').animate({ scrollTop: 0}, 500);
-    };
 
-    $scope.filter_by_price = function(price_start, price_end, currency){
-      $scope.allProductsData = [];
-      $scope.selected_redis_filters.price_start = price_start;
-      $scope.selected_redis_filters.price_end = price_end;
-      $scope.selected_redis_filters.page = 1;
-      $scope.selected_redis_filters.currency = currency;
-      load_products();
-    }
-  /**/
 
   /*Redis Filter-end*/
 
-  $scope.allProductsData=[];
-
-  $scope.reverse_price = false;//predicate for sorting products by price
-
-
-  var load_products = function(){
-    $scope.loading_products = true;
-    console.log('filters before post', $scope.selected_redis_filters);
-    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
-    .then(function(data){
-      $scope.loading_products = false;
-      $scope.total_collection_pages = data.data.pages;
-      $scope.taxonomy_counts = data.data.taxonomies;
-      console.log('fetched products', data.data);
-      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      if(!$scope.allProductsData.length && $rootScope.alerts.length == 1){
-        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
-      }
-    }, function(error){
-      $scope.loading_products = false;
-      console.error(error);
-    });
-    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
-  };
-
-  /*Redis caching mechanism*/
-    $scope.total_collection_pages = 1;
-    $scope.load_more = function(){
-      console.log('load more');
-      console.log('total pages', $scope.total_collection_pages);
-      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
-        load_products();
-      }
-      console.log('scrolling');
-    };
-
-  /**/
 
 
 

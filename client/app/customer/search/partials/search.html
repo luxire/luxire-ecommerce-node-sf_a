@@ -82,12 +82,12 @@
                 </div>
                 <div ng-if="selected_filters[property.name].toLowerCase() == 'custom'" ng-init="$parent.price_start='';$parent.price_end=''" class="">
                   <div style="width: 80%">
-                      <rzslider
+                      <rzslider id="priceSlider"
                            rz-slider-model="slider.low_value" rz-slider-high="slider.high_value"
                            rz-slider-options="slider.options"></rzslider>
                   </div>
                 </div>
-                
+
 
 
 

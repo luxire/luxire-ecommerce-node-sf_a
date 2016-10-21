@@ -177,6 +177,45 @@ angular.module('luxire')
   $scope.allProductsData=[];
   $scope.total_collection_pages = 1;
 
+  $scope.allProductsData=[];
+
+  var load_products = function(){
+    $scope.loading_products = true;
+    console.log('filters before post', $scope.selected_redis_filters);
+    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
+    .then(function(data){
+      $scope.loading_products = false;
+      $scope.total_collection_pages = data.data.pages;
+      $scope.taxonomy_counts = data.data.taxonomies;
+      console.log('fetched products', data.data);
+      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+      if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
+        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+      }
+    }, function(error){
+      $scope.loading_products = false;
+      console.error(error);
+    });
+    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
+  };
+
+
+
+  /*Redis caching mechanism*/
+    $scope.total_collection_pages = 1;
+    $scope.load_more = function(){
+      console.log('load more');
+      console.log('total pages', $scope.total_collection_pages);
+      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
+        load_products();
+      }
+      console.log('scrolling');
+    };
+
+  /**/
+
+
+
 
   /*Redis caching mechanism*/
     var active_res_page = 1;
@@ -220,13 +259,14 @@ angular.module('luxire')
 
     /*Multi currency support*/
   $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+  init_price_range_sliders($scope.selected_currency);
   $scope.selected_redis_filters.currency = $scope.selected_currency;
   $scope.$on('currency_change', function(event, data){
     console.log('currency changed', data)
     $scope.selected_currency = data;
     $scope.selected_redis_filters.currency = $scope.selected_currency;
+    $scope.select_filter_option('price', 'all', 'display_price');
     init_price_range_sliders($scope.selected_currency);
-
   });
 
 
@@ -279,6 +319,7 @@ angular.module('luxire')
 
 function init_slider(low, high, currency){
   $scope.filter_by_price(low, high, currency);
+  $("#priceSlider").remove();
   $scope.slider = {
     low_value: isNaN(low) ? 0 : low,
     high_value: isNaN(high) ? 10000 : high,
@@ -318,43 +359,6 @@ function init_price_range_sliders(currency){
   }
 };
 
-
-  $scope.allProductsData=[];
-
-  var load_products = function(){
-    $scope.loading_products = true;
-    console.log('filters before post', $scope.selected_redis_filters);
-    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
-    .then(function(data){
-      $scope.loading_products = false;
-      $scope.total_collection_pages = data.data.pages;
-      $scope.taxonomy_counts = data.data.taxonomies;
-      console.log('fetched products', data.data);
-      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      if(!$scope.allProductsData.length){
-        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
-      }
-    }, function(error){
-      $scope.loading_products = false;
-      console.error(error);
-    });
-    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
-  };
-
-
-
-  /*Redis caching mechanism*/
-    $scope.total_collection_pages = 1;
-    $scope.load_more = function(){
-      console.log('load more');
-      console.log('total pages', $scope.total_collection_pages);
-      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
-        load_products();
-      }
-      console.log('scrolling');
-    };
-
-  /**/
 
 
 
