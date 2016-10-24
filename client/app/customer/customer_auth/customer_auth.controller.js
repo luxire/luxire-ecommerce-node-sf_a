@@ -19,13 +19,15 @@ angular.module('luxire')
   $scope.nav_to_state = $state.params.nav_to_state;
   /*Login function*/
   $scope.login = function(){
+    $scope.error = '';
     console.log('login');
     if($scope.customer.user.email && $scope.customer.user.password){
+      $scope.loading = true;
       CustomerAuthentication.authenticate($scope.customer)
       .then(function(data){
         console.log('login data', data.data);
         CustomerAuthentication.login($scope.remember_me, data.data);
-
+        $scope.loading = false;
         if($state.params.nav_to_state === 'customer.checkout_address'){
 
           CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
@@ -56,6 +58,7 @@ angular.module('luxire')
         console.log(data);
       },
       function(error){
+        $scope.loading = false;
         $scope.error = '*Invalid user id or password';
         console.error(error);
       });
