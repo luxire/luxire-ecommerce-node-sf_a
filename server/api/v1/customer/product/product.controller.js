@@ -135,12 +135,10 @@ exports.show = function(req, res){
     }
       , function(error, response, body){
         if(error){
-          res.status(response.status).json(body);
-          console.log('response from redis failed', body);
+          res.status(500).send(error.syscall);
+          console.log('response from redis failed', error);
         }
         else{
-          console.log('response from redis success', body, response.statusCode);
-          res.status(response.statusCode).send(body);
           prediction.create({
             "event" : "view",
             "entityType" : "user",
@@ -148,6 +146,7 @@ exports.show = function(req, res){
             "targetEntityType" : "item",
             "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
           });
+          res.status(response.statusCode).send(body);
         };
   });
 };
@@ -175,6 +174,7 @@ exports.taxonomy_index = function(req, res){
     .get(constants.spree.host+constants.spree.taxonomy, function(error, response, body){
       if(error){
         res.status(500).send(error.syscall);
+        console.log('failed to fetch taxonomies', error);
       }
       else{
         if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
