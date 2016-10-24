@@ -1696,7 +1696,7 @@ button.slick-arrow{
                                         <img ng-src="{{getImage(bespoke_attribute.image)}}"
                                         class="img-circle"
                                         ng-class="{'active-bespoke': bespoke_attribute.name==selected_bespoke_attribute.name}"
-                                          style="margin-top: 8%; margin-bottom: 8%;border: solid 2px #FDFDFD"
+                                          style="margin-top: 8%; margin-bottom: 8%;border: solid 2px #FDFDFD;background-color: white"
                                           onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                           <div style="font-size: 100%;text-align:center;"><span>{{bespoke_attribute.name}}</span></div>
                                       </div>
@@ -1723,20 +1723,20 @@ button.slick-arrow{
                                     <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': style_name.toLowerCase()===cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()}" style="background-color: #FDFDFD;padding: 5% 0%;display: block" >
                                       <img class="img-circle" ng-src="{{getImage(style_object.image)||'assets/images/customer/grey_circle.png'}}" alt="getImage(style_object.image)"
                                         ng-class="{'active-bespoke': style_name.toLowerCase()===cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'].toLowerCase()}"
-                                        style="border: solid 2px #DADADA" onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
+                                        style="border: solid 2px #DADADA;background-color: white;" onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                     </div>
                                     <div style="font-size: 85%;text-align: center;padding-top:1%;">{{style_name}}<span ng-if="style_object.cost">[<span ng-bind-html="currency_symbols(style_object.cost[selected_currency], selected_currency)"></span>]</span></div>
                                 </div>
                                 <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()!='monogram'" style="margin-left:2%;cursor: pointer" >
                                   <div class="row container-fluid" style="margin-top:2%;">
-                                    <div ng-click="activate_bespoke_style('personalize', personalization_attribute_child_value, $index, personalization_attribute_child)"
+                                    <div  ng-click="activate_bespoke_style('personalize', personalization_attribute_child_value, $index, personalization_attribute_child)"
                                       ng-repeat="(personalization_attribute_child, personalization_attribute_child_value) in selected_bespoke_attribute.value"
                                         style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%" >
-                                        <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center";  >
+                                        <div ng-class="{'active-bespoke-attributes-slide': cart_object['personalization_attributes'][selected_bespoke_attribute.name].hasOwnProperty(personalization_attribute_child)}" class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center";  >
                                           <img ng-src="{{getImage(personalization_attribute_child_value.image) || 'assets/images/customer/grey_circle.png'}}"
                                             ng-class="{'active-bespoke': cart_object['personalization_attributes'][selected_bespoke_attribute.name].hasOwnProperty(personalization_attribute_child)}"
                                             alt="getImage(style_object.image)"
-                                            class="img-circle" style="border: solid 1.5px #E5E5E5;"
+                                            class="img-circle" style="border: solid 1.5px #E5E5E5;background-color: white"
                                               onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                         </div>
                                         <div style="font-size: 85%;text-align: center;padding-top:1%;">{{personalization_attribute_child}}[<span ng-bind-html="currency_symbols(personalization_attribute_child_value.cost[selected_currency], selected_currency)"></span>]</div>
@@ -1746,9 +1746,9 @@ button.slick-arrow{
                                 </div>
                                 <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram'" class="row" style="margin-left:2%;cursor: pointer">
                                   <div class="row container-fluid" style="margin-top:2%;">
-                                    <div ng-click="activate_bespoke_style('personalize',null, $index, 'monogram')"
+                                    <div  ng-click="activate_bespoke_style('personalize',null, $index, 'monogram')"
                                         style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%" >
-                                        <div class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center" >
+                                        <div ng-class="{'active-bespoke-attributes-slide': cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)}" class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center" >
                                           <img ng-src="{{getImage(selected_bespoke_attribute.value.image)||'assets/images/customer/grey_circle.png'}}"
                                             ng-class="{'active-bespoke': cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)}"
 
