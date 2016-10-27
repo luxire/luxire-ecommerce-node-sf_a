@@ -127,6 +127,13 @@ angular.module('luxire')
     id: -1
   }
 
+  $scope.get_display_width = function(){
+    // console.log('area', $("#activeReviewArea").innerWidth());
+    // console.log('img', $("#activeReviewImage").innerWidth());
+    // $timeout(function(){
+    // },0)
+  };
+
   $scope.change_active_click_bait = function(id){
     console.log('mouse over', id);
     $scope.active_click_bait.id=id;
@@ -348,13 +355,17 @@ angular.module('luxire')
   for(var i=0; i<$scope.number_of_reviews; i++){
     $scope.review_indexes.push(i);
   };
+  $scope.get_review_width = function(){
+    $timeout(function(){
+      $scope.review_description_width = (($("#activeReviewArea").innerWidth() - $("#activeReviewImage").innerWidth())-20)+'px';
+    })
+  };
 
   $scope.change_active_review_index = function(index){
     console.log('current active index', $scope.active_customer_review_index);
     console.log('index', index);
     $scope.active_customer_review_index = index;
     console.log('new active index', $scope.active_customer_review_index);
-
   };
 
   $scope.getImage = function(url){
