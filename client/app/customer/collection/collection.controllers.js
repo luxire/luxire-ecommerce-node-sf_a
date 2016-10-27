@@ -106,6 +106,9 @@ angular.module('luxire')
   var load_products = function(){
     $scope.loading_products = true;
     console.log('filters before post', $scope.selected_redis_filters);
+    if($scope.selected_redis_filters["wrinkle_resistance"]){
+      $scope.selected_redis_filters["wrinkle_resistance"] = "True";
+    }
     CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
     .then(function(data){
       $scope.loading_products = false;
@@ -190,6 +193,7 @@ angular.module('luxire')
       $scope.selected_redis_filters.sort = price_sort_order;
       $scope.selected_redis_filters.page = 1;
       $scope.allProductsData = [];
+      console.log('sort by price load products');
       load_products();
       $('html, body').animate({ scrollTop: 0}, 500);
     };
@@ -200,13 +204,14 @@ angular.module('luxire')
       $scope.selected_redis_filters.price_end = price_end;
       $scope.selected_redis_filters.page = 1;
       $scope.selected_redis_filters.currency = currency;
+      console.log('filter by price load products');
       load_products();
     }
   /**/
 
   function init_slider(low, high, currency){
     console.log('low', low, 'high', high, 'currency', currency);
-    $scope.filter_by_price(low, high, currency);
+    // $scope.filter_by_price(low, high, currency);
     $("#priceSlider").remove();
     $scope.slider = {
       low_value: isNaN(low) ? 0 : low,
@@ -238,13 +243,13 @@ angular.module('luxire')
       init_slider(0, 500, currency);
     }
     else if(one_to_two_currencies.indexOf(currency) != -1){
-      init_slider(0, 1000, currency);
+      init_slider(0, 10000, currency);
     }
     else if(one_to_ten_currencies.indexOf(currency) != -1){
-      init_slider(0,10000, currency);
+      init_slider(0,100000, currency);
     }
     else if(currency == "INR"){
-      init_slider(0,10000, currency);
+      init_slider(0,100000, currency);
     }
   };
 
@@ -299,9 +304,10 @@ angular.module('luxire')
       else if($scope.selected_filters[property] && option === 'all'){
         delete $scope.selected_redis_filters[db_field];
         if(property == 'price'){
-          $scope.selected_redis_filters.page = 1;
-          $scope.allProductsData = [];
-          load_products();
+          // $scope.selected_redis_filters.page = 1;
+          // $scope.allProductsData = [];
+          // console.log('load products test - all prices');
+          // load_products();// fixing duplicates
         }
       }
       /*For redis post*/
@@ -375,16 +381,59 @@ angular.module('luxire')
     return ImageHandler.url(url);
   }
 
+  $scope.weight_help_template = {
+    url: 'weight-help.html'
+  };
+  $scope.weight_help_texts = [
+    {
+      id: 1,
+      label: '< 50 gsm'
+    },{
+      id: 2,
+      label: '50-60 gsm'
+    },{
+      id: 3,
+      label: '60-70 gsm'
+    },{
+      id: 4,
+      label: '70-80 gsm'
+    },{
+      id: 5,
+      label: '80-90 gsm'
+    },{
+      id: 6,
+      label: '90-100 gsm'
+    },{
+      id: 7,
+      label: '100-110 gsm'
+    },{
+      id: 8,
+      label: '110-120 gsm'
+    },{
+      id: 9,
+      label: '120-130 gsm'
+    },{
+      id: 10,
+      label: '130-140 gsm'
+    },{
+      id: 11,
+      label: '140-150 gsm'
+    },{
+      id: 12,
+      label: '150< gsm'
+    }
+  ]
+
   var weight_indexes_ref = {
     shirts: {
       min: 50,
       max: 150,
-      step: 12.5//150/12
+      step: 10//150/12
     },
     pants: {
       min: 150,
       max: 500,
-      step: 30 //
+      step: 35 //(500-150)/10
     }
   };
 
@@ -412,7 +461,7 @@ angular.module('luxire')
       return 12;
     }
     else{
-      return parseInt((parseFloat(variant_weight)-min_weight)/step)+1;
+      return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
     };
   };
   var thickness = 0;
