@@ -8,14 +8,14 @@ var errors = require('./components/errors');
 var path = require('path');
 var jwt = require('jsonwebtoken');//used to create/sign/verify token
 var constants = require('./config/constants');
-var redis_client = require('./config/redis');
+// var redis_client = require('./config/redis');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
 var http = require('request');
 
 
-console.log('redis client', redis_client);
+// console.log('redis client', redis_client);
 module.exports = function(app) {
 
   // Insert routes below
@@ -43,7 +43,7 @@ module.exports = function(app) {
   app.use('/api/luxire_properties.json', require('./api/luxireProperties'));
   app.use('/api/luxire_vendor_masters', require('./api/luxireVendor'));
 
-  /*To test filteration*/
+  /*To test filteration
   app.get('/redis_products',function(req,res){
       client.exists("products", function(err,reply){
           if(reply===1){
@@ -307,7 +307,7 @@ module.exports = function(app) {
           }
           client.set("products", JSON.stringify(obj));
 
-
+*/
 
 };
 // app.all('/*', function (req, res, next) {
