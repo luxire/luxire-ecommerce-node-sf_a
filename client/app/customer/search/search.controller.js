@@ -124,9 +124,9 @@ angular.module('luxire')
       else if($scope.selected_filters[property] && option === 'all'){
         delete $scope.selected_redis_filters[db_field];
         if(property == 'price'){
-          $scope.selected_redis_filters.page = 1;
-          $scope.allProductsData = [];
-          load_products();
+          // $scope.selected_redis_filters.page = 1;
+          // $scope.allProductsData = [];
+          // load_products();//fixing duplicates
         }
       }
       /*For redis post*/
@@ -182,6 +182,9 @@ angular.module('luxire')
   var load_products = function(){
     $scope.loading_products = true;
     console.log('filters before post', $scope.selected_redis_filters);
+    if($scope.selected_redis_filters["wrinkle_resistance"]){
+      $scope.selected_redis_filters["wrinkle_resistance"] = "True";
+    }
     CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
     .then(function(data){
       $scope.loading_products = false;
@@ -318,7 +321,7 @@ angular.module('luxire')
   };
 
 function init_slider(low, high, currency){
-  $scope.filter_by_price(low, high, currency);
+  // $scope.filter_by_price(low, high, currency);
   $("#priceSlider").remove();
   $scope.slider = {
     low_value: isNaN(low) ? 0 : low,
