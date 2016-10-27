@@ -94,7 +94,7 @@ font-size: 1px
   border-color: #8A247C;
 }
 .btn.btn-default.btn-lux{
-  font-weight: 100;
+  font-weight: 300;
   border-radius: 0;
 }
 .active-fit{
@@ -1568,15 +1568,21 @@ button.slick-arrow{
               </div>
             </div>
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" >
-              <div style="text-align: center;margin-top: 1%;font-size: 150%;">
-                {{active_detail_style.name}}
+              <div style="display: inline-block; width: 5%;text-align:right;color: #b62fa4">
+                <i ng-show="more_details_on_style" style="cursor: pointer" class="fa fa-minus-circle" aria-hidden="true" ng-click="more_details_on_style = !more_details_on_style"></i>
               </div>
-              <div style="text-align: center;margin-top: 3%;">
-                <div ng-class="{'shrink-style-details': !more_details_on_style}" ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
+              <div style="display: inline-block; width: 94%">
+                <div style="text-align: center;margin-top: 1%;font-size: 150%;">
+                  {{active_detail_style.name}}
+                </div>
+                <div style="text-align: center;margin-top: 3%;">
+                  <div ng-class="{'shrink-style-details': !more_details_on_style}" ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
+                </div>
+                <div ng-show="!more_details_on_style" style="text-align: left">
+                  <p style="color: #8a247c;cursor: pointer;margin-top: 1%" ng-click="more_details_on_style=true">+more details</p>
+                </div>
               </div>
-              <div ng-show="!more_details_on_style" style="text-align: left">
-                <p style="color: #8a247c;cursor: pointer;margin-top: 1%" ng-click="more_details_on_style=true">+more details</p>
-              </div>
+
             </div>
           </div>
         </div>
@@ -1627,9 +1633,9 @@ button.slick-arrow{
                       <div style="width: 48%;text-align: left;display: inline-block;vertical-align: top;font-weight: 400">
                         {{attribute.name}}:
                       </div>
-                      <div style="width: 48%;text-align: left;display: inline-block;display: inline-block;text-decoration: underline;color: #7F0E6E"
+                      <div style="width: 48%;text-align: left;display: inline-block;display: inline-block;text-decoration: underline;color: #7F0E6E;cursor: default"
                         ng-init="attribute.options=cart_object['customization_attributes'][attribute.name]['options']"
-                        uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter"
+                        uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''" popover-placement="right" popover-trigger="mouseenter"
                         animate-on-change="cart_object['customization_attributes'][attribute.name]['value']" >
                         {{cart_object["customization_attributes"][attribute.name]['value']}}
                       </div>
@@ -1638,19 +1644,19 @@ button.slick-arrow{
                       <div style="width: 48%;text-align: left;display: inline-block;font-weight: 400;vertical-align: top">
                         {{attribute.name}}:
                       </div>
-                      <div style="width: 48%;text-align: left;display: inline-block;color: #7F0E6E">
+                      <div style="width: 48%;text-align: left;display: inline-block;color: #7F0E6E;cursor: default">
 
                         <div ng-if="attr_options_key_length(cart_object['personalization_attributes'][attribute.name])>0 && attribute.name.toLowerCase()!=='monogram'"
                             ng-repeat="(prop_key, prop_val) in cart_object['personalization_attributes'][attribute.name]"
                             ng-init="attribute={};attribute.options=prop_val"
 
-                            uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter" >
+                            uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''" popover-placement="right" popover-trigger="mouseenter" >
                             &#9899 <span style="text-decoration: underline;" animate-on-change="prop_key"> {{prop_key}}</span>
                         </div>
                         <div ng-if="attr_options_key_length(cart_object['personalization_attributes'][attribute.name])>0 && attribute.name.toLowerCase()=='monogram'"
                             ng-init="attribute={};attribute.options=cart_object['personalization_attributes'][$parent.attribute.name]"
                             animate-on-change="cart_object['personalization_attributes'][$parent.attribute.name]"
-                            uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter" >
+                            uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''" popover-placement="right" popover-trigger="mouseenter" >
                             Yes
                         </div>
 
@@ -1731,7 +1737,7 @@ button.slick-arrow{
                                   <div class="row container-fluid" style="margin-top:2%;">
                                     <div  ng-click="activate_bespoke_style('personalize', personalization_attribute_child_value, $index, personalization_attribute_child)"
                                       ng-repeat="(personalization_attribute_child, personalization_attribute_child_value) in selected_bespoke_attribute.value"
-                                        style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%" >
+                                        style="display:inline-block;float:left;margin-left: 4%;cursor: pointer; width: 18%;margin-bottom: 3%" >
                                         <div ng-class="{'active-bespoke-attributes-slide': cart_object['personalization_attributes'][selected_bespoke_attribute.name].hasOwnProperty(personalization_attribute_child)}" class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center";  >
                                           <img ng-src="{{getImage(personalization_attribute_child_value.image) || 'assets/images/customer/grey_circle.png'}}"
                                             ng-class="{'active-bespoke': cart_object['personalization_attributes'][selected_bespoke_attribute.name].hasOwnProperty(personalization_attribute_child)}"
@@ -2094,7 +2100,8 @@ button.slick-arrow{
       {{attr_property}}:
     </div>
     <div style="display: inline-block;width: 38%;padding:1%;">
-      {{attr_property_value}}
+      <span ng-if="attr_property.toLowerCase() == 'cost'" ng-bind-html="currency_symbols(attr_property_value[selected_currency], selected_currency)"></span>
+      <span ng-if="attr_property.toLowerCase() !== 'cost'" >{{attr_property_value}}</span>
     </div>
 
   </div>

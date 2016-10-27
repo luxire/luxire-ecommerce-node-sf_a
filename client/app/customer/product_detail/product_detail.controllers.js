@@ -1920,16 +1920,16 @@ angular.module('luxire')
     if($scope.selected_style.name === style.name){
       $scope.selected_style = {};
       $scope.style_extractor(style, false);
-      $('.slick-bespoke-style-slider').slick('getSlick').unslick();
-      $('.slick-bespoke-style-slider').slick({
-        slidesToShow: 5,
-        slidesToScroll: 3,
-        centerMode: true,
-        focusOnSelect: true,
-        initialSlide: $scope.activeStyleCarouselIndex
-      });
-      $('.slick-bespoke-style-slider').slick('getSlick').slickGoTo(2, true);
-      $scope.activate_style_details(luxire_styles[2]);
+      // $('.slick-bespoke-style-slider').slick('getSlick').unslick();
+      // $('.slick-bespoke-style-slider').slick({
+      //   slidesToShow: 5,
+      //   slidesToScroll: 3,
+      //   centerMode: true,
+      //   focusOnSelect: true,
+      //   initialSlide: $scope.activeStyleCarouselIndex
+      // });
+      // $('.slick-bespoke-style-slider').slick('getSlick').slickGoTo(2, true);
+      // $scope.activate_style_details(luxire_styles[2]);
 
     }
     else{
