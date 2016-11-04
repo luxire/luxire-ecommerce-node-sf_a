@@ -175,15 +175,16 @@ avoid conflict with customer ctrl on admin side*/
         }
       }
       else{
-        $scope.is_window_scrolled = false;
         if($scope.is_customer_home_state){
           $timeout(function(){
+            $scope.is_window_scrolled = false;
             $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
           })
 
         }
         else{
           $timeout(function(){
+            $scope.is_window_scrolled = false;
             $(".customer-main-nav-header").removeClass('changed-customer-header-color');
           })
 
