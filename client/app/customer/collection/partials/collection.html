@@ -158,7 +158,9 @@
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].original_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer;"></img>
                 </div> -->
                 <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                  <a href="/#/products/{{product.slug}}">
+                    <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                  </a>
                 </div>
                 <!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].original_url)}}" style="cursor: pointer;"></img>
@@ -183,9 +185,9 @@
                   <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
                       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
                         <span>
-                          <img uib-popover-template="weight_help_template.url" popover-title="{{'Weight: '+product.luxire_product.gsm+ ' gsm'}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 12%; margin-left: 8%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.thickness.split('mm')[0]}} thickness" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-                          <img style="max-width: 14%; margin-left: 8%" title="{{product.luxire_product.stiffness}} stiffness" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                          <img uib-popover-template="help_template.weight_url" popover-title="{{'Weight: '+product.luxire_product.gsm+ ' gsm'}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 12%; margin-left: 8%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png" alt="" />&nbsp;&nbsp;
+                          <img uib-popover-template="help_template.thickness_url" popover-title="{{'Thickness: '+product.luxire_product.thickness.split('mm')[0]}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom"  style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                          <img uib-popover-template="help_template.stiffness_url" popover-title="{{'Stiffness '+product.luxire_product.stiffness}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
                         </span>
 
                       </div>
@@ -211,7 +213,9 @@
                   <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
                 </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
                 <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                  <a href="/#/products/{{product.slug}}">
+                    <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                  </a>
                 </div>
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
@@ -273,14 +277,28 @@
 
 </div>
 <script id="weight-help.html" type="text/ng-template">
-  <div >
-    <div>
-      <div style="display: inline-block; width: 33.33%"ng-repeat="weight_help_text in weight_help_texts">
+    <div style="margin: auto;">
+      <div style="display: inline-block; width: 33.33%"ng-repeat="weight_help_text in weight_help_texts[product.product_type.product_type.toLowerCase()]">
         <img style="max-width: 15%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_help_text.id}}.png">
         <p style="font-size: 85%;display: inline-block">{{weight_help_text.label}}
       </div>
     </div>
-  </div>
+</script>
+<script id="thickness-help.html" type="text/ng-template">
+    <div style="margin: auto;width: 100%">
+      <div style="display: inline-block; width: 33.33%"ng-repeat="thickness_help_text in thickness_help_texts">
+        <img style="max-width: 15%" ng-src="assets/images/customer/luxire-thickness-icons/{{$index+1}}.png">
+        <p style="font-size: 85%;display: inline-block">{{thickness_help_text.label}}</p>
+      </div>
+    </div>
+</script>
+<script id="stiffness-help.html" type="text/ng-template">
+    <div style="margin: auto;width: 100%">
+      <div style="display: inline-block; width: 33.33%" ng-repeat="stiffness_help_text in stiffness_help_texts">
+        <img style="max-width: 25%" ng-src="assets/images/customer/luxire-stiffness-icons/{{$index+1}}.png">
+        <p style="font-size: 85%;display: inline-block">{{stiffness_help_text.label}}</p>
+      </div>
+    </div>
 </script>
 <!--Filter-->
 <!--Material-->
