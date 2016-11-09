@@ -43,12 +43,19 @@ angular.module('luxire')
   // function(error){
   //   console.error(error);
   // });
+  function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  $scope.available_collections = ['shirts', 'pants'];
 
   $scope.go_to_collection = function(permalink){
-    console.log('set location for', permalink);
-    console.log('location', $location.url());
-    $location.url('/collections/'+permalink);
-    console.log('changed location', $location.url());
+
+    if($scope.available_collections.indexOf(permalink) == -1){
+      $rootScope.alerts[0] = {type: 'warning', message: capitalizeFirstLetter(permalink)+ ' Collection coming soon!'};
+    }
+    else{
+      $location.url('/collections/'+permalink);
+    }
 
   };
 
@@ -153,14 +160,18 @@ angular.module('luxire')
       y_pos: '48%',
       x_pos: '23.5%',
       name: 'Shirt',
-      text_line: 'This is a sample text animation for Shirt Style'
+      text_line: 'This is a sample text animation for Shirt Style',
+      active: true,
+      permalink: 'shirts'
     },
     {
       id: 2,
       y_pos: '58%',
       x_pos: '19.5%',
       name: 'Pant',
-      text_line: 'This is a sample text animation for Pant Style'
+      text_line: 'This is a sample text animation for Pant Style',
+      active: true,
+      permalink: 'pants'
     },
     {
       id: 3,
