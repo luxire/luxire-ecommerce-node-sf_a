@@ -375,52 +375,218 @@ function init_price_range_sliders(currency){
     return ImageHandler.url(url);
   }
 
-  /*Get weight icon*/
-  $scope.weight_index = function(variant_weight){
 
-    if((parseFloat(variant_weight)-50)<0){
-      return 1;
-    }
-    else if((parseFloat(variant_weight)-50)>150){
-      return 12;
-    }
-    else{
-      return parseInt((parseFloat(variant_weight)-50)/12.5)+1;
+    $scope.help_template = {
+      weight_url: 'weight-help.html',
+      thickness_url: 'thickness-help.html',
+      stiffness_url: 'stiffness-help.html'
     };
-  };
-  var thickness = 0;
-  /*Get Thickness icon*/
-  $scope.thickness_index = function(variant_thickness){
-    if(variant_thickness != undefined){
-      thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-      if(thickness/10 >5){
-        return 6;
+    $scope.weight_help_texts = {
+      "shirts": [
+        {
+          id: 1,
+          label: '< 50 gsm'
+        },{
+          id: 2,
+          label: '50-60 gsm'
+        },{
+          id: 3,
+          label: '60-70 gsm'
+        },{
+          id: 4,
+          label: '70-80 gsm'
+        },{
+          id: 5,
+          label: '80-90 gsm'
+        },{
+          id: 6,
+          label: '90-100 gsm'
+        },{
+          id: 7,
+          label: '100-110 gsm'
+        },{
+          id: 8,
+          label: '110-120 gsm'
+        },{
+          id: 9,
+          label: '120-130 gsm'
+        },{
+          id: 10,
+          label: '130-140 gsm'
+        },{
+          id: 11,
+          label: '140-150 gsm'
+        },{
+          id: 12,
+          label: '150< gsm'
+        }
+      ],
+      "pants": [
+        {
+          id: 1,
+          label: '< 150 gsm'
+        },{
+          id: 2,
+          label: '150-185 gsm'
+        },{
+          id: 3,
+          label: '185-220 gsm'
+        },{
+          id: 4,
+          label: '220-255 gsm'
+        },{
+          id: 5,
+          label: '255-290 gsm'
+        },{
+          id: 6,
+          label: '290-325 gsm'
+        },{
+          id: 7,
+          label: '325-360 gsm'
+        },{
+          id: 8,
+          label: '360-395 gsm'
+        },{
+          id: 9,
+          label: '395-430 gsm'
+        },{
+          id: 10,
+          label: '430-465 gsm'
+        },{
+          id: 11,
+          label: '465-500 gsm'
+        },{
+          id: 12,
+          label: '500< gsm'
+        }
+      ]
+
+
+    }
+
+    $scope.thickness_help_texts = [
+      {
+        label: '0-0.10'
+      },
+      {
+        label: '0.10-0.20'
+      },
+      {
+        label: '0.20-0.30'
+      },
+      {
+        label: '0.30-0.40'
+      },
+      {
+        label: '0.40-0.50'
+      },
+      {
+        label: '0.50<'
       }
-      else {
-        return Math.ceil(thickness/10);
+
+    ];
+
+    $scope.stiffness_help_texts = [
+      {
+        label: '0.00-1.25'
+      },
+      {
+        label: '1.25-2.50'
+      },
+      {
+        label: '2.50-3.75'
+      },
+      {
+        label: '3.75-5.00'
+      },
+      {
+        label: '5.00-6.25'
+      },
+      {
+        label: '6.25-7.50'
+      },
+      {
+        label: '7.50-8.75'
+      },
+      {
+        label: '8.75-10.00'
       }
-    }
+    ];
 
-  };
-  /*Get stiffness icon*/
-  $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
-    if(stiffness_unit=='m'){
-      variant_stiffness = parseFloat(variant_stiffness)*100;
-    }
-    else if(stiffness_unit=='cm'){
-      variant_stiffness = parseFloat(variant_stiffness);
-    }
+    var weight_indexes_ref = {
+      shirts: {
+        min: 50,
+        max: 150,
+        step: 10//150/12
+      },
+      pants: {
+        min: 150,
+        max: 500,
+        step: 35 //(500-150)/10
+      }
+    };
 
-    if(variant_stiffness/1.25 >8){
-      return 8;
-    }
-    else{
+    /*Get weight icon*/
+    var min_weight = 0;
+    var max_weight = 0;
+    $scope.weight_index = function(variant_weight, product_type){
+      product_type = product_type.toLowerCase();
+      if(product_type && product_type.indexOf('pant') !== -1){
+        min_weight = weight_indexes_ref['pants']['min'];
+        max_weight = weight_indexes_ref['pants']['max'];
+        step = weight_indexes_ref['pants']['step'];
+      }
+      else if(product_type && product_type.indexOf('pant') == -1){
+        min_weight = weight_indexes_ref['shirts']['min'];
+        max_weight = weight_indexes_ref['shirts']['max'];
+        step = weight_indexes_ref['shirts']['step'];
+      };
 
 
-      return Math.ceil(variant_stiffness/1.25);
-    }
+      if((parseFloat(variant_weight))<min_weight){
+        return 1;
+      }
+      else if((parseFloat(variant_weight))>max_weight){
+        return 12;
+      }
+      else{
+        return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
+      };
+    };
+    var thickness = 0;
+    /*Get Thickness icon*/
+    $scope.thickness_index = function(variant_thickness){
+      if(variant_thickness != undefined){
+        thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
+        if(thickness/10 >5){
+          return 6;
+        }
+        else {
+          return Math.ceil(thickness/10);
+        }
+      }
 
-  };
+    };
+    /*Get stiffness icon*/
+    $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
+      if(stiffness_unit=='m'){
+        variant_stiffness = parseFloat(variant_stiffness)*100;
+      }
+      else if(stiffness_unit=='cm'){
+        variant_stiffness = parseFloat(variant_stiffness);
+      }
+
+      if(variant_stiffness/1.25 >8){
+        return 8;
+      }
+      else{
+
+
+        return Math.ceil(variant_stiffness/1.25);
+      }
+
+    };
+
 
   $scope.order_swatch = function(variant){
     console.log(variant);
