@@ -1,9 +1,4 @@
-<!-- <div class="" style="">
-  <h1>Customer Landing Page</h1>
 
-  <button ng-click="go_to_product_listing()">Move to listing margin-top: 16.4vh; </button>
-
-</div> -->
 <div class="row" style="margin-left: 0px; margin-right: 0px; display: block">
   <div class="product-promotion-carousel" >
     <div id="carousel-example-generic" class="carousel slide" data-interval="3000">
@@ -65,11 +60,22 @@
     </div>
     <div class="taxonomyCards" >
       <div class="taxonomyCard" ng-click="go_to_collection(taxonomy.root.permalink)" ng-repeat="taxonomy in product_taxonomies" >
-        <div class="">
-          <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
-        </div>
-        <div class="taxonomy-name" >
-          {{taxonomy.name}}
+        <a ng-if="available_collections.indexOf(taxonomy.root.permalink) !== -1" href="{{'/#/collections/'+taxonomy.root.permalink}}">
+          <div class="">
+            <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
+          </div>
+          <div class="taxonomy-name" >
+            {{taxonomy.name}}
+          </div>
+        </a>
+        <div ng-if="available_collections.indexOf(taxonomy.root.permalink) == -1" class="">
+          <div class="">
+            <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
+          </div>
+          <div class="taxonomy-name" >
+            {{taxonomy.name}}
+          </div>
+
         </div>
       </div>
     </div>
@@ -96,8 +102,10 @@
           {{click_bait.text_line}}&nbsp;&nbsp;
         </div>
         <div ng-show="active_click_bait.id==click_bait.id" ng-class="{'active-click-bait-text': active_click_bait.id==click_bait.id}" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top: 12%">
-          <div class="click_bait-details" style="">
-            Details
+          <div class="click_bait-details" style="width: 125%">
+            <button ng-click="go_to_collection(click_bait.permalink)" ng-disabled="!click_bait.active" type="button" name="button" style="width: 100%;font-weight: 400;border: none;background: {{click_bait.active ? '#8a247c' : 'transparent'}};color: {{click_bait.active ? 'white' : 'black'}}">
+              {{click_bait.active ? 'View Collection' : 'Coming soon!'}}
+            </button>
           </div>
         </div>
       </div>
@@ -253,23 +261,23 @@
   </div>
   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top:5%;padding-bottom:5%;">
     <div id="luxire-logo">
-      <img style="max-width: 75%" src="assets/images/customer/luxire_logo_grey.png" >
+      <img style="max-width: 100%" src="assets/images/customer/luxire_logo_grey.png" >
     </div>
     <div style="margin-top:2%;">
-        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to luxire Corporation</span>
+        <span style="margin-left:10%; background-color:;color:#D2D2D2;font-size:90%;">All copyrights to Luxire Corporation</span>
     </div>
 
   </div>
   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color:white;margin-top:5%;font-size:90%">
-    <span ui-sref="customer.about_us" ><a href="#" style="color:#D2D2D2;">About Us</a></span><br><br>
-    <span ui-sref="customer.shipping_returns" ><a href="#" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
-    <span ui-sref="customer.quality" ><a href="#" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
-    <span ui-sref="customer.contact_us" ><a href="#" style="color:#D2D2D2;">Contact Us</a></span><br><br>
+    <span ui-sref="customer.about_us" ><a href="#/about_us" style="color:#D2D2D2;">About Us</a></span><br><br>
+    <span ui-sref="customer.shipping_returns" ><a href="#/shipping_returns" style="color:#D2D2D2;">Shipping & Returns</a></span><br><br>
+    <span ui-sref="customer.quality" ><a href="#/quality" style="color:#D2D2D2;">Quality and Satisfaction</a></span><br><br>
+    <span ui-sref="customer.contact_us" ><a href="#/contact_us" style="color:#D2D2D2;">Contact Us</a></span><br><br>
   </div>
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="color:white;margin-top:5%;font-size:90%;">
-    <span ui-sref="customer.privacy_policy"><a href="#" style="color:#D2D2D2;">Privacy Policy</a></span><br><br>
-    <span ui-sref="customer.faqs"><a href="#" style="color:#D2D2D2;">FAQs</a></span><br><br>
-    <span ui-sref="customer.responsible_manufacturing"><a href="#" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
+    <span ui-sref="customer.privacy_policy"><a href="#/privacy_policy" style="color:#D2D2D2;">Privacy Policy</a></span><br><br>
+    <span ui-sref="customer.faqs"><a href="#/faqs" style="color:#D2D2D2;">FAQs</a></span><br><br>
+    <span ui-sref="customer.responsible_manufacturing"><a href="#/responsible_manufacturing" style="color:#D2D2D2;">Responsible Manufacturing</a></span><br><br>
   </div>
 
 </div>
