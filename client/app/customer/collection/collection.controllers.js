@@ -21,7 +21,9 @@ angular.module('luxire')
       });
     }
   };
+  
   $scope.go_to_collection = function(permalink){
+
     $location.url('/collections/'+permalink);
   };
   window.scrollTo(0, 0);
@@ -561,7 +563,6 @@ angular.module('luxire')
   var thickness = 0;
   /*Get Thickness icon*/
   $scope.thickness_index = function(variant_thickness){
-    console.log('thickness', variant_thickness);
     if(variant_thickness != undefined){
       thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
       if(thickness/10 >5){
@@ -581,8 +582,6 @@ angular.module('luxire')
     else if(stiffness_unit=='cm'){
       variant_stiffness = parseFloat(variant_stiffness);
     }
-    console.log('stiffness', variant_stiffness);
-
 
     if(variant_stiffness/1.25 >8){
       return 8;
