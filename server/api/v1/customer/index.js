@@ -57,4 +57,6 @@ app.use('/product_types', require('./product_type'));
 app.use('/style_masters', require('./style_master'));
 app.use('/orders', require('./order'));
 app.use('/checkouts', require('./checkout'));
+app.use('/contact_us', require('./contact_us'));
+
 module.exports = app;
