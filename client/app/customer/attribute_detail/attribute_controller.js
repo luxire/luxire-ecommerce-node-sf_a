@@ -57,11 +57,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "One_Piece_Hidden_Button_1.png",
-              "url": "Images/Shirts/Collar/One_Piece_Hidden_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/One_Piece_Hidden_Button_1.png"
             },
             {
               "ref": "One_Piece_Hidden_Button_2.png",
-              "url": "Images/Shirts/Collar/One_Piece_Hidden_Button_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/One_Piece_Hidden_Button_2.png"
             }
           ],
           "description": "Look- As the name says it, the collar does not have a collar brand and it is a gives a very relaxed look. It is a single piece and can be worn both with or without tie. The buttons are hidden and gives a smooth and soft look.",
@@ -98,11 +98,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "English_Spread_1.png",
-              "url": "Images/Shirts/Collar/English_Spread_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/English_Spread_1.png"
             },
             {
               "ref": "English_Spread_1.png",
-              "url": "Images/Shirts/Collar/English_Spread_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/English_Spread_2.png"
             }
           ],
           "description": "Look – Business collar with wider spread. The collar goes well with professional and formal look. Apt for both small and large tie knots. The points slide below the jacket and lets the tie shine.",
@@ -140,11 +140,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Classic_Polo_Button_Down_1.png",
-              "url": "Images/Shirts/Collar/Classic_Polo_Button_Down_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Classic_Polo_Button_Down_1.png"
             },
             {
               "ref": "Classic_Polo_Button_Down_2.png",
-              "url": "Images/Shirts/Collar/Classic_Polo_Button_Down_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Classic_Polo_Button_Down_2.png"
             }
           ],
           "description": "Look – Holds an iconic statement. Commnly a sporty collar, square shaped front neck band, worn with or without tie. The button down avoids flapping of collar.",
@@ -182,11 +182,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Luxire_Button_Down_1.png",
-              "url": "Images/Shirts/Collar/Luxire_Button_Down_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Luxire_Button_Down_1.png"
             },
             {
               "ref": "Luxire_Button_Down_2.png",
-              "url": "Images/Shirts/Collar/Luxire_Button_Down_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Luxire_Button_Down_2.png"
             }
           ],
           "description": "Look- Our most popular collar after multiple iteration, we think we have perfected the right balance of point length, spread and roll. Commonly gives a sporty look to the collar with its wide spread, can be worn with or without tie.",
@@ -224,11 +224,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Semi_Spread_1.png",
-              "url": "Images/Shirts/Collar/Semi_Spread_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Semi_Spread_1.png"
             },
             {
               "ref": "Semi_Spread_2.png",
-              "url": "Images/Shirts/Collar/Semi_Spread_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Semi_Spread_2.png"
             }
           ],
           "description": "Look-  A very classic and versatile collar.  Goes well with a medium knot tie as well as open collar.  The collar stands by a very polished and confident look.",
@@ -266,11 +266,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Milano_Button_Down_1.png",
-              "url": "Images/Shirts/Collar/Milano_Button_Down_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Milano_Button_Down_1.png"
             },
             {
               "ref": "Milano_Button_Down_2.png",
-              "url": "Images/Shirts/Collar/Milano_Button_Down_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Milano_Button_Down_2.png"
             }
           ],
           "description": "Look- Like our Florentine collar , it is classic and enhances your formal look. Suited both with or without tie. The fuse keeps the collar stiff and restricts from flapping. Alter collar works well with wide variety of ties.",
@@ -308,11 +308,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Osaka_Button_Down_1.png",
-              "url": "Images/Shirts/Collar/Osaka_Button_Down_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Osaka_Button_Down_1.png"
             },
             {
               "ref": "Osaka_Button_Down_2.png",
-              "url": "Images/Shirts/Collar/Osaka_Button_Down_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Osaka_Button_Down_2.png"
             }
           ],
           "description": "Look- Slant- squared neck band front shape, the point length is longer and gives a nice roll. Collar spread is slightly wider.",
@@ -350,11 +350,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Spear_Point_1.png",
-              "url": "Images/Shirts/Collar/Spear_Point_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Spear_Point_1.png"
             },
             {
               "ref": "Spear_Point_2.png",
-              "url": "Images/Shirts/Collar/Spear_Point_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Spear_Point_2.png"
             }
           ],
           "description": "Look –  Elongated collar points. Suited with a small tie knot and gives a formal look. Goes well with a formal day event.",
@@ -392,11 +392,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Cutaway_1.png",
-              "url": "Images/Shirts/Collar/Cutaway_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Cutaway_1.png"
             },
             {
               "ref": "Cutaway_2.png",
-              "url": "Images/Shirts/Collar/Cutaway_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Cutaway_2.png"
             }
           ],
           "description": "Look-  Good choice of collar when unbuttoned. The collar makes you stand out in a crowed making a style statement. The spread of the collar drives attention towards your tie.",
@@ -434,11 +434,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Extreme_Spread_1.png",
-              "url": "Images/Shirts/Collar/Extreme_Spread_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Extreme_Spread_1.png"
             },
             {
               "ref": "Extreme_Spread_2.png",
-              "url": "Images/Shirts/Collar/Extreme_Spread_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Extreme_Spread_2.png"
             }
           ],
           "description": "Look-  Good choice of collar when unbuttoned. The collar is cut to the back to its extreme which gives a statement look and makes you stand out in a crowd. A sleek and small knot tie is apt for the extreme spread",
@@ -476,11 +476,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Italian_1.png",
-              "url": "Images/Shirts/Collar/Italian_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Italian_1.png"
             },
             {
               "ref": "Italian_2.png",
-              "url": "Images/Shirts/Collar/Italian_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Italian_2.png"
             }
           ],
           "description": "Look- One of the classics and very traditional style. Goes well with medium to small tie knots.  Smart and widely spread in Italy.",
@@ -518,11 +518,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Club_1.png",
-              "url": "Images/Shirts/Collar/Club_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Club_1.png"
             },
             {
               "ref": "Club_2.png",
-              "url": "Images/Shirts/Collar/Club_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Club_2.png"
             }
           ],
           "description": "Look- A stylish man’s collar, redefines the word classic. Also known as Golf collar or round collar. The name signifies ‘exclusive membership’. Best suited on thin and straight face.",
@@ -560,11 +560,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Florentine_1.png",
-              "url": "Images/Shirts/Collar/Florentine_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Florentine_1.png"
             },
             {
               "ref": "Florentine_2.png",
-              "url": "Images/Shirts/Collar/Florentine_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Florentine_2.png"
             }
           ],
           "description": "Look- The collar is wide spread as the name says it. It goes well with a larger tie knot. The collar gives attraction to the overall look. It has a slight roll.",
@@ -602,11 +602,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "BrokeAndBespoke_1.png",
-              "url": "Images/Shirts/Collar/BrokeAndBespoke_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/BrokeAndBespoke_1.png"
             },
             {
               "ref": "BrokeAndBespoke_2.png",
-              "url": "Images/Shirts/Collar/BrokeAndBespoke_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/BrokeAndBespoke_2.png"
             }
           ],
           "description": "Look-  The collar point is more and makes it look longer from other button down collars.",
@@ -644,11 +644,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "NOBD_1_1.png",
-              "url": "Images/Shirts/Collar/NOBD_1_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/NOBD_1_1.png"
             },
             {
               "ref": "NOBD_1_2.png",
-              "url": "Images/Shirts/Collar/NOBD_1_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/NOBD_1_2.png"
             }
           ],
           "description": "Look- A formal collar, has a soft curve when worn with a tie. Consists of wide spread and suited with medium tie knots.",
@@ -687,11 +687,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Trad_Button_Down_1.png",
-              "url": "Images/Shirts/Collar/Trad_Button_Down_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Trad_Button_Down_1.png"
             },
             {
               "ref": "Trad_Button_Down_2.png",
-              "url": "Images/Shirts/Collar/Trad_Button_Down_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Trad_Button_Down_2.png"
             }
           ],
           "description": "Look-  A traditionally used button down collar, soft and consists of nice roll.",
@@ -730,7 +730,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "One_Button_Rounded_Barrel_1.png",
-              "url": "Images/Shirts/Cuff/One_Button_Rounded_Barrel_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Rounded_Barrel_1.png"
             },
             {
               "ref": "",
@@ -747,7 +747,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Two_Button_Rounded_Barrel_1.png",
-              "url": "Images/Shirts/Cuff/Two_Button_Rounded_Barrel_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Rounded_Barrel_1.png"
             },
             {
               "ref": "",
@@ -764,7 +764,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "French_cuff_1.png",
-              "url": "Images/Shirts/Cuff/French_cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/French_cuff_1.png"
             },
             {
               "ref": "",
@@ -779,7 +779,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "One_Button_Mitered_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/One_Button_Mitered_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Mitered_Cuff_1.png"
             },
             {
               "ref": "",
@@ -796,7 +796,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Two_Button_Mitered_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/Two_Button_Mitered_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Mitered_Cuff_1.png"
             },
             {
               "ref": "",
@@ -813,7 +813,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Single_French_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/Single_French_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Single_French_Cuff_1.png"
             },
             {
               "ref": "",
@@ -830,7 +830,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "One_Button_Square_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/One_Button_Square_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Square_Cuff_1.png"
             },
             {
               "ref": "",
@@ -847,7 +847,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Three_Button_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/Three_Button_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Three_Button_Cuff_1.png"
             },
             {
               "ref": "",
@@ -864,7 +864,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Cocktail_Cuff_1.png",
-              "url": "Images/Shirts/Cuff/Cocktail_Cuff_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Cocktail_Cuff_1.png"
             },
             {
               "ref": "",
@@ -883,7 +883,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Standard_Placket_1.png",
-              "url": "Images/Shirts/Placket/Standard_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/Standard_Placket_1.png"
             },
             {
               "ref": "",
@@ -900,7 +900,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Hidden_Placket_1.png",
-              "url": "Images/Shirts/Placket/Hidden_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/Hidden_Placket_1.png"
             },
             {
               "ref": "",
@@ -917,7 +917,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "French_Placket_1.png",
-              "url": "Images/Shirts/Placket/French_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/French_Placket_1.png"
             },
             {
               "ref": "",
@@ -934,7 +934,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Pullover_Placket_1.png",
-              "url": "Images/Shirts/Placket/Pullover_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/Pullover_Placket_1.png"
             },
             {
               "ref": "",
@@ -951,7 +951,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Edge_Stitch_Placket_1.png",
-              "url": "Images/Shirts/Placket/Edge_Stitch_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/Edge_Stitch_Placket_1.png"
             },
             {
               "ref": "",
@@ -968,7 +968,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Side_Stitch_Placket_1.png",
-              "url": "Images/Shirts/Placket/Side_Stitch_Placket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Placket/Side_Stitch_Placket_1.png"
             },
             {
               "ref": "",
@@ -987,7 +987,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Inverted_Box_Pleat_1.png",
-              "url": "Images/Shirts/Pleat/Inverted_Box_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/Inverted_Box_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1004,7 +1004,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Center_Box_Pleat_1.png",
-              "url": "Images/Shirts/Pleat/Center_Box_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/Center_Box_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1021,7 +1021,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Side_Pleat_1.png",
-              "url": "Images/Shirts/Pleat/Side_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/Side_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1038,7 +1038,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Shirred_Pleat_1.png",
-              "url": "Images/Shirts/Pleat/Shirred_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/Shirred_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1055,7 +1055,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": ".png",
-              "url": "Images/Shirts/Pleat/One_Piece_Hidden_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/One_Piece_Hidden_Button_1.png"
             },
             {
               "ref": "",
@@ -1074,7 +1074,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Boat_Curve_Bottom_1.png",
-              "url": "Images/Shirts/Bottom/Boat_Curve_Bottom_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Boat_Curve_Bottom_1.png"
             },
             {
               "ref": "",
@@ -1091,7 +1091,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Straight_Bottom_1.png",
-              "url": "Images/Shirts/Bottom/Straight_Bottom_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Straight_Bottom_1.png"
             },
             {
               "ref": "",
@@ -1108,7 +1108,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Curved_Bottom_1.png",
-              "url": "Images/Shirts/Bottom/Curved_Bottom_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Curved_Bottom_1.png"
             },
             {
               "ref": "",
@@ -1125,7 +1125,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Deep_Curved_Bottom_1.png",
-              "url": "Images/Shirts/Bottom/Deep_Curved_Bottom_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Deep_Curved_Bottom_1.png"
             },
             {
               "ref": "",
@@ -1142,7 +1142,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Long_Tail_Shirt_1.png",
-              "url": "Images/Shirts/Bottom/Long_Tail_Shirt_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Long_Tail_Shirt_1.png"
             },
             {
               "ref": "",
@@ -1161,7 +1161,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Work_Shirt_Pocket_1.png",
-              "url": "Images/Shirts/Pocket/Work_Shirt_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Work_Shirt_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1178,11 +1178,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "No_Pocket_1.png",
-              "url": "Images/Shirts/Pocket/No_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             },
             {
               "ref": "No_Pocket_1",
-              "url": "Images/Shirts/Pocket/No_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             }
           ],
           "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth.",
@@ -1195,11 +1195,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Pocket_Yes_1.png",
-              "url": "Images/Shirts/Pocket/Pocket_Yes_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
             },
             {
               "ref": "Pocket_Yes_1.png",
-              "url": "Images/Shirts/Pocket/Pocket_Yes_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
             }
           ],
           "description": "This pocket is both used for formal and casual shirts. Most common choice of pocket.",
@@ -1212,11 +1212,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
             },
             {
               "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
             }
           ],
           "description": "Look- Most commonly used pockets for work shirts. Consists of a flap with a button for closure.",
@@ -1229,11 +1229,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
             },
             {
               "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
             }
           ],
           "description": "Look- A pocket that is best suited with casual shirts. A pocket with flap but has no button for closure.",
@@ -1248,7 +1248,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Work_Shirt_Pocket_1.png",
-              "url": "Images/Shirts/Pocket/Work_Shirt_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Work_Shirt_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1265,11 +1265,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "No_Pocket_1.png",
-              "url": "Images/Shirts/Pocket/No_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             },
             {
               "ref": "No_Pocket_1",
-              "url": "Images/Shirts/Pocket/No_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             }
           ],
           "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth.",
@@ -1282,11 +1282,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Pocket_Yes_1.png",
-              "url": "Images/Shirts/Pocket/Pocket_Yes_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
             },
             {
               "ref": "Pocket_Yes_1.png",
-              "url": "Images/Shirts/Pocket/Pocket_Yes_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
             }
           ],
           "description": "This pocket is both used for formal and casual shirts. Most common choice of pocket.",
@@ -1299,11 +1299,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
             },
             {
               "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
             }
           ],
           "description": "Look- Most commonly used pockets for work shirts. Consists of a flap with a button for closure.",
@@ -1316,11 +1316,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
             },
             {
               "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "Images/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
             }
           ],
           "description": "Look- A pocket that is best suited with casual shirts. A pocket with flap but has no button for closure.",
@@ -1335,11 +1335,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "V_Shape_Clip_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
             },
             {
               "ref": "V_Shape_Clip_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
             }
           ],
           "description": "Look- The gusset is mainly used to give more strength on the side seams and can add a bit more character to the untucked shirt. Attached  additionally on top. Looks like an inverted ‘V’.",
@@ -1352,11 +1352,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "A_Clip_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/A_Clip_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/A_Clip_Gusset_1.png"
             },
             {
               "ref": "A_Clip_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/A_Clip_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/A_Clip_Gusset_1.png"
             }
           ],
           "description": "Look- The gusset is mainly used to give more strength on the side seams and can add a bit more character to the untucked shirt. Pointed at the top, attached additionally. Mainly used to give more strength over the side seams.",
@@ -1369,11 +1369,11 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Patch_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/Patch_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/Patch_Gusset_1.png"
             },
             {
               "ref": "Patch_Gusset_1.png",
-              "url": "Images/Shirts/Gusset/Patch_Gusset_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Gusset/Patch_Gusset_1.png"
             }
           ],
           "description": "Look- The gusset is mainly used to give more strength on the side seams can add a bit more character to the untucked shirt. Differs from other gussets, attached  as a patch internally. Sometimes attached with a contrast fabric for more aesthetic appeal.",
@@ -1388,7 +1388,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Split_Yoke_1.png",
-              "url": "Images/Shirts/Yoke/Split_Yoke_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Split_Yoke_1.png"
             },
             {
               "ref": "",
@@ -1405,7 +1405,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Single_Yoke_1.png",
-              "url": "Images/Shirts/Yoke/Single_Yoke_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Single_Yoke_1.png"
             },
             {
               "ref": "",
@@ -1426,7 +1426,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Single_Forward_Pleat_1.png",
-              "url": "Images/Pants/Pleats/Single_Forward_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/Single_Forward_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1443,7 +1443,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Double_Forward_Pleat_1.png",
-              "url": "Images/Pants/Pleats/Double_Forward_Pleat_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/Double_Forward_Pleat_1.png"
             },
             {
               "ref": "",
@@ -1461,7 +1461,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Single_Pleat_Reverse_1.png",
-              "url": "Images/Pants/Pleats/Single_Pleat_Reverse_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/Single_Pleat_Reverse_1.png"
             },
             {
               "ref": "",
@@ -1478,7 +1478,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Double_Pleat_Reverse_1.png",
-              "url": "Images/Pants/Pleats/Double_Pleat_Reverse_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/Double_Pleat_Reverse_1.png"
             },
             {
               "ref": "",
@@ -1496,7 +1496,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Inverted_Pleats_1.png",
-              "url": "Images/Pants/Pleats/Inverted_Pleats_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/Inverted_Pleats_1.png"
             },
             {
               "ref": "",
@@ -1513,7 +1513,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "No_Pleat_Plain_Front_1.png",
-              "url": "Images/Pants/Pleats/No_Pleat_Plain_Front_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pleats/No_Pleat_Plain_Front_1.png"
             },
             {
               "ref": "",
@@ -1531,7 +1531,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Front_Slant_Pockets_1.png",
-              "url": "Images/Pants/Pockets/Front_Slant_Pockets_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/Front_Slant_Pockets_1.png"
             },
             {
               "ref": "",
@@ -1549,7 +1549,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "On_Seam_Pocket_1.png",
-              "url": "Images/Pants/Pockets/On_Seam_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/On_Seam_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1567,7 +1567,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Jetted_Pocket_1.png",
-              "url": "Images/Pants/Pockets/Jetted_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/Jetted_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1586,7 +1586,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Frog_Style_Pocket_1.png",
-              "url": "Images/Pants/Pockets/Frog_Style_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/Frog_Style_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1603,7 +1603,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Jean_Style_Pocket_1.png",
-              "url": "Images/Pants/Pockets/Jean_Style_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/Jean_Style_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1620,7 +1620,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Coin_Pocket_1.png",
-              "url": "Images/Pants/Pockets/Coin_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Pockets/Coin_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1639,7 +1639,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Zip_Fly_1.png",
-              "url": "Images/Pants/Fly_Style/Zip_Fly_1.png"
+              "url": "assets/images/customer/attributes/Pants/Fly_Style/Zip_Fly_1.png"
             },
             {
               "ref": "",
@@ -1657,7 +1657,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Button_Fly_1.png",
-              "url": "Images/Pants/Fly_Style/Button_Fly_1.png"
+              "url": "assets/images/customer/attributes/Pants/Fly_Style/Button_Fly_1.png"
             },
             {
               "ref": "",
@@ -1678,7 +1678,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Standard_Extended_Closure_1.png",
-              "url": "Images/Pants/Front_Closure/Standard_Extended_Closure_1.png"
+              "url": "assets/images/customer/attributes/Pants/Front_Closure/Standard_Extended_Closure_1.png"
             },
             {
               "ref": "",
@@ -1695,7 +1695,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Extra_Long_Extended_Closure_1.png",
-              "url": "Images/Pants/Front_Closure/Extra_Long_Extended_Closure_1.png"
+              "url": "assets/images/customer/attributes/Pants/Front_Closure/Extra_Long_Extended_Closure_1.png"
             },
             {
               "ref": "",
@@ -1712,7 +1712,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Jeans_Style_Closure_1.png",
-              "url": "Images/Pants/Front_Closure/Jeans_Style_Closure_1.png"
+              "url": "assets/images/customer/attributes/Pants/Front_Closure/Jeans_Style_Closure_1.png"
             },
             {
               "ref": "",
@@ -1728,7 +1728,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Hook_And_Bar_Closure_1.png",
-              "url": "Images/Pants/Front_Closure/Hook_And_Bar_Closure_1.png"
+              "url": "assets/images/customer/attributes/Pants/Front_Closure/Hook_And_Bar_Closure_1.png"
             },
             {
               "ref": "",
@@ -1746,7 +1746,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Side_Metal_Adjusters_Between_Wast_Seam_1.png",
-              "url": "Images/Pants/Waist_Band/Side_Metal_Adjusters_Between_Wast_Seam_1.png"
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Side_Metal_Adjusters_Between_Wast_Seam_1.png"
             },
             {
               "ref": "",
@@ -1762,7 +1762,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Side_Metal_Adjusters_On_Wast_Seam_1.png",
-              "url": "Images/Pants/Waist_Band/Side_Metal_Adjusters_On_Wast_Seam_1.png"
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Side_Metal_Adjusters_On_Wast_Seam_1.png"
             },
             {
               "ref": "",
@@ -1778,7 +1778,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Elastic_Adjusting_WastBand_1.png",
-              "url": "Images/Pants/Waist_Band/Elastic_Adjusting_WastBand_1.png"
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Elastic_Adjusting_WastBand_1.png"
             },
             {
               "ref": "",
@@ -1794,7 +1794,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Standard_Belt_Loop_1.png",
-              "url": "Images/Pants/Waist_Band/Standard_Belt_Loop_1.png"
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Standard_Belt_Loop_1.png"
             },
             {
               "ref": "",
@@ -1810,7 +1810,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Hollywood_Style_Waist_Band_1.png",
-              "url": "Images/Pants/Waist_Band/Hollywood_Style_Waist_Band_1.png"
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Hollywood_Style_Waist_Band_1.png"
             },
             {
               "ref": "",
@@ -1828,7 +1828,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Patch_Rear_Pockets_1.png",
-              "url": "Images/Pants/Rear_Pockets/Patch_Rear_Pockets_1.png"
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Patch_Rear_Pockets_1.png"
             },
             {
               "ref": "",
@@ -1844,7 +1844,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Jeans_Style_Rear_Pockets_1.png",
-              "url": "Images/Pants/Rear_Pockets/Jeans_Style_Rear_Pockets_1.png"
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Jeans_Style_Rear_Pockets_1.png"
             },
             {
               "ref": "",
@@ -1860,7 +1860,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Both_Sides_Rear_Pockets_1.png",
-              "url": "Images/Pants/Rear_Pockets/Both_Sides_Rear_Pockets_1.png"
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Both_Sides_Rear_Pockets_1.png"
             },
             {
               "ref": "",
@@ -1878,7 +1878,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Right_Side_Pocket_1.png",
-              "url": "Images/Pants/Rear_Pockets/Right_Side_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Right_Side_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1896,7 +1896,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Back_No_Pocket_1.png",
-              "url": "Images/Pants/Rear_Pockets/Back_No_Pocket_1.png"
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Back_No_Pocket_1.png"
             },
             {
               "ref": "",
@@ -1914,7 +1914,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "No_Cuffs_1.png",
-              "url": "Images/Pants/Bottom_Cuffs/No_Cuffs_1.png"
+              "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/No_Cuffs_1.png"
             },
             {
               "ref": "",
@@ -1931,7 +1931,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Cuffs_With_Buttons_1.png",
-              "url": "Images/Pants/Bottom_Cuffs/Cuffs_With_Buttons_1.png"
+              "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/Cuffs_With_Buttons_1.png"
             },
             {
               "ref": "",
@@ -1948,7 +1948,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": "Cuffs_Without_Buttons_1.png",
-              "url": "Images/Pants/Bottom_Cuffs/Cuffs_Without_Buttons_1.png"
+              "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/Cuffs_Without_Buttons_1.png"
             },
             {
               "ref": "",
