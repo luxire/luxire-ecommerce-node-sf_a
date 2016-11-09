@@ -21,6 +21,7 @@ angular.module('luxire')
 				controller: "CustomerHomeController"
 			},
 		},
+		cache: true,
 		data: {
 			require_auth: false
 		}
@@ -253,7 +254,7 @@ angular.module('luxire')
 		}
 	})
 	.state('customer.faqs',{
-		url:'/faq',
+		url:'/faqs',
 		views: {
 			"customer": {
 				templateUrl: "app/customer/static_content/faqs.html"
@@ -285,17 +286,18 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
-	// .state('customer.contact_us',{
-	// 	url:'/about_us',
-	// 	views: {
-	// 		"customer": {
-	// 			templateUrl: "app/customer/static_content/about_us.html"
-	// 		},
-	// 	},
-	// 	data: {
-	// 		require_auth: false
-	// 	}
-	// })
+	.state('customer.contact_us',{
+		url:'/contact_us',
+		views: {
+			"customer": {
+				templateUrl: "app/customer/static_content/contact_us.html",
+				controller: "ClientController"
+			},
+		},
+		data: {
+			require_auth: false
+		}
+	})
 
 }])
 // .state('customer.invoice',{
