@@ -7,6 +7,7 @@ avoid conflict with customer ctrl on admin side*/
   $scope.checkout_state = false;
   $scope.is_customer_home_state = false;
 
+  $scope.available_collections = ['shirts', 'pants'];
 
   /*Bread crumbs */
   $scope.checkout_steps = {
@@ -215,11 +216,18 @@ avoid conflict with customer ctrl on admin side*/
       $("#products_search").focus();
     }
   };
-
+  function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   $scope.go_to_collection = function(event, permalink){
     console.log('permalink', permalink);
     event.preventDefault();
-    $location.url('/collections/'+permalink);
+    if(permalink.indexOf('shirts') == -1 && permalink.indexOf('pants') == -1 ){
+      $rootScope.alerts[0] = {type: 'warning', message: capitalizeFirstLetter(permalink)+ ' Collection coming soon!'};
+    }
+    else{
+      $location.url('/collections/'+permalink);
+    }
   };
 
   /*Load products*/
@@ -448,6 +456,27 @@ avoid conflict with customer ctrl on admin side*/
       $state.go("customer.checkout_"+state.name.toLowerCase());
     }
   };
+
+  $scope.user = {};
+
+
+  $scope.submit_form = function(){
+    $scope.submitted = true;
+    console.log('submit form', $scope.contact.$invalid);
+    if(!$scope.contact.$invalid){
+      $scope.loading =  true;
+      CustomerUtils.contact_us($scope.user).then(function(data){
+        console.log('data', data);
+        $scope.loading =  false;
+        $rootScope.alerts.push({type: 'success', message: 'Thanks for the details, we shall revert back shortly'});
+      }, function(error){
+        console.log('error', error);
+        $scope.loading =  false;
+        $rootScope.alerts.push({type: 'danger', message: 'Please send again!!'});
+      });
+    }
+
+  };
 })
 .controller('CustomerSideMenuController', function($scope, $state, taxonomies,$rootScope, $uibModalInstance, CustomerAuthentication, $location, CustomerOrders){
   console.log('taxonomies', taxonomies);
@@ -512,77 +541,81 @@ avoid conflict with customer ctrl on admin side*/
   $scope.is_gift_card = is_gift_card;
   $scope.selected_currency = selected_currency;
 
-/*Get weight icon*/
-  var weight_indexes_ref = {
-    shirts: {
-      min: 50,
-      max: 150,
-      step: 12.5//150/12
-    },
-    pants: {
-      min: 150,
-      max: 500,
-      step: 30 //
-    }
-  };
-  var min_weight = 0;
-  var max_weight = 0;
-  $scope.weight_index = function(variant_weight, product_type){
-    product_type = product_type.toLowerCase();
-    if(product_type && product_type.indexOf('pant') !== -1){
-      min_weight = weight_indexes_ref['pants']['min'];
-      max_weight = weight_indexes_ref['pants']['max'];
-      step = weight_indexes_ref['pants']['step'];
-    }
-    else if(product_type && product_type.indexOf('pant') == -1){
-      min_weight = weight_indexes_ref['shirts']['min'];
-      max_weight = weight_indexes_ref['shirts']['max'];
-      step = weight_indexes_ref['shirts']['step'];
+
+    var weight_indexes_ref = {
+      shirts: {
+        min: 50,
+        max: 150,
+        step: 10//150/12
+      },
+      pants: {
+        min: 150,
+        max: 500,
+        step: 35 //(500-150)/10
+      }
     };
 
+    /*Get weight icon*/
+    var min_weight = 0;
+    var max_weight = 0;
+    $scope.weight_index = function(variant_weight, product_type){
+      product_type = product_type.toLowerCase();
+      if(product_type && product_type.indexOf('pant') !== -1){
+        min_weight = weight_indexes_ref['pants']['min'];
+        max_weight = weight_indexes_ref['pants']['max'];
+        step = weight_indexes_ref['pants']['step'];
+      }
+      else if(product_type && product_type.indexOf('pant') == -1){
+        min_weight = weight_indexes_ref['shirts']['min'];
+        max_weight = weight_indexes_ref['shirts']['max'];
+        step = weight_indexes_ref['shirts']['step'];
+      };
 
-    if((parseFloat(variant_weight))<min_weight){
-      return 1;
-    }
-    else if((parseFloat(variant_weight))>max_weight){
-      return 12;
-    }
-    else{
-      return parseInt((parseFloat(variant_weight)-min_weight)/step)+1;
+
+      if((parseFloat(variant_weight))<min_weight){
+        return 1;
+      }
+      else if((parseFloat(variant_weight))>max_weight){
+        return 12;
+      }
+      else{
+        return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
+      };
     };
-  };
+    var thickness = 0;
+    /*Get Thickness icon*/
+    $scope.thickness_index = function(variant_thickness){
+      if(variant_thickness != undefined){
+        thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
+        if(thickness/10 >5){
+          return 6;
+        }
+        else {
+          return Math.ceil(thickness/10);
+        }
+      }
+
+    };
+    /*Get stiffness icon*/
+    $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
+      if(stiffness_unit=='m'){
+        variant_stiffness = parseFloat(variant_stiffness)*100;
+      }
+      else if(stiffness_unit=='cm'){
+        variant_stiffness = parseFloat(variant_stiffness);
+      }
+
+      if(variant_stiffness/1.25 >8){
+        return 8;
+      }
+      else{
 
 
-  var thickness = 0;
-  /*Get Thickness icon*/
-  $scope.thickness_index = function(variant_thickness){
-    thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-    if(thickness/10 >5){
-      return 6;
-    }
-    else {
-      return Math.ceil(thickness/10);
-    }
-  };
-  /*Get stiffness icon*/
-  $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
-    if(stiffness_unit=='m'){
-      variant_stiffness = parseFloat(variant_stiffness)*100;
-    }
-    else if(stiffness_unit=='cm'){
-      variant_stiffness = parseFloat(variant_stiffness);
-    }
+        return Math.ceil(variant_stiffness/1.25);
+      }
 
-    if(variant_stiffness/1.25 >8){
-      return 8;
-    }
-    else{
+    };
 
-
-      return Math.ceil(variant_stiffness/1.25);
-    }
-
-  };
 
   $scope.wash_care = function(variant_wash_care){
     if(variant_wash_care.toLowerCase().indexOf('machine')>-1){
