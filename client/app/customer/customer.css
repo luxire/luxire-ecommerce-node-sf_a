@@ -231,10 +231,10 @@ span.user-drop-down:hover{
 /*Gradient for color filters*/
 .gradient-white{
   background: white; /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(left, white, yellow); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(right, white , yellow); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(right, white , yellow); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(to right, white , yellow); /* Standard syntax (must be last) */
+  background: -webkit-linear-gradient(left, white, white, yellow); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, white, white, yellow); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, white, white, yellow); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, white, white, yellow); /* Standard syntax (must be last) */
 }
 .gradient-pink{
   background: pink; /* For browsers that do not support gradients */
