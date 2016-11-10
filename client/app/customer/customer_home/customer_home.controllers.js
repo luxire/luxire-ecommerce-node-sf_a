@@ -371,6 +371,10 @@ angular.module('luxire')
       $scope.review_description_width = (($("#activeReviewArea").innerWidth() - $("#activeReviewImage").innerWidth())-20)+'px';
     })
   };
+  $(window).resize(function(){
+    $scope.get_review_width();
+    console.log('window resized');
+  });
 
   $scope.change_active_review_index = function(index){
     console.log('current active index', $scope.active_customer_review_index);
