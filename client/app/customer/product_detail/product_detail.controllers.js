@@ -167,6 +167,10 @@ angular.module('luxire')
 
   $scope.value3 = 12;
   $scope.value4 = 20;
+  $scope.activate_thumbnail = function(thumbnail){
+    $scope.active_product_description_image = thumbnail;
+    $('body').scrollTop(0);
+  };
   $scope.reg_enlarged_image = function(element){
     console.log('show enlarged image for', element.target.id);
     $('#product_description_image_id').ezPlus({

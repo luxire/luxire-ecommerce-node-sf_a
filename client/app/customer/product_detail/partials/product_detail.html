@@ -474,7 +474,7 @@ button.slick-arrow{
           <img id="product_description_image_id" src="{{getImage(active_product_description_image['product_url'])}}" data-zoom-image="{{getImage(active_product_description_image['original_url'])}}" alt="{{slide.alt}}" ng-mouseover="reg_enlarged_image($event)" ng-mouseleave="dereg_enlarged_image($event)" style="max-width: 100%; margin: auto">
         </div>
         <div id="thumbnail-part" style="margin-top: 2%;padding-left: 8%">
-          <a href="#" ng-repeat="thumbnail in product.master.images" ng-click="$parent.active_product_description_image=thumbnail" ng-mouseover="reg_enlarged_image($event)" data-image="{{getImage(thumbnail.product_url)}}" data-zoom-image="{{getImage(thumbnail.original_url)}}">
+          <a href="#" ng-repeat="thumbnail in product.master.images" ng-click="activate_thumbnail(thumbnail)" data-image="{{getImage(thumbnail.product_url)}}" data-zoom-image="{{getImage(thumbnail.original_url)}}">
               <img id="product_description_thumbnail_id" src="{{getImage(thumbnail.mini_url)}}"/>
           </a>
         </div>
