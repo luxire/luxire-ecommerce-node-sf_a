@@ -21,7 +21,7 @@ angular.module('luxire')
       });
     }
   };
-  
+
   $scope.go_to_collection = function(permalink){
 
     $location.url('/collections/'+permalink);
@@ -116,7 +116,7 @@ angular.module('luxire')
       $scope.loading_products = false;
       $scope.total_collection_pages = data.data.pages;
       $scope.taxonomy_counts = data.data.taxonomies;
-      console.log('fetched products', data.data);
+      console.log('fetched products', data.data, data.data.products[0].name , Date.now());
       $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
       if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
         $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
@@ -586,9 +586,10 @@ angular.module('luxire')
     if(variant_stiffness/1.25 >8){
       return 8;
     }
+    else if(variant_stiffness == 0.0){
+      return 1;
+    }
     else{
-
-
       return Math.ceil(variant_stiffness/1.25);
     }
 

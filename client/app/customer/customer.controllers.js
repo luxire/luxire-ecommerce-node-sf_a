@@ -608,6 +608,9 @@ avoid conflict with customer ctrl on admin side*/
       if(variant_stiffness/1.25 >8){
         return 8;
       }
+      else if(variant_stiffness == 0.0){
+        return 1;
+      }
       else{
 
 

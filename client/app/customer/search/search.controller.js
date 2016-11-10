@@ -579,6 +579,9 @@ function init_price_range_sliders(currency){
       if(variant_stiffness/1.25 >8){
         return 8;
       }
+      else if(variant_stiffness == 0.0){
+        return 1;
+      }
       else{
 
 
