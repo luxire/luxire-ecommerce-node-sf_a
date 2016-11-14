@@ -8,6 +8,9 @@ td , th{
 .popover-content{
   padding: 0 !important;
 }
+.footer-copy-right-text{
+  text-align: center
+}
 
 /*Product Search*/
 .highlight{
