@@ -456,7 +456,7 @@ button.slick-arrow{
   Loading, please wait...
 </p>
 <div ng-hide="loading_product" class="" style="display: block;position: relative" >
-  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: 8.2%;z-index: 10">
+  <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: {{get_subheader_top_margin()}};z-index: 10">
     <div class="row" style="margin: 1% 0.25% 0.5% 0.25%">
       <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"  style="color: #000000; font-size: 140%; font-weight: 100">
         {{product.name.toUpperCase()}}

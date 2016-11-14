@@ -1,6 +1,13 @@
 angular.module('luxire')
-.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils){
+.controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils, $timeout){
 
+  $scope.get_subheader_top_margin = function(){
+    return $(".customer-main-nav-header").innerHeight() + 'px';
+
+  };
+  $(window).resize(function(){
+      $timeout(function(){}, 0);
+  });
 
   $scope.active_permalink = $location.url().split('/collections/')[1];
   console.log('active_permalink', $scope.active_permalink);
@@ -106,26 +113,32 @@ angular.module('luxire')
 
 
   var load_products = function(){
-    $scope.loading_products = true;
-    console.log('filters before post', $scope.selected_redis_filters);
-    if($scope.selected_redis_filters["wrinkle_resistance"]){
-      $scope.selected_redis_filters["wrinkle_resistance"] = "True";
-    }
-    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
-    .then(function(data){
-      $scope.loading_products = false;
-      $scope.total_collection_pages = data.data.pages;
-      $scope.taxonomy_counts = data.data.taxonomies;
-      console.log('fetched products', data.data, data.data.products[0].name , Date.now());
-      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
-        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+    if(CustomerProducts.is_active_collections($scope.selected_redis_filters.taxonomy)){
+      $scope.loading_products = true;
+      console.log('filters before post', $scope.selected_redis_filters);
+      if($scope.selected_redis_filters["wrinkle_resistance"]){
+        $scope.selected_redis_filters["wrinkle_resistance"] = "True";
       }
-    }, function(error){
-      $scope.loading_products = false;
-      console.error(error);
-    });
-    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
+      CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
+      .then(function(data){
+        $scope.loading_products = false;
+        $scope.total_collection_pages = data.data.pages;
+        $scope.taxonomy_counts = data.data.taxonomies;
+        console.log('fetched products', data.data, data.data.products[0].name , Date.now());
+        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+        if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
+          $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+        }
+      }, function(error){
+        $scope.loading_products = false;
+        console.error(error);
+      });
+      $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
+    }
+    else{
+      $state.go('customer.home');
+      $rootScope.alerts[0] = {type: 'warning', message: $scope.selected_redis_filters.taxonomy+ ' Collection coming soon!'};
+    }
   };
 
   /*Redis caching mechanism*/

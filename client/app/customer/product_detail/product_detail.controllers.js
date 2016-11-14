@@ -10,6 +10,14 @@ angular.module('luxire')
     original_url: ''
   };
 
+  $scope.get_subheader_top_margin = function(){
+    return $(".customer-main-nav-header").innerHeight() + 'px';
+
+  };
+  $(window).resize(function(){
+      $timeout(function(){}, 0);
+  });
+
   var convert_to_cm = function(product){
     CustomerUtils.convert_in_to_cm(product['customization_attributes']);
     CustomerUtils.convert_in_to_cm(product['personalization_attributes']);
@@ -17,40 +25,49 @@ angular.module('luxire')
     $scope.product_in_cm = product;
   };
 
+
   CustomerProducts.show($stateParams.product_name).then(function(data){
     console.log('product data for', $stateParams.product_name, data);
-    $scope.product = data.data;
-    $scope.images_array = [];
-    $scope.images_array_for_zoom = {};
-    angular.forEach($scope.product.master.images, function(val, key){
-      $scope.images_array.push(val.id)
-      $scope.images_array_for_zoom[key+1] = {
-        img: $scope.getImage(val.large_url),
-        thumb: $scope.getImage(val.mini_url),
-        title: key+'image'
+    if(CustomerProducts.is_active_collections(data.data.product_type.product_type)){
+      $scope.product = data.data;
+      $scope.images_array = [];
+      $scope.images_array_for_zoom = {};
+      angular.forEach($scope.product.master.images, function(val, key){
+        $scope.images_array.push(val.id)
+        $scope.images_array_for_zoom[key+1] = {
+          img: $scope.getImage(val.large_url),
+          thumb: $scope.getImage(val.mini_url),
+          title: key+'image'
+        }
+      })
+      $scope.active_product_description_image = $scope.product.master.images[0];
+      json_array_to_obj("customization_attributes", $scope.product.customization_attributes);
+      json_array_to_obj("personalization_attributes", $scope.product.personalization_attributes);
+      json_array_to_obj("standard_measurement_attributes", $scope.product.standard_measurement_attributes);
+      json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
+      $scope.luxire_styles = data.data.luxire_style_masters;
+      console.log('cart', $scope.cart_object);
+      $scope.cart_object_prototype = angular.copy($scope.cart_object);
+      $scope.active_product_type = $scope.product.product_type.product_type;
+      $scope.fabric_product_types = ["shirts", "pants", "jackets"];
+      $scope.is_fabric_product = $scope.fabric_product_types.indexOf($scope.active_product_type.toLowerCase()) >-1 ? true : false;
+      console.log('product_type', $scope.active_product_type, 'is fabric product', $scope.is_fabric_product);
+      $scope.loading_product = false;
+      if($scope.product.product_type.product_type.toLowerCase() === 'gift cards'){
+        $scope.selected_gift_card_variant = $scope.product.master;
+        $scope.product.variants.push($scope.product.master);
+        console.log('selected gift card variant', $scope.selected_gift_card_variant);
       }
-    })
-    $scope.active_product_description_image = $scope.product.master.images[0];
-    json_array_to_obj("customization_attributes", $scope.product.customization_attributes);
-    json_array_to_obj("personalization_attributes", $scope.product.personalization_attributes);
-    json_array_to_obj("standard_measurement_attributes", $scope.product.standard_measurement_attributes);
-    json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
-    $scope.luxire_styles = data.data.luxire_style_masters;
-    console.log('cart', $scope.cart_object);
-    $scope.cart_object_prototype = angular.copy($scope.cart_object);
-    $scope.active_product_type = $scope.product.product_type.product_type;
-    $scope.fabric_product_types = ["shirts", "pants", "jackets"];
-    $scope.is_fabric_product = $scope.fabric_product_types.indexOf($scope.active_product_type.toLowerCase()) >-1 ? true : false;
-    console.log('product_type', $scope.active_product_type, 'is fabric product', $scope.is_fabric_product);
-    $scope.loading_product = false;
-    if($scope.product.product_type.product_type.toLowerCase() === 'gift cards'){
-      $scope.selected_gift_card_variant = $scope.product.master;
-      $scope.product.variants.push($scope.product.master);
-      console.log('selected gift card variant', $scope.selected_gift_card_variant);
-    }
 
-    /*Convert to cm */
-      convert_to_cm(angular.copy(data.data));
+      /*Convert to cm */
+        convert_to_cm(angular.copy(data.data));
+
+    }
+    else{
+      window.history.back();
+      $rootScope.alerts[0] = {type: 'warning', message: 'Product belongs to ' +data.data.product_type.product_type+ ' Collection, which is in active'};
+
+    }
   }, function(error){
     $scope.loading_product = false;
     console.log('error fetching product',error);

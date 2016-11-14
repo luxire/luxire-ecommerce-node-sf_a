@@ -1,6 +1,13 @@
 angular.module('luxire')
-.controller('SearchController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils){
+.controller('SearchController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils, $timeout){
 
+  $scope.get_subheader_top_margin = function(){
+    return $(".customer-main-nav-header").innerHeight() + 'px';
+
+  };
+  $(window).resize(function(){
+      $timeout(function(){}, 0);
+  });
   /*Filters-start*/
   /*filters*/
   $scope.selected_filters = {}; //for DOM Manipulation
