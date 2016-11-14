@@ -222,7 +222,8 @@ avoid conflict with customer ctrl on admin side*/
   $scope.go_to_collection = function(event, permalink){
     console.log('permalink', permalink);
     event.preventDefault();
-    if(permalink.indexOf('shirts') == -1 && permalink.indexOf('pants') == -1 ){
+    var is_active_collection = CustomerProducts.is_active_collections(permalink);
+    if(!is_active_collection){
       $rootScope.alerts[0] = {type: 'warning', message: capitalizeFirstLetter(permalink)+ ' Collection coming soon!'};
     }
     else{

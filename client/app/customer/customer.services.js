@@ -65,6 +65,22 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.products+"/search", angular.toJson(query_object));
   };
 
+  var active_collections = ["shirts", "pants"]
+  this.is_active_collections = function(collection){
+    var collection = collection.toLowerCase();
+    var is_active_collection = false;
+    
+    for(var i=0;i<active_collections.length;i++){
+      if(collection.indexOf(active_collections[i]) !== -1){
+        is_active_collection = true;
+      }
+    }
+    if(is_active_collection){
+      return true;
+    }
+    return false;
+  };
+
   this.show = function(product_name){
     return $http.get(CustomerConstants.api.products+'/'+product_name, {
       cache: product_cache

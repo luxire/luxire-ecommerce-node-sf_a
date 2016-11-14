@@ -49,8 +49,8 @@ angular.module('luxire')
   $scope.available_collections = ['shirts', 'pants'];
 
   $scope.go_to_collection = function(permalink){
-
-    if($scope.available_collections.indexOf(permalink) == -1){
+    var is_active_collection = CustomerProducts.is_active_collections(permalink);
+    if(!is_active_collection){
       $rootScope.alerts[0] = {type: 'warning', message: capitalizeFirstLetter(permalink)+ ' Collection coming soon!'};
     }
     else{
