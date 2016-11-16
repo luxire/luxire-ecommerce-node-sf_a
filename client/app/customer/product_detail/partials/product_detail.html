@@ -1573,7 +1573,7 @@ button.slick-arrow{
               </div>
               <div style="display: inline-block; width: 94%">
                 <div style="text-align: center;margin-top: 1%;font-size: 150%;">
-                  {{active_detail_style.name}}
+                  {{active_detail_style.name}} <span ng-show="active_detail_style.default_values.additional_cost">[</span><span ng-show="active_detail_style.default_values.additional_cost" ng-bind-html="currency_symbols(active_detail_style.default_values.additional_cost[selected_currency], selected_currency)"></span><span ng-show="active_detail_style.default_values.additional_cost">]</span>
                 </div>
                 <div style="text-align: center;margin-top: 3%;">
                   <div ng-class="{'shrink-style-details': !more_details_on_style}" ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
