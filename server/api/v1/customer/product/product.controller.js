@@ -23,8 +23,8 @@ var prediction = require(path.resolve('server/api/v1/generic/prediction/predicti
 Products
 ******/
 // Get list of all products
-var spree_cookie = [];
 exports.index = function(req, res) {
+  var spree_cookie = [];
   console.log('req to search', req.query);
   console.log(constants.spree.host+constants.spree.products);
   var qstr = ''
@@ -59,8 +59,9 @@ exports.index = function(req, res) {
 };
 
 //Search from redis for products
-var request = {};
+
 exports.search = function(req, res) {
+  var request = {};
   console.log('search by name ', req.query);
   request = req.body;
   if(req.query && req.query.name_cont){
