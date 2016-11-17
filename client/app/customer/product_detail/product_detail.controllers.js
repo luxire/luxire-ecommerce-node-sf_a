@@ -482,6 +482,9 @@ angular.module('luxire')
         },
         standard_measurement_attributes_all: function(){
           return $scope.standard_measurement_attributes_all;
+        },
+        selected_currency: function(){
+          return $scope.selected_currency;
         }
 
       }
@@ -712,7 +715,7 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler){
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', 'ProductTypes', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler, ProductTypes){
 
   console.log('standard attr', standard_measurement_attributes_all);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
@@ -1589,7 +1592,7 @@ angular.module('luxire')
   console.log('key map', key_name_map);
 
 }])
-.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', 'selected_currency',function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce, selected_currency){
+.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', 'selected_currency', 'CustomerUtils',function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce, selected_currency,CustomerUtils){
   $scope.selected_currency = selected_currency;
   console.log('selected_currency', selected_currency);
   $scope.active_style_option = "system_preset";
@@ -1597,52 +1600,63 @@ angular.module('luxire')
   angular.forEach(product['customization_attributes'],function(val,key){
     $scope.product_customization_attributes[val.name] = val.value;
   })
-  console.log('product customization attr', $scope.product_customization_attributes);
+  console.log('product customization attr before', $scope.product_customization_attributes);
   $scope.change_active_style_option = function(option){
     $scope.active_style_option = option;
-    $('#prev-attr').click();
+    // $('#prev-attr').click();
+    $scope.attibutes_slider_config.method.slickPrev();
+    $scope.attibutes_slider_config.method.slickPrev();
+
+
+    console.log('product customization attr after', $scope.product_customization_attributes);
+
     if($scope.selected_style && $scope.selected_style.name && option == 'bespoke'){
       console.log('cart to explore', $scope.cart_object);
 
-      angular.forEach($scope.cart_object['customization_attributes'], function(val, key){
-        if(!angular.isObject($scope["customization_attributes"])){
-          $scope["customization_attributes"] = {};
-        };
-        if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][key])){
-           $scope["customization_attributes"][key] = {};
-         };
-         if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][key]) && !angular.isObject($scope["customization_attributes"][key]["options"])){
-           $scope["customization_attributes"][key]['options'] = {};
-         }
-         angular.forEach($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']], function(option_val, option_key){
-           if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][key]['value'], option_key)){
-             if(!$scope.cart_object["customization_attributes"][key]['options'][option_key]){
-               if(angular.isObject(option_val)){
-                 $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val.default;
-               }
-               else{
-                 $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val;
-               }
-             }
-           }
-         });
-         $scope["customization_attributes"][key]['options'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']];
-         if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost){
-           if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][key]){
-             $scope.cart_object["personalization_attributes"][key]= {};
-           }
-           if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][key]){
-                if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]){
-                  $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']] = {};
-                }
-                if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost']){
-                  $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost;
-                  $scope.add_personalization_cost($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost);
-                }
-            }
-         }
-      });
+      // angular.forEach($scope.cart_object['customization_attributes'], function(val, key){
+      //   if(!angular.isObject($scope["customization_attributes"])){
+      //     $scope["customization_attributes"] = {};
+      //   };
+      //   if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][key])){
+      //      $scope["customization_attributes"][key] = {};
+      //    };
+      //    if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][key]) && !angular.isObject($scope["customization_attributes"][key]["options"])){
+      //      $scope["customization_attributes"][key]['options'] = {};
+      //    }
+      //    if($scope.product_customization_attributes[key] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']]){
+      //      angular.forEach($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']], function(option_val, option_key){
+      //        if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][key]['value'], option_key)){
+      //          if(!$scope.cart_object["customization_attributes"][key]['options'][option_key]){
+      //            if(angular.isObject(option_val)){
+      //              $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val.default;
+      //            }
+      //            else{
+      //              $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val;
+      //            }
+      //          }
+      //        }
+      //      });
+      //      $scope["customization_attributes"][key]['options'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']];
+      //    }
+      //
+      //    if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost){
+      //      if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][key]){
+      //        $scope.cart_object["personalization_attributes"][key]= {};
+      //      }
+      //      if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][key]){
+      //           if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]){
+      //             $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']] = {};
+      //           }
+      //           if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost']){
+      //             $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost;
+      //             $scope.add_personalization_cost($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost);
+      //           }
+      //       }
+      //    }
+      // });
     }
+
+
   };
 
   $scope.activeStyleCarouselIndex = 2;
@@ -1698,60 +1712,62 @@ angular.module('luxire')
   var style_iterator = function(style, attribute_type, is_selected){
     console.log('style iterator for: ', style,'of type, : ',attribute_type,'is selected', is_selected);
     console.log('cart object b4', $scope.cart_object);
-    angular.forEach(style[attribute_type], function(value, key){
-      if(!is_selected){
+    if(style[attribute_type]){
+      angular.forEach(style[attribute_type], function(value, key){
+        if(!is_selected){
 
-        /*Relocate this code*/
-        if(attribute_type == "personalization_attributes" ){
-          console.log('personalization_attributes', style[attribute_type]);
-          angular.forEach(style[attribute_type][key], function(val, name){
-            if($scope.cart_object[attribute_type][key][name]){
-              if(val.cost){
-                $scope.remove_personalization_cost(val.cost);
+          /*Relocate this code*/
+          if(attribute_type == "personalization_attributes" ){
+            console.log('personalization_attributes', style[attribute_type]);
+            angular.forEach(style[attribute_type][key], function(val, name){
+              if($scope.cart_object[attribute_type][key][name]){
+                if(val.cost){
+                  $scope.remove_personalization_cost(val.cost);
+                }
+                delete $scope.cart_object[attribute_type][key][name];
               }
-              delete $scope.cart_object[attribute_type][key][name];
-            }
-          })
-        }
-        else{
-          if(style[attribute_type][key] && style[attribute_type][key]!==''){
-            $scope.cart_object[attribute_type][key]['value'] = '';
-
-          }
-        }
-
-        /*Relocate this code*/
-      }
-      else{
-        console.log('attribute type', attribute_type, attribute_type == "personalization_attributes");
-
-        if(attribute_type == "personalization_attributes"){
-          console.log('personalization_attributes', style[attribute_type]);
-          angular.forEach(style[attribute_type][key], function(val, name){
-            console.log('Personalization check', key, name , val);
-            if(!$scope.cart_object[attribute_type]){
-              $scope.cart_object[attribute_type] = {};
-            }
-            $scope.cart_object[attribute_type][key] = $scope.cart_object[attribute_type][key] ? $scope.cart_object[attribute_type][key] : {};
-            $scope.cart_object[attribute_type][key][name] = val;
-            if(val.cost){
-              $scope.add_personalization_cost(val.cost);
-            }
-          })
-        }
-        else{
-          if(style[attribute_type] && angular.isDefined(style[attribute_type][key])){
-            $scope.cart_object[attribute_type][key]['value'] = style[attribute_type][key];
+            })
           }
           else{
-            $scope.cart_object[attribute_type][key]['value'] = '';
+            if(style[attribute_type][key] && style[attribute_type][key]!==''){
+              $scope.cart_object[attribute_type][key]['value'] = '';
+
+            }
+          }
+
+          /*Relocate this code*/
+        }
+        else{
+          console.log('attribute type', attribute_type, attribute_type == "personalization_attributes");
+
+          if(attribute_type == "personalization_attributes"){
+            console.log('personalization_attributes', style[attribute_type]);
+            angular.forEach(style[attribute_type][key], function(val, name){
+              console.log('Personalization check', key, name , val);
+              if(!$scope.cart_object[attribute_type]){
+                $scope.cart_object[attribute_type] = {};
+              }
+              $scope.cart_object[attribute_type][key] = $scope.cart_object[attribute_type][key] ? $scope.cart_object[attribute_type][key] : {};
+              $scope.cart_object[attribute_type][key][name] = val;
+              if(val.cost){
+                $scope.add_personalization_cost(val.cost);
+              }
+            })
+          }
+          else{
+            if(!$scope.cart_object[attribute_type][key]){
+              $scope.cart_object[attribute_type][key] = {};
+            }
+            else{
+              $scope.cart_object[attribute_type][key]['value'] = style[attribute_type][key];
+            }
           }
         }
-      }
-    })
-    console.log('cart object after', $scope.cart_object);
+      })
+      console.log('cart object after', $scope.cart_object);
 
-    return;
+    }
+
 
   };
 
@@ -1802,6 +1818,19 @@ angular.module('luxire')
     $scope.style_detail_images = $scope.active_detail_style.sketch_images;
     $scope.set_aggregated_style_images(active_style);
   }
+
+  $scope.attibutes_slider_config = {
+    infinite: false,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    vertical: true,
+    method: {},
+    event: {
+      beforeChange: function (event, slick, currentSlide, nextSlide) {
+        $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][nextSlide]);
+      }
+    }
+  };
 
 
       $timeout(function () {
@@ -1904,8 +1933,7 @@ angular.module('luxire')
             infinite: false,
             slidesToShow: 5,
             slidesToScroll: 1,
-            vertical: true,
-            adaptiveHeight: true
+            vertical: true
           });
           $('#prev-attr').addClass('slick-arrow');
           $('#next-attr').addClass('slick-arrow');
@@ -2131,41 +2159,7 @@ angular.module('luxire')
   };
 
 
-  $scope.currency_symbols = function(val ,currency){
-    if(currency == "INR"){
-      return $sce.trustAsHtml('&#8377;'+val);
-    }
-    else if(currency == "USD"){
-      return $sce.trustAsHtml('&#36;'+val);
-    }
-    else if(currency == "EUR"){
-      return $sce.trustAsHtml('&euro;'+val);
-    }
-    else if(currency == "SGD"){
-      return $sce.trustAsHtml('&#36;'+val);
-    }
-    else if(currency == "AUD"){
-      return $sce.trustAsHtml('a;'+val);//$
-    }
-    else if(currency == "SEK"){
-      return $sce.trustAsHtml(val+' kr');
-    }
-    else if(currency == "DKK"){
-      return $sce.trustAsHtml(val+' kr');
-    }
-    else if(currency == "CHF"){
-      return $sce.trustAsHtml('CHF'+val);
-    }
-    else if(currency == "NOK"){
-      return $sce.trustAsHtml(val+' kr');
-    }
-    else if(currency == "GBP"){
-      return $sce.trustAsHtml('&pound;'+val);
-    }
-    else if(currency == "CAD"){
-      return $sce.trustAsHtml('&#36;'+val);
-    }
-  };
+  $scope.currency_symbols = CustomerUtils.get_currency_with_symbol;//accepts (val, currency)
 
   var personalisation_cost_init = {
     "INR": 0.00,
@@ -2182,6 +2176,7 @@ angular.module('luxire')
   };
 
   $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
+
   var product_prices = {};
   angular.forEach($scope.product.master.prices, function(value, currency){
     if((currency == "USD") || (currency == "SGD") || (currency == "AUD") || (currency == "CAD")){
@@ -2454,13 +2449,15 @@ angular.module('luxire')
   };
 })
 
-.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style', '$uibModalInstance', 'summary_type', 'selected_measurement_id', 'selected_measurement_unit',function($scope, product, cart_object, base_style, $uibModalInstance, summary_type, selected_measurement_id, selected_measurement_unit){
+.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style', '$uibModalInstance', 'summary_type', 'selected_measurement_id', 'selected_measurement_unit', 'CustomerUtils', 'selected_currency',function($scope, product, cart_object, base_style, $uibModalInstance, summary_type, selected_measurement_id, selected_measurement_unit, CustomerUtils, selected_currency){
   $scope.product = product;
   $scope.cart_object = cart_object;
   $scope.base_style = base_style;
   $scope.summary_type = summary_type;
   $scope.selected_measurement_id = selected_measurement_id;
   $scope.selected_measurement_unit = selected_measurement_unit;
+  $scope.currency_symbols = CustomerUtils.get_currency_with_symbol;
+  $scope.selected_currency = selected_currency;
   console.log('cart_object in summary', cart_object);
   $scope.summary_bespoke_attributes = cart_object['customization_attributes'];
   angular.forEach(cart_object['personalization_attributes'], function(val, key){

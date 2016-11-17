@@ -536,11 +536,20 @@ button.slick-arrow{
                       <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !active_style.name, 'btn-description-before': active_style.name}" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style': 'Style Saved'}}</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: left">
+                      <!-- <div class="" style="color: #7F0E6E;text-decoration: underline;">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
+                      </div> -->
                       <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
                         <i class="fa fa-check" aria-hidden="true"></i>
                         <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
                       </div>
                     </div>
+                      <!-- <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
+                      </div> -->
+                    <!-- </div> -->
                   </div>
                   <div class="row" style="margin-left: 0;margin-right: 0">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1692,10 +1701,27 @@ button.slick-arrow{
                                 <div><span style="font-size:120%;margin-top:3%;">Options</span></div>
                               </div>
                               <div class="row" style="text-align: center">
-                                <i id="prev-attr" class="slide-next fa fa-chevron-up"  style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
+                                <i class="fa fa-chevron-up"  style="padding-left:0%;font-size:x-large;cursor: pointer" ng-click="attibutes_slider_config.method.slickPrev()"></i>
                               </div>
+                              <!--//div class="row" style="text-align: center">
+                              //   <i id="prev-attr" class="slide-next fa fa-chevron-up"  style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
+                              // </div-->
                               <div class="row container-fluid" style="">
-                                <div class="bespoke-attributes-slider">
+                                <!--//div class="bespoke-attributes-slider">
+                                //   <div class="bespoke-attributes-slide"  ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
+                                //     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
+                                //       <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': bespoke_attribute.name==selected_bespoke_attribute.name}" style="width: 100%;background-color: #FDFDFD;text-align: center">
+                                //         <img ng-src="{{getImage(bespoke_attribute.image)}}"
+                                //         class="img-circle"
+                                //         ng-class="{'active-bespoke': bespoke_attribute.name==selected_bespoke_attribute.name}"
+                                //           style="margin-top: 8%; margin-bottom: 8%;border: solid 2px #FDFDFD;background-color: white"
+                                //           onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
+                                //           <div style="font-size: 100%;text-align:center;"><span>{{bespoke_attribute.name}}</span></div>
+                                //       </div>
+                                //     </div>
+                                //   </div>
+                                // </div-->
+                                <slick settings="attibutes_slider_config">
                                   <div class="bespoke-attributes-slide"  ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
                                     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
                                       <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': bespoke_attribute.name==selected_bespoke_attribute.name}" style="width: 100%;background-color: #FDFDFD;text-align: center">
@@ -1708,11 +1734,11 @@ button.slick-arrow{
                                       </div>
                                     </div>
                                   </div>
-                                </div>
+                                </slick>
 
                               </div>
                               <div class="row" style="text-align: center">
-                                <i id="next-attr" class="slide-next fa fa-chevron-down"  style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
+                                <i class="fa fa-chevron-down"  style="padding-left:0%;font-size:x-large;cursor: pointer" ng-click="attibutes_slider_config.method.slickNext()"></i>
                               </div>
                             </div>
                           </div>
@@ -2040,7 +2066,7 @@ button.slick-arrow{
             <a ng-if="attr_options_key_length(attribute.options)>0" style="color: #7E006C" uib-popover-template="view_measurements.templateUrl" popover-placement="right" popover-trigger="mouseenter">View Details</a>
           </div>
           <div style="display: inline-block;width: 38%;padding:1%">
-            <span ng-if="attribute.cost">+{{attribute.cost}}</span>
+            <span ng-if="attribute.cost">+<span ng-bind-html="currency_symbols(attribute.cost[selected_currency], selected_currency)"></span></span>
           </div>
         </div>
       </uib-accordion-group>
