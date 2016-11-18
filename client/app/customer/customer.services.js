@@ -69,7 +69,7 @@ angular.module('luxire')
   this.is_active_collections = function(collection){
     var collection = collection.toLowerCase();
     var is_active_collection = false;
-    
+
     for(var i=0;i<active_collections.length;i++){
       if(collection.indexOf(active_collections[i]) !== -1){
         is_active_collection = true;
@@ -325,7 +325,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.checkouts+'/'+order.number+'/payments/brain_tree?order_token='+order.token, angular.toJson(brain_tree_object));
   };
 })
-.service('CustomerUtils', function($http, CustomerConstants){
+.service('CustomerUtils', function($http, CustomerConstants, $sce){
   //passed by ref
   var exclusion_list = ['id','cost'];
   var local_currency = "";
@@ -375,8 +375,82 @@ angular.module('luxire')
     return $http.post('/api/v1/contact_us', angular.toJson(user));
   };
 
-});
+  this.get_currency_with_symbol = function(val, currency){
+    if(currency == "INR"){
+      return $sce.trustAsHtml('&#8377;'+val);
+    }
+    else if(currency == "USD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+    else if(currency == "EUR"){
+      return $sce.trustAsHtml('&euro;'+val);
+    }
+    else if(currency == "SGD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+    else if(currency == "AUD"){
+      return $sce.trustAsHtml('a;'+val);//$
+    }
+    else if(currency == "SEK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
+    else if(currency == "DKK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
+    else if(currency == "CHF"){
+      return $sce.trustAsHtml('CHF'+val);
+    }
+    else if(currency == "NOK"){
+      return $sce.trustAsHtml(val+' kr');
+    }
+    else if(currency == "GBP"){
+      return $sce.trustAsHtml('&pound;'+val);
+    }
+    else if(currency == "CAD"){
+      return $sce.trustAsHtml('&#36;'+val);
+    }
+  };
 
+})
+.service('ProductType', function(){
+  this.shirts = function(){
+    console.log('init shirt');
+    return {
+      cloth_measurement_attributes: {
+        "Collar Size": [],
+        "Chest": ["Chest(Front)", "Chest(Back)"],
+        "Waist": ["Waist(Front)", "Waist(Back)"],
+        "Bottom": ["Bottom(Front)", "Bottom(Back)"],
+        "Yoke": ["Yoke(Left)", "Yoke(Right)"],
+        "Sleeve Width": ["Sleeve Width(Left)", "Sleeve Width(Right)"],
+        "Armhole": ["Armhole(Left)", "Armhole(Right)"],
+        "Forearm": ["Forearm(Left)", "Forearm(Right)"],
+        "Cuff Around": ["Cuff Around(Left)", "Cuff Around(Right)"],
+        "Shoulder Slope": ["Shoulder Slope(Left)", "Shoulder Slope(Right)"],
+        "Back Panel Slope": ["Back Panel Slope(Left)", "Back Panel Slope(Right)"],
+        "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"],
+        "Shirt Length": []
+      },
+      attributes_order: ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope', 'back panel slope', 'sleeve length']
+
+    };
+  };
+  this.pants = function(){
+    return {
+      cloth_measurement_attributes: {
+        "Waist": [],
+        "Hips": ["Hips(Front)", "Hips(Back)"],
+        "Front Rise": [],
+        "Back Rise": [],
+        "Inseam": ["Inseam(Left)", "Inseam(Right)"],
+        "Outseam": ["Outseam(Left)", "Outseam(Right)"],
+        "Thigh": [],
+        "Knee": [],
+        "Bottom": []
+      }
+    };
+  }
+});
 
   // this.update_cart_by_quantity = function(order, line_item_id,variant_id,quantity){
 	// 	var updated_cart = {
