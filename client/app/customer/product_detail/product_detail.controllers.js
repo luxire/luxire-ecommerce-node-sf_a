@@ -715,8 +715,8 @@ angular.module('luxire')
 
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', 'ProductTypes', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler, ProductTypes){
-
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', 'ProductType', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler, ProductType){
+  console.log('product', product);
   console.log('standard attr', standard_measurement_attributes_all);
   $scope.standard_measurement_attributes = standard_measurement_attributes;
   $scope.standard_measurement_attributes_all = standard_measurement_attributes_all;
@@ -1174,41 +1174,18 @@ angular.module('luxire')
     $scope.change_dependents(attribute_type, attribute_key, attribute_value);
   };
 
+  var ProductType = {
+    shirts: ProductType["shirts"](),
+    pants: ProductType["pants"]()
+  };
   /*Order to display attributes shirt measurement*/
   $scope.cloth_measurement_attributes = {};
-  if($scope.product.product_type.product_type === "Shirts"){
-    $scope.cloth_measurement_attributes = {
-      "Collar Size": [],
-      "Chest": ["Chest(Front)", "Chest(Back)"],
-      "Waist": ["Waist(Front)", "Waist(Back)"],
-      "Bottom": ["Bottom(Front)", "Bottom(Back)"],
-      "Yoke": ["Yoke(Left)", "Yoke(Right)"],
-      "Sleeve Width": ["Sleeve Width(Left)", "Sleeve Width(Right)"],
-      "Armhole": ["Armhole(Left)", "Armhole(Right)"],
-      "Forearm": ["Forearm(Left)", "Forearm(Right)"],
-      "Cuff Around": ["Cuff Around(Left)", "Cuff Around(Right)"],
-      "Shoulder Slope": ["Shoulder Slope(Left)", "Shoulder Slope(Right)"],
-      "Back Panel Slope": ["Back Panel Slope(Left)", "Back Panel Slope(Right)"],
-      "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"],
-      "Shirt Length": []
-    };
-  }
-  else if($scope.product.product_type.product_type === "Pants"){
-    $scope.cloth_measurement_attributes = {
-      "Waist": [],
-      "Hips": ["Hips(Front)", "Hips(Back)"],
-      "Front Rise": [],
-      "Back Rise": [],
-      "Inseam": ["Inseam(Left)", "Inseam(Right)"],
-      "Outseam": ["Outseam(Left)", "Outseam(Right)"],
-      "Thigh": [],
-      "Knee": [],
-      "Bottom": [],
-
-    };
+  if($scope.product.product_type.product_type === "Shirts" || $scope.product.product_type.product_type === "Pants"){
+    $scope.cloth_measurement_attributes = ProductType[$scope.product.product_type.product_type.toLowerCase()].cloth_measurement_attributes;
   }
 
-  var attributes_order = ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope', 'back panel slope', 'sleeve length'];
+
+  var attributes_order = ProductType[$scope.product.product_type.product_type.toLowerCase()].attributes_order;
 
   /*Check dependents and set dependents*/
   $scope.change_dependents = function(attr_type, attr_name, attr_value){
@@ -2449,16 +2426,45 @@ angular.module('luxire')
   };
 })
 
-.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style', '$uibModalInstance', 'summary_type', 'selected_measurement_id', 'selected_measurement_unit', 'CustomerUtils', 'selected_currency',function($scope, product, cart_object, base_style, $uibModalInstance, summary_type, selected_measurement_id, selected_measurement_unit, CustomerUtils, selected_currency){
+.controller('SummaryController', ['$scope', 'product','cart_object', 'base_style', '$uibModalInstance', 'summary_type', 'selected_measurement_id', 'selected_measurement_unit', 'CustomerUtils', 'selected_currency', 'ProductType',function($scope, product, cart_object, base_style, $uibModalInstance, summary_type, selected_measurement_id, selected_measurement_unit, CustomerUtils, selected_currency, ProductType){
   $scope.product = product;
+  console.log('product', product);
+
   $scope.cart_object = cart_object;
   $scope.base_style = base_style;
   $scope.summary_type = summary_type;
   $scope.selected_measurement_id = selected_measurement_id;
   $scope.selected_measurement_unit = selected_measurement_unit;
   $scope.currency_symbols = CustomerUtils.get_currency_with_symbol;
+  $scope.ProductType = {
+    shirts: ProductType.shirts(),
+    pants: ProductType.pants()
+  }
   $scope.selected_currency = selected_currency;
   console.log('cart_object in summary', cart_object);
+  var product_type = product.product_type.product_type;
+  $scope.measurement_types = [
+    {
+      id: 1,
+      header: "Standard",
+      sub_header: "Choose from standard sizes"
+    },
+    {
+      id: 2,
+      header: "Custom",
+      sub_header: "Customize your fit types"
+    },
+    {
+      id: 3,
+      header: "Body Measurements",
+      sub_header: "Provide your exact body measurements for the perfect fit type"
+    },
+    {
+      id: 4,
+      header: "Send "+product_type+" Sample",
+      sub_header: "Send us your "+product_type+" sample to exactly replicate or modify"
+    }
+  ];
   $scope.summary_bespoke_attributes = cart_object['customization_attributes'];
   angular.forEach(cart_object['personalization_attributes'], function(val, key){
     $scope.summary_bespoke_attributes[key] = val;

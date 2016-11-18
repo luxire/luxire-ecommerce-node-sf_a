@@ -536,14 +536,14 @@ button.slick-arrow{
                       <button type="button" style="width: 100%" class="btn btn-default btn-lux" ng-class="{'btn-description': !active_style.name, 'btn-description-before': active_style.name}" ng-click="invoke_choose_a_style()">{{active_style.name==''||active_style.name==undefined?'Choose a style': 'Style Saved'}}</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: left">
-                      <!-- <div class="" style="color: #7F0E6E;text-decoration: underline;">
-                        <i class="fa fa-check" aria-hidden="true"></i>
-                        <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
-                      </div> -->
-                      <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
+                      <div ng-if="active_style.name"  class="" style="color: #7F0E6E;text-decoration: underline;">
                         <i class="fa fa-check" aria-hidden="true"></i>
                         <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
                       </div>
+                      <!-- <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        <span style="cursor: pointer" ng-click="show_summary('style')">More details</span>
+                      </div> -->
                     </div>
                       <!-- <div ng-if="active_style.name" class="" style="color: #7F0E6E;text-decoration: underline;">
                         <i class="fa fa-check" aria-hidden="true"></i>
@@ -1941,7 +1941,6 @@ button.slick-arrow{
                   </div>
                 </div>
             </div>
-
         </div>
       </div>
     </div>
@@ -2028,7 +2027,8 @@ button.slick-arrow{
     </div>
 </script>
 <script type="text/ng-template" id="summary.html">
-  <div style="padding: 3%" ng-mouseleave="close()">
+  <!--//ng-mouseleave="close()"-->
+  <div style="padding: 3%" >
     <div style="color: #8F2B80;font-size: 150%;font-weight: 500">
       {{product.product_type.product_type.slice(0,-1)}}
     </div>
@@ -2040,12 +2040,28 @@ button.slick-arrow{
         {{product.display_price}}
       </div>
     </div>
-    <div style="font-size: 110%;font-weight: 500">
+    <div ng-if="summary_type == 'style'" style="font-size: 110%;font-weight: 500">
       <div style="display: inline-block;width: 30%">
-        Base Style Selected:
+        Selected base style :
       </div>
       <div  style="display: inline-block;width: 30%;">
         {{base_style && base_style.name ? base_style.name : 'None'}}
+      </div>
+    </div>
+    <div ng-if="summary_type == 'measurement'" style="font-size: 110%;font-weight: 500">
+      <div style="display: inline-block;width: 30%">
+        Selected measurement type :
+      </div>
+      <div  style="display: inline-block;width: 30%;">
+        {{measurement_types[selected_measurement_id-1].header}}
+      </div>
+    </div>
+    <div ng-if="summary_type == 'measurement'" style="font-size: 110%;font-weight: 500">
+      <div style="display: inline-block;width: 30%">
+        Selected measurement unit :
+      </div>
+      <div  style="display: inline-block;width: 30%;">
+        {{selected_measurement_unit}}
       </div>
     </div>
     <uib-accordion close-others="true" >
@@ -2070,7 +2086,7 @@ button.slick-arrow{
           </div>
         </div>
       </uib-accordion-group>
-      <uib-accordion-group ng-if="summary_type == 'measurement' && selected_measurement_id == 1">
+      <uib-accordion-group ng-if="summary_type == 'measurement' && selected_measurement_id == 1" is-open="true">
         <uib-accordion-heading>
           <div style="color: #8F2B80;font-size: 120%;font-weight: 500;">
             Standard Measurements
@@ -2079,10 +2095,34 @@ button.slick-arrow{
         <div ng-if="product.product_type.product_type.toLowerCase() == 'shirts'"  style="width: 100%">
           <div class="summary-row" style="width: 100%;text-align: center;" >
             <div style="display: inline-block;width: 19%;padding:1%">
-              {{attr}}
+              Collar Size
             </div>
             <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
-              {{attr_obj.value}}
+              {{cart_object['standard_measurement_attributes']['Collar Size']['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
+          </div>
+          <div class="summary-row" style="width: 100%;text-align: center;" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              Sleeve Length
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes']['Sleeve Length']['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
+          </div>
+          <div class="summary-row" style="width: 100%;text-align: center;" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              Fit Type
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes']['Fit Type']['value']}}
             </div>
             <div style="display: inline-block;width: 20%;padding:1%;">
             </div>
@@ -2090,35 +2130,102 @@ button.slick-arrow{
             </div>
           </div>
         </div>
-
-
+        <div ng-if="product.product_type.product_type.toLowerCase() == 'pants'"  style="width: 100%">
+          <div class="summary-row" style="width: 100%;text-align: center;" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              Body Waist
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes']['Waist']['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
+          </div>
+          <div class="summary-row" style="width: 100%;text-align: center;" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              Inseam
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes']['Inseam']['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
+          </div>
+          <div class="summary-row" style="width: 100%;text-align: center;" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              Fit Type
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes']['Fit Type']['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
+          </div>
+        </div>
       </uib-accordion-group>
-      <uib-accordion-group ng-if="body_attrs_length>0" >
+    </uib-accordion>
+    <uib-accordion ng-if="summary_type == 'measurement' && selected_measurement_id == 3"   close-others="true" >
+      <uib-accordion-group is-open="true">
         <uib-accordion-heading>
           <div style="color: #8F2B80;font-size: 120%;font-weight: 500;">
             Body Measurements
           </div>
         </uib-accordion-heading>
-        <div ng-if="attr_obj.value" class="summary-row" style="width: 100%;text-align: center;" ng-repeat="(attr, attr_obj) in filter_attr('body_attrs', cart_object['body_measurement_attributes'])">
-          <div style="display: inline-block;width: 19%;padding:1%">
-            {{attr}}
+        <div style="width: 100%">
+          <div class="summary-row" style="width: 100%;text-align: center;" ng-repeat="body_measurement_attribute in product['body_measurement_attributes']" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              {{body_measurement_attribute.name}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['body_measurement_attributes'][body_measurement_attribute.name]['value']}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;">
+            </div>
+            <div style="display: inline-block;width: 38%;padding:1%">
+            </div>
           </div>
-          <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
-            {{attr_obj.value}}
-          </div>
-          <div style="display: inline-block;width: 20%;padding:1%;">
-          </div>
-          <div style="display: inline-block;width: 38%;padding:1%">
-          </div>
-
 
         </div>
 
       </uib-accordion-group>
-
     </uib-accordion>
+    <uib-accordion close-others="true">
+      <uib-accordion-group ng-if="summary_type == 'measurement' && selected_measurement_id !== 4" is-open="true">
+        <uib-accordion-heading>
+          <div style="color: #8F2B80;font-size: 120%;font-weight: 500;">
+            {{(selected_measurement_id == 1) || (selected_measurement_id == 3) ? 'Computed Measurements' : 'Custom Measurements'}}
+          </div>
+        </uib-accordion-heading>
+        <div ng-if="product.product_type.product_type.toLowerCase() == 'shirts'"  style="width: 100%">
+          <div class="summary-row" style="width: 100%;text-align: center;" ng-repeat="(cloth_measurement_attribute_key,cloth_measurement_attribute_derivatives) in ProductType.shirts.cloth_measurement_attributes" >
+            <div style="display: inline-block;width: 19%;padding:1%">
+              {{cloth_measurement_attribute_key}}
+            </div>
+            <div style="display: inline-block;width: 20%;padding:1%;border-right: solid 1px white;">
+              {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_key]['value']}}
+            </div>
+            <div ng-if="!cloth_measurement_attribute_derivatives.length" style="display: inline-block;width: 60%;padding:1%">
+            </div>
 
+            <div ng-if="cloth_measurement_attribute_derivatives.length" ng-repeat="cloth_measurement_attribute_derivative in cloth_measurement_attribute_derivatives" style="display: inline-block;width: 30%;padding:1%;">
+              <div style="display: inline-block;width: 48%;padding:1%;">
+                {{cloth_measurement_attribute_derivative}}
+              </div>
+              <div style="display: inline-block;width: 48%;padding:1%;">
+                {{cart_object['standard_measurement_attributes'][cloth_measurement_attribute_derivative]['value']}}
+              </div>
+            </div>
 
+          </div>
+        </div>
+      </uib-accordion-group>
+    </uib-accordion>
   </div>
 </script>
 <script type="text/ng-template" id="view_measurements_popover.html">
