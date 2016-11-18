@@ -389,7 +389,7 @@ avoid conflict with customer ctrl on admin side*/
 
 
   var update_order_measurement_unit = function(unit){
-    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items.length){
+    if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.line_items.length){
       $scope.loading = true;
       var luxire_line_items = [];
       for(var i=0;i<$rootScope.luxire_cart.line_items.length;i++){
