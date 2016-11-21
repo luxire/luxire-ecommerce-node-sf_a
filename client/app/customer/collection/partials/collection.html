@@ -145,58 +145,61 @@
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
             </div>
           </div>
-          <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)===-1" class="row" style="display: block">
+          <div  class="row" style="display: block">
             <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData " ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
-                <!-- <div class="productImage">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
-                </div> -->
-                <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
-                </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
-                <!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="height: 45vh;overflow: hidden">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].original_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer;"></img>
-                </div> -->
                 <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
                   <a href="/#/products/{{product.slug}}">
                     <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
                   </a>
                 </div>
-                <!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].original_url)}}" style="cursor: pointer;"></img>
-                </div> -->
                 <div class="container-fluid" style="background-color: ">
                   <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">
                     <center><span style="font-size:140%;word-break: break-all">{{product.name && product.name.length>32? product.name.slice(0,32)+'...' : product.name}}</span></center>
                     <center><span style="font-size:90%;color:#7F7F7F;">{{product.master.prices[selected_currency]}}</span></center>
                   </div>
-                  <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
-                      <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="order_swatch(product.variants[0])">
-                        <div style="margin-top:5%;margin-bottom:5%;">
-                          <span style="text-align:center;font-size:80%;">Order fabric swatch</span><br>
+                  <div ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)==-1">
+                    <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="order_swatch(product.variants[0])">
+                          <div style="margin-top:5%;margin-bottom:5%;">
+                            <span style="text-align:center;font-size:80%;">Order fabric swatch</span><br>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" ng-click="showQuickView(product,'md')">
-                        <div style="margin-top:5%;margin-bottom:10%;">
-                          <span style="font-size:80%;">Quick View</span><br>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" ng-click="showQuickView(product,'md')">
+                          <div style="margin-top:5%;margin-bottom:10%;">
+                            <span style="font-size:80%;">Quick View</span><br>
+                          </div>
                         </div>
-                      </div>
+                    </div>
+                    <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
+                          <span>
+                            <img uib-popover-template="help_template.weight_url" popover-title="{{'Weight: '+product.luxire_product.gsm+ ' gsm'}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 12%; margin-left: 8%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png" alt="" />&nbsp;&nbsp;
+                            <img uib-popover-template="help_template.thickness_url" popover-title="{{'Thickness: '+product.luxire_product.thickness.split('mm')[0]}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom"  style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
+                            <img uib-popover-template="help_template.stiffness_url" popover-title="{{'Stiffness '+product.luxire_product.stiffness}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
+                          </span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:2% 1% 1% 1%;">
+                          <a href="/#/products/{{product.slug}}">
+                            <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                          </a>
+                        </div>
+                       </div>
+                    </div>
                   </div>
-                  <div id="image-icon" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;">
-                      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"  style="border-right:1px solid #E5E5E5;padding-top:3%;padding-bottom:3%;display: block">
-                        <span>
-                          <img uib-popover-template="help_template.weight_url" popover-title="{{'Weight: '+product.luxire_product.gsm+ ' gsm'}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 12%; margin-left: 8%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png" alt="" />&nbsp;&nbsp;
-                          <img uib-popover-template="help_template.thickness_url" popover-title="{{'Thickness: '+product.luxire_product.thickness.split('mm')[0]}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom"  style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png" alt="" />&nbsp;&nbsp;
-                          <img uib-popover-template="help_template.stiffness_url" popover-title="{{'Stiffness '+product.luxire_product.stiffness}}" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="bottom" style="max-width: 14%; margin-left: 8%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png" alt="" />
-                        </span>
-
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:2% 1% 1% 1%;">
-                        <a href="/#/products/{{product.slug}}">
-                          <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
-                        </a>
-                      </div>
-                     </div>
+                  <div ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1">
+                    <div id="image-btn" class="row" style="margin-left:0%;margin-right:0%;margin-top:0%;text-align:center;border-bottom:1px solid #E5E5E5;">
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"style="border-right:1px solid #E5E5E5;cursor: pointer" ng-click="showQuickView(product,'md')">
+                          <div style="margin-top:5%;margin-bottom:5%;">
+                            <span style="text-align:center;font-size:80%;">Quick View</span><br>
+                          </div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="cursor: pointer" >
+                          <a href="/#/products/{{product.slug}}">
+                            <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;margin-top: 3%">SELECT</button>
+                          </a>
+                        </div>
+                    </div>
                   </div>
                 </div>
 
@@ -205,15 +208,9 @@
             </div>
 
           </div>
-          <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1" class="row" style="display: block">
-            <div style="padding-bottom: 2%;width: 33%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData" ng-cloak>
+          <!-- <div  ng-if="non_fabric_taxonomies.indexOf(active_taxonomy)!==-1" class="row" style="display: block">
+            <div style="padding-bottom: 2%;width: 30%; display: inline-block; padding: 1%" ng-repeat="product in allProductsData" ng-cloak>
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
-                <!-- <div class="productImage">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].product_url)}}" style="max-width: 100%; cursor: pointer"></img>
-                </div> -->
-                <!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
-                  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
-                </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
                 <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
                   <a href="/#/products/{{product.slug}}">
                     <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
@@ -242,7 +239,7 @@
 
             </div>
 
-          </div>
+          </div> -->
 
         </div>
         <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>-->
@@ -281,6 +278,18 @@
 
 
 </div>
+<!-- <div class="productImage">
+  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="max-width: 100%; cursor: pointer"></img>
+</div> -->
+<!-- <div class="img-middle" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="width: 330px;height: 330px;text-align: center;">
+  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
+</div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
+<!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" ng-init="active_product=false" ng-mouseover="active_product=true" ng-mouseleave="active_product=false" style="height: 45vh;overflow: hidden">
+  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].original_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer;"></img>
+</div> -->
+<!-- <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
+  <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].original_url)}}" style="cursor: pointer;"></img>
+</div> -->
 
 <!--Filter-->
 <!--Material-->
