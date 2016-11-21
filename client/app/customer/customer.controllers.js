@@ -674,6 +674,8 @@ avoid conflict with customer ctrl on admin side*/
   $scope.add_to_cart = function(variant){
     console.log('add to cart', variant);
     console.log('luxire_cart', $rootScope.luxire_cart);
+    $scope.loading_product = true;
+
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
       CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
       .then(function(data){
@@ -682,11 +684,15 @@ avoid conflict with customer ctrl on admin side*/
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
           $scope.cancel();
           $state.go('customer.pre_cart');
+          $scope.loading_product = false;
+
         }, function(error){
           console.error(error);
         });
         console.log(data);
       },function(error){
+        $scope.loading_product = false;
+
         $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
         console.error(error);
       });
@@ -697,9 +703,13 @@ avoid conflict with customer ctrl on admin side*/
         $rootScope.luxire_cart = data.data;
         $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
         $scope.cancel();
+        $scope.loading_product = false;
+
         $state.go('customer.pre_cart');
         console.log(data);
       },function(error){
+        $scope.loading_product = false;
+
         $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
         console.error(error);
       });
