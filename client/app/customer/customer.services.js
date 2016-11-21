@@ -65,7 +65,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.products+"/search", angular.toJson(query_object));
   };
 
-  var active_collections = ["shirts", "pants"]
+  var active_collections = ["shirts", "pants", "accessories", "ties", "pocket squares"];
   this.is_active_collections = function(collection){
     var collection = collection.toLowerCase();
     var is_active_collection = false;
