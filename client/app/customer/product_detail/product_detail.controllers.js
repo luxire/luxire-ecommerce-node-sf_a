@@ -28,7 +28,7 @@ angular.module('luxire')
 
   CustomerProducts.show($stateParams.product_name).then(function(data){
     console.log('product data for', $stateParams.product_name, data);
-    if(CustomerProducts.is_active_collections(data.data.product_type.product_type)){
+    if(CustomerProducts.is_active_collections(data.data.product_type.product_type.toLowerCase())){
       $scope.product = data.data;
       $scope.images_array = [];
       $scope.images_array_for_zoom = {};
@@ -325,7 +325,8 @@ angular.module('luxire')
       'jackets': '',//Chest Size,Length,Fit Type
       'gift cards': '',
       'ties': '',//Tie Width,Tie Length
-      'belts': ''//Belt Length
+      'belts': '',//Belt Length
+      'pocket squares': ''
     };
     var product_type = $scope.product.product_type.product_type;
     console.log('product_type', product_type_validations[product_type.toLowerCase()].indexOf(','));
