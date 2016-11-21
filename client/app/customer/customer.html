@@ -303,14 +303,12 @@
       </div>
       <div class="row">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="padding-left: 0px; padding-right: 0px">
-          <uib-carousel interval="3000" >
+          <uib-carousel >
             <uib-slide ng-repeat="slideImage in quickViewProduct.master.images" index="slideImage.id">
               <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
                 <img ng-src="{{getImage(slideImage.large_url)}}"></img>
               </div>
-              <!--//div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden">
-              //  <img ng-src="{{getImage(slideImage.large_url)}}" style="cursor: pointer">
-            //  </div-->
+
             </uib-slide>
           </uib-carousel>
         </div>
@@ -353,14 +351,14 @@
           <!--//Layout for Ties-->
           <div ng-if="quickViewProduct && quickViewProduct.product_type && quickViewProduct.product_type.product_type && quickViewProduct.product_type.product_type.toLowerCase() === 'ties'" >
             <div class="row" style="margin-left: 0px; margin-right: 0px;font-weight: 300">
-              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;padding: 0">
                 <div class="btn-group">
                   Width
                 </div>
               </div>
             </div>
             <div class="row" style="margin-left: 0px; margin-right: 0px;">
-              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;padding: 0">
                 <div class="btn-group" style="width: 100%" uib-dropdown keyboard-nav>
                     <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Width']['value']">
                 </div>
@@ -368,14 +366,14 @@
             </div>
 
             <div class="row" style="margin-left: 0px; margin-right: 0px;font-weight: 300">
-              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;padding: 0">
                 <div class="btn-group">
                   Length
                 </div>
               </div>
             </div>
             <div class="row" style="margin-left: 0px; margin-right: 0px;">
-              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;padding: 0">
                 <div class="btn-group" style="width: 100%" style="width: 100%" uib-dropdown keyboard-nav>
                   <input type="number" class="form-control" style="width: 100%" ng-model="cart_object['standard_measurement_attributes']['Tie Length']['value']">
                 </div>
@@ -454,6 +452,17 @@
             </div>
           </div>
 
+          <!---->
+          <div ng-if="quickViewProduct.product_type.product_type.toLowerCase() === 'pocket squares'">
+          <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 4%">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height:100%;;padding: 0px">
+              <div style="padding: 2%;border:1px solid #E1C9DD;">
+                  <button type="button" class="btn btn-default" style="width:100%;font-weight: 300;background-color: #7F0E6E;border-radius:0px;color:white;" ng-click="add_to_cart(quickViewProduct.master)">Add To Cart <span style="margin-left: 8%"><img style="max-width: 10%" ng-src="assets/images/customer/cart_bag.png" alt="" /></span></button>
+              </div>
+            </div>
+          </div>
+          </div>
+
         </div>
       </div>
       <div class="row" style="padding-top: 2%">
@@ -471,7 +480,7 @@
             </span>
           </p>
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%">
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding-left: 5%" ng-if="quickViewProduct.product_type.product_type.toLowerCase() === 'shirts' || quickViewProduct.product_type.product_type.toLowerCase() === 'pants' || quickViewProduct.product_type.product_type.toLowerCase() === 'jackets'">
           <div style="padding: 0% 0% 4% 0%;border:1px solid #DDDCDA;margin-left:4%;">
             <button type="button" class="btn btn-default" ng-click="go_to_product_detail(quickViewProduct.slug)" style="margin-left:5%; margin-top:4%;width:90%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
 
