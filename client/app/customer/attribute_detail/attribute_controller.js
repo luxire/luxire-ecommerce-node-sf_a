@@ -8,27 +8,41 @@ angular.module('luxire')
 
 
   console.log('attribute params', $state.params.type);
-  $scope.id_generator = function(val){
-    return val.toLowerCase().split(" ").join("-");
+  $scope.id_generator = function(val, attr_type_name){
+    return (val.toLowerCase().split(" ").join("-")) + '-'+attr_type_name.toLowerCase();
   };
   console.log('attr-type',$state.params.type);
+  var attributes_map = {
+    "back": "pleats",
+    "left-pocket": "pocket",
+    "right-pocket": "pocket",
+    "yoke-style": "yoke"
+  }
+
 
   if(!$state.params.attribute_name || !$state.params.type){
     $state.go('customer.home');
   }
   else{
 
+    var nav_str = "";
+    if(attributes_map[$state.params.attribute_name]){
+      nav_str = "#"+$state.params.type + '-' +attributes_map[$state.params.attribute_name];
+    }
+    else{
+      nav_str = "#"+$state.params.type + '-' +$state.params.attribute_name;
+    }
     console.log('state params', $state.params);
     $(document).ready(function(){
-      console.log('content loaded',$("#"+$state.params.type).length);
 
-      if($("#"+$state.params.type).length){
-          $('html, body').animate({ scrollTop:$("#"+$state.params.type).offset().top-80}, 500);
+      console.log('nav str', nav_str);
+      if($(nav_str).length){
+          $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
       }
     });
     $scope.$on('$viewContentLoaded', function(){
-      if($("#"+$state.params.type).length){
-          $('html, body').animate({ scrollTop:$("#"+$state.params.type).offset().top-80}, 500);
+      if($(nav_str).length){
+          $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
       }
     });
 
@@ -43,17 +57,22 @@ angular.module('luxire')
   $timeout(function(){
     console.log('timeout fired');
     console.log('content loaded', $("#"+$state.params.type).length);
-    if($("#"+$state.params.type).length){
-      $('html, body').animate({ scrollTop:$("#"+$state.params.type).offset().top-80}, 500);
+    if($(nav_str).length){
+      $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
     }
 
   }, 1000);
 
+  $scope.isArray = function(value){
+    return angular.isArray(value) ? true : false;
+  };
+
   $scope.product_types = {
     "shirts": {
-      "collar": {
+      "Collar": {
         "One Piece Hidden Button": {
-          "title": "One Piece Hidden Button Collar (one piece dress collar)",
+          "title": "One Piece Hidden Button",
+          "alias": "One Piece Dress",
           "images": [
             {
               "ref": "One_Piece_Hidden_Button_1.png",
@@ -64,7 +83,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/One_Piece_Hidden_Button_2.png"
             }
           ],
-          "description": "Look- As the name says it, the collar does not have a collar brand and it is a gives a very relaxed look. It is a single piece and can be worn both with or without tie. The buttons are hidden and gives a smooth and soft look.",
+          "description": "Look- As the name says it, the collar does not have a collar brand and it gives a very relaxed look. It is a single piece and can be worn both with or without tie. The buttons are hidden and gives a smooth and soft look.",
           "properties": {
             "Collar Point Length": "4\"",
             "Front Collar Band Height": "1 1/2\"",
@@ -94,7 +113,7 @@ angular.module('luxire')
           }
         },
         "English Spread": {
-          "title": "English Spread Collar",
+          "title": "English Spread",
           "images": [
             {
               "ref": "English_Spread_1.png",
@@ -113,7 +132,7 @@ angular.module('luxire')
             "Collar Back Height": "2\"",
             "Front Neck Band Shape": "Round",
             "Tie Space": "1/4\"",
-            "Spread": "6 ½\""
+            "Spread": "5 ½\""
           },
           "table-view": {
             "header": [
@@ -136,7 +155,8 @@ angular.module('luxire')
           }
         },
         "Classic Polo Button Down": {
-          "title": "Classic Polo Button Down Collar",
+          "title": "Classic Polo Button Down",
+          "alias": "Brook Brother Button Down",
           "images": [
             {
               "ref": "Classic_Polo_Button_Down_1.png",
@@ -147,7 +167,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/Classic_Polo_Button_Down_2.png"
             }
           ],
-          "description": "Look – Holds an iconic statement. Commnly a sporty collar, square shaped front neck band, worn with or without tie. The button down avoids flapping of collar.",
+          "description": "Look – Holds an iconic statement. Commonly a sporty collar, square shaped front neck band, worn with or without tie. The button down avoids flapping of collar.",
           "properties": {
             "Collar Point Length": "3 1/4\"",
             "Front Collar Band Height": "1\"",
@@ -178,7 +198,8 @@ angular.module('luxire')
           }
         },
         "Luxire Button Down": {
-          "title": "Luxire Button Down Collar",
+          "title": "Luxire Button Down",
+          "alias": "Button Down",
           "images": [
             {
               "ref": "Luxire_Button_Down_1.png",
@@ -199,28 +220,51 @@ angular.module('luxire')
             "Tie Space": "1/4\"",
             "Spread": "3 ½\""
           },
-          "table-view": {
-            "header": [
-              "Interlining",
-              "Fused/Unfused",
-              "Construction"
-            ],
-            "body": {
-              "Collar": {
-                "Interlining": "No",
-                "Fused/Unfused": "-",
-                "Construction": "-"
-              },
-              "Band": {
-                "Interlining": "No",
-                "Fused/Unfused": "-",
-                "Construction": "-"
+          "table-view": [
+            {
+              "title": "Oxford Shirt Button Down",
+              "header": [
+                "Interlining",
+                "Fused/Unfused",
+                "Construction"
+              ],
+              "body": {
+                "Collar": {
+                  "Interlining": "No",
+                  "Fused/Unfused": "-",
+                  "Construction": "-"
+                },
+                "Band": {
+                  "Interlining": "No",
+                  "Fused/Unfused": "-",
+                  "Construction": "-"
+                }
+              }
+            },
+            {
+              "title": "Except/ other than Button Down",
+              "header": [
+                "Interlining",
+                "Fused/Unfused",
+                "Construction"
+              ],
+              "body": {
+                "Collar": {
+                  "Interlining": "Yes",
+                  "Fused/Unfused": "Unfused",
+                  "Construction": "Medium"
+                },
+                "Band": {
+                  "Interlining": "Yes",
+                  "Fused/Unfused": "Unfused",
+                  "Construction": "Medium"
+                }
               }
             }
-          }
+          ]
         },
         "Semi-spread": {
-          "title": "Semi-spread Collar",
+          "title": "Semi-spread",
           "images": [
             {
               "ref": "Semi_Spread_1.png",
@@ -262,7 +306,8 @@ angular.module('luxire')
           }
         },
         "NOBD-2": {
-          "title": "NOBD-2 Collar",
+          "title": "NOBD-2",
+          "alias": "Milano Button Down",
           "images": [
             {
               "ref": "Milano_Button_Down_1.png",
@@ -304,7 +349,8 @@ angular.module('luxire')
           }
         },
         "Osaka Button Down": {
-          "title": "Osaka Button Down Collar",
+          "title": "Osaka Button Down",
+          "alias": "Kamakura Button Down",
           "images": [
             {
               "ref": "Osaka_Button_Down_1.png",
@@ -334,19 +380,19 @@ angular.module('luxire')
             "body": {
               "Collar": {
                 "Interlining": "-",
-                "Fused/Unfused": "Un-fused",
+                "Fused/Unfused": "Unfused",
                 "Construction": "Medium"
               },
               "Band": {
                 "Interlining": "-",
-                "Fused/Unfused": "Un-fused",
+                "Fused/Unfused": "Unfused",
                 "Construction": "Medium"
               }
             }
           }
         },
         "Spear Point": {
-          "title": "Spear Point Collar",
+          "title": "Spear Point",
           "images": [
             {
               "ref": "Spear_Point_1.png",
@@ -388,7 +434,7 @@ angular.module('luxire')
           }
         },
         "Cutaway": {
-          "title": "Cutaway Collar",
+          "title": "Cutaway",
           "images": [
             {
               "ref": "Cutaway_1.png",
@@ -399,7 +445,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/Cutaway_2.png"
             }
           ],
-          "description": "Look-  Good choice of collar when unbuttoned. The collar makes you stand out in a crowed making a style statement. The spread of the collar drives attention towards your tie.",
+          "description": "Look-  Good choice of collar when unbuttoned. The collar makes you stand out in the crowd making a style statement. The spread of the collar drives attention towards your tie.",
           "properties": {
             "Collar Point Length": "3 3/4\"",
             "Front Collar Band Height": "1 1/4\"",
@@ -407,7 +453,7 @@ angular.module('luxire')
             "Collar Back Height": "2\"",
             "Front Neck Band Shape": "Round",
             "Tie Space": "1/4\"",
-            "Spread Shoulder Back": ""
+            "Spread": "Shoulder Back"
           },
           "table-view": {
             "header": [
@@ -430,7 +476,7 @@ angular.module('luxire')
           }
         },
         "Extreme Spread": {
-          "title": "Extreme Spread Collar",
+          "title": "Extreme Spread",
           "images": [
             {
               "ref": "Extreme_Spread_1.png",
@@ -438,17 +484,17 @@ angular.module('luxire')
             },
             {
               "ref": "Extreme_Spread_2.png",
-              "url": "assets/images/customer/attributes/Shirts/Collar/Extreme_Spread_2.png"
+              "url": "assets/images/customer/attributes/Shirts/Collar/Extreme_Spread_2.jpg"
             }
           ],
           "description": "Look-  Good choice of collar when unbuttoned. The collar is cut to the back to its extreme which gives a statement look and makes you stand out in a crowd. A sleek and small knot tie is apt for the extreme spread",
           "properties": {
             "Collar Point Length": "3 3/4\"",
-            "Front Collar Band Height": "",
+            "Front Collar Band Height": "-",
             "Rear Collar Band Height": "1 1/2\"",
             "Collar Back Height": "1 7/8\"",
-            "Front Neck Band Shape": "",
-            "Tie Space": "",
+            "Front Neck Band Shape": "-",
+            "Tie Space": "-",
             "Spread Shoulder Back": "6 1/4\""
           },
           "table-view": {
@@ -471,8 +517,8 @@ angular.module('luxire')
             }
           }
         },
-        "Italian Collar": {
-          "title": "Italian Collar",
+        "Italian": {
+          "title": "Italian",
           "images": [
             {
               "ref": "Italian_1.png",
@@ -483,7 +529,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/Italian_2.png"
             }
           ],
-          "description": "Look- One of the classics and very traditional style. Goes well with medium to small tie knots.  Smart and widely spread in Italy.",
+          "description": "Look- One of the classic and very traditional style. Goes well with medium to small tie knots.  Smart and widely spread in Italy.",
           "properties": {
             "Collar Point Length": "3 1/2\"",
             "Front Collar Band Height": "1 1/4\"",
@@ -513,8 +559,8 @@ angular.module('luxire')
             }
           }
         },
-        "Club Collar": {
-          "title": "Club Collar",
+        "Club": {
+          "title": "Club",
           "images": [
             {
               "ref": "Club_1.png",
@@ -525,7 +571,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/Club_2.png"
             }
           ],
-          "description": "Look- A stylish man’s collar, redefines the word classic. Also known as Golf collar or round collar. The name signifies ‘exclusive membership’. Best suited on thin and straight face.",
+          "description": "Look- A stylish man’s collar, redefines the word classic. Also known as Golf collar or round collar. The name signifies 'Exclusive Membership'. Best suited on thin and straight face.",
           "properties": {
             "Collar Point Length": "2 1/2\"",
             "Front Collar Band Height": "1 1/4\"",
@@ -555,8 +601,9 @@ angular.module('luxire')
             }
           }
         },
-        "Florentine Collar": {
-          "title": "Florentine Collar( Milano Cutaway collar)",
+        "Florentine": {
+          "title": "Florentine",
+          "alias": "Milano Cutaway",
           "images": [
             {
               "ref": "Florentine_1.png",
@@ -597,8 +644,8 @@ angular.module('luxire')
             }
           }
         },
-        "Broke and Bespoke Collar": {
-          "title": "Broke and Bespoke Collar",
+        "Broke and Bespoke": {
+          "title": "Broke and Bespoke",
           "images": [
             {
               "ref": "BrokeAndBespoke_1.png",
@@ -639,8 +686,8 @@ angular.module('luxire')
             }
           }
         },
-        "NOBD-1 Collar": {
-          "title": "NOBD-1 Collar",
+        "NOBD-1": {
+          "title": "NOBD-1",
           "images": [
             {
               "ref": "NOBD_1_1.png",
@@ -683,7 +730,8 @@ angular.module('luxire')
           }
         },
         "Trad Button Down": {
-          "title": "Trad Button Down Collar(Mercer Button Down Collar)",
+          "title": "Trad Button Down",
+          "alias": "Mercer Button Down",
           "images": [
             {
               "ref": "Trad_Button_Down_1.png",
@@ -724,17 +772,13 @@ angular.module('luxire')
           }
         }
       },
-      "cuff": {
+      "Cuffs": {
         "One-Button Rounded": {
-          "title": "One-Button Rounded Barrel Cuff",
+          "title": "One-Button Rounded Barrel",
           "images": [
             {
               "ref": "One_Button_Rounded_Barrel_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Rounded_Barrel_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Our most desired cuff with more casual and relaxed look. It is considered as classic and less formal. Generally compliments well with button down collar.",
@@ -743,151 +787,117 @@ angular.module('luxire')
           }
         },
         "Two-Button Rounded": {
-          "title": "Two-Button Rounded Barrel Cuff",
+          "title": "Two-Button Rounded Barrel",
           "images": [
             {
               "ref": "Two_Button_Rounded_Barrel_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Rounded_Barrel_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Two buttons vertically aligned tightens the cuff well. Compliments with suits but less formal compared to 2 button mitered barrel cuff.",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Two buttons vertically aligned tightens the cuff well. Compliments with suits but less formal compared to two button mitered barrel cuff.",
           "properties": {
             "Cuff Height": "3\""
           }
         },
-        "French Cuff": {
-          "title": "French Cuff",
+        "French": {
+          "title": "French",
           "images": [
             {
               "ref": "French_cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/French_cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. French cuffs known for its fold back style that is twice longer than regular cuffs. Fastened with ease using cufflinks. It coordinates excellently with tuxedo shirts as well as formal shirts. Your  oppurtunity to wear an accessory.",
-          "properties": {}
+          "properties": {
+            "Cuff Height": "2 1/2\" (with fold inside), 3\" (with fold outside), 5 1/2\" (without fold)"
+          }
         },
         "One-Button Mitered": {
-          "title": "One-Button Mitered Cuff",
+          "title": "One-Button Mitered",
           "images": [
             {
               "ref": "One_Button_Mitered_Cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Mitered_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look – Constructed to match the collar. It collar is fused cuff is made fused too and vice versa. Considered to be a dressy cuff that has a modish mitered angle. This gives a very sharp professional look. The attractive cut to the button closure compliments well with formal occasions.",
+          "description": "Look – Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Considered to be a dressy cuff that has a modish mitered angle. This gives a very sharp professional look. The attractive cut to the button closure compliments well with formal occasions.",
           "properties": {
             "Cuff Height": "2 1/2\""
           }
         },
         "Two-Button Mitered": {
-          "title": "Two-Button Mitered Cuff",
+          "title": "Two-Button Mitered",
           "images": [
             {
               "ref": "Two_Button_Mitered_Cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Mitered_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- Constructed to match the collar. It collar is fused cuff is made fused too and vice versa. A very elegant cuff and appears more dressy. The sharp angle gives a very professional look. Offers  leaveway to wear with a wristwatch.",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. A very elegant cuff and appears more dressy. The sharp angle gives a very professional look. Offers leaveway to wear with a wristwatch.",
           "properties": {
             "Cuff Height": "3\""
           }
         },
-        "Single Cuff for Cufflink": {
-          "title": "Single Cuff for Cufflink",
+        "Single French": {
+          "title": "Single French",
           "images": [
             {
               "ref": "Single_French_Cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/Single_French_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- Constructed to match the collar. It collar is fused cuff is made fused too and vice versa. Single French cuff is sublte and shorter in length. Its element is simplicity and considered versetile. Your opportuninty to wear an accessory.",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Single French cuff is subtle and shorter in length. Its element is simplicity and considered versatile. Your opportuninty to wear an accessory.",
           "properties": {
-              "Cuff Height": ""
+              "Cuff Height": "2 1/2 \""
           }
         },
         "One-Button Square": {
-          "title": "One-Button Square Cuff",
+          "title": "One-Button Square",
           "images": [
             {
               "ref": "One_Button_Square_Cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/One_Button_Square_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- Constructed to match the collar. It collar is fused cuff is made fused too and vice versa. Usually used for casual shirts, very sharp and the ends are squared differing from other cuffs.",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Usually used for casual shirts, very sharp and the ends are squared differing from other cuffs.",
           "properties": {
-              "Cuff Height": ""
+              "Cuff Height": "2 1/2 \""
           }
         },
         "Three button": {
-          "title": "Three button Cuff",
+          "title": "Three button",
           "images": [
             {
               "ref": "Three_Button_Cuff_1.png",
               "url": "assets/images/customer/attributes/Shirts/Cuff/Three_Button_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- Constructed to match the collar. It collar is fused cuff is made fused too and vice versa. Gives a smart look to the attire. 3 button cuffs are longer than two button cuffs.  This cuff is slightly tilted.",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Gives a smart look to the attire. Three button cuffs are longer than two button cuffs.  This cuff is slightly tilted.",
           "properties": {
-            "Cuff Height": ""
+            "Cuff Height": "3 1/2\""
           }
         },
-        "Cocktail Cuff": {
-          "title": "Cocktail Cuff",
+        "Cocktail": {
+          "title": "Cocktail",
           "images": [
             {
               "ref": "Cocktail_Cuff_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Cuff/Cocktail_Cuff_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Cocktail_Cuff_1.jpg"
             }
           ],
           "description": "Look- Aesthetically the cuff is attractive and desired.  Apt for both formal and dressy shirts. Two button folded turn back gives a typical gallant finish. Look appears to be double cuff, practically stands single cuff.",
           "properties": {
-            "Cuff Width": "2 1/2\"(with fold),5 1/2\"(without fold)"
+            "Cuff Width": "2 1/2\"(with fold), 5 1/2\"(without fold)"
           }
         }
       },
-      "placket": {
-        "Standard Placket": {
-          "title": "Standard Placket",
+      "Placket": {
+        "Standard": {
+          "title": "Standard",
           "images": [
             {
               "ref": "Standard_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/Standard_Placket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look – this is the most common placket style used in dress shirts. Standard placket adds stability to the front and it is aesthetically symmetrical. Constructed with a light interlining can be made for a crisp and dressy look.",
@@ -896,15 +906,15 @@ angular.module('luxire')
           }
         },
         "Hidden": {
-          "title": "Hidden Placket",
+          "title": "Hidden",
           "images": [
             {
               "ref": "Hidden_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/Hidden_Placket_1.png"
             },
             {
-              "ref": "",
-              "url": ""
+              "ref": "Hidden_Placket_2.png",
+              "url": "assets/images/customer/attributes/Shirts/Placket/Hidden_Placket_2.png"
             }
           ],
           "description": "Look- It covers the placket, hiding the buttons. This type of placket gives very professional and formal look. Apt for dressy shirts and oftenly used in tuxedo shirts.",
@@ -912,33 +922,26 @@ angular.module('luxire')
             "Width": "1 3/8\""
           }
         },
-        "Placket No": {
-          "title": "No Placket/French Placket",
+        "No": {
+          "title": "No",
+          "alias": "French Placket",
           "images": [
             {
               "ref": "French_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/French_Placket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Best suited with a fashionable classic casual shirt. Gives a very polished look as the front is smooth and clean without any stitches.  Commonly used in business and casual shirts.",
           "properties": {
-            "Width": ""
+            "Width": "-"
           }
         },
-        "Pullover Placket": {
-          "title": "Pullover Placket",
+        "Pullover": {
+          "title": "Pullover",
           "images": [
             {
               "ref": "Pullover_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/Pullover_Placket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Constructed mainly on relaxed shirts and popovers. This placket gives an interesting appearance as it is different from other common plackets. Stands out and gains attention. It ends with a pointed shape and generally has 3 to 4 buttons.",
@@ -947,20 +950,16 @@ angular.module('luxire')
           }
         },
         "Edge Stitch": {
-          "title": "Edge Stitch Placket",
+          "title": "Edge Stitch",
           "images": [
             {
               "ref": "Edge_Stitch_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/Edge_Stitch_Placket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- A French placket that consists of an edge stitch. Gives  a very casual feel. Not that commonly used placket but can be a good style that works for you.",
           "properties": {
-            "Width": ""
+            "Width": "-"
           }
         },
         "Plain Front With Side Stitch": {
@@ -969,63 +968,47 @@ angular.module('luxire')
             {
               "ref": "Side_Stitch_Placket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Placket/Side_Stitch_Placket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- A French placket with a side stitch on top, giving an illusion of a plain placket. Used casually and not very commonly chosen.",
           "properties": {
-            "Width": ""
+            "Width": "-"
           }
         }
       },
-      "back": {
+      "Pleats": {
         "Inverted Box": {
-          "title": "Inverted Box pleat",
+          "title": "Inverted Box",
           "images": [
             {
               "ref": "Inverted_Box_Pleat_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pleat/Inverted_Box_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look- It is much same as box pleat just inverted. Rare demanded compared to other pleats. This pleat is also studied as scissor pleat. It is considered as formal, also stands best with smart casual shirt.",
+          "description": "Look- It is very similar to box pleat but just inverted. Rare demanded compared to other pleats. This pleat is also studied as scissor pleat. It is considered as formal, also stands best with smart casual shirt.",
           "properties": {
 
           }
         },
-        "Center Box Pleats": {
-          "title": "Center Box Pleats",
+        "Center Box": {
+          "title": "Center Box",
           "images": [
             {
               "ref": "Center_Box_Pleat_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pleat/Center_Box_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Look-  Regarded as classic design and stands best with formals. Used generally to give ease for hand movementss. The style enhances the slope shoulders.",
+          "description": "Look-  Regarded as classic design and stands best with formals. Used generally to give ease for hand movements. The style enhances the slope shoulders.",
           "properties": {
 
           }
         },
-        "Side Pleats": {
-          "title": "Side Pleats",
+        "Side": {
+          "title": "Side",
           "images": [
             {
               "ref": "Side_Pleat_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pleat/Side_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Considered as most stylish pleat, gives a cleaner look to a shirt. This pleat is also known as knife pleat. Looks great for slightly sloping shoulders.",
@@ -1033,16 +1016,12 @@ angular.module('luxire')
 
           }
         },
-        "Shirred Pleat": {
-          "title": "Shirred Pleat",
+        "Shirred": {
+          "title": "Shirred",
           "images": [
             {
               "ref": "Shirred_Pleat_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pleat/Shirred_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Basically placed at the center of the back. Gives elastic feeling which makes the hand movement more ease than the other pleats. This provides great fit to the body.",
@@ -1050,16 +1029,13 @@ angular.module('luxire')
 
           }
         },
-        "Plain(No) Pleats": {
-          "title": "Plain(No) Pleats",
+        "Plain": {
+          "title": "Plain",
+          "alias": "No Pleat",
           "images": [
             {
               "ref": ".png",
               "url": "assets/images/customer/attributes/Shirts/Pleat/One_Piece_Hidden_Button_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Our most desired cuff with more casual and relaxed look. It is considered as classic and less formal. Generally compliments well with button down collar.",
@@ -1068,17 +1044,13 @@ angular.module('luxire')
           }
         }
       },
-      "bottom": {
+      "Bottom": {
         "Boat Curve": {
-          "title": "Boat Curve Bottom",
+          "title": "Boat Curve",
           "images": [
             {
               "ref": "Boat_Curve_Bottom_1.png",
               "url": "assets/images/customer/attributes/Shirts/Bottom/Boat_Curve_Bottom_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- the boat curve bottom is most commonly used for formal shirts. Boat bottom are usually tucked in. The higher curve towards the side seam gives more ease to the pant pockets when the shirt is tucked.",
@@ -1087,15 +1059,11 @@ angular.module('luxire')
           }
         },
         "Straight": {
-          "title": "Straight Bottom",
+          "title": "Straight",
           "images": [
             {
               "ref": "Straight_Bottom_1.png",
               "url": "assets/images/customer/attributes/Shirts/Bottom/Straight_Bottom_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look – commonly used for casual shirts. Straight bottom sometimes consists of side slits. They are usually not tucked and length may be little shorter compared to formal tuck in shirt.",
@@ -1103,16 +1071,12 @@ angular.module('luxire')
 
           }
         },
-        "Curved Bottom": {
-          "title": "Curved Bottom",
+        "Curved": {
+          "title": "Curved",
           "images": [
             {
               "ref": "Curved_Bottom_1.png",
               "url": "assets/images/customer/attributes/Shirts/Bottom/Curved_Bottom_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- consists of a continuous and smooth curve, like a moon curve. Best suited with Smart casual look.",
@@ -1120,19 +1084,15 @@ angular.module('luxire')
 
           }
         },
-        "Deep Curved Bottom": {
-          "title": "Deep Curved Bottom",
+        "Deep Curved": {
+          "title": "Deep Curved",
           "images": [
             {
               "ref": "Deep_Curved_Bottom_1.png",
               "url": "assets/images/customer/attributes/Shirts/Bottom/Deep_Curved_Bottom_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "ook – A deeper curved shirt giving a stylish look at the bottom. A good choice for who like untucked.",
+          "description": "Look – A deeper curved shirt giving a stylish look at the bottom. A good choice for who like untucked.",
           "properties": {
 
           }
@@ -1143,10 +1103,6 @@ angular.module('luxire')
             {
               "ref": "Long_Tail_Shirt_1.png",
               "url": "assets/images/customer/attributes/Shirts/Bottom/Long_Tail_Shirt_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Look- The back of the shirt is slightly longer than the front. This allows a bit more play, preventing the shirt from untucking durning the day.",
@@ -1155,33 +1111,26 @@ angular.module('luxire')
           }
         }
       },
-      "left pocket": {
-        "Work Shirt": {
-          "title": "Work Shirt Style Pockets",
+      "Pocket": {
+        "Work Shirt Style": {
+          "title": "Work Shirt Style",
           "images": [
             {
               "ref": "Work_Shirt_Pocket_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pocket/Work_Shirt_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
+
           ],
-          "description": "ook – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with and button. Right pocket has a button closure and a pen slot.",
+          "description": "Look – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with a button. Right pocket has a button closure and a pen slot.",
           "properties": {
 
           }
         },
-        "No Pocket": {
-          "title": "No Pocket",
+        "No": {
+          "title": "No",
           "images": [
             {
               "ref": "No_Pocket_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
-            },
-            {
-              "ref": "No_Pocket_1",
               "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             }
           ],
@@ -1190,13 +1139,9 @@ angular.module('luxire')
 
           }
         },
-        "Pocket(Yes)": {
-          "title": "Pocket(Yes)",
+        "Yes": {
+          "title": "With",
           "images": [
-            {
-              "ref": "Pocket_Yes_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
-            },
             {
               "ref": "Pocket_Yes_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
@@ -1207,13 +1152,9 @@ angular.module('luxire')
 
           }
         },
-        "Flap Pocket with button": {
-          "title": "Flap Pocket With Button",
+        "Flap With Button": {
+          "title": "Flap With Button",
           "images": [
-            {
-              "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
-            },
             {
               "ref": "Flap_Pocket_With_Button_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
@@ -1224,13 +1165,9 @@ angular.module('luxire')
 
           }
         },
-        "Flap Pocket without button": {
-          "title": "Flap Pocket Without Button",
+        "Flap without button": {
+          "title": "Flap Without Button",
           "images": [
-            {
-              "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
-            },
             {
               "ref": "Flap_Pocket_Without_Button_1.png",
               "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
@@ -1242,101 +1179,97 @@ angular.module('luxire')
           }
         }
       },
-      "right pocket": {
-        "Work Shirt": {
-          "title": "Work Shirt Style Pockets",
+      // "right pocket": {
+      //   "Work Shirt": {
+      //     "title": "Work Shirt Style Pockets",
+      //     "images": [
+      //       {
+      //         "ref": "Work_Shirt_Pocket_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Work_Shirt_Pocket_1.png"
+      //       },
+      //       {
+      //         "ref": "",
+      //         "url": ""
+      //       }
+      //     ],
+      //     "description": "ook – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with and button. Right pocket has a button closure and a pen slot.",
+      //     "properties": {
+      //
+      //     }
+      //   },
+      //   "No Pocket": {
+      //     "title": "No Pocket",
+      //     "images": [
+      //       {
+      //         "ref": "No_Pocket_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
+      //       },
+      //       {
+      //         "ref": "No_Pocket_1",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
+      //       }
+      //     ],
+      //     "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth.",
+      //     "properties": {
+      //
+      //     }
+      //   },
+      //   "Pocket(Yes)": {
+      //     "title": "Pocket(Yes)",
+      //     "images": [
+      //       {
+      //         "ref": "Pocket_Yes_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
+      //       },
+      //       {
+      //         "ref": "Pocket_Yes_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
+      //       }
+      //     ],
+      //     "description": "This pocket is both used for formal and casual shirts. Most common choice of pocket.",
+      //     "properties": {
+      //
+      //     }
+      //   },
+      //   "Flap Pocket with button": {
+      //     "title": "Flap Pocket With Button",
+      //     "images": [
+      //       {
+      //         "ref": "Flap_Pocket_With_Button_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+      //       },
+      //       {
+      //         "ref": "Flap_Pocket_With_Button_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
+      //       }
+      //     ],
+      //     "description": "Look- Most commonly used pockets for work shirts. Consists of a flap with a button for closure.",
+      //     "properties": {
+      //
+      //     }
+      //   },
+      //   "Flap Pocket without button": {
+      //     "title": "Flap Pocket Without Button",
+      //     "images": [
+      //       {
+      //         "ref": "Flap_Pocket_Without_Button_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+      //       },
+      //       {
+      //         "ref": "Flap_Pocket_Without_Button_1.png",
+      //         "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
+      //       }
+      //     ],
+      //     "description": "Look- A pocket that is best suited with casual shirts. A pocket with flap but has no button for closure.",
+      //     "properties": {
+      //
+      //     }
+      //   }
+      // },
+      "Gusset": {
+        "V Shape Clip": {
+          "title": "V Shape Clip",
           "images": [
-            {
-              "ref": "Work_Shirt_Pocket_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Work_Shirt_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
-            }
-          ],
-          "description": "ook – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with and button. Right pocket has a button closure and a pen slot.",
-          "properties": {
-
-          }
-        },
-        "No Pocket": {
-          "title": "No Pocket",
-          "images": [
-            {
-              "ref": "No_Pocket_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
-            },
-            {
-              "ref": "No_Pocket_1",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
-            }
-          ],
-          "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth.",
-          "properties": {
-
-          }
-        },
-        "Pocket(Yes)": {
-          "title": "Pocket(Yes)",
-          "images": [
-            {
-              "ref": "Pocket_Yes_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
-            },
-            {
-              "ref": "Pocket_Yes_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Pocket_Yes_1.png"
-            }
-          ],
-          "description": "This pocket is both used for formal and casual shirts. Most common choice of pocket.",
-          "properties": {
-
-          }
-        },
-        "Flap Pocket with button": {
-          "title": "Flap Pocket With Button",
-          "images": [
-            {
-              "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
-            },
-            {
-              "ref": "Flap_Pocket_With_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_With_Button_1.png"
-            }
-          ],
-          "description": "Look- Most commonly used pockets for work shirts. Consists of a flap with a button for closure.",
-          "properties": {
-
-          }
-        },
-        "Flap Pocket without button": {
-          "title": "Flap Pocket Without Button",
-          "images": [
-            {
-              "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
-            },
-            {
-              "ref": "Flap_Pocket_Without_Button_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Pocket/Flap_Pocket_Without_Button_1.png"
-            }
-          ],
-          "description": "Look- A pocket that is best suited with casual shirts. A pocket with flap but has no button for closure.",
-          "properties": {
-
-          }
-        }
-      },
-      "gusset": {
-        "V Shape Clip gusset": {
-          "title": "V Shape Clip Gusset",
-          "images": [
-            {
-              "ref": "V_Shape_Clip_Gusset_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
-            },
             {
               "ref": "V_Shape_Clip_Gusset_1.png",
               "url": "assets/images/customer/attributes/Shirts/Gusset/V_Shape_Clip_Gusset_1.png"
@@ -1347,13 +1280,9 @@ angular.module('luxire')
 
           }
         },
-        "A Clip gusset": {
-          "title": "A Clip Gusset",
+        "A Clip": {
+          "title": "A Clip",
           "images": [
-            {
-              "ref": "A_Clip_Gusset_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Gusset/A_Clip_Gusset_1.png"
-            },
             {
               "ref": "A_Clip_Gusset_1.png",
               "url": "assets/images/customer/attributes/Shirts/Gusset/A_Clip_Gusset_1.png"
@@ -1364,13 +1293,9 @@ angular.module('luxire')
 
           }
         },
-        "Patch gusset": {
-          "title": "Patch Gusset",
+        "Patch": {
+          "title": "Patch",
           "images": [
-            {
-              "ref": "Patch_Gusset_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Gusset/Patch_Gusset_1.png"
-            },
             {
               "ref": "Patch_Gusset_1.png",
               "url": "assets/images/customer/attributes/Shirts/Gusset/Patch_Gusset_1.png"
@@ -1382,17 +1307,13 @@ angular.module('luxire')
           }
         }
       },
-      "yoke": {
-        "Split Yoke": {
-          "title": "Split Yoke",
+      "Yoke": {
+        "Split": {
+          "title": "Split",
           "images": [
             {
-              "ref": "Split_Yoke_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Yoke/Split_Yoke_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_1.jpg"
             }
           ],
           "description": "",
@@ -1400,16 +1321,39 @@ angular.module('luxire')
 
           }
         },
-        "Single Yoke": {
+        "Single": {
           "title": "Single Yoke",
           "images": [
             {
-              "ref": "Single_Yoke_1.png",
-              "url": "assets/images/customer/attributes/Shirts/Yoke/Single_Yoke_1.png"
-            },
+              "ref": "Yoke_2.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_2.jpg"
+            }
+          ],
+          "description": "",
+          "properties": {
+
+          }
+        },
+        "Moon": {
+          "title": "Moon",
+          "images": [
             {
-              "ref": "",
-              "url": ""
+              "ref": "Yoke_4.png",
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_4.png"
+            }
+
+          ],
+          "description": "",
+          "properties": {
+
+          }
+        },
+        "Plain": {
+          "title": "Plain",
+          "images": [
+            {
+              "ref": "Yoke_3.png",
+              "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_3.png"
             }
           ],
           "description": "",
