@@ -1591,47 +1591,47 @@ angular.module('luxire')
     if($scope.selected_style && $scope.selected_style.name && option == 'bespoke'){
       console.log('cart to explore', $scope.cart_object);
 
-      // angular.forEach($scope.cart_object['customization_attributes'], function(val, key){
-      //   if(!angular.isObject($scope["customization_attributes"])){
-      //     $scope["customization_attributes"] = {};
-      //   };
-      //   if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][key])){
-      //      $scope["customization_attributes"][key] = {};
-      //    };
-      //    if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][key]) && !angular.isObject($scope["customization_attributes"][key]["options"])){
-      //      $scope["customization_attributes"][key]['options'] = {};
-      //    }
-      //    if($scope.product_customization_attributes[key] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']]){
-      //      angular.forEach($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']], function(option_val, option_key){
-      //        if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][key]['value'], option_key)){
-      //          if(!$scope.cart_object["customization_attributes"][key]['options'][option_key]){
-      //            if(angular.isObject(option_val)){
-      //              $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val.default;
-      //            }
-      //            else{
-      //              $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val;
-      //            }
-      //          }
-      //        }
-      //      });
-      //      $scope["customization_attributes"][key]['options'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']];
-      //    }
-      //
-      //    if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost){
-      //      if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][key]){
-      //        $scope.cart_object["personalization_attributes"][key]= {};
-      //      }
-      //      if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][key]){
-      //           if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]){
-      //             $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']] = {};
-      //           }
-      //           if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost']){
-      //             $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost;
-      //             $scope.add_personalization_cost($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost);
-      //           }
-      //       }
-      //    }
-      // });
+      angular.forEach($scope.cart_object['customization_attributes'], function(val, key){
+        if(!angular.isObject($scope["customization_attributes"])){
+          $scope["customization_attributes"] = {};
+        };
+        if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][key])){
+           $scope["customization_attributes"][key] = {};
+         };
+         if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][key]) && !angular.isObject($scope["customization_attributes"][key]["options"])){
+           $scope["customization_attributes"][key]['options'] = {};
+         }
+         if($scope.product_customization_attributes[key] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']]){
+           angular.forEach($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']], function(option_val, option_key){
+             if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][key]['value'], option_key)){
+               if(!$scope.cart_object["customization_attributes"][key]['options'][option_key]){
+                 if(angular.isObject(option_val)){
+                   $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val.default;
+                 }
+                 else{
+                   $scope.cart_object["customization_attributes"][key]['options'][option_key] = option_val;
+                 }
+               }
+             }
+           });
+           $scope["customization_attributes"][key]['options'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']];
+         }
+
+         if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost){
+           if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][key]){
+             $scope.cart_object["personalization_attributes"][key]= {};
+           }
+           if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][key]){
+                if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]){
+                  $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']] = {};
+                }
+                if(!$scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost']){
+                  $scope.cart_object["personalization_attributes"][key][$scope.cart_object['customization_attributes'][key]['value']]['cost'] = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost;
+                  $scope.add_personalization_cost($scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost);
+                }
+            }
+         }
+      });
     }
 
 
