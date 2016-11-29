@@ -3,7 +3,7 @@
 module.exports = {
   /*spree api constants*/
   spree:{
-    host: 'http://luxire-store.cloudhop.in', //Spree store-Host Url
+    host: 'http://luxire-store.stage.cloudhop.in', //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
     users: '/luxire-users',
