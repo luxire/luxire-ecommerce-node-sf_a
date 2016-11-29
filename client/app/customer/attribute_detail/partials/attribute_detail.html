@@ -16,9 +16,9 @@
           </div>
           <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
             <div class="" style="text-align: center; font-size: 200%;margin-top: 3%">
-              {{attribute['title'] +' '+ attribute_type_name}}<span ng-if="attribute.alias">&nbsp;({{attribute['alias']}})</span>
+              {{attribute['title'] +' - '+ attribute_type_name}}<span ng-if="attribute.alias">&nbsp;({{attribute['alias']}})</span>
             </div>
-            <hr>
+            <hr ng-if="attribute['description']">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <p class="attr-desc" style="font-weight: 400; color: grey">
                 {{attribute['description']}}

@@ -9,7 +9,9 @@ angular.module('luxire')
 
   console.log('attribute params', $state.params.type);
   $scope.id_generator = function(val, attr_type_name){
-    return (val.toLowerCase().split(" ").join("-")) + '-'+attr_type_name.toLowerCase();
+    console.log('val', val, 'attr name', attr_type_name);
+    console.log('generated str', (val.toLowerCase().split(" ").join("-")) + '-'+attr_type_name.toLowerCase().split(" ").join("-"));
+    return (val.toLowerCase().split(" ").join("-")) + '-'+attr_type_name.toLowerCase().split(" ").join("-");
   };
   console.log('attr-type',$state.params.type);
   var attributes_map = {
@@ -32,19 +34,20 @@ angular.module('luxire')
     else{
       nav_str = "#"+$state.params.type + '-' +$state.params.attribute_name;
     }
+    console.log('nav_str', nav_str);
     console.log('state params', $state.params);
-    $(document).ready(function(){
-
-      console.log('nav str', nav_str);
-      if($(nav_str).length){
-          $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
-      }
-    });
-    $scope.$on('$viewContentLoaded', function(){
-      if($(nav_str).length){
-          $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
-      }
-    });
+    // $(document).ready(function(){
+    //
+    //   console.log('nav str', nav_str);
+    //   if($(nav_str).length){
+    //       $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
+    //   }
+    // });
+    // $scope.$on('$viewContentLoaded', function(){
+    //   if($(nav_str).length){
+    //       $('html, body').animate({ scrollTop:$(nav_str).offset().top-80}, 500);
+    //   }
+    // });
 
 
     $scope.template_loaded = function(){
@@ -864,6 +867,19 @@ angular.module('luxire')
               "Cuff Height": "2 1/2 \""
           }
         },
+        "Two-Button Square": {
+          "title": "Two-Button Square",
+          "images": [
+            {
+              "ref": "Two_Button_Square_Cuff_1.png",
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Square_Cuff_1.jpg"
+            }
+          ],
+          "description": "",
+          "properties": {
+              "Cuff Height": ""
+          }
+        },
         "Three button": {
           "title": "Three button",
           "images": [
@@ -1035,7 +1051,7 @@ angular.module('luxire')
           "images": [
             {
               "ref": ".png",
-              "url": "assets/images/customer/attributes/Shirts/Pleat/One_Piece_Hidden_Button_1.png"
+              "url": "assets/images/customer/attributes/Shirts/Pleat/No_Pleats_1.jpg"
             }
           ],
           "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Our most desired cuff with more casual and relaxed look. It is considered as classic and less formal. Generally compliments well with button down collar.",
@@ -1109,6 +1125,19 @@ angular.module('luxire')
           "properties": {
 
           }
+        },
+        "Straight with Side Slits": {
+          "title": "Straight with Side Slits",
+          "images": [
+            {
+              "ref": "Straight_With_Side_Slits_1.png",
+              "url": "assets/images/customer/attributes/Shirts/Bottom/Straight_With_Side_Slits_1.png"
+            }
+          ],
+          "description": "Look- The back of the shirt is slightly longer than the front. This allows a bit more play, preventing the shirt from untucking durning the day.",
+          "properties": {
+
+          }
         }
       },
       "Pocket": {
@@ -1121,7 +1150,7 @@ angular.module('luxire')
             }
 
           ],
-          "description": "Look – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with a button. Right pocket has a button closure and a pen slot.",
+          "description": "Look – pocket apt for work shirts with double stitches giving more detailing. Left pocket consist of a pocket with a pen slot and Right pocket has a button closure",
           "properties": {
 
           }
@@ -1134,7 +1163,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Pocket/No_Pocket_1.png"
             }
           ],
-          "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth.",
+          "description": "Look – A shirt with no chest pocket is usually a man’s choice for a clean and smooth front of the shirt.",
           "properties": {
 
           }
@@ -1316,20 +1345,20 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_1.jpg"
             }
           ],
-          "description": "",
+          "description": "Look - It is cut at a bias and diagonally joined at center. It aids in better movement of arms and is also useful in adjusting for differences in left, right shoulder . The person behind you at starbucks will know that you are wearing a high quality/custom made shirt.",
           "properties": {
 
           }
         },
         "Single": {
-          "title": "Single Yoke",
+          "title": "Single",
           "images": [
             {
               "ref": "Yoke_2.jpg",
               "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_2.jpg"
             }
           ],
-          "description": "",
+          "description": "For a cleaner look at the back. Generally recommended for shirts in large checks pattern as the diagonally split may be a bit distracting.",
           "properties": {
 
           }
@@ -1343,7 +1372,7 @@ angular.module('luxire')
             }
 
           ],
-          "description": "",
+          "description": "Our standard yoke for knitted shirts. Provide a casual feel and looks comfortable.",
           "properties": {
 
           }
@@ -1356,11 +1385,213 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Yoke/Yoke_3.png"
             }
           ],
-          "description": "",
+          "description": "The back of the shirt is made with one piece fabric without the seam towards the top of the shoulder.  Usually seen in casual pullover shirts.",
           "properties": {
 
           }
         }
+      },
+      "Button": {
+        "Coconut Shell": {
+          "title": "Coconut Shell",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Coconut_Shell _Button_1.jpg"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size": "18L, 11mm"
+          }
+        },
+        "Dark Bronze Snap" : {
+          "title": "Dark Bronze Snap",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Dark_Bronze_Snap button_1.jpg"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size": "18L, 11mm"
+          }
+        },
+        "Black Fish Eye": {
+          "title": "Black Fish Eye",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Black_Fish_Eye.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size": "18L, 11mm",
+            "Small Button Size": "14L, 9mm"
+          }
+        },
+        "Grey Shaded Mother of Pearl": {
+          "title": "Grey Shaded Mother of Pearl",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Grey_Shaded_MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "16L, 10mm",
+            "Size3": "14L, 9mm"
+          }
+        },
+        "Marble Snap": {
+          "title": "Marble Snap",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Marble_Snap.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "16L, 10mm",
+            "Size3": "18L, 11mm",
+            "Size2": "18L, 11mm"
+          }
+        },
+        "Off-White Mother of Pearl": {
+          "title": "Off-White Mother of Pearl",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Off-White-MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "16L, 10mm",
+            "Size3": "14L, 9mm"
+          }
+        },
+        "Off-White Shank": {
+          "title": "Off-White Shank",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Off-White-Shank.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "16L, 10mm",
+            "Size3": "12L, 8mm"
+          }
+        },
+        "Resin": {
+          "title": "Resin",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Resin.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "28L, 18mm",
+
+          }
+        },
+        "Ton Corozo": {
+          "title": "Ton Corozo",
+          "images": [
+            {
+              "ref": "Yoke_1.jpg",
+              "url": "assets/images/customer/attributes/Shirts/Button/Ton_Corozo.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "16L, 10mm"
+          }
+        },
+        "Thick Grey Shaded Mother of Pearl": {
+          "title": "Thick Grey Shaded Mother of Pearl",
+          "images": [
+            {
+              "ref": "Thick_Grey_Shaded_MoP.png",
+              "url": "assets/images/customer/attributes/Shirts/Button/Thick_Grey_Shaded_MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "14L, 9mm"
+          }
+        },
+        "Thick White Mother of Pearl": {
+          "title": "Thick White Mother of Pearl",
+          "images": [
+            {
+              "ref": "Thick_White_MoP.png",
+              "url": "assets/images/customer/attributes/Shirts/Button/Thick_White_MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "14L, 9mm"
+          }
+        },
+        "White Mother of Pearl": {
+          "title": "White Mother of Pearl",
+          "images": [
+            {
+              "ref": "White_MoP.png",
+              "url": "assets/images/customer/attributes/Shirts/Button/White_MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "14L, 9mm"
+          }
+        },
+        "White Cat Eye Resin": {
+          "title": "White Cat Eye Resin",
+          "images": [
+            {
+              "ref": "White_Cat_Eye_Resin.png",
+              "url": "assets/images/customer/attributes/Shirts/Button/White_Cat_Eye_Resin.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "14L, 9mm"
+          }
+        },
+        "White Shaded Mother of Pearl": {
+          "title": "White Shaded Mother of Pearl",
+          "images": [
+            {
+              "ref": "White_Shaded_MoP.png",
+              "url": "assets/images/customer/attributes/Shirts/Button/White_Shaded_MoP.png"
+            }
+          ],
+          "description": "",
+          "properties": {
+            "Size1": "18L, 11mm",
+            "Size2": "14L, 9mm"
+          }
+        }
+
       }
     },
     "pants": {
@@ -1371,10 +1602,6 @@ angular.module('luxire')
             {
               "ref": "Single_Forward_Pleat_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/Single_Forward_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1388,10 +1615,6 @@ angular.module('luxire')
             {
               "ref": "Double_Forward_Pleat_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/Double_Forward_Pleat_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1406,10 +1629,6 @@ angular.module('luxire')
             {
               "ref": "Single_Pleat_Reverse_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/Single_Pleat_Reverse_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1423,10 +1642,6 @@ angular.module('luxire')
             {
               "ref": "Double_Pleat_Reverse_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/Double_Pleat_Reverse_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1435,16 +1650,12 @@ angular.module('luxire')
             "2nd Pleat from fly": "0.75\""
           }
         },
-        "Inverted Pleats": {
-          "title": "Inverted Pleats",
+        "Inverted": {
+          "title": "Inverted",
           "images": [
             {
               "ref": "Inverted_Pleats_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/Inverted_Pleats_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1452,16 +1663,12 @@ angular.module('luxire')
             "Depth": "0.5\" inside from each side"
           }
         },
-        "No Pleat": {
-          "title": "No Pleat",
+        "No": {
+          "title": "No",
           "images": [
             {
               "ref": "No_Pleat_Plain_Front_1.png",
               "url": "assets/images/customer/attributes/Pants/Pleats/No_Pleat_Plain_Front_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1470,16 +1677,12 @@ angular.module('luxire')
         }
       },
       "Front Pockets": {
-        "Slant Pocket": {
-          "title": "Front Slant Pocket",
+        "Slant": {
+          "title": "Slant",
           "images": [
             {
               "ref": "Front_Slant_Pockets_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Front_Slant_Pockets_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1488,16 +1691,12 @@ angular.module('luxire')
             "Width from side seam to pocket on top": "1.5\""
           }
         },
-        "On Seam Pocket": {
-          "title": "On Seam Pocket",
+        "On Seam": {
+          "title": "On Seam",
           "images": [
             {
               "ref": "On_Seam_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/On_Seam_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1506,16 +1705,12 @@ angular.module('luxire')
             "Opening": "6.5\""
           }
         },
-        "Jetted Pocket": {
-          "title": "Jetted Pocket",
+        "Jetted": {
+          "title": "Jetted",
           "images": [
             {
               "ref": "Jetted_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Jetted_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1525,16 +1720,12 @@ angular.module('luxire')
             "Distance from waistband seam to pocket": "1.25\"(top)"
           }
         },
-        "Frog Pockets": {
-          "title": "Frog Pockets",
+        "Frog": {
+          "title": "Frog",
           "images": [
             {
               "ref": "Frog_Style_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Frog_Style_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "The depth and length depends on waist measurement",
@@ -1542,16 +1733,12 @@ angular.module('luxire')
 
           }
         },
-        "Jeans Style Pocket": {
-          "title": "Jeans Style Pocket",
+        "Jeans Style": {
+          "title": "Jeans Style",
           "images": [
             {
               "ref": "Jean_Style_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Jean_Style_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "The depth and length depends on waist measurement",
@@ -1559,16 +1746,12 @@ angular.module('luxire')
 
           }
         },
-        "Coin Pocket": {
-          "title": "Coin Pocket",
+        "Coin": {
+          "title": "Coin",
           "images": [
             {
               "ref": "Coin_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Coin_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1579,54 +1762,42 @@ angular.module('luxire')
       },
       "Fly Style": {
         "Zip": {
-          "title": "Zip Fly",
+          "title": "Zip",
           "images": [
             {
               "ref": "Zip_Fly_1.png",
               "url": "assets/images/customer/attributes/Pants/Fly_Style/Zip_Fly_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
           "properties": {
             "Width": "1.5\"",
-            "Length": "Depends ton front rise"
+            "Length": "Depends on front rise"
           }
         },
         "Button": {
-          "title": "Button Fly",
+          "title": "Button",
           "images": [
             {
               "ref": "Button_Fly_1.png",
               "url": "assets/images/customer/attributes/Pants/Fly_Style/Button_Fly_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
           "properties": {
             "Width": "1.75\"",
-            "Length": "Depends ton front rise",
+            "Length": "Depends on front rise",
             "Total Buttons": "Depends on fly dimension"
           }
         }
       },
       "Front Closure": {
         "Standard Extended": {
-          "title": "Standard Extended Closure",
+          "title": "Standard Extended",
           "images": [
             {
               "ref": "Standard_Extended_Closure_1.png",
               "url": "assets/images/customer/attributes/Pants/Front_Closure/Standard_Extended_Closure_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1635,15 +1806,11 @@ angular.module('luxire')
           }
         },
         "Extra Long Extended": {
-          "title": "Extra Long Extended Closure",
+          "title": "Extra Long Extended",
           "images": [
             {
               "ref": "Extra_Long_Extended_Closure_1.png",
               "url": "assets/images/customer/attributes/Pants/Front_Closure/Extra_Long_Extended_Closure_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1652,15 +1819,11 @@ angular.module('luxire')
           }
         },
         "Jeans Style": {
-          "title": "Jeans Style Closure",
+          "title": "Jeans Style",
           "images": [
             {
               "ref": "Jeans_Style_Closure_1.png",
               "url": "assets/images/customer/attributes/Pants/Front_Closure/Jeans_Style_Closure_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "The fly ends with 1 button closure and in square shape",
@@ -1673,60 +1836,44 @@ angular.module('luxire')
             {
               "ref": "Hook_And_Bar_Closure_1.png",
               "url": "assets/images/customer/attributes/Pants/Front_Closure/Hook_And_Bar_Closure_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "The fly ends with 1 button closure and in square shape",
+          "description": "Extended closure with hook and bar fasteners.",
           "properties": {
           }
         }
       },
       "Waist Band": {
-        "Side Metal Adjusters bw seam": {
-          "title": "Side Metal Adjusters between waist seam",
+        "Side Metal Adjusters between waist seam": {
+          "title": "Side Metal Adjusters Between Waist Seam",
           "images": [
             {
               "ref": "Side_Metal_Adjusters_Between_Wast_Seam_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Side_Metal_Adjusters_Between_Wast_Seam_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
           "properties": {
           }
         },
-        "Side Metal Adjusters on waistband": {
-          "title": "Side Metal Adjusters on waistband",
+        "Side Metal Adjusters on waist band": {
+          "title": "Side Metal Adjusters On Waist Band",
           "images": [
             {
               "ref": "Side_Metal_Adjusters_On_Wast_Seam_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Side_Metal_Adjusters_On_Wast_Seam_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
           "properties": {
           }
         },
-        "Elastic Adjusting Waistband": {
-          "title": "Elastic Adjusting Waistband",
+        "Elastic Adjusting": {
+          "title": "Elastic Adjusting",
           "images": [
             {
               "ref": "Elastic_Adjusting_WastBand_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Elastic_Adjusting_WastBand_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1739,10 +1886,6 @@ angular.module('luxire')
             {
               "ref": "Standard_Belt_Loop_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Standard_Belt_Loop_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "Total 7 loops",
@@ -1750,65 +1893,49 @@ angular.module('luxire')
           }
         },
         "Hollywood Style": {
-          "title": "Hollywood Style Waist Band",
+          "title": "Hollywood Style",
           "images": [
             {
               "ref": "Hollywood_Style_Waist_Band_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Hollywood_Style_Waist_Band_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
-          "description": "Total 7 loops",
+          "description": "",
           "properties": {
           }
         }
       },
       "Rear Pockets": {
-        "Patch Pockets": {
-          "title": "Pocket Pockets",
+        "Patch": {
+          "title": "Patch",
           "images": [
             {
               "ref": "Patch_Rear_Pockets_1.png",
               "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Patch_Rear_Pockets_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
           "properties": {
           }
         },
-        "Jeans Style Pockets": {
-          "title": "Jeans Style Pockets",
+        "Jeans Style": {
+          "title": "Jeans Style",
           "images": [
             {
               "ref": "Jeans_Style_Rear_Pockets_1.png",
-              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Jeans_Style_Rear_Pockets_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
+              "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Jeans_Style_Rear_Pockets_1.jpg"
             }
           ],
           "description": "",
           "properties": {
           }
         },
-        "2 Rear Pockets": {
-          "title": "2 Rear Pockets",
+        "Two": {
+          "title": "Two",
           "images": [
             {
               "ref": "Both_Sides_Rear_Pockets_1.png",
               "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Both_Sides_Rear_Pockets_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1817,16 +1944,12 @@ angular.module('luxire')
             "Width": "Depends on rear pant size"
           }
         },
-        "Right Rear Pocket": {
-          "title": "Right Rear Pocket",
+        "Right": {
+          "title": "Right",
           "images": [
             {
               "ref": "Right_Side_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Right_Side_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1835,16 +1958,12 @@ angular.module('luxire')
             "Width": "Depends on rear pant size"
           }
         },
-        "No Rear Pocket": {
-          "title": "No Rear Pocket",
+        "No": {
+          "title": "No",
           "images": [
             {
               "ref": "Back_No_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Rear_Pockets/Back_No_Pocket_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1853,16 +1972,12 @@ angular.module('luxire')
         }
       },
       "Bottom Cuffs": {
-        "No Cuff": {
-          "title": "No Cuff",
+        "No": {
+          "title": "No",
           "images": [
             {
               "ref": "No_Cuffs_1.png",
               "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/No_Cuffs_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1876,10 +1991,6 @@ angular.module('luxire')
             {
               "ref": "Cuffs_With_Buttons_1.png",
               "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/Cuffs_With_Buttons_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
@@ -1893,10 +2004,6 @@ angular.module('luxire')
             {
               "ref": "Cuffs_Without_Buttons_1.png",
               "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/Cuffs_Without_Buttons_1.png"
-            },
-            {
-              "ref": "",
-              "url": ""
             }
           ],
           "description": "",
