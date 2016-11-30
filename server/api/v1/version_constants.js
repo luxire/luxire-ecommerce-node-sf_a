@@ -1,5 +1,17 @@
 'use strict';
+
 //This file contains enviroment variable required for the application
+var development_host = {
+  spree: 'http://luxire-store.stage.cloudhop.in',
+  redis: 'http://localhost:9090',
+  prediction: 'http://137.116.155.7:8000',
+}
+var production_host = {
+  spree: 'https://luxire-store.cloudhop.in',
+  redis: 'http://10.138.0.3:9090',
+  prediction: 'http://137.116.155.7:8000',
+}
+var host = development_host;
 module.exports = {
   /*spree api constants*/
   api: {
@@ -11,7 +23,7 @@ module.exports = {
     }
   },
   spree:{
-    host: 'http://luxire-store.stage.cloudhop.in', //Spree store-Host Url
+    host: host.spree, //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
     adminProducts: '/api/admin/products',
@@ -51,7 +63,7 @@ module.exports = {
     }
   },
   prediction: {
-    host: 'http://137.116.155.7:8000',
+    host: host.prediction,
     customer_bought: '/queries.json',
     sample_product_ids: [313, 315, 301, 297, 306, 1, 310, 298, 317, 314],
     expected_res_len: 5,
@@ -60,7 +72,7 @@ module.exports = {
     feed_access_key: 'QRblQvAr2lZ2IwP2fD85LixUKPqg7Tf2Y56jYEUIaUwWA80nfA1q6iFwKwrHt4fd'
   },
   redis: {
-    host: 'http://localhost:9090',
+    host: host.redis,
     products: '/api/redis/products',
     products_filter: '/api/redis/customer/products/filter',
     collections: '/api/redis/collection',//change to plural
