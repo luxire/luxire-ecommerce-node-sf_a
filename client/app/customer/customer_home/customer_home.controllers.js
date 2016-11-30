@@ -310,28 +310,28 @@ angular.module('luxire')
     {
       image: 'http://cdn.styleforum.net/5/5c/900x900px-LL-5c99b818_image.jpeg',
       review: 'I ordered this shirt with the NOBDII collar and a "medium" wash. I wear a lot of sportcoats and odd trousers so the collar type made sense for me. It\'s honestly my favorite Luxire shirt along with the Blue Denim Slubby Chambray.',
-      name: 'Anonymous',
+      name: 'patliean1',
       source: 'Style Forum',
       sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/21700_100#post_8338716'
     },
     {
       image: 'http://www.styleforum.net/image/id/11288434',
       review: '',
-      name: 'Anonymous',
+      name: 'NOTWITHIT',
       source: 'Style Forum',
       sourceRef: 'http://www.styleforum.net/t/518949/luxire-and-styleforum-leather-jackets-official-thread/0_100#post_8510168'
     },
     {
       image: 'http://cdn.styleforum.net/9/97/97d28283_DSC02722.jpeg',
       review: 'A little project Luxire did for me in Dugdale black plain linen',
-      name: 'Anonymous',
+      name: 'Frank Cowperwood',
       source: 'Style Forum',
       sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/19600_100#post_8088795'
     },
     {
       image: 'https://parisiangentleman.fr/wp-content/uploads/2015/02/paulcollarstanding.jpg',
       review: 'Hi Paul, I really like the collar on the Luxire shirt you’re wearing on your most recent posts.  I’m a Luxire customer as well. I’d appreciate it if you can provide me with some details on the collar. What collar is it?<br>Thanks in advance.<br>~periodicreview<br>Dear periodicreview,This is probably the most reoccurring question that I\’ve had for months !To get directly to the point, I only use two types of collars with the Luxire brand:1. An English spread with 3.5” collar wings:2. A button-down with 3.5” collar wings based on the “Barba shirt” button-down collar. Sometimes, I like a nice S-shape roll on my button-down with a slightly longer collar wings. Other times, I prefer a perfectly straight button down collar',
-      name: 'Anonymous',
+      name: 'Paul LUX',
       source: 'Parisian Gentleman',
       sourceRef: 'https://parisiangentleman.co.uk/2015/02/23/q-a-with-pg-editors-what-type-of-shirt-collar-should-i-buy/',
       font_size: '88'
@@ -346,7 +346,7 @@ angular.module('luxire')
     {
       image: 'http://cdn.styleforum.net/c/c9/500x1000px-LL-c9bc6145_interior-torso-2.jpeg',
       review: 'Holland & Sherry Tweed, fully lined. This is the first I\'ve had made from wool. Ashish, to his credit, tried to give me a less expensive option by showing me a bunch of lovely Campore plaids. And so I had them make a pair of magnificent pants from one of the Campore light tweeds. They\'re obviously beautiful and I\'d recommend that fabric line to anyone. But ultimately I decided the Holland & Sherry I chose was something special, with a unique richness of colour and complexity of pattern, and life is short so I might as well go for it.',
-      name: 'Anonymous',
+      name: 'CruzAzul',
       source: 'Style Forum',
       sourceRef: 'http://www.styleforum.net/t/304965/luxire-custom-clothing-official-affiliate-thread/22200_100#post_8390415',
       font_size: '100'
