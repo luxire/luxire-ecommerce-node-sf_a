@@ -171,6 +171,7 @@ exports.productVariants = function(req, res) {
 /*Taxonomy*/
 
 exports.taxonomy_index = function(req, res){
+  var spree_cookie = [];
   http
     .get(constants.spree.host+constants.spree.taxonomy, function(error, response, body){
       if(error){
