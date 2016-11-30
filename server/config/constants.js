@@ -1,9 +1,20 @@
 'use strict';
 //This file contains enviroment variable required for the application
+var development_host = {
+  spree: 'http://luxire-store.stage.cloudhop.in',
+  redis: 'http://localhost:9090',
+  prediction: 'http://137.116.155.7:8000',
+}
+var production_host = {
+  spree: 'https://luxire-store.cloudhop.in',
+  redis: 'http://10.138.0.3:9090',
+  prediction: 'http://137.116.155.7:8000',
+}
+var host = development_host;
 module.exports = {
   /*spree api constants*/
   spree:{
-    host: 'http://luxire-store.stage.cloudhop.in', //Spree store-Host Url
+    host: host.spree, //Spree store-Host Url
     jwt_secret: 'Azu531k3n!@#',
     products: '/api/products',     //Spree store-Product API
     users: '/luxire-users',
