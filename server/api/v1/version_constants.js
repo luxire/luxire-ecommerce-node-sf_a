@@ -52,7 +52,8 @@ module.exports = {
     json: '.json',
     product_csv_import: '/luxire_product_data/imports',
     collections: '/customized_taxons/get_taxon_details.json',
-    get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code='
+    get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code=',
+    contact_us: '/api/contact_us'
   },
   payment: {
     ebs: {
