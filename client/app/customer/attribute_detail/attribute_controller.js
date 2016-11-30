@@ -869,6 +869,7 @@ angular.module('luxire')
         },
         "Two-Button Square": {
           "title": "Two-Button Square",
+          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Usually used for casual shirts, very sharp and the ends are squared with two button differing from other cuffs but similar to one button square cuffs.",
           "images": [
             {
               "ref": "Two_Button_Square_Cuff_1.png",
@@ -877,7 +878,7 @@ angular.module('luxire')
           ],
           "description": "",
           "properties": {
-              "Cuff Height": ""
+              "Cuff Height": "3\""
           }
         },
         "Three button": {
@@ -904,6 +905,19 @@ angular.module('luxire')
           "description": "Look- Aesthetically the cuff is attractive and desired.  Apt for both formal and dressy shirts. Two button folded turn back gives a typical gallant finish. Look appears to be double cuff, practically stands single cuff.",
           "properties": {
             "Cuff Width": "2 1/2\"(with fold), 5 1/2\"(without fold)"
+          }
+        },
+        "Short Sleeve": {
+          "title": "Short Sleeve",
+          "images": [
+            {
+              "ref": "Short_Sleeve_Cuff.png",
+              "url": "assets/images/customer/attributes/Shirts/Cuff/Short_Sleeve_Cuff.png"
+            }
+          ],
+          "description": "Look- Aesthetically the cuff is attractive and desired.  Apt for both formal and dressy shirts. Two button folded turn back gives a typical gallant finish. Look appears to be double cuff, practically stands single cuff.",
+          "properties": {
+            "Short Sleeve Length": "8\" can be customized while processing"
           }
         }
       },
