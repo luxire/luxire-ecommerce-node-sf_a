@@ -1,7 +1,7 @@
 angular.module('luxire')
 .service('AdminConstants',function(){
 	this.api = {
-		host: 'http://luxire-store.stage.cloudhop.in',
+		host: 'https://luxire-store.cloudhop.in',
 		products: '/api/v1/admin/products',
 		product_types: '/api/v1/admin/product_types',
 		measurement_types: '/api/v1/admin/measurement_types',//product attributes
