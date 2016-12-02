@@ -92,6 +92,7 @@ angular.module('luxire')
             "Front Collar Band Height": "1 1/2\"",
             "Rear Collar Band Height": "1 ¾\"",
             "Collar Back Height": "2 ¼\"",
+            "Front Neck Band Shape" : "Round",
             "Tie Space": "1/4\"",
             "Spread": "6 ½\""
           },
@@ -456,7 +457,7 @@ angular.module('luxire')
             "Collar Back Height": "2\"",
             "Front Neck Band Shape": "Round",
             "Tie Space": "1/4\"",
-            "Spread": "Shoulder Back"
+            "Spread": "NA"
           },
           "table-view": {
             "header": [
@@ -493,12 +494,13 @@ angular.module('luxire')
           "description": "Look-  Good choice of collar when unbuttoned. The collar is cut to the back to its extreme which gives a statement look and makes you stand out in a crowd. A sleek and small knot tie is apt for the extreme spread",
           "properties": {
             "Collar Point Length": "3 3/4\"",
-            "Front Collar Band Height": "-",
+            "Front Collar Band Height": "1 1/4\"",
             "Rear Collar Band Height": "1 1/2\"",
             "Collar Back Height": "1 7/8\"",
-            "Front Neck Band Shape": "-",
-            "Tie Space": "-",
-            "Spread Shoulder Back": "6 1/4\""
+            "Front Neck Band Shape": "Round",
+            "Tie Space": "0\"",
+            "Spread Shoulder Back": "6 1/4\"",
+            "Spread": "NA"
           },
           "table-view": {
             "header": [
@@ -876,7 +878,6 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Cuff/Two_Button_Square_Cuff_1.jpg"
             }
           ],
-          "description": "",
           "properties": {
               "Cuff Height": "3\""
           }
@@ -1068,7 +1069,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Pleat/No_Pleats_1.jpg"
             }
           ],
-          "description": "Look- Constructed to match the collar. If collar is fused, cuff is made fused too and vice versa. Our most desired cuff with more casual and relaxed look. It is considered as classic and less formal. Generally compliments well with button down collar.",
+          "description": "",
           "properties": {
 
           }
