@@ -4,13 +4,13 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('luxire', ['ui.router','ngRoute',
-													'ui.bootstrap','angularFileUpload',
-													'ui.bootstrap.datetimepicker','ngTagsInput',
-													'ngMessages',
-													'AngularPrint', 'monospaced.qrcode',
-												  'ui.tree','infinite-scroll', 'ngAside',
-													'angucomplete-alt', 'angularAwesomeSlider',
-													'angular-cache', 'ui.slider', 'mega-menu', 'rzModule', 'slickCarousel'])//removed ng-animate to resolve carousel issue
+						'ui.bootstrap','angularFileUpload',
+						'ui.bootstrap.datetimepicker','ngTagsInput',
+						'ngMessages', 'AngularPrint', 'monospaced.qrcode',
+						'ui.tree','infinite-scroll', 'ngAside',
+						'angucomplete-alt', 'angularAwesomeSlider',
+						'angular-cache', 'ui.slider', 'mega-menu', 
+						'rzModule', 'slickCarousel', 'angulartics','angulartics.google.analytics'])//removed ng-animate to resolve carousel issue
 
 
 .run(function($location,$rootScope, $state){
