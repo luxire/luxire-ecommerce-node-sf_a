@@ -1036,7 +1036,7 @@ angular.module('luxire')
 
   };
   var rounded_pant_attr = ["Waist", "Hips", "Thigh", "Knee", "Bottom"];
-  var rounded_shirt_attr = ["Chest", "Waist", "Bottom", "Sleeve Width"];
+  var rounded_shirt_attr = ["Chest", "Waist", "Bottom"];//, "Sleeve Width" as per 02 Dec Ashish's email, sleeve width calculated is already for half
 
   var set_standard_sizes = function(){
     var product_type = $scope.product.product_type.product_type.toLowerCase();
@@ -1069,42 +1069,48 @@ angular.module('luxire')
         if(fit_type == "regular"){
           if(selected_measurement_unit == "in"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+0.75)*1000)/1000).toFixed(3);//since armhole is rounded mnt 1.5->0.75
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
-
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);//changed from 0.5->2 after ashish mail on 02 dec, changed for all fit types
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
           }
           else if(selected_measurement_unit == "cm"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+1.905)*10)/10).toFixed(2);//since armhole is rounded mnt 3.81->1.905
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);//changed from 0.5->2 after ashish mail on 02 dec
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
           }
 
         }
         else if(fit_type == "slim"){
           if(selected_measurement_unit == "in"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+1.25)*1000)/1000).toFixed(3);//2.5->1.25
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
           }
           else if(selected_measurement_unit == "cm"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+3.175)*10)/10).toFixed(2);//6.35->3.175
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
           }
         }
         else if(fit_type == "super slim"){
           if(selected_measurement_unit == "in"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+1.5)*1000)/1000).toFixed(3);//3->1.5
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((0.5)*1000)/1000).toFixed(3);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((2)*1000)/1000).toFixed(3);
           }
           else if(selected_measurement_unit == "cm"){
             $scope.cart_object['standard_measurement_attributes']['Armhole']['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes']['Sleeve Width']['value'])+3.81)*10)/10).toFixed(2);//7.62->3.81
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
-            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((1.27)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Right)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            // $scope.cart_object['standard_measurement_attributes']['Shoulder Slope(Left)']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
+            $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value'] = (Math.round((5.08)*10)/10).toFixed(2);
           }
         }
         $scope.change_dependents('standard_measurement_attributes', 'Armhole' , $scope.cart_object['standard_measurement_attributes']['Armhole']['value']);
+        $scope.change_dependents('standard_measurement_attributes', 'Shoulder Slope' , $scope.cart_object['standard_measurement_attributes']['Shoulder Slope']['value']);
 
 
       }
