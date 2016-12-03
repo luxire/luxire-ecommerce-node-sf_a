@@ -1805,7 +1805,7 @@ button.slick-arrow{
                             <div ng-show="selected_bespoke_attribute.category=='c'&&cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != undefined && cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != ''" class="row" style="height: 100%;margin-left: 0px; margin-right: 0px" >
                               <div style="border-bottom: solid 1px #E0E0E0; padding: 10% 5%">
                                 <p style="margin-bottom: 0px; text-decoration: underline;">{{cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']+' '+selected_bespoke_attribute.name}}</p>
-                                <p style="margin-bottom: 0px" ng-repeat="help in selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help'].split(';')">{{help}}</p>
+                                <!--//p style="margin-bottom: 0px" ng-repeat="help in selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help'].split(';')">{{help}}</p -->
                                 <!--// {{selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']}}
                                 // {{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}} -->
                                 <div ng-if="selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']">
