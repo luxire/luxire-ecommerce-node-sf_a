@@ -491,7 +491,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Collar/Extreme_Spread_2.jpg"
             }
           ],
-          "description": "Look-  Good choice of collar when unbuttoned. The collar is cut to the back to its extreme which gives a statement look and makes you stand out in a crowd. A sleek and small knot tie is apt for the extreme spread",
+          "description": "Look-  Good choice of collar when unbuttoned. The collar is cut to the back to its extreme which gives a statement look and makes you stand out in a crowd. A sleek and small knot tie is apt for the extreme spread.",
           "properties": {
             "Collar Point Length": "3 3/4\"",
             "Front Collar Band Height": "1 1/4\"",
@@ -499,7 +499,6 @@ angular.module('luxire')
             "Collar Back Height": "1 7/8\"",
             "Front Neck Band Shape": "Round",
             "Tie Space": "0\"",
-            "Spread Shoulder Back": "6 1/4\"",
             "Spread": "NA"
           },
           "table-view": {
@@ -708,11 +707,10 @@ angular.module('luxire')
             "Collar Point Length": "3 1/4\"",
             "Front Collar Band Height": "1 3/8\"",
             "Rear Collar Band Height": "1 1/2\"",
+            "Front Neck Band Shape": "Round",
             "Collar Back Height": "1 7/8\"",
             "Tie Space": "1/4\"",
-            "Spread": "6\"",
-            "Lining": "No",
-            "Fusing": "Yes"
+            "Spread": "6\""
           },
           "table-view": {
             "header": [
@@ -752,6 +750,7 @@ angular.module('luxire')
             "Collar Point Length": "3 3/8\"",
             "Front Collar Band Height": "1 1/4\"",
             "Rear Collar Band Height": "1 1/2\"",
+            "Front Neck Band Shape": "Round",
             "Collar Back Height": "2 1/4\"",
             "Tie Space": "1/4\"",
             "Spread": "3 1/2\""
