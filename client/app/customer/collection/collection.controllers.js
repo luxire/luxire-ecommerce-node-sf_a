@@ -124,7 +124,6 @@ angular.module('luxire')
         $scope.loading_products = false;
         $scope.total_collection_pages = data.data.pages;
         $scope.taxonomy_counts = data.data.taxonomies;
-        console.log('fetched products', data.data, data.data.products[0].name , Date.now());
         $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
         if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
           $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
