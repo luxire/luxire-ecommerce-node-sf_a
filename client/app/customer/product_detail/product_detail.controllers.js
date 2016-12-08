@@ -10,6 +10,9 @@ angular.module('luxire')
     original_url: ''
   };
 
+  $scope.currency_symbols = CustomerUtils.get_currency_with_symbol;
+
+
   $scope.get_subheader_top_margin = function(){
     return $(".customer-main-nav-header").innerHeight() + 'px';
 
@@ -61,6 +64,30 @@ angular.module('luxire')
 
       /*Convert to cm */
         convert_to_cm(angular.copy(data.data));
+
+      var product_prices = {};
+      angular.forEach($scope.product.master.prices, function(value, currency){
+        if((currency == "USD") || (currency == "SGD") || (currency == "AUD") || (currency == "CAD")){
+          product_prices[currency] = parseFloat(value.split(",").join("").split("$")[1]);
+        }
+        else if((currency == "SEK") || (currency == "NOK") || (currency == "DKK")){
+          product_prices[currency] = parseFloat(value.split(",").join("").split(" kr")[0]);
+        }
+        else if(currency == "CHF"){
+          product_prices[currency] = parseFloat(value.split(",").join("").split("CHF")[1]);
+        }
+        else if(currency == "EUR"){
+          product_prices[currency] = parseFloat(value.split(",").join("").split("\u20ac")[1]);
+        }
+        else if(currency == "GBP"){
+          product_prices[currency] = parseFloat(value.split(",").join("").split("\u20a3")[1]);
+        }
+        else if(currency == "INR"){
+          product_prices[currency] = parseFloat(value.split(",").join("").split("\u20b9")[1]);
+        }
+      });
+      $scope.cart_object.total_cost = $scope.cart_object.total_cost ? $scope.cart_object.total_cost : product_prices;
+
 
     }
     else{
@@ -264,6 +291,8 @@ angular.module('luxire')
 
   $scope.cart_object.personalization_cost = $scope.cart_object.personalization_cost ? $scope.cart_object.personalization_cost : personalisation_cost_init;
 
+
+
   var json_array_to_obj = function(parent, arr){
     $scope[parent] = {};
     $scope[parent+'_all'] = {};
@@ -362,7 +391,7 @@ angular.module('luxire')
     console.log('has valid measurements', has_valid_measurements());
     if(has_valid_measurements()){
       if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
-        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false)
+        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency)
         .then(function(data){
           CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
             $rootScope.luxire_cart = data.data;
@@ -381,7 +410,7 @@ angular.module('luxire')
         });
       }
       else{
-        CustomerOrders.create_order($scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false)
+        CustomerOrders.create_order($scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency)
         .then(function(data){
           $rootScope.luxire_cart = data.data;
           $scope.loading_cart = false;

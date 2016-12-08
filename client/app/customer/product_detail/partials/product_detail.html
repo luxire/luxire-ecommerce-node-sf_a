@@ -458,11 +458,15 @@ button.slick-arrow{
 <div ng-hide="loading_product" class="" style="display: block;position: relative" >
   <div class="container" style="position: fixed;background-color: #FDFDFD;width: 100%;font-family: Roboto;border-bottom: solid 1px #E4E4E4;margin-top: {{get_subheader_top_margin()}};z-index: 10">
     <div class="row" style="margin: 1% 0.25% 0.5% 0.25%">
-      <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"  style="color: #000000; font-size: 140%; font-weight: 100">
+      <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"  style="color: #000000; font-size: 120%; font-weight: 100">
         {{product.name.toUpperCase()}}
       </div>
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="text-align: right;color: #8A247C; font-size: 140%; font-weight: 100; padding-right: 2%">
-        {{product.master.prices[selected_currency].toUpperCase()}}
+      <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"  style="text-align: right;color: #8A247C; font-size: 120%; font-weight: 100; padding-right: 2%">
+        <span>{{product.master.prices[selected_currency].toUpperCase()}}</span>
+        <span ng-if="cart_object.personalization_cost[selected_currency]"> + </span>
+        <span ng-if="cart_object.personalization_cost[selected_currency]" ng-bind-html="currency_symbols(cart_object.personalization_cost[selected_currency], selected_currency)"></span>
+        <span ng-if="cart_object.personalization_cost[selected_currency]">(personalisation) = </span>
+        <span ng-if="cart_object.personalization_cost[selected_currency]" ng-bind-html="currency_symbols(cart_object.total_cost[selected_currency], selected_currency)"></span>
       </div>
     </div>
   </div>
