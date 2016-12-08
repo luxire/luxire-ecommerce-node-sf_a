@@ -95,7 +95,7 @@
       <div class="taxonomy-menu dropdown-toggle"  ng-class="{'taxonomy-menu-hover': is_open===true}" ng-click="go_to_collection($event, taxonomy.root.permalink)" style="display: inline-block;padding: 0.25% 0.5%;border-radius: 2px;margin-left: 0.5%;cursor: pointer;text-align: center;font-size: 95%" uib-dropdown-toggle>
         {{taxonomy.name}}&nbsp;&nbsp;<i style="font-size: 80%;margin-top: -3%" ng-if="taxonomy.root.taxons.length" class="fa fa-chevron-down" aria-hidden="true"></i>
       </div>
-      <div ng-mouseover="is_open=true;" ng-if="taxonomy.root.taxons.length" uib-dropdown-menu aria-labelledby="simple-dropdown" style="padding: 0px;margin-top: -0.7%;border: none;border-radius: 0px;border-top: solid 1px #8A247C;width: 100%">
+      <div ng-mouseover="is_open=true;" ng-if="taxonomy.root.taxons.length" uib-dropdown-menu aria-labelledby="simple-dropdown" style="padding: 0px;margin-top: -0.7%;border: none;border-radius: 0px;border-top: solid 1px #8A247C;width: 100%;;background: whitesmoke">
         <div style="margin-left: {{arrow_margin_left+'px'}}" ng-if="taxonomy.root.taxons.length && is_open" class="arrow-up"></div>
         <div class="row-eq-height" style="width: 100%;">
           <div class="" style="margin: auto;padding: 1%;width: 100%;text-align: center">
