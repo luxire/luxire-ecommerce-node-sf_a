@@ -161,7 +161,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.orders+'/new');
   };
 
-  this.create_order = function(cartObject, variant, sample){
+    this.create_order = function(cartObject, variant, sample, selected_currency){
     // total_perosnalisation_cost_in_currencies: cartObject.personalization_cost,
 
     var order = {
@@ -172,8 +172,8 @@ angular.module('luxire')
             variant_id: variant.id,
             quantity: 1,
             luxire_line_item:{
-              total_personalisation_cost_in_currencies: cartObject.personalization_cost,
-              total_personalization_cost: 0,
+              total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
+              total_personalization_cost: cartObject && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
               send_sample: sample ? true : false,
               customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
               personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
@@ -202,14 +202,14 @@ angular.module('luxire')
 
   /*line_items*/
 
-  this.add_line_item = function(order, cartObject, variant, send_sample){
+  this.add_line_item = function(order, cartObject, variant, send_sample, selected_currency){
     var line_item = {
       line_item: {
         variant_id: variant.id,
         quantity: 1,
         luxire_line_item:{
-          total_personalisation_cost_in_currencies: cartObject.personalization_cost,
-          total_personalization_cost: 0,
+          total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
+          total_personalization_cost: cartObject && cartObject.personalization_cost && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
           send_sample: send_sample ? true : false,
           customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
           personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
