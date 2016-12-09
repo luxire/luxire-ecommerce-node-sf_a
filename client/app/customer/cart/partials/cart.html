@@ -67,7 +67,7 @@
             <i ng-class="{'update-cart': line_item.quantity_changed==true}" class="fa fa-check-circle" style="padding: 5%; color: green"></i>
         </div>
         <div class="col cart-body col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center">
-          {{line_item.display_amount}}
+          {{line_item.display_total}}
         </div>
         <div class="col cart-body col-lg-1 col-md-1 col-sm-1 col-xs-1" style="border: none;" style="text-align: center">
           <i class="fa fa-minus-circle" title="Remove item" style="cursor: pointer" ng-click="delete_line_item(line_item.id, $index)"></i>
@@ -78,7 +78,7 @@
           Total Amount:
         </div>
         <div class="col-lg- col-md-3 col-sm-3 col-xs-3" style="text-align:center;">
-          {{luxire_cart.display_item_total}}
+          {{luxire_cart.display_total}}
         </div>
       </div>
       <uib-alert style="margin-top: 5%" ng-hide="(luxire_cart != {} && luxire_cart.line_items.length >0) || loading_cart" type="success">Your cart is empty</uib-alert>
@@ -129,7 +129,7 @@
           Subtotal ({{luxire_cart.line_items.length}} {{luxire_cart.line_items.length>1? 'items' : 'item'}}):
         </span>
         <span style="color: #8A247C">
-          &nbsp;{{luxire_cart.display_item_total}}
+          &nbsp;{{luxire_cart.display_total}}
         </span>
       </div>
       <div style="">
