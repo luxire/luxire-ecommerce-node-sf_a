@@ -963,7 +963,6 @@ angular.module('luxire')
           ],
           "description": "Look- Best suited with a fashionable classic casual shirt. Gives a very polished look as the front is smooth and clean without any stitches.  Commonly used in business and casual shirts.",
           "properties": {
-            "Width": "-"
           }
         },
         "Pullover": {
@@ -980,7 +979,7 @@ angular.module('luxire')
           }
         },
         "Edge Stitch": {
-          "title": "Edge Stitch",
+          "title": "Edge Stitch on French",
           "images": [
             {
               "ref": "Edge_Stitch_Placket_1.png",
@@ -989,11 +988,11 @@ angular.module('luxire')
           ],
           "description": "Look- A French placket that consists of an edge stitch. Gives  a very casual feel. Not that commonly used placket but can be a good style that works for you.",
           "properties": {
-            "Width": "-"
+            "Width": "5mm edge stitch"
           }
         },
-        "Plain Front With Side Stitch": {
-          "title": "Plain Front With Side Stitch",
+        "No Placket With Side Stitch": {
+          "title": "No Placket With Side Stitch",
           "images": [
             {
               "ref": "Side_Stitch_Placket_1.png",
@@ -1002,7 +1001,7 @@ angular.module('luxire')
           ],
           "description": "Look- A French placket with a side stitch on top, giving an illusion of a plain placket. Used casually and not very commonly chosen.",
           "properties": {
-            "Width": "-"
+            "Width": "1 3/8 \""
           }
         }
       },
