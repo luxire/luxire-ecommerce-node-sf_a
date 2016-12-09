@@ -163,7 +163,10 @@
                     </span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin:0%;padding:2% 1% 1% 1%;">
-                  <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                  <a href="/#/products/{{product.slug}}">
+                    <!-- <button type="button" class="btn btn-default" ng-click="go_to_product_detail(product.slug)" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button> -->
+                    <button type="button" class="btn btn-default" style="width:100%;font-size:90%;background-color: #7F0E6E;color:#EDEDED;border-radius:0px;">SELECT</button>
+                  </a>
                 </div>
                </div>
             </div>
