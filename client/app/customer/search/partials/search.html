@@ -130,7 +130,10 @@
           <img ng-click="go_to_product_detail(product.slug)" ng-src="{{active_product==true? getImage(product.master.images[0].large_url) : getImage(product.master.images[0].product_url)}}" style="cursor: pointer"></img>
         </div> ng-init="url='large_url'" ng-mouseover="url='original_url'" ng-mouseleave="url='large_url'"-->
         <div class="new-product-image" ng-class="{'zoomable-taxonomy': get_taxonomy_details(product.taxons[0].permalink).is_gift_card==false}" style="height: 45vh;overflow: hidden">
-          <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+          <a href="/#/products/{{product.slug}}">
+            <img ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+            <!-- <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img> -->
+          </a>
         </div>
         <div class="container-fluid" style="background-color: ">
           <div id="image-name" class="row" style="margin-left:0%;margin-right:0%;border-bottom:1px solid #E5E5E5;padding-top:2%;font-family: Roboto; font-weight: 300">

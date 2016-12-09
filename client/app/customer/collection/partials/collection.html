@@ -150,7 +150,8 @@
               <div style="border: solid 1px #DBDBDB" style="width: 96%;padding-left:1.5%;padding-right: 1.5%;overflow: auto;">
                 <div class="new-product-image" ng-class="{'zoomable-taxonomy': is_gift_card==false}" style="height: 45vh;overflow: hidden" >
                   <a href="/#/products/{{product.slug}}">
-                    <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                    <img ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img>
+                    <!-- <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img> -->
                   </a>
                 </div>
                 <div class="container-fluid" style="background-color: ">
