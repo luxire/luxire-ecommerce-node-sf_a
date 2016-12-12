@@ -50,7 +50,7 @@
                   {{}}
                 </td>
                 <td>
-                  {{payment_state==null? 'payment due' : shipment_state}}
+                  {{order.payment_state !== 'paid'? 'payment due' : order.luxire_order.fulfillment_status}}
                 </td>
                 <td>
                   Edit | Cancel
