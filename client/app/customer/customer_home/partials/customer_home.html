@@ -13,9 +13,12 @@
             <div class="">
               {{slide.text}}
             </div>
-            <button id="viewCollectionButton" type="button" ng-click="go_to_collection(slide.permalink)" class="btn btn-default" name="button">
-              View Collection
-            </button>
+            <a href="#/collections/{{slide.permalink}}" style="text-decoration: none; color: inherit">
+              <button id="viewCollectionButton" type="button" class="btn btn-default" name="button">
+                View Collection
+              </button>
+            </a>
+
           </div>
         </div>
 
@@ -37,30 +40,14 @@
         <span class="sr-only">Next</span>
       </div>
     </div>
-
-    <!--Using Jquery carousel to overcome issue of non changing slides in uib carousel-->
-    <!-- <uib-carousel active="0" interval="5000" style="width: 100%">
-      <uib-slide ng-cloak ng-repeat="slide in product_type_carousels" style="width: 100%">
-        <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%; height: 89vh"/>
-        <div class="carousel-caption">
-
-        </div>
-        <div class="carousel-collection">
-          {{slide.text}} <br>
-          <button id="viewCollectionButton" type="button" ng-click="go_to_collection(slide.permalink)" class="btn btn-default" name="button">
-            View Collection
-          </button>
-        </div>
-      </uib-slide>
-    </uib-carousel> -->
   </div>
   <div class="product-collections">
     <div class="view-collection-title">
       View Men’s Collection
     </div>
     <div class="taxonomyCards" >
-      <div class="taxonomyCard" ng-click="go_to_collection(taxonomy.root.permalink)" ng-repeat="taxonomy in product_taxonomies" >
-        <a ng-if="available_collections.indexOf(taxonomy.root.permalink) !== -1" href="{{'/#/collections/'+taxonomy.root.permalink}}">
+      <div class="taxonomyCard" ng-repeat="taxonomy in product_taxonomies" >
+        <a href="{{'/#/collections/'+taxonomy.root.permalink}}" style="color: inherit;text-decoration: none">
           <div class="">
             <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
           </div>
@@ -68,7 +55,8 @@
             {{taxonomy.name}}
           </div>
         </a>
-        <div ng-if="available_collections.indexOf(taxonomy.root.permalink) == -1" class="">
+        <!-- ng-if="available_collections.indexOf(taxonomy.root.permalink) !== -1" -->
+        <!-- <div ng-if="available_collections.indexOf(taxonomy.root.permalink) == -1" class="">
           <div class="">
             <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
           </div>
@@ -76,7 +64,7 @@
             {{taxonomy.name}}
           </div>
 
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -103,9 +91,12 @@
         </div>
         <div ng-show="active_click_bait.id==click_bait.id" ng-class="{'active-click-bait-text': active_click_bait.id==click_bait.id}" class="click-bait-text" style="display: block; position: absolute;width: 50%;margin-top: 12%">
           <div class="click_bait-details" style="width: 125%">
-            <button ng-click="go_to_collection(click_bait.permalink)" ng-disabled="!click_bait.active" type="button" name="button" style="width: 100%;font-weight: 400;border: none;background: {{click_bait.active ? '#8a247c' : 'transparent'}};color: {{click_bait.active ? 'white' : 'black'}}">
-              {{click_bait.active ? 'View Collection' : 'Coming soon!'}}
-            </button>
+            <a href="#/collections/{{click_bait.permalink}}">
+              <button ng-disabled="!click_bait.active" type="button" name="button" style="width: 100%;font-weight: 400;border: none;background: {{click_bait.active ? '#8a247c' : 'transparent'}};color: {{click_bait.active ? 'white' : 'black'}}">
+                {{click_bait.active ? 'View Collection' : 'Coming soon!'}}
+              </button>
+            </a>
+            
           </div>
         </div>
       </div>
