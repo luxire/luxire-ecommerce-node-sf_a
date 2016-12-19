@@ -4,6 +4,9 @@ angular.module('luxire')
   $scope.loading_product = true;
   $scope.display_summary = false;
   $scope.is_bespoke_style = false;
+  $scope.getInt = function(val){
+    return parseInt(val);
+  };
   $scope.active_product_description_image = {
     product_url: '',
     large_url: '',
@@ -24,13 +27,11 @@ angular.module('luxire')
   var convert_to_cm = function(product){
     CustomerUtils.convert_in_to_cm(product['customization_attributes']);
     CustomerUtils.convert_in_to_cm(product['personalization_attributes']);
-    console.log('after conversion product', product);
     $scope.product_in_cm = product;
   };
 
 
   CustomerProducts.show($stateParams.product_name).then(function(data){
-    console.log('product data for', $stateParams.product_name, data);
     if(CustomerProducts.is_active_collections(data.data.product_type.product_type.toLowerCase())){
       $scope.product = data.data;
       $scope.images_array = [];
@@ -49,17 +50,14 @@ angular.module('luxire')
       json_array_to_obj("standard_measurement_attributes", $scope.product.standard_measurement_attributes);
       json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
       $scope.luxire_styles = data.data.luxire_style_masters;
-      console.log('cart', $scope.cart_object);
       $scope.cart_object_prototype = angular.copy($scope.cart_object);
       $scope.active_product_type = $scope.product.product_type.product_type;
       $scope.fabric_product_types = ["shirts", "pants", "jackets"];
       $scope.is_fabric_product = $scope.fabric_product_types.indexOf($scope.active_product_type.toLowerCase()) >-1 ? true : false;
-      console.log('product_type', $scope.active_product_type, 'is fabric product', $scope.is_fabric_product);
       $scope.loading_product = false;
       if($scope.product.product_type.product_type.toLowerCase() === 'gift cards'){
         $scope.selected_gift_card_variant = $scope.product.master;
         $scope.product.variants.push($scope.product.master);
-        console.log('selected gift card variant', $scope.selected_gift_card_variant);
       }
 
       /*Convert to cm */
@@ -101,23 +99,19 @@ angular.module('luxire')
   });
 
   $scope.select_gift_card_variant = function(variant){
-    console.log('gift card variant', variant);
     $scope.selected_gift_card_variant = variant;
   };
 
   /*Unit conversion*/
   $scope.selected_measurement_unit = "in";
   $scope.$on('measurement_unit_change', function(event, data){
-    console.log('unit', data.symbol.toLowerCase());
     $scope.selected_measurement_unit = data.symbol.toLowerCase();
     $scope.selected_measurement_unit === "cm" ? CustomerUtils.convert_in_to_cm($scope.cart_object) : CustomerUtils.convert_cm_to_in($scope.cart_object);
   });
 
   /*Multi currency support*/
   $scope.selected_currency = $rootScope.luxire_cart.currency ? $rootScope.luxire_cart.currency : CustomerUtils.get_local_currency_in_app();
-  console.log('selected currency in controller', $scope.selected_currency);
   $scope.$on('currency_change', function(event, data){
-    console.log('currency changed', data)
     $scope.selected_currency = data;
   });
 
@@ -216,7 +210,6 @@ angular.module('luxire')
     $('body').scrollTop(0);
   };
   $scope.reg_enlarged_image = function(element){
-    console.log('show enlarged image for', element.target.id);
     $('#product_description_image_id').ezPlus({
       gallery: 'thumbnail-part',
       galleryActiveClass: 'active-thumbnail',
@@ -239,7 +232,6 @@ angular.module('luxire')
     });
 
     $('#product_description_image_id').bind('click', function (e) {
-      console.log('clicked',e);
       var ez = $('#product_description_image_id').data('ezPlus');
       $.fancyboxPlus(ez.getGalleryList());
       return false;
@@ -543,7 +535,6 @@ angular.module('luxire')
 
   }
 
-  console.log($stateParams);
   $scope.getImage = function(url){
     return ImageHandler.url(url);
   }
@@ -1610,6 +1601,7 @@ angular.module('luxire')
   console.log('selected_currency', selected_currency);
   $scope.active_style_option = "system_preset";
   $scope.product_customization_attributes = {};
+
   angular.forEach(product['customization_attributes'],function(val,key){
     $scope.product_customization_attributes[val.name] = val.value;
   })
@@ -1754,9 +1746,9 @@ angular.module('luxire')
           console.log('attribute type', attribute_type, attribute_type == "personalization_attributes");
 
           if(attribute_type == "personalization_attributes"){
-            console.log('personalization_attributes', style[attribute_type]);
+            // console.log('personalization_attributes', style[attribute_type]);
             angular.forEach(style[attribute_type][key], function(val, name){
-              console.log('Personalization check', key, name , val);
+              // console.log('Personalization check', key, name , val);
               if(!$scope.cart_object[attribute_type]){
                 $scope.cart_object[attribute_type] = {};
               }
@@ -1840,7 +1832,7 @@ angular.module('luxire')
     method: {},
     event: {
       beforeChange: function (event, slick, currentSlide, nextSlide) {
-        $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][nextSlide]);
+        // $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][nextSlide]);
       }
     }
   };
@@ -2031,6 +2023,9 @@ angular.module('luxire')
     }
     else{
       $('.slick-bespoke-style-slider').slick('getSlick').slickGoTo(index, false);
+      if($scope.selected_style && $scope.selected_style.hasOwnProperty('default_values')){
+        $scope.style_extractor($scope.selected_style, false);
+      }
       $scope.selected_style = {};//added to disable detail change on style selected
       $scope.activate_style_details(style);//added to disable detail change on style selected
       $scope.selected_style = style;
