@@ -383,6 +383,13 @@
   <script type="text/javascript" src="app/admin/standard_sizes/standard_size.controller.js"></script>
   <script type="text/javascript" src="app/admin/standard_sizes/standard_size.services.js"></script>
 
+  <!--Making Event listeners passive-->
+  <script type="text/javascript">
+    addEventListener(document, "touchstart", function(e) {
+      e.preventDefault();   // does nothing since the listener is passive
+    }, {passive: true});
+  </script>
+
   <!-- Google Analytics -->
   <!--<script type="text/javascript" src="lib/js/angulartics-ga.min.js"></script>-->
   <script>
