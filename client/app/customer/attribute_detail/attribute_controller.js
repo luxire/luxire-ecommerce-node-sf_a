@@ -915,7 +915,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Cuff/Short_Sleeve_Cuff.png"
             }
           ],
-          "description": "Look- Aesthetically the cuff is attractive and desired.  Apt for both formal and dressy shirts. Two button folded turn back gives a typical gallant finish. Look appears to be double cuff, practically stands single cuff.",
+          "description": "Warm summer shirt for warm summer days.",
           "properties": {
             "Short Sleeve Length": "8\" can be customized while processing"
           }
@@ -1067,7 +1067,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Pleat/No_Pleats_1.jpg"
             }
           ],
-          "description": "",
+          "description": "As the shirts are made to your body they contour well  to your shape. Thus, a clean back looks very elegant.",
           "properties": {
 
           }
@@ -1147,7 +1147,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Shirts/Bottom/Straight_With_Side_Slits_1.png"
             }
           ],
-          "description": "Look- The back of the shirt is slightly longer than the front. This allows a bit more play, preventing the shirt from untucking durning the day.",
+          "description": "A more traditional casual bottom option. The hem is straight, with no curve. It has slits at the side to allow for better movement and easier access to the pockets if worn untucked. They are usually worn un-tucked thus a shorter length may be desired.",
           "properties": {
 
           }
@@ -1632,8 +1632,8 @@ angular.module('luxire')
           ],
           "description": "",
           "properties": {
-            "1st Pleat from fly": "1\"",
-            "2nd Pleat from fly": "0.75\""
+            "Depth, 1st Pleat from fly": "1\"",
+            "Depth, 2nd Pleat from fly": "0.75\""
           }
         },
         "Single Pleat Reverse": {
@@ -1659,8 +1659,8 @@ angular.module('luxire')
           ],
           "description": "",
           "properties": {
-            "1st Pleat from fly": "1\"",
-            "2nd Pleat from fly": "0.75\""
+            "Depth, 1st Pleat from fly": "1\"",
+            "Depth, 2nd Pleat from fly": "0.75\""
           }
         },
         "Inverted": {
@@ -1691,7 +1691,7 @@ angular.module('luxire')
       },
       "Front Pockets": {
         "Slant": {
-          "title": "Slant",
+          "title": "Slant Front Pockets",
           "images": [
             {
               "ref": "Front_Slant_Pockets_1.png",
@@ -1765,6 +1765,10 @@ angular.module('luxire')
             {
               "ref": "Coin_Pocket_1.png",
               "url": "assets/images/customer/attributes/Pants/Pockets/Coin_Pocket_1.png"
+            },
+            {
+              "ref": "Coin_Pocket_2.png",
+              "url": "assets/images/customer/attributes/Pants/Pockets/Coin_Pocket_2.png"
             }
           ],
           "description": "",
@@ -1911,6 +1915,10 @@ angular.module('luxire')
             {
               "ref": "Hollywood_Style_Waist_Band_1.png",
               "url": "assets/images/customer/attributes/Pants/Waist_Band/Hollywood_Style_Waist_Band_1.png"
+            },
+            {
+              "ref": "Hollywood_Style_Waist_Band_2.png",
+              "url": "assets/images/customer/attributes/Pants/Waist_Band/Hollywood_Style_Waist_Band_2.png"
             }
           ],
           "description": "",
@@ -1993,7 +2001,7 @@ angular.module('luxire')
               "url": "assets/images/customer/attributes/Pants/Bottom_Cuffs/No_Cuffs_1.png"
             }
           ],
-          "description": "",
+          "description": "No, Self fold inside",
           "properties": {
             "Cuff Width": "Custom"
           }
