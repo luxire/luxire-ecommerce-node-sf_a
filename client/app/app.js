@@ -9,7 +9,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 						'ngMessages', 'AngularPrint', 'monospaced.qrcode',
 						'ui.tree','infinite-scroll', 'ngAside',
 						'angucomplete-alt', 'angularAwesomeSlider',
-						'angular-cache', 'ui.slider', 'mega-menu', 
+						'angular-cache', 'ui.slider', 'mega-menu',
 						'rzModule', 'slickCarousel', 'angulartics','angulartics.google.analytics'])//removed ng-animate to resolve carousel issue
 
 
@@ -21,16 +21,15 @@ angular.module('luxire', ['ui.router','ngRoute',
     $rootScope.alerts.splice(index, 1);
   };
 	$rootScope.page = {
+		  title: "",
       setTitle: function(title) {
-          this.title = 'Luxire - ' + title;
+          this.title = title || "Bespoke Shirts by Luxire. Custom made to Perfection";
       }
   }
-  $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
-      $rootScope.page.setTitle(current.$$route.title || 'Home');
-  });
+  // $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+  //     $rootScope.page.setTitle(current.$$route.title || 'Home');
+  // });
 	$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-			console.log('tostate', toState);
-			console.log('toStateParams', toStateParams);
 			if(toState.name.indexOf('admin') !== -1){
 				if(window.localStorage.luxire_token || window.sessionStorage.luxire_token){
 					var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
@@ -54,7 +53,6 @@ angular.module('luxire', ['ui.router','ngRoute',
 
 			if(toState.name == 'test'){
 				window.sessionStorage.luxire_token = toStateParams.id;
-				console.log('state.go to admin');
 				event.preventDefault();
 
 				$state.go('admin.default');
@@ -66,14 +64,18 @@ angular.module('luxire', ['ui.router','ngRoute',
 				}
 			}
 			if(toState.name == 'login'){
-				console.log('token', window.sessionStorage.luxire_token);
 				if(window.localStorage.luxire_token != undefined || window.sessionStorage.luxire_token != undefined ){
 					event.preventDefault();
 					$rootScope.alerts.push({type: 'warning', message: 'You are already logged in!'});
 
 				}
 			}
-
+			if(toState.name.indexOf('checkout') != -1){
+				$rootScope.page.setTitle("Luxire Custom Clothing - Checkout");
+			}
+			else{
+				$rootScope.page.setTitle();//Reinitializing title on state change
+			}
       // // track the state the user wants to go to; authorization service needs this
       // $rootScope.toState = toState;
       // $rootScope.toStateParams = toStateParams;
@@ -93,8 +95,6 @@ angular.module('luxire', ['ui.router','ngRoute',
 			raw = elem[0];
 			elem.bind("scroll", function(){
 					if(raw.scrollTop + raw.offsetHeight + 5 >= raw.scrollHeight){
-				//		scope.loading = true;
-						console.log('Firing next in dir');
 						scope.$apply(attrs.whenScrolled);
 					}
 			});
