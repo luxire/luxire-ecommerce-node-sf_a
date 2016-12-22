@@ -5,7 +5,7 @@
       <!-- Wrapper for slides -->
       <div class="carousel-inner" role="listbox" style="width: 100%">
         <div class="item" ng-class="{'active': $index==0}" ng-repeat="slide in product_type_carousels" >
-          <img ng-cloak src="{{slide.image}}" alt="" style="width: 100%"/>
+          <img ng-cloak ng-src="{{slide.image}}" alt="" style="width: 100%"/>
           <div class="carousel-caption">
 
           </div>
@@ -49,7 +49,7 @@
       <div class="taxonomyCard" ng-repeat="taxonomy in product_taxonomies" >
         <a href="{{'/#/collections/'+taxonomy.root.permalink}}" style="color: inherit;text-decoration: none">
           <div class="">
-            <img src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
+            <img ng-src="{{getImage(taxonomy.root.icon)}}" style="width: 128px; height: auto"alt="" />
           </div>
           <div class="taxonomy-name" >
             {{taxonomy.name}}
@@ -96,7 +96,7 @@
                 {{click_bait.active ? 'View Collection' : 'Coming soon!'}}
               </button>
             </a>
-            
+
           </div>
         </div>
       </div>
