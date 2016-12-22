@@ -6,10 +6,8 @@ avoid conflict with customer ctrl on admin side*/
   $scope.show_header = true;
   $scope.checkout_state = false;
   $scope.is_customer_home_state = false;
-
   $scope.available_collections = ['shirts', 'pants'];
-
-  /*Bread crumbs */
+  /*Bread crumbs for checkout */
   $scope.checkout_steps = {
     'address': {
       id: 0,
@@ -102,9 +100,7 @@ avoid conflict with customer ctrl on admin side*/
 
   };
 
-
   $scope.header_visibility = function(state){
-    console.log('current state', state);
     if(state.name!==prev_state){
       if(state.name === "customer.home"){
         $scope.is_customer_home_state = true;
@@ -114,7 +110,6 @@ avoid conflict with customer ctrl on admin side*/
       }
 
       if(state.name.indexOf('checkout') !==-1){
-        console.log('hide header');
         $scope.show_header = false;
         $scope.checkout_state = true;
       }
@@ -123,7 +118,6 @@ avoid conflict with customer ctrl on admin side*/
         $scope.checkout_state = false;
       }
       else{
-        console.log(' not a checkout state');
         $scope.show_header = true;
         $scope.checkout_state = false;
       }
@@ -132,6 +126,7 @@ avoid conflict with customer ctrl on admin side*/
 
 
   }
+
   function reset_login_status(){
     $scope.isLoggedIn = CustomerAuthentication.isLoggedIn();
     $scope.user_name = $scope.isLoggedIn ? CustomerAuthentication.identity() : '';
@@ -142,8 +137,13 @@ avoid conflict with customer ctrl on admin side*/
   $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
     $scope.header_visibility(toState);
     reset_login_status();
-    console.log('changing state', toState);
   })
+
+  $scope.arrow_margin_left = 0;
+  /*Tool tip for taxonomy */
+  $scope.change_arrow_pos = function(event){
+    $scope.arrow_margin_left = $(event.currentTarget).offset().left + ($(event.currentTarget).width()/2);
+  };
 
   $scope.changeHeader = function(){
       $scope.show_header = true;
@@ -152,23 +152,15 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   $timeout(function(){
-
     $(window).scroll(function(){
-
-      //$("#customer-main-nav-header").height()
-      // $(window).scrollTop()>$("#customer-main-nav-header").height()
       if($(window).scrollTop()>0){
         if($scope.is_customer_home_state){
-          console.log('home state scroll>0');
           $timeout(function(){
             $scope.changeHeader();
           },0)
-          // $scope.changeHeader();
-            // $(".customer-main-nav-header").addClass('changed-customer-home-header-color');
         }
         else{
             $scope.is_window_scrolled = true;
-
             if($(".changed-customer-home-header-color").length){
               $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
             }
@@ -181,31 +173,19 @@ avoid conflict with customer ctrl on admin side*/
             $scope.is_window_scrolled = false;
             $(".customer-main-nav-header").removeClass('changed-customer-home-header-color');
           })
-
         }
         else{
           $timeout(function(){
             $scope.is_window_scrolled = false;
             $(".customer-main-nav-header").removeClass('changed-customer-header-color');
           })
-
         }
       }
     })
-
   }, 0);
-  $scope.arrow_margin_left = 0;
-
-
-
-  /*Tool tip for taxonomy */
-  $scope.change_arrow_pos = function(event){
-    $scope.arrow_margin_left = $(event.currentTarget).offset().left + ($(event.currentTarget).width()/2);
-  };
 
   CustomerProducts.taxonomy_index()
   .then(function(data){
-    console.log('taxonomies', data);
     $scope.taxonomies = data.data.taxonomies;
   }, function(error){
     console.error(error);
@@ -216,11 +196,12 @@ avoid conflict with customer ctrl on admin side*/
       $("#products_search").focus();
     }
   };
+
   function capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
   $scope.go_to_collection = function(event, permalink){
-    console.log('permalink', permalink);
     event.preventDefault();
     var is_active_collection = CustomerProducts.is_active_collections(permalink);
     if(!is_active_collection){
@@ -235,19 +216,16 @@ avoid conflict with customer ctrl on admin side*/
   // $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';//search provided by ransack
   $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';
 
-
   /*Select product from search*/
   $scope.select_product = function(data){
     $scope.show_search_panel = false;
-    console.log('selected product', data);
     $state.go('customer.product_detail', {
       product_name: data.originalObject.slug
     });
   };
 
-
   $scope.go_to_login = function(){
-    $state.go('customer.login');
+    $state.go('customerin');
   };
 
   $scope.go_to_signup = function(){
@@ -261,7 +239,6 @@ avoid conflict with customer ctrl on admin side*/
     $state.go('customer.home');
     CustomerOrders.get_order_by_cookie()
     .then(function(data){
-      console.log('fetched order', data.data);
       $rootScope.luxire_cart = data.data;
     },
     function(error){
@@ -277,7 +254,6 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   $scope.open_side_menu = function(){
-    console.log('opening side menu');
     var asideInstance = $aside.open({
       templateUrl: 'customer_side_menu.html',
       controller: 'CustomerSideMenuController',
@@ -295,23 +271,18 @@ avoid conflict with customer ctrl on admin side*/
 
     asideInstance.result
     .then(function(selection){
-      console.log(selection);
       $state.go('customer.product_listing',selection);
 
     }, function(){
-      console.log('side menu dismissed');
     });
   };
 
   CustomerOrders.get_order_by_cookie().then(function(data){
-    console.log('data from cookie', data);
     if(data.data === "null"){
-      console.log("No order found");
       $rootScope.luxire_cart = {};
       $rootScope.$broadcast('fetched_order_from_cookie', data);
     }
     else{
-      console.log('cart status', $rootScope.luxire_cart);
       $rootScope.$broadcast('fetched_order_from_cookie', data);
       $rootScope.luxire_cart = data.data;
     }
@@ -322,7 +293,6 @@ avoid conflict with customer ctrl on admin side*/
     }
     else{
       CustomerUtils.get_local_currency().then(function(data){
-        console.log('currency', data);
         CustomerUtils.set_local_currency_in_app(data.data);
         if(data.data && $scope.currencies.hasOwnProperty(data.data)){
           $scope.selected_currency = $scope.currencies[data.data];
@@ -353,7 +323,6 @@ avoid conflict with customer ctrl on admin side*/
     console.error('data from cookie', error);
     $rootScope.$broadcast('fetched_order_from_cookie', error);
     CustomerUtils.get_local_currency().then(function(data){
-        console.log('currency', data);
         CustomerUtils.set_local_currency_in_app(data.data);
         if(data.data && $scope.currencies.hasOwnProperty(data.data)){
           $scope.selected_currency = $scope.currencies[data.data];
@@ -368,10 +337,6 @@ avoid conflict with customer ctrl on admin side*/
       });
   });
   $rootScope.luxire_cart = angular.isUndefined($rootScope.luxire_cart)? {} : $rootScope.luxire_cart;
-
-
-
-
   if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items &&$rootScope.luxire_cart.line_items.length){
     if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in"){
       $scope.selected_measurement_unit = $scope.measurement_units[0];
@@ -386,8 +351,6 @@ avoid conflict with customer ctrl on admin side*/
   else{
     $scope.selected_measurement_unit = $scope.measurement_units[0];
   }
-
-
   var update_order_measurement_unit = function(unit){
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.line_items.length){
       $scope.loading = true;
@@ -409,7 +372,6 @@ avoid conflict with customer ctrl on admin side*/
       };
       CustomerOrders.updated_order_measurement_unit($rootScope.luxire_cart, luxire_line_items)
       .then(function(data){
-        console.log('data', data.data);
         $rootScope.luxire_cart = data.data;
         $scope.loading = false;
       }, function(error){
@@ -423,25 +385,17 @@ avoid conflict with customer ctrl on admin side*/
 
   $scope.change_measurement_unit = function(measurement_unit){
     $scope.selected_measurement_unit = measurement_unit;
-    console.log('selected unit', measurement_unit);
     update_order_measurement_unit(measurement_unit.symbol.toLowerCase());
     $rootScope.$broadcast('measurement_unit_change', measurement_unit);
   };
 
-
-
-
-
-
   $scope.change_currency = function(currency){
     $scope.selected_currency = currency;
-    console.log('selected currency', currency);
     CustomerUtils.set_local_currency_in_app(currency.symbol);
     $rootScope.$broadcast('currency_change', currency.symbol);
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.currency && $rootScope.luxire_cart.currency !== currency.symbol){
       $scope.loading = true;
       CustomerOrders.update_order_currency($rootScope.luxire_cart).then(function(data){
-        console.log('success', data);
         $rootScope.luxire_cart = data.data;
         $scope.loading = false;
         $rootScope.$broadcast('fetched_order_from_cookie', data);
@@ -460,14 +414,11 @@ avoid conflict with customer ctrl on admin side*/
 
   $scope.user = {};
 
-
   $scope.submit_form = function(){
     $scope.submitted = true;
-    console.log('submit form', $scope.contact.$invalid);
     if(!$scope.contact.$invalid){
       $scope.loading =  true;
       CustomerUtils.contact_us($scope.user).then(function(data){
-        console.log('data', data);
         $scope.loading =  false;
         $rootScope.alerts.push({type: 'success', message: 'Thanks for the details, we shall revert back shortly'});
       }, function(error){
@@ -480,32 +431,24 @@ avoid conflict with customer ctrl on admin side*/
   };
 })
 .controller('CustomerSideMenuController', function($scope, $state, taxonomies,$rootScope, $uibModalInstance, CustomerAuthentication, $location, CustomerOrders){
-  console.log('taxonomies', taxonomies);
   $scope.taxonomies = taxonomies;
   $scope.visible_taxonomy_permalink = taxonomies[0].root.permalink;
-
   $scope.go_to_collection = function(permalink){
     $location.url('/collections/'+permalink);
     $uibModalInstance.dismiss();
   };
-
   $scope.change_active_taxonomy = function(taxonomy){
     $scope.visible_taxonomy_permalink = taxonomy;
   };
-
   $scope.isLoggedIn = CustomerAuthentication.isLoggedIn();
-
   $scope.go_to_login = function(){
     $uibModalInstance.dismiss('cancel');
     $state.go('customer.login');
   }
-
   $scope.go_to_signup = function(){
     $uibModalInstance.dismiss('cancel');
     $state.go('customer.signup');
-
   }
-
   $scope.go_to_logout = function(){
     $uibModalInstance.dismiss('cancel');
     CustomerAuthentication.logout();
@@ -514,7 +457,6 @@ avoid conflict with customer ctrl on admin side*/
     $state.go('customer.home');
     CustomerOrders.get_order_by_cookie()
     .then(function(data){
-      console.log('fetched order', data.data);
       $rootScope.luxire_cart = data.data;
     },
     function(error){
@@ -523,104 +465,95 @@ avoid conflict with customer ctrl on admin side*/
     });
 
   }
-
   $scope.go_to_my_account = function(){
     $uibModalInstance.dismiss('cancel');
     $state.go('customer.my_account');
   };
-
   $scope.close_side_menu = function(){
     $uibModalInstance.dismiss();
   };
-
 })
 .controller('quickViewModalController',function($scope, $uibModalInstance, product, is_fabric_taxonomy, is_gift_card, selected_currency, CustomerOrders, $state, ImageHandler, CustomerProducts, $rootScope){
-  console.log('product', product);
   $scope.loading_product = true;
-  console.log('is fabric', is_fabric_taxonomy);
   $scope.fabric_taxonomy = is_fabric_taxonomy;
   $scope.is_gift_card = is_gift_card;
   $scope.selected_currency = selected_currency;
+  var weight_indexes_ref = {
+    shirts: {
+      min: 50,
+      max: 150,
+      step: 10//150/12
+    },
+    pants: {
+      min: 150,
+      max: 500,
+      step: 35 //(500-150)/10
+    }
+  };
 
-
-    var weight_indexes_ref = {
-      shirts: {
-        min: 50,
-        max: 150,
-        step: 10//150/12
-      },
-      pants: {
-        min: 150,
-        max: 500,
-        step: 35 //(500-150)/10
-      }
-    };
-
-    /*Get weight icon*/
-    var min_weight = 0;
-    var max_weight = 0;
-    $scope.weight_index = function(variant_weight, product_type){
-      product_type = product_type.toLowerCase();
-      if(product_type && product_type.indexOf('pant') !== -1){
-        min_weight = weight_indexes_ref['pants']['min'];
-        max_weight = weight_indexes_ref['pants']['max'];
-        step = weight_indexes_ref['pants']['step'];
-      }
-      else if(product_type && product_type.indexOf('pant') == -1){
-        min_weight = weight_indexes_ref['shirts']['min'];
-        max_weight = weight_indexes_ref['shirts']['max'];
-        step = weight_indexes_ref['shirts']['step'];
-      };
-
-
-      if((parseFloat(variant_weight))<min_weight){
-        return 1;
-      }
-      else if((parseFloat(variant_weight))>max_weight){
-        return 12;
-      }
-      else{
-        return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
-      };
-    };
-    var thickness = 0;
-    /*Get Thickness icon*/
-    $scope.thickness_index = function(variant_thickness){
-      if(variant_thickness != undefined){
-        thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-        if(thickness/10 >5){
-          return 6;
-        }
-        else {
-          return Math.ceil(thickness/10);
-        }
-      }
-
-    };
-    /*Get stiffness icon*/
-    $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
-      if(stiffness_unit=='m'){
-        variant_stiffness = parseFloat(variant_stiffness)*100;
-      }
-      else if(stiffness_unit=='cm'){
-        variant_stiffness = parseFloat(variant_stiffness);
-      }
-
-      if(variant_stiffness/1.25 >8){
-        return 8;
-      }
-      else if(variant_stiffness == 0.0){
-        return 1;
-      }
-      else{
-
-
-        return Math.ceil(variant_stiffness/1.25);
-      }
-
+  /*Get weight icon*/
+  var min_weight = 0;
+  var max_weight = 0;
+  $scope.weight_index = function(variant_weight, product_type){
+    product_type = product_type.toLowerCase();
+    if(product_type && product_type.indexOf('pant') !== -1){
+      min_weight = weight_indexes_ref['pants']['min'];
+      max_weight = weight_indexes_ref['pants']['max'];
+      step = weight_indexes_ref['pants']['step'];
+    }
+    else if(product_type && product_type.indexOf('pant') == -1){
+      min_weight = weight_indexes_ref['shirts']['min'];
+      max_weight = weight_indexes_ref['shirts']['max'];
+      step = weight_indexes_ref['shirts']['step'];
     };
 
 
+    if((parseFloat(variant_weight))<min_weight){
+      return 1;
+    }
+    else if((parseFloat(variant_weight))>max_weight){
+      return 12;
+    }
+    else{
+      return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
+    };
+  };
+  var thickness = 0;
+  /*Get Thickness icon*/
+  $scope.thickness_index = function(variant_thickness){
+    if(variant_thickness != undefined){
+      thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
+      if(thickness/10 >5){
+        return 6;
+      }
+      else {
+        return Math.ceil(thickness/10);
+      }
+    }
+
+  };
+  /*Get stiffness icon*/
+  $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
+    if(stiffness_unit=='m'){
+      variant_stiffness = parseFloat(variant_stiffness)*100;
+    }
+    else if(stiffness_unit=='cm'){
+      variant_stiffness = parseFloat(variant_stiffness);
+    }
+
+    if(variant_stiffness/1.25 >8){
+      return 8;
+    }
+    else if(variant_stiffness == 0.0){
+      return 1;
+    }
+    else{
+
+
+      return Math.ceil(variant_stiffness/1.25);
+    }
+
+  };
   $scope.wash_care = function(variant_wash_care){
     if(variant_wash_care.toLowerCase().indexOf('machine')>-1){
       return 'machine';
@@ -631,13 +564,10 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   $scope.get_ounce_weight = function(gram_weight){
-    console.log('gram_weight', gram_weight);
     return (parseFloat(gram_weight)/28.3).toFixed(2);
   };
 
-
   $scope.getImage = function(url){
-    console.log('url', url);
     return ImageHandler.url(url);
   }
 
@@ -650,7 +580,6 @@ avoid conflict with customer ctrl on admin side*/
   else{
     CustomerProducts.show(product.id)
     .then(function(data){
-      console.log('Non fabric product', data.data);
       $scope.loading_product = false;
       $scope.quickViewProduct = data.data;
       json_array_to_obj("customization_attributes", $scope.quickViewProduct.customization_attributes);
@@ -661,7 +590,6 @@ avoid conflict with customer ctrl on admin side*/
       if($scope.quickViewProduct.product_type.product_type.toLowerCase() === 'gift cards'){
         $scope.selected_gift_card_variant = $scope.quickViewProduct.master;
         $scope.quickViewProduct.variants.push($scope.quickViewProduct.master);
-        console.log('selected gift card variant', $scope.selected_gift_card_variant);
       }
 
     }, function(error){
@@ -672,10 +600,7 @@ avoid conflict with customer ctrl on admin side*/
   $scope.cart_object = {};
 
   $scope.add_to_cart = function(variant){
-    console.log('add to cart', variant);
-    console.log('luxire_cart', $rootScope.luxire_cart);
     $scope.loading_product = true;
-
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
       CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant)
       .then(function(data){
@@ -689,7 +614,6 @@ avoid conflict with customer ctrl on admin side*/
         }, function(error){
           console.error(error);
         });
-        console.log(data);
       },function(error){
         $scope.loading_product = false;
 
@@ -706,7 +630,6 @@ avoid conflict with customer ctrl on admin side*/
         $scope.loading_product = false;
 
         $state.go('customer.pre_cart');
-        console.log(data);
       },function(error){
         $scope.loading_product = false;
 
@@ -737,12 +660,10 @@ avoid conflict with customer ctrl on admin side*/
       // }
       $scope[parent][val.name] = val.value;
     })
-    console.log('after_conv',$scope[parent]);
     return $scope[parent];
   };
 
   $scope.select_gift_card_variant = function(variant){
-    console.log('gift card variant', variant);
     $scope.selected_gift_card_variant = variant;
   };
 
@@ -750,20 +671,9 @@ avoid conflict with customer ctrl on admin side*/
   $scope.go_to_product_detail = function (product_name) {
     $uibModalInstance.close();
     $state.go('customer.product_detail',{product_name: product_name});
-
-
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
 });
-
-// $scope.go_to_listing = function(taxonomy_name, taxonomy_id, taxon_name, taxon_id){
-//   $uibModalInstance.close({
-//     taxonomy_name: taxonomy_name,
-//     taxonomy_id: taxonomy_id,
-//     taxon_name: taxon_name,
-//     taxon_id: taxon_id
-//   });
-// }
