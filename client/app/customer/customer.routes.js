@@ -39,13 +39,13 @@ angular.module('luxire')
 	// 	}
 	// })
 	.state('customer.collection',{
-		url:'/collections/*collection_name',
+		url:"/collections/*collection_name?color&price&weave-type&pattern&wrinkle-resistant&thickness&construction&Number-of-Colors&price_start&price_end&currency&price_sort",//white listing of params
 		views: {
 			"customer": {
 				templateUrl: "app/customer/collection/partials/collection.html",
 			  controller: "CollectionController"},
 			 params: {
-				 collection_name: null
+				 "collection_name": null
 			 }
 		},
 		params: {
@@ -196,7 +196,7 @@ angular.module('luxire')
 		}
 	})
 	.state('customer.search',{
-		url:'/search?name_cont&taxonomy',
+		url:'/search?name_cont&taxonomy&color&price&weave-type&pattern&wrinkle-resistant&thickness&construction&Number-of-Colors&price_start&price_end&currency&price_sort',
 		views: {
 			"customer": { templateUrl: "app/customer/search/partials/search.html",
 			 controller: "SearchController"},
