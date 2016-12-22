@@ -4,11 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-  <title ng-bind="page.title"></title>
-
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <title ng-cloak ng-bind="page.title"></title>
+
+
   <!-- <link rel="stylesheet" href="lib/css/font-awesome/font-awesome.min.css"> -->
 
 
@@ -123,11 +124,10 @@
   <script type="text/javascript" src="app/auth/auth.controllers.js"></script>
   <script type="text/javascript" src="app/auth/auth.services.js"></script>
 
-
 </head>
 <!-- <body > -->
 
-<body>
+<body ng-cloak>
   <div class="" id="luxire-beta-ribbon">
     BETA
   </div>
