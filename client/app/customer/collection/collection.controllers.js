@@ -1,5 +1,95 @@
 angular.module('luxire')
 .controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils, $timeout){
+  console.log('state params', $stateParams);
+  $scope.reverse_price = false;//predicate for sorting products by price
+  var filter_mapping = {
+    'color': {
+      'display_name': 'COLOR',
+      'db_column_name': 'color'
+    },
+    'price': {
+      'display_name': 'PRICE',
+      'db_column_name': 'display_price'
+    },
+    'weave-type': {
+      'display_name': 'WEAVE TYPE',
+      'db_column_name': 'weave_type'
+    },
+    'pattern': {
+      'display_name': 'PATTERN',
+      'db_column_name': 'pattern'
+    },
+    'wrinkle-resistant': {
+      'display_name': 'WRINKLE RESISTANCE',
+      'db_column_name': 'wrinkle_resistance'
+    },
+    'thickness': {
+      'display_name': 'THICKNESS',
+      'db_column_name': 'thickness'
+    },
+    'construction': {
+      'display_name': 'CONSTRUCTION',
+      'db_column_name': 'construction'
+    },
+    'Number-of-Colors': {
+      'display_name': 'No of Colors',
+      'db_column_name': 'no_of_color'
+    },
+    'collection_name': {
+      'display_name': 'collection',
+      'db_column_name': 'taxonomy'
+    }
+  };
+  $scope.selected_redis_filters = {
+    sort: 'asc',
+    page: 1,
+    taxonomy: $stateParams.collection_name,
+    price_start: $scope.price_start,
+    price_end: $scope.price_end,
+    currency: CustomerUtils.get_local_currency_in_app()
+  };
+
+  /*filters reflecting in url*/
+  var generate_url_for_filters = function(selected_filters){
+    /**generating url with filters**/
+    $scope.selected_filters.price_sort = $scope.selected_redis_filters.sort;
+    $scope.selected_filters.price_start = $scope.selected_redis_filters.price_start;
+    $scope.selected_filters.price_end = $scope.selected_redis_filters.price_end;
+    /*To handle situation of changing price filter*/
+    // $scope.selected_filters.currency = CustomerUtils.get_local_currency_in_app();
+    /*To handle situation of changing price filter*/
+
+    console.log('generating url for', $scope.selected_filters, $scope.selected_redis_filters);
+    /**generating url with filters**/
+    $state.go('customer.collection', $scope.selected_filters);
+  };
+  function read_filters_from_url(property){ //set values in view
+    return $stateParams[property]
+  };
+  function filter_by_url(selected_filters){
+    $scope.allProductsData=[];
+    $scope.selected_redis_filters.page = 1;
+    angular.forEach(selected_filters, function(val, key){
+      if(filter_mapping[key] && val && val !== 'all'){
+        $scope.selected_redis_filters[filter_mapping[key]['db_column_name']] = val;
+      }
+    });
+    if(read_filters_from_url("price_sort")){
+      $scope.reverse_price = read_filters_from_url("price_sort") == "desc" ? true : false;//predicate for sorting products by price
+      $scope.selected_redis_filters["sort"] = read_filters_from_url("price_sort");
+    }
+    if((read_filters_from_url("price_start") || read_filters_from_url("price_start")==0) && read_filters_from_url("price_end") && read_filters_from_url("currency")){
+      $scope.selected_redis_filters["price_start"] = read_filters_from_url("price_start");
+      $scope.selected_redis_filters["price_end"] = read_filters_from_url("price_end");
+      $scope.selected_redis_filters["currency"] = read_filters_from_url("currency");
+    }
+    /*To handle situation of changing price filter*/
+    $scope.selected_filters.currency = read_filters_from_url("currency") || CustomerUtils.get_local_currency_in_app();
+    /*To handle situation of changing price filter*/
+
+    load_products();
+  };
+
 
   $scope.get_subheader_top_margin = function(){
     return $(".customer-main-nav-header").innerHeight() + 'px';
@@ -9,8 +99,7 @@ angular.module('luxire')
       $timeout(function(){}, 0);
   });
 
-  $scope.active_permalink = $location.url().split('/collections/')[1];
-  console.log('active_permalink', $scope.active_permalink);
+  $scope.active_permalink = $location.url().split('/collections/')[1].split('?')[0];
   $scope.active_taxonomy = $scope.active_permalink.indexOf('/') > -1? $scope.active_permalink.split('/')[0] : $scope.active_permalink;
   $scope.non_fabric_taxonomies = ["accessories", "bags", "shoes", "gift-cards"];
   $scope.is_fabric_taxonomy = $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false;
@@ -30,7 +119,6 @@ angular.module('luxire')
   };
 
   $scope.go_to_collection = function(permalink){
-
     $location.url('/collections/'+permalink);
   };
   window.scrollTo(0, 0);
@@ -42,10 +130,12 @@ angular.module('luxire')
   $scope.selected_filters = {}; //for DOM Manipulation
   $scope.filter_properties = [];
   var filter_index = '';
-  //weight, brand & material removed, thickness needs to be added in properties
-  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'No of Colors'];
-  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors'];
-  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color'];
+    //weight, brand & material removed, thickness needs to be added in properties
+  var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'Number-of-Colors'];//filter name in properties
+  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors']; //filter display name in ui
+  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color']; //filter name as db column
+
+
 
   $scope.color_variants = {
     white: {
@@ -90,17 +180,18 @@ angular.module('luxire')
   $scope.loading_filters = true;
   CustomerProducts.filter_properties()
   .then(function(data){
-    console.log('Filter Properties', data.data);
+    console.log('filters', data.data);
     angular.forEach(data.data, function(val, key){
       filter_index = required_filters.indexOf(val.name);
       if(filter_index != -1){
-        $scope.selected_filters[val.name] = 'all';
+        $scope.selected_filters[val.name] = read_filters_from_url(val.name) || 'all';
         val.display_name = filter_display_names[filter_index];
         val.db_name = filter_db_column_names[filter_index];
         val.value = 'all,'+val.value; //available option for filters
         $scope.filter_properties.push(val);
       }
     });
+    filter_by_url($scope.selected_filters);
     $scope.loading_filters = false;
   }, function(error){
     console.error(error);
@@ -109,13 +200,12 @@ angular.module('luxire')
 
   $scope.allProductsData=[];
 
-  $scope.reverse_price = false;//predicate for sorting products by price
+
 
 
   var load_products = function(){
     if(CustomerProducts.is_active_collections($scope.selected_redis_filters.taxonomy)){
       $scope.loading_products = true;
-      console.log('filters before post', $scope.selected_redis_filters);
       if($scope.selected_redis_filters["wrinkle_resistance"]){
         $scope.selected_redis_filters["wrinkle_resistance"] = "True";
       }
@@ -154,14 +244,7 @@ angular.module('luxire')
   /**/
 
 
-  $scope.selected_redis_filters = {
-    sort: 'asc',
-    page: 1,
-    taxonomy: $scope.active_permalink,
-    price_start: $scope.price_start,
-    price_end: $scope.price_end,
-    currency: CustomerUtils.get_local_currency_in_app()
-  };
+
 
   /*Multi currency support*/
   $scope.currency_symbols = function(val ,currency){
@@ -207,8 +290,9 @@ angular.module('luxire')
       $scope.selected_redis_filters.sort = price_sort_order;
       $scope.selected_redis_filters.page = 1;
       $scope.allProductsData = [];
-      console.log('sort by price load products');
-      load_products();
+      generate_url_for_filters($scope.selected_filters);
+      // load_products();
+
       $('html, body').animate({ scrollTop: 0}, 500);
     };
 
@@ -218,21 +302,26 @@ angular.module('luxire')
       $scope.selected_redis_filters.price_end = price_end;
       $scope.selected_redis_filters.page = 1;
       $scope.selected_redis_filters.currency = currency;
+      /*To handle situation of changing price filter*/
+      $scope.selected_filters.currency = currency;
+      /*To handle situation of changing price filter*/
+
       console.log('filter by price load products');
-      load_products();
+      generate_url_for_filters($scope.selected_filters);
+      // load_products();
     }
   /**/
 
-  function init_slider(low, high, currency){
+  function init_slider(floor, ceil, currency, low, high){
     console.log('low', low, 'high', high, 'currency', currency);
     // $scope.filter_by_price(low, high, currency);
     $("#priceSlider").remove();
     $scope.slider = {
-      low_value: isNaN(low) ? 0 : low,
-      high_value: isNaN(high) ? 10000 : high,
+      low_value: isNaN(low) ? floor : low,
+      high_value: isNaN(high) ? ceil : high,
       options: {
-        floor: isNaN(low) ? 0 : low,
-        ceil: isNaN(high) ? 10000 : high,
+        floor: isNaN(floor) ? 0 : floor,
+        ceil: isNaN(ceil) ? 10000 : ceil,
         step: 10,
         translate: function(value) {
           return $scope.currency_symbols(value, currency);
@@ -253,28 +342,47 @@ angular.module('luxire')
     var one_to_one_currencies = ["USD", "CHF", "EUR", "GBP", "CAD"];
     var one_to_two_currencies = ["AUD", "SGD"];
     var one_to_ten_currencies = ["NOK", "DKK", "SEK"];
-    if(one_to_one_currencies.indexOf(currency) != -1){
-      init_slider(0, 500, currency);
+    if(currency == read_filters_from_url("currency")){
+      if(one_to_one_currencies.indexOf(currency) != -1){
+        init_slider(0, 500, currency, read_filters_from_url("price_start"), read_filters_from_url("price_end"));
+      }
+      else if(one_to_two_currencies.indexOf(currency) != -1){
+        init_slider(0, 10000, currency, read_filters_from_url("price_start"), read_filters_from_url("price_end"));
+      }
+      else if(one_to_ten_currencies.indexOf(currency) != -1){
+        init_slider(0,100000, currency, read_filters_from_url("price_start"), read_filters_from_url("price_end"));
+      }
+      else if(currency == "INR"){
+        init_slider(0,100000, currency, read_filters_from_url("price_start"), read_filters_from_url("price_end"));
+      }
     }
-    else if(one_to_two_currencies.indexOf(currency) != -1){
-      init_slider(0, 10000, currency);
+    else{
+      if(one_to_one_currencies.indexOf(currency) != -1){
+        init_slider(0, 500, currency);
+      }
+      else if(one_to_two_currencies.indexOf(currency) != -1){
+        init_slider(0, 10000, currency);
+      }
+      else if(one_to_ten_currencies.indexOf(currency) != -1){
+        init_slider(0,100000, currency);
+      }
+      else if(currency == "INR"){
+        init_slider(0,100000, currency);
+      }
     }
-    else if(one_to_ten_currencies.indexOf(currency) != -1){
-      init_slider(0,100000, currency);
-    }
-    else if(currency == "INR"){
-      init_slider(0,100000, currency);
-    }
+
   };
 
   console.log('in app currency', CustomerUtils.get_local_currency_in_app());
   $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
   init_price_range_sliders($scope.selected_currency);
   $scope.$on('currency_change', function(event, data){
-    console.log('currency changed', data)
+    console.log('currency changed', $scope.selected_currency, 'in app', CustomerUtils.get_local_currency_in_app())
+    if($scope.selected_currency){
+      $scope.select_filter_option('price', 'all', 'display_price');
+    }
     $scope.selected_currency = data;
     $scope.selected_redis_filters.currency = $scope.selected_currency;
-    $scope.select_filter_option('price', 'all', 'display_price');
     init_price_range_sliders($scope.selected_currency);
   });
 
@@ -357,14 +465,17 @@ angular.module('luxire')
     }
     $scope.allProductsData=[];
     $scope.selected_redis_filters.page = 1;
+    // console.log('selected filters', btoa(angular.toJson($scope.selected_filters)));
     console.log('selected filters', $scope.selected_filters);
+
     console.log('output to redis', $scope.selected_redis_filters);
 
-    load_products();
+    generate_url_for_filters($scope.selected_filters);
+
+    // load_products();
 
   };
 
-  $scope.reverse_price = false;//predicate for sorting products by price
 
   /*Filters-end*/
 
