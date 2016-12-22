@@ -1,5 +1,6 @@
 angular.module('luxire')
 .controller('ProductDetailController', function($scope, $sce, CustomerOrders, $state, countries, $stateParams, $rootScope, CustomerProducts, ImageHandler,  $location, $anchorScroll, $uibModal, $window, $timeout, $log, $compile, $interval, CustomerUtils){
+  /*Use $rootScope.page.setTitle() to change title*/
   $window.scrollTo(0, 0);
   $scope.loading_product = true;
   $scope.display_summary = false;
@@ -34,6 +35,7 @@ angular.module('luxire')
 
 
   CustomerProducts.show($stateParams.product_name).then(function(data){
+    $rootScope.page.setTitle(data.data.name); //set page title to product name
     if(CustomerProducts.is_active_collections(data.data.product_type.product_type.toLowerCase())){
       $scope.product = data.data;
       $scope.images_array = [];
