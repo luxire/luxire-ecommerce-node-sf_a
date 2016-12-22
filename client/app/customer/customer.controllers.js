@@ -225,7 +225,7 @@ avoid conflict with customer ctrl on admin side*/
   };
 
   $scope.go_to_login = function(){
-    $state.go('customerin');
+    $state.go('customer.login');
   };
 
   $scope.go_to_signup = function(){
@@ -320,7 +320,6 @@ avoid conflict with customer ctrl on admin side*/
     }
 
   }, function(error){
-    console.error('data from cookie', error);
     $rootScope.$broadcast('fetched_order_from_cookie', error);
     CustomerUtils.get_local_currency().then(function(data){
         CustomerUtils.set_local_currency_in_app(data.data);
