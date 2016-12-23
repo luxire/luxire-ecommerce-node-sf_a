@@ -48,23 +48,18 @@ angular.module('luxire')
     price_end: $scope.price_end,
   };
 
-  /*filters reflecting in url*/
+  /*filters reflecting in url*/    /**generating url with filters**/
   var generate_url_for_filters = function(selected_filters){
-    /**generating url with filters**/
-    $scope.selected_filters.price_sort = $scope.selected_redis_filters.sort;
-    $scope.selected_filters.price_start = $scope.selected_redis_filters.price_start;
-    $scope.selected_filters.price_end = $scope.selected_redis_filters.price_end;
     /*To handle situation of changing price filter*/
     // $scope.selected_filters.currency = CustomerUtils.get_local_currency_in_app();
     /*To handle situation of changing price filter*/
-
-    console.log('generating url for', $scope.selected_filters, $scope.selected_redis_filters);
-    /**generating url with filters**/
     $state.go('customer.search', $scope.selected_filters);
   };
+
   function read_filters_from_url(property){ //set values in view
-    return $stateParams[property]
+    return $stateParams[property];
   };
+
   function filter_by_url(selected_filters){
     $scope.allProductsData=[];
     $scope.selected_redis_filters.page = 1;
@@ -85,10 +80,8 @@ angular.module('luxire')
     /*To handle situation of changing price filter*/
     $scope.selected_filters.currency = read_filters_from_url("currency") || CustomerUtils.get_local_currency_in_app();
     /*To handle situation of changing price filter*/
-
     load_products();
   };
-
 
   $scope.get_subheader_top_margin = function(){
     return $(".customer-main-nav-header").innerHeight() + 'px';
@@ -97,14 +90,7 @@ angular.module('luxire')
   $(window).resize(function(){
       $timeout(function(){}, 0);
   });
-  /*Filters-start*/
-  /*filters*/
 
-
-
-  /*Filters-end*/
-  /*Filters-start*/
-  /*filters*/
   $scope.selected_filters = {}; //for DOM Manipulation
   $scope.filter_properties = [];
   var filter_index = '';
@@ -204,19 +190,12 @@ angular.module('luxire')
   };
 
   /*Redis caching mechanism*/
-    $scope.total_collection_pages = 1;
     $scope.load_more = function(){
-      console.log('load more');
-      console.log('total pages', $scope.total_collection_pages);
-      if($scope.selected_redis_filters.page == 1 || $scope.selected_redis_filters.page<=$scope.total_collection_pages){
+      if($scope.selected_redis_filters.page<=$scope.total_collection_pages){
         load_products();
       }
-      console.log('scrolling');
     };
-
   /**/
-
-
 
   /*Multi currency support*/
   $scope.currency_symbols = function(val ,currency){
@@ -256,37 +235,38 @@ angular.module('luxire')
   };
 
   /*Redis caching mechanism*/
-    $scope.sort_by_price = function(is_desc){
-      $scope.reverse_price = is_desc;
-      var price_sort_order = is_desc === true ? 'desc' : 'asc';
-      $scope.selected_redis_filters.sort = price_sort_order;
-      $scope.selected_redis_filters.page = 1;
-      $scope.allProductsData = [];
-      generate_url_for_filters($scope.selected_filters);
-      // load_products();
+  $scope.sort_by_price = function(is_desc){
+    $scope.reverse_price = is_desc;
+    var price_sort_order = is_desc === true ? 'desc' : 'asc';
+    $scope.selected_redis_filters.sort = price_sort_order;
+    $scope.selected_filters.price_sort = price_sort_order;
+    $scope.selected_redis_filters.page = 1;
+    $scope.allProductsData = [];
+    generate_url_for_filters($scope.selected_filters);
+    // load_products();
 
-      $('html, body').animate({ scrollTop: 0}, 500);
-    };
+    $('html, body').animate({ scrollTop: 0}, 500);
+  };
 
-    $scope.filter_by_price = function(price_start, price_end, currency){
-      $scope.allProductsData = [];
-      $scope.selected_redis_filters.price_start = price_start;
-      $scope.selected_redis_filters.price_end = price_end;
-      $scope.selected_redis_filters.page = 1;
-      $scope.selected_redis_filters.currency = currency;
-      /*To handle situation of changing price filter*/
-      $scope.selected_filters.currency = currency;
-      /*To handle situation of changing price filter*/
+  $scope.filter_by_price = function(price_start, price_end, currency){
+    $scope.allProductsData = [];
+    $scope.selected_redis_filters.price_start = price_start;
+    $scope.selected_redis_filters.price_end = price_end;
+    $scope.selected_redis_filters.page = 1;
+    $scope.selected_redis_filters.currency = currency;
+    /*To handle situation of changing price filter*/
+    $scope.selected_filters.currency = currency;
+    $scope.selected_filters.price_start = price_start;
+    $scope.selected_filters.price_end = price_end;
+    /*To handle situation of changing price filter*/
 
-      console.log('filter by price load products');
-      generate_url_for_filters($scope.selected_filters);
-      // load_products();
-    }
+    console.log('filter by price load products');
+    generate_url_for_filters($scope.selected_filters);
+    // load_products();
+  }
   /**/
 
   function init_slider(floor, ceil, currency, low, high){
-    console.log('low', low, 'high', high, 'currency', currency);
-    // $scope.filter_by_price(low, high, currency);
     $("#priceSlider").remove();
     $scope.slider = {
       low_value: isNaN(low) ? floor : low,
@@ -310,7 +290,6 @@ angular.module('luxire')
     };
   };
   function init_price_range_sliders(currency){
-    console.log('currency changed init', currency);
     var one_to_one_currencies = ["USD", "CHF", "EUR", "GBP", "CAD"];
     var one_to_two_currencies = ["AUD", "SGD"];
     var one_to_ten_currencies = ["NOK", "DKK", "SEK"];
@@ -345,18 +324,20 @@ angular.module('luxire')
 
   };
 
-  console.log('in app currency', CustomerUtils.get_local_currency_in_app());
   $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
   init_price_range_sliders($scope.selected_currency);
   $scope.$on('currency_change', function(event, data){
-    console.log('currency changed', $scope.selected_currency, 'in app', CustomerUtils.get_local_currency_in_app())
     if($scope.selected_currency){
+      $scope.selected_filters.price_start = null;
+      $scope.selected_filters.price_end = null;
+      $scope.selected_filters.currency = CustomerUtils.get_local_currency_in_app();
       $scope.select_filter_option('price', 'all', 'display_price');
     }
     $scope.selected_currency = data;
     $scope.selected_redis_filters.currency = $scope.selected_currency;
     init_price_range_sliders($scope.selected_currency);
   });
+
 
   var price_range = function(price_string){
     var range = price_string.split(',');
@@ -442,6 +423,7 @@ angular.module('luxire')
 
     console.log('output to redis', $scope.selected_redis_filters);
 
+
     generate_url_for_filters($scope.selected_filters);
 
     // load_products();
@@ -454,19 +436,10 @@ angular.module('luxire')
   $rootScope.$on('fetched_order_from_cookie', function(event, data){
     console.log('event fired', data);
   });
-
-
-
-
   /*Filters from redis*/
 
   /*Redis Filters-start*/
   $scope.allProductsData=[];
-  $scope.total_collection_pages = 1;
-
-
-
-
   /*Redis Filter-end*/
 
 
@@ -480,220 +453,219 @@ angular.module('luxire')
     return ImageHandler.url(url);
   }
 
+  $scope.help_template = {
+    weight_url: 'weight-help.html',
+    thickness_url: 'thickness-help.html',
+    stiffness_url: 'stiffness-help.html'
+  };
+  $scope.weight_help_texts = {
+    "shirts": [
+      {
+        id: 1,
+        label: '< 50 gsm'
+      },{
+        id: 2,
+        label: '50-60 gsm'
+      },{
+        id: 3,
+        label: '60-70 gsm'
+      },{
+        id: 4,
+        label: '70-80 gsm'
+      },{
+        id: 5,
+        label: '80-90 gsm'
+      },{
+        id: 6,
+        label: '90-100 gsm'
+      },{
+        id: 7,
+        label: '100-110 gsm'
+      },{
+        id: 8,
+        label: '110-120 gsm'
+      },{
+        id: 9,
+        label: '120-130 gsm'
+      },{
+        id: 10,
+        label: '130-140 gsm'
+      },{
+        id: 11,
+        label: '140-150 gsm'
+      },{
+        id: 12,
+        label: '150< gsm'
+      }
+    ],
+    "pants": [
+      {
+        id: 1,
+        label: '< 150 gsm'
+      },{
+        id: 2,
+        label: '150-185 gsm'
+      },{
+        id: 3,
+        label: '185-220 gsm'
+      },{
+        id: 4,
+        label: '220-255 gsm'
+      },{
+        id: 5,
+        label: '255-290 gsm'
+      },{
+        id: 6,
+        label: '290-325 gsm'
+      },{
+        id: 7,
+        label: '325-360 gsm'
+      },{
+        id: 8,
+        label: '360-395 gsm'
+      },{
+        id: 9,
+        label: '395-430 gsm'
+      },{
+        id: 10,
+        label: '430-465 gsm'
+      },{
+        id: 11,
+        label: '465-500 gsm'
+      },{
+        id: 12,
+        label: '500< gsm'
+      }
+    ]
 
-    $scope.help_template = {
-      weight_url: 'weight-help.html',
-      thickness_url: 'thickness-help.html',
-      stiffness_url: 'stiffness-help.html'
-    };
-    $scope.weight_help_texts = {
-      "shirts": [
-        {
-          id: 1,
-          label: '< 50 gsm'
-        },{
-          id: 2,
-          label: '50-60 gsm'
-        },{
-          id: 3,
-          label: '60-70 gsm'
-        },{
-          id: 4,
-          label: '70-80 gsm'
-        },{
-          id: 5,
-          label: '80-90 gsm'
-        },{
-          id: 6,
-          label: '90-100 gsm'
-        },{
-          id: 7,
-          label: '100-110 gsm'
-        },{
-          id: 8,
-          label: '110-120 gsm'
-        },{
-          id: 9,
-          label: '120-130 gsm'
-        },{
-          id: 10,
-          label: '130-140 gsm'
-        },{
-          id: 11,
-          label: '140-150 gsm'
-        },{
-          id: 12,
-          label: '150< gsm'
-        }
-      ],
-      "pants": [
-        {
-          id: 1,
-          label: '< 150 gsm'
-        },{
-          id: 2,
-          label: '150-185 gsm'
-        },{
-          id: 3,
-          label: '185-220 gsm'
-        },{
-          id: 4,
-          label: '220-255 gsm'
-        },{
-          id: 5,
-          label: '255-290 gsm'
-        },{
-          id: 6,
-          label: '290-325 gsm'
-        },{
-          id: 7,
-          label: '325-360 gsm'
-        },{
-          id: 8,
-          label: '360-395 gsm'
-        },{
-          id: 9,
-          label: '395-430 gsm'
-        },{
-          id: 10,
-          label: '430-465 gsm'
-        },{
-          id: 11,
-          label: '465-500 gsm'
-        },{
-          id: 12,
-          label: '500< gsm'
-        }
-      ]
 
+  }
 
+  $scope.thickness_help_texts = [
+    {
+      label: '0-0.10'
+    },
+    {
+      label: '0.10-0.20'
+    },
+    {
+      label: '0.20-0.30'
+    },
+    {
+      label: '0.30-0.40'
+    },
+    {
+      label: '0.40-0.50'
+    },
+    {
+      label: '0.50<'
     }
 
-    $scope.thickness_help_texts = [
-      {
-        label: '0-0.10'
-      },
-      {
-        label: '0.10-0.20'
-      },
-      {
-        label: '0.20-0.30'
-      },
-      {
-        label: '0.30-0.40'
-      },
-      {
-        label: '0.40-0.50'
-      },
-      {
-        label: '0.50<'
-      }
+  ];
 
-    ];
+  $scope.stiffness_help_texts = [
+    {
+      label: '0.00-1.25'
+    },
+    {
+      label: '1.25-2.50'
+    },
+    {
+      label: '2.50-3.75'
+    },
+    {
+      label: '3.75-5.00'
+    },
+    {
+      label: '5.00-6.25'
+    },
+    {
+      label: '6.25-7.50'
+    },
+    {
+      label: '7.50-8.75'
+    },
+    {
+      label: '8.75-10.00'
+    }
+  ];
 
-    $scope.stiffness_help_texts = [
-      {
-        label: '0.00-1.25'
-      },
-      {
-        label: '1.25-2.50'
-      },
-      {
-        label: '2.50-3.75'
-      },
-      {
-        label: '3.75-5.00'
-      },
-      {
-        label: '5.00-6.25'
-      },
-      {
-        label: '6.25-7.50'
-      },
-      {
-        label: '7.50-8.75'
-      },
-      {
-        label: '8.75-10.00'
-      }
-    ];
+  var weight_indexes_ref = {
+    shirts: {
+      min: 50,
+      max: 150,
+      step: 10//150/12
+    },
+    pants: {
+      min: 150,
+      max: 500,
+      step: 35 //(500-150)/10
+    }
+  };
 
-    var weight_indexes_ref = {
-      shirts: {
-        min: 50,
-        max: 150,
-        step: 10//150/12
-      },
-      pants: {
-        min: 150,
-        max: 500,
-        step: 35 //(500-150)/10
-      }
+  /*Get weight icon*/
+  var min_weight = 0;
+  var max_weight = 0;
+  $scope.weight_index = function(variant_weight, product_type){
+    product_type = product_type.toLowerCase();
+    if(product_type && product_type.indexOf('pant') !== -1){
+      min_weight = weight_indexes_ref['pants']['min'];
+      max_weight = weight_indexes_ref['pants']['max'];
+      step = weight_indexes_ref['pants']['step'];
+    }
+    else if(product_type && product_type.indexOf('pant') == -1){
+      min_weight = weight_indexes_ref['shirts']['min'];
+      max_weight = weight_indexes_ref['shirts']['max'];
+      step = weight_indexes_ref['shirts']['step'];
     };
 
-    /*Get weight icon*/
-    var min_weight = 0;
-    var max_weight = 0;
-    $scope.weight_index = function(variant_weight, product_type){
-      product_type = product_type.toLowerCase();
-      if(product_type && product_type.indexOf('pant') !== -1){
-        min_weight = weight_indexes_ref['pants']['min'];
-        max_weight = weight_indexes_ref['pants']['max'];
-        step = weight_indexes_ref['pants']['step'];
-      }
-      else if(product_type && product_type.indexOf('pant') == -1){
-        min_weight = weight_indexes_ref['shirts']['min'];
-        max_weight = weight_indexes_ref['shirts']['max'];
-        step = weight_indexes_ref['shirts']['step'];
-      };
 
-
-      if((parseFloat(variant_weight))<min_weight){
-        return 1;
-      }
-      else if((parseFloat(variant_weight))>max_weight){
-        return 12;
-      }
-      else{
-        return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
-      };
+    if((parseFloat(variant_weight))<min_weight){
+      return 1;
+    }
+    else if((parseFloat(variant_weight))>max_weight){
+      return 12;
+    }
+    else{
+      return parseInt(Math.ceil((parseFloat(variant_weight)-min_weight)/step))+1;
     };
-    var thickness = 0;
-    /*Get Thickness icon*/
-    $scope.thickness_index = function(variant_thickness){
-      if(variant_thickness != undefined){
-        thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-        if(thickness/10 >5){
-          return 6;
-        }
-        else {
-          return Math.ceil(thickness/10);
-        }
+  };
+  var thickness = 0;
+  /*Get Thickness icon*/
+  $scope.thickness_index = function(variant_thickness){
+    if(variant_thickness != undefined){
+      thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
+      if(thickness/10 >5){
+        return 6;
       }
+      else {
+        return Math.ceil(thickness/10);
+      }
+    }
 
-    };
-    /*Get stiffness icon*/
-    $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
-      if(stiffness_unit=='m'){
-        variant_stiffness = parseFloat(variant_stiffness)*100;
-      }
-      else if(stiffness_unit=='cm'){
-        variant_stiffness = parseFloat(variant_stiffness);
-      }
+  };
+  /*Get stiffness icon*/
+  $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
+    if(stiffness_unit=='m'){
+      variant_stiffness = parseFloat(variant_stiffness)*100;
+    }
+    else if(stiffness_unit=='cm'){
+      variant_stiffness = parseFloat(variant_stiffness);
+    }
 
-      if(variant_stiffness/1.25 >8){
-        return 8;
-      }
-      else if(variant_stiffness == 0.0){
-        return 1;
-      }
-      else{
+    if(variant_stiffness/1.25 >8){
+      return 8;
+    }
+    else if(variant_stiffness == 0.0){
+      return 1;
+    }
+    else{
 
 
-        return Math.ceil(variant_stiffness/1.25);
-      }
+      return Math.ceil(variant_stiffness/1.25);
+    }
 
-    };
+  };
 
 
   $scope.order_swatch = function(variant){
@@ -736,42 +708,40 @@ angular.module('luxire')
 
  //******** start of quick view **********
 
-
-    $scope.animationsEnabled = true;
-    $scope.showQuickView=function(product, size){
-      console.log("quick view fun is calling...");
-      console.log("product: ",product);
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: 'quickViewContent.html',
-        controller: 'quickViewModalController',
-        windowClass: 'quick-view-modal',
-        //size: size,
-        resolve: {
-          product: function () {
-            return product;
-          },
-          is_fabric_taxonomy: function(){
-            return $scope.get_taxonomy_details(product.taxons[0].permalink).is_fabric_taxonomy;
-          },
-          is_gift_card: function(){
-            return $scope.get_taxonomy_details(product.taxons[0].permalink).is_gift_card;
-          },
-          selected_currency: function(){
-            return $scope.selected_currency;
-          }
+  $scope.animationsEnabled = true;
+  $scope.showQuickView=function(product, size){
+    console.log("quick view fun is calling...");
+    console.log("product: ",product);
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'quickViewContent.html',
+      controller: 'quickViewModalController',
+      windowClass: 'quick-view-modal',
+      //size: size,
+      resolve: {
+        product: function () {
+          return product;
+        },
+        is_fabric_taxonomy: function(){
+          return $scope.get_taxonomy_details(product.taxons[0].permalink).is_fabric_taxonomy;
+        },
+        is_gift_card: function(){
+          return $scope.get_taxonomy_details(product.taxons[0].permalink).is_gift_card;
+        },
+        selected_currency: function(){
+          return $scope.selected_currency;
         }
-      });
+      }
+    });
 
-      modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-        console.log("modal return value is : ",selectedItem);
-      }, function () {
-        console.info('Modal dismissed at: ' + new Date());
-      });
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+      console.log("modal return value is : ",selectedItem);
+    }, function () {
+      console.info('Modal dismissed at: ' + new Date());
+    });
 
-    }
-
+  }
 
    //******** end of quick view **********
 })
