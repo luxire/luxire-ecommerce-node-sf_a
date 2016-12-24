@@ -85,11 +85,10 @@ angular.module('luxire')
     load_products();
   };
 
-
   $scope.get_subheader_top_margin = function(){
     return $(".customer-main-nav-header").innerHeight() + 'px';
-
   };
+
   $(window).resize(function(){
       $timeout(function(){}, 0);
   });
@@ -118,7 +117,6 @@ angular.module('luxire')
   };
   window.scrollTo(0, 0);
   $('[data-toggle="tooltip"]').tooltip();
-  $scope.stateParams = $stateParams;
 
   /*Filters-start*/
   /*filters*/
@@ -129,8 +127,6 @@ angular.module('luxire')
   var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'Number-of-Colors'];//filter name in properties
   var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors']; //filter display name in ui
   var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color']; //filter name as db column
-
-
 
   $scope.color_variants = {
     white: {
@@ -194,34 +190,34 @@ angular.module('luxire')
 
   $scope.allProductsData=[];
 
-var load_products = function(){
-  if(CustomerProducts.is_active_collections($scope.selected_redis_filters.taxonomy)){
-    $scope.loading_products = true;
-    if($scope.selected_redis_filters["wrinkle_resistance"]){
-      $scope.selected_redis_filters["wrinkle_resistance"] = "True";
-    }
-    CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
-    .then(function(data){
-      $scope.loading_products = false;
-      $scope.total_collection_pages = data.data.pages;
-      $scope.taxonomy_counts = data.data.taxonomies;
-      $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-      if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
-        $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+  var load_products = function(){
+    if(CustomerProducts.is_active_collections($scope.selected_redis_filters.taxonomy)){
+      $scope.loading_products = true;
+      if($scope.selected_redis_filters["wrinkle_resistance"]){
+        $scope.selected_redis_filters["wrinkle_resistance"] = "True";
       }
-    }, function(error){
-      $scope.loading_products = false;
-      console.error(error);
-    });
-    $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
-  }
-  else{
-    $state.go('customer.home');
-    $rootScope.alerts[0] = {type: 'warning', message: $scope.selected_redis_filters.taxonomy+ ' Collection coming soon!'};
-  }
-};
+      CustomerProducts.search_products_in_redis($scope.selected_redis_filters)
+      .then(function(data){
+        $scope.loading_products = false;
+        $scope.total_collection_pages = data.data.pages;
+        $scope.taxonomy_counts = data.data.taxonomies;
+        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+        if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
+          $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
+        }
+      }, function(error){
+        $scope.loading_products = false;
+        console.error(error);
+      });
+      $scope.selected_redis_filters.page++;// Moved out of sucess block to resolve product duplication
+    }
+    else{
+      $state.go('customer.home');
+      $rootScope.alerts[0] = {type: 'warning', message: $scope.selected_redis_filters.taxonomy+ ' Collection coming soon!'};
+    }
+  };
 
-/*Redis caching mechanism*/
+  /*Redis caching mechanism*/
   $scope.load_more = function(){
     if($scope.selected_redis_filters.page<=$scope.total_collection_pages){
       load_products();
@@ -229,9 +225,6 @@ var load_products = function(){
   };
 
 /**/
-
-
-
 
   /*Multi currency support*/
   $scope.currency_symbols = function(val ,currency){
@@ -470,9 +463,7 @@ var load_products = function(){
     console.log('event fired', data);
   });
 
-
   /*Filters from redis*/
-
   $scope.go_to_product_detail = function(product_name){
     $state.go('customer.product_detail',{taxonomy_name: $scope.selected_taxonomy_name,taxon_name: $scope.selected_taxon_name,product_name: product_name});
   };
@@ -734,7 +725,6 @@ var load_products = function(){
 
  //******** start of quick view **********
 
-
     $scope.animationsEnabled = true;
     $scope.showQuickView=function(product, size){
       console.log("quick view fun is calling...");
@@ -770,7 +760,6 @@ var load_products = function(){
       });
 
     }
-
 
    //******** end of quick view **********
 })
