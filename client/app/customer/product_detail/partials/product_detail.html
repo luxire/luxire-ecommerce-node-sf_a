@@ -1542,10 +1542,10 @@ button.slick-arrow{
       <div ng-show="active_style_option === 'system_preset'" class="preset-styles-section">
         <div class="style-nav">
           <div class="row-eq-height" style="display: inline-block;width: 8%;text-align: center;vertical-align: top;padding-top: 8.5%;float: left">
-            <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;font-size:x-large;cursor: pointer;"></i>
+            <i id="prev-style" class="slide-prev fa fa-chevron-left" style="padding-left:0%;font-size:x-large;cursor: pointer;" ng-click="style_slider_config.method.slickPrev()"></i>
           </div>
           <div class="row-eq-height" style="display: inline-block;width: 82%">
-            <div class="slick-bespoke-style-slider">
+            <slick settings="style_slider_config">
               <div class="slick-bespoke-style-slide" ng-init="mouse_over_style=false" ng-repeat="luxire_style in luxire_styles" style="display:inline-block;float:left;cursor: pointer;border: none !important;margin-left: 0.5%"
                 ng-mouseenter="activate_style_details(luxire_style);mouse_over_style=true" ng-mouseleave="mouse_over_style=false" ng-click="select_style($index, luxire_style)">
                 <div class="luxireStyle" ng-class="{'activeStyleClass': selected_style.name==luxire_style.name}" style="text-align: center;position: relative" >
@@ -1557,10 +1557,10 @@ button.slick-arrow{
                   <div ng-if="(selected_style.name==luxire_style.name) || (!selected_style.name && mouse_over_style)" style="width: 0; height: 0; margin-left: 38%; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 20px solid #EDEBEC;"></div>
                 </div>
               </div>
-            </div>
+            </slick>
           </div>
           <div class="row-eq-height" style="display: inline-block;width: 8%;text-align: center;vertical-align: top;padding-top: 8.5%">
-            <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;font-size:x-large;cursor: pointer;"></i>
+            <i id="next-style" class="slide-next fa fa-chevron-right"  style="padding-left:0%;font-size:x-large;cursor: pointer;" ng-click="style_slider_config.method.slickNext()"></i>
           </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" uib-collapse="hide_active_style_details" style="padding: 0 3%;" >
@@ -1602,10 +1602,6 @@ button.slick-arrow{
             </div>
           </div>
         </div>
-        <!--//div style="text-align: center;width: 100%;padding: 1%" >
-            //<button ng-if="selected_style && selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;width: 10%" ng-click="edit_style();">Edit Style</button>
-            //<button ng-if="selected_style.name" class="btn btn-default" style="background-color: #8A247C;color: white;border-radius: 0;" ng-click="next_step()">Select {{selected_style.name}}</button>
-        //</div-->
       </div>
       <div ng-show="active_style_option === 'bespoke'" class="bespoke-styles-section">
         <div class="row container-fluid" style="width: 96.5%;height:100%;margin: 0 1% 2% 1%">
@@ -1640,8 +1636,6 @@ button.slick-arrow{
                       <span ng-bind-html="currency_symbols(cart_object.total_cost[selected_currency], selected_currency)"></span>
                     </div>
                   </div>
-
-
                 </div>
                 <div class="row detail-summary" style="margin-top:4%; padding-bottom:10%;">
                     <span>Selected Options</span>
@@ -1661,11 +1655,9 @@ button.slick-arrow{
                         {{attribute.name}}:
                       </div>
                       <div style="width: 48%;text-align: left;display: inline-block;color: #7F0E6E;cursor: default">
-
                         <div ng-if="attr_options_key_length(cart_object['personalization_attributes'][attribute.name])>0 && attribute.name.toLowerCase()!=='monogram'"
                             ng-repeat="(prop_key, prop_val) in cart_object['personalization_attributes'][attribute.name]"
                             ng-init="attribute={};attribute.options=prop_val"
-
                             uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''" popover-placement="right" popover-trigger="mouseenter" >
                             &#9899 <span style="text-decoration: underline;" animate-on-change="prop_key"> {{prop_key}}</span>
                         </div>
@@ -1675,22 +1667,9 @@ button.slick-arrow{
                             uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''" popover-placement="right" popover-trigger="mouseenter" >
                             Yes
                         </div>
-
                       </div>
                     </div>
-
                 </div>
-                <!--//div class="row">
-                  //<div class=""  style="padding: 2%;margin-top: 4%;border:1px solid #DDDCDA;bottom:3%;">
-                    //<button type="button" class="btn btn-default" style="width:100%;height:3em;font-size:120%;background-color: #9A408D;color:white;border-radius:0px;color:white;" ng-click="next_step()">Next</button>
-                  //</div>
-                //</div-->
-
-
-
-                <!--//div class="row" style="margin-top:12%;">
-                    <!--//span style="font-size:200%;">{{product.display_price}}</span>
-                <!--//div -->
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:2.5%">
             </div>
@@ -1710,24 +1689,7 @@ button.slick-arrow{
                               <div class="row" style="text-align: center">
                                 <i class="fa fa-chevron-up"  style="padding-left:0%;font-size:x-large;cursor: pointer" ng-click="attibutes_slider_config.method.slickPrev()"></i>
                               </div>
-                              <!--//div class="row" style="text-align: center">
-                              //   <i id="prev-attr" class="slide-next fa fa-chevron-up"  style="padding-left:0%;font-size:x-large;cursor: pointer"></i>
-                              // </div-->
                               <div class="row container-fluid" style="">
-                                <!--//div class="bespoke-attributes-slider">
-                                //   <div class="bespoke-attributes-slide"  ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
-                                //     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
-                                //       <div class="luxireStyle" ng-class="{'active-bespoke-attributes-slide': bespoke_attribute.name==selected_bespoke_attribute.name}" style="width: 100%;background-color: #FDFDFD;text-align: center">
-                                //         <img ng-src="{{getImage(bespoke_attribute.image)}}"
-                                //         class="img-circle"
-                                //         ng-class="{'active-bespoke': bespoke_attribute.name==selected_bespoke_attribute.name}"
-                                //           style="margin-top: 8%; margin-bottom: 8%;border: solid 2px #FDFDFD;background-color: white"
-                                //           onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
-                                //           <div style="font-size: 100%;text-align:center;"><span>{{bespoke_attribute.name}}</span></div>
-                                //       </div>
-                                //     </div>
-                                //   </div>
-                                // </div-->
                                 <slick settings="attibutes_slider_config">
                                   <div class="bespoke-attributes-slide"  ng-repeat="bespoke_attribute in product['bespoke_attributes']" style="margin-bottom:8%; cursor: pointer;display: block" >
                                     <div ng-click="activate_bespoke_attribute(bespoke_attribute)">
@@ -1742,7 +1704,6 @@ button.slick-arrow{
                                     </div>
                                   </div>
                                 </slick>
-
                               </div>
                               <div class="row" style="text-align: center">
                                 <i class="fa fa-chevron-down"  style="padding-left:0%;font-size:x-large;cursor: pointer" ng-click="attibutes_slider_config.method.slickNext()"></i>
