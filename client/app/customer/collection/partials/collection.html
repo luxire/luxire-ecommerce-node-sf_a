@@ -53,7 +53,7 @@
             <div class="row" ng-repeat="property in filter_properties" style="margin-left: 9%; font-size: 80%" ng-cloak>
               <!--COLOR-->
               <div ng-if="property.name.toLowerCase()=='color'" class="row" style="margin-top: 3%">
-                <span style="font-size:115%;font-weight: 100;">COLOR</span>
+                <span style="font-size:115%;font-weight: 300;">COLOR</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
                   <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block" ng-cloak>
@@ -70,16 +70,14 @@
                         <div class="" style="display: inline-block;background: {{color_variants[filter_option].secondary}};width: 11px; height: 9px;margin-left:-4px;border-top: solid 1px grey;border-bottom: solid 1px grey;border-right: solid 1px grey;">
                         </div> -->
                       </div>
-                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">&nbsp;&nbsp;{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight: 300; font-size: 100%">&nbsp;&nbsp;{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
-
               </div>
-
               <!--PRICE-->
               <div ng-if="property.name.toLowerCase()=='price'" class="row" style="margin-top: 3%">
-                <span style="font-size:115%;font-weight: 100;">PRICE</span>
+                <span style="font-size:115%;font-weight: 300;">PRICE</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
                   <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block">
@@ -87,7 +85,7 @@
                       <img ng-show="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
                     <div class="" style="display: inline-block">
-                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight: 300; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
@@ -116,10 +114,9 @@
 
 
               </div>
-
               <!--Other Filters-->
               <div ng-if="property.name.toLowerCase()!=='price'&&property.name.toLowerCase()!=='color'" class="row" style="margin-top: 3%">
-                <span style="font-size:115%;font-weight: 100;">{{property.display_name}}</span>
+                <span style="font-size:115%;font-weight: 300;">{{property.display_name}}</span>
                 <div ng-repeat="filter_option in property.value.split(',')" ng-mouseover="active_filter_option_index=$index" ng-mouseleave="active_filter_option_index=-1" >
                   <div style="cursor: pointer; width: 100%" ng-click="select_filter_option(property.name, filter_option, property.db_name)">
                     <div style="width: 20px;display: inline-block">
@@ -127,15 +124,12 @@
                       <img ng-show="active_filter_option_index==$index||selected_filters[property.name].split(',').indexOf(filter_option)!==-1" ng-src="assets/images/customer/checkbox_checked.png" alt="" />&nbsp;&nbsp;
                     </div>
                     <div class="" style="display: inline-block">
-                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight:100; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
+                      <span ng-class="{'activeFilter': selected_filters[property.name].split(',').indexOf(filter_option)!==-1}" style="font-weight: 300; font-size: 100%">{{filter_option[0].toUpperCase()+filter_option.slice(1).toLowerCase()}}</span>
                     </div>
                   </div>
                 </div>
               </div>
-
-
             </div>
-
           </div>
         </div>
 
