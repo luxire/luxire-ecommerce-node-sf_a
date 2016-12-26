@@ -13,6 +13,9 @@ angular.module('luxire')
       });
     }
   };
+  $scope.parseFloat = function(value){
+    return parseFloat(value);
+  };
   if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
     $scope.loading_cart = true;
 
