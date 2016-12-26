@@ -195,12 +195,12 @@
           <div class="col col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left: -12%; margin-top: -2%">
             <span class="badge" style="background: #8A247C">{{line_item.quantity}}</span>
           </div>
-          <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;padding-right: 0px !important">
+          <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;padding-right: 0px !important;font-size:85%;">
             {{line_item.variant.name}}
           </div>
         </div>
         <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 5%; text-align: right;padding-right: 7%">
-          {{line_item.display_amount}}
+          {{line_item.display_total}}
         </div>
 
       </div>
@@ -210,7 +210,7 @@
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
           Subtotal
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center;padding-right:0">
           {{luxire_cart.display_item_total}}
         </div>
       </div>
@@ -218,23 +218,23 @@
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
           Shipping
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
-          {{luxire_cart.display_ship_total=="$0.00" ? '-' : luxire_cart.display_ship_total}}
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center;padding-right:0">
+          {{luxire_cart.ship_total =="0.00" ? '-' : luxire_cart.display_ship_total}}
         </div>
       </div>
       <div class="row">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
           Taxes
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
-          {{luxire_cart.display_tax_total=="$0.00" ? '-' : luxire_cart.display_tax_total}}
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center;padding-right:0">
+          {{luxire_cart.tax_total=="0.00" ? '-' : luxire_cart.display_tax_total}}
         </div>
       </div>
       <div class="row" ng-repeat="adjustment in luxire_cart.adjustments">
         <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8" style="HelveticaNeue;">
           {{adjustment.label}}
         </div>
-        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+        <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center;padding-right:0">
           {{adjustment.display_amount}}
         </div>
       </div>
