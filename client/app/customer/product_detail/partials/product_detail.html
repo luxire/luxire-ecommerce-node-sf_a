@@ -480,7 +480,7 @@ button.slick-arrow{
         </div>
         <div id="thumbnail-part" style="margin-top: 2%;padding-left: 8%">
           <a href="javascript: void(0)" ng-repeat="thumbnail in product.master.images" ng-click="activate_thumbnail(thumbnail)" data-image="{{getImage(thumbnail.product_url)}}" data-zoom-image="{{getImage(thumbnail.original_url)}}">
-              <img id="product_description_thumbnail_id" src="{{getImage(thumbnail.mini_url)}}"/>
+              <img id="product_description_thumbnail_id" ng-src="{{getImage(thumbnail.mini_url)}}"/>
           </a>
         </div>
       </div>
@@ -1515,9 +1515,6 @@ button.slick-arrow{
 <script type="text/ng-template" id="select_a_style.html">
   <div class="row" style="margin: 0;background: #FDFDFD;font-family: Roboto">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px;">
-      <!--//div style="width: 100%;text-align: right">
-        //<i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300" ng-click="cancel()"></i>
-      //</div-->
       <div style="width: 100%;border-bottom: solid 2px #E9E9E9;margin-bottom: 1%">
         <div style="width: 33%;display: inline-block">
         </div>
