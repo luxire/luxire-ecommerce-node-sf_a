@@ -2,7 +2,7 @@
 
 //This file contains enviroment variable required for the application
 var development_host = {
-  spree: 'http://luxire-store.stage.cloudhop.in',
+  spree: 'https://test.store.luxire.com',
   redis: 'http://localhost:9090',
   prediction: 'http://137.116.155.7:8000',
 }
