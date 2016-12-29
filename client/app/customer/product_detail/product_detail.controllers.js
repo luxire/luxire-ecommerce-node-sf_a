@@ -1874,14 +1874,35 @@ angular.module('luxire')
     }
   }
 
+  $scope.selected_bespoke_attribute_index = 0;
+  $scope.show_attribute_sync_slide = false;
+
   $scope.attibutes_slider_config = {
     infinite: false,
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     vertical: true,
     method: {},
     event: {
       beforeChange: function (event, slick, currentSlide, nextSlide) {
+        console.log('current', currentSlide, 'next', nextSlide, 'active', $scope.selected_bespoke_attribute_index);
+        if(nextSlide > currentSlide){ //scroll down
+          if(!$scope.selected_bespoke_attribute_index || ($scope.selected_bespoke_attribute_index <= currentSlide)){
+            $scope.show_attribute_sync_slide = true;
+          }
+          else{
+            $scope.show_attribute_sync_slide = false;
+          }
+        }
+        else if(nextSlide < currentSlide){
+          if(!$scope.selected_bespoke_attribute_index || ($scope.selected_bespoke_attribute_index <= nextSlide)){
+            $scope.show_attribute_sync_slide = true;
+          }
+          else{
+            $scope.show_attribute_sync_slide = false;
+          }
+        }
+
         // $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][nextSlide]);
       }
     }
@@ -2101,8 +2122,10 @@ angular.module('luxire')
 
 
   /*Bespoke attributes*/
-  $scope.activate_bespoke_attribute = function(bespoke_attribute){
+  $scope.activate_bespoke_attribute = function(bespoke_attribute, index){
     $scope.selected_bespoke_attribute = bespoke_attribute;
+    $scope.selected_bespoke_attribute_index = index;
+    $scope.show_attribute_sync_slide = false;
     console.log('selected_bespoke_attribute', bespoke_attribute);
   };
   $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][0]);
