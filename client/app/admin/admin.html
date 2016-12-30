@@ -150,38 +150,7 @@
 
             <!--Global search div end-->
 						<div ng-hide = "showDefaultNav" ui-view="sideContent" style="width: 100%; height:100%;overflow-y: hidden;overflow-x: hidden"></div>
-						<div ng-show = "showDefaultNav" >
-							<div class="col-lg-11 col-md-11" style="padding: 0px;">
-                <div class="" ng-mouseleave="mouseleaveNav()">
-                  <div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">Luxire</h3></div>
-  								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search" ng-click="globalSearch=true">Search</div>
-  								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home">Home</div>
-  								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order">Orders</div>
-  								<div class="products admin-sidebar-tab" style="font-size:13px;" ui-sref="admin.product">Products</div>
-  								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer">Customers</div>
-  								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports">Reports</div>
-  								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount">Discounts</div>
-                  <div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting">Settings</div>
-                  <div class="crm admin-sidebar-tab" style="font-size:13px;" id="crm" ng-click="go_to_crm()">Support</div>
-
-                </div>
-                <div class="admin-sidebar-tab" ng-init="popoverIsOpen=false" uib-popover-template="user_popover.templateUrl" popover-append-to-body="true"
-                 style="font-size:13px;position: fixed; bottom: 0px;width: 20%" id="settings"
-                  popover-is-open="popoverIsOpen" ng-click="popoverIsOpen = !popoverIsOpen">User</div>
-
-              </div>
-							<div class="col-lg-1 col-md-1" style="padding: 0px;">
-								<div class="admin-sidebar-header"><h3 style="margin: 0px; padding: 10px 0px;">&nbsp;</h3></div>
-								<div class="search admin-sidebar-tab" style="font-size:13px;" id="search"></div>
-								<div class="home admin-sidebar-tab" style="font-size:13px;" id="home"></div>
-								<div class="orders admin-sidebar-tab" style="font-size:13px;" id="orders" ui-sref="admin.order"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-								<div class="products admin-sidebar-tab" style="font-size:13px;" id="products" ui-sref="admin.product"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-								<div class="customers admin-sidebar-tab" style="font-size:13px;" id="customers" ui-sref="admin.customer"></div>
-								<div class="reports admin-sidebar-tab" style="font-size:13px;" id="reports"></div>
-								<div class="discounts admin-sidebar-tab" style="font-size:13px;" id="discounts" ui-sref="admin.discount"></div>
-              	<div class="settings admin-sidebar-tab" style="font-size:13px;" id="settings" ui-sref="admin.shipping_setting"><i class="fa fa-chevron-right" style="font-size:11px;"></i></div>
-                <div class="admin-sidebar-tab"  ng-click="popoverIsOpen = !popoverIsOpen" style="font-size:13px;position: fixed; bottom: 0px;margin-left: -0.5%" id="user" ><i class="fa fa-chevron-up" style="font-size:11px;padding-top: 1%; padding-right: 1%"></i></div>
-							</div>
+						<div ng-show="showDefaultNav" default-side-menu>
 						</div>
           </div>
         </div>
@@ -195,7 +164,7 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(".search").hover(function(){
       $(".search").toggleClass("hover-sidebar");
     });
@@ -250,7 +219,7 @@
 		$(".crm").click(function(){
       $(".crm").toggleClass("active-sidebar1");
     });
-</script>
+</script> -->
 <script type="text/ng-template" id="user_popover.html">
   <div style="color: #479CCF" ng-mouseleave="mouseleaveNav()">
     <div class="list-group">

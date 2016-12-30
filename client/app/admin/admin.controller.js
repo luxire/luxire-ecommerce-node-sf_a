@@ -1,14 +1,14 @@
  angular.module('luxire')
  .controller('adminController',function($scope, $stateParams, $rootScope, products, fileReader, prototypeObject,$rootScope,$authentication,$state,$http){
-   console.log($stateParams);
+   console.log('state', $state);
    console.log(new prototypeObject.product())
    $scope.navbar = "default";
    $scope.adminConsole = "default";
    $scope.isActive = false;
    $scope.infinityFlag = true;
-   $scope.showDefaultNav = false
+   $rootScope.showDefaultNav = true;
 
-   $scope.page.setTitle("Admin Console")
+   $rootScope.page.setTitle("Admin Console")
 
    $scope.loading = false;
 
@@ -17,17 +17,24 @@
    $scope.user_popover = {
     templateUrl: 'user_popover.html',
   };
-  
+
   $scope.go_to_crm = function(){
     window.open("http://crm.cloudhop.in/login?data=admin@example.com&data2=admin", "_blank");
   }
 
+  $scope.go_to_state = function(state){
+    $state.go(state);
+    $rootScope.showDefaultNav = false; //to show state specific sidemenu
+  };
+
    $scope.mouseoverNav = function(){
-     $scope.showDefaultNav = true;
+     $rootScope.showDefaultNav = true;
      $scope.popoverIsOpen = false;
   }
    $scope.mouseleaveNav = function(){
-     $scope.showDefaultNav = false
+     if($state.current.name !== "admin.default"){
+       $rootScope.showDefaultNav = false
+     }
    }
    $scope.log_out = function(event){
      event.preventDefault();
@@ -499,5 +506,10 @@ $scope.uploadSponsorLogo = function(files) {
 .directive('addOrder', function() {
   return {
     templateUrl: 'app/admin/partial_templates/addOrder.html'
+  }
+})
+.directive('defaultSideMenu', function() {
+  return {
+    templateUrl: 'app/admin/default/partials/sideBarDefault.html'
   }
 })
