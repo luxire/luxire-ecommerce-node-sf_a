@@ -70,3 +70,6 @@ tr.angular-ui-tree-empty {
  content:"*";
  color:grey;
 }
+.active-attribute-row{
+  background: #EFF9FD !important;
+}
