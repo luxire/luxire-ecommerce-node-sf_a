@@ -13,43 +13,27 @@
     <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;margin-bottom: 10%">
       <div class="row" style="margin:0px; background-color: white;">
         <div  class="col-lg-3 col-md-3" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
-          <span style="font-size: 12px;">Product Attributes Pool</span>
+          <span style="font-size: 16px;">Product Attributes</span>
         </div>
         <div  class="col-lg-9 col-md-9" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
         </div>
       </div>
-      <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-        <div class="left-inner-addon">
-          <i class="fa fa-search"></i>
+      <div class="row" style="margin:0px; background-color: white; padding: 2% 2% 0 2%">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">
+            <i class="fa fa-search"></i>
+          </span>
           <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for product attributes...">
         </div>
-        <!-- <div class="input-group">
-          <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">Filter Customers</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-          </div>
-          <input type="text" class="form-control" aria-label="...">
-        </div> -->
       </div>
-
-      <div class="row " style="margin:0px; background-color: white; padding: 20px;">
-        <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;">
+      <div class="row " style="margin:0px; background-color: white; padding: 0 2%;">
+        <div class="row" ng-show="filteredResults.length == 0 && !loading" style="padding-top:2%;padding-buttom:2%;">
           <div class="" style="color:black; font-size:120%;">
-            <center>Data not Found</center>
+            <center>No match found</center>
           </div>
         </div>
         <div ng-show="!(filteredResults.length == 0)">
-
-      <div class="row" style="margin:0px; background-color: white;text-align: left;">
-        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1">
-          <input type="checkbox">
-        </div>
+      <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
           Image
         </div>
@@ -59,25 +43,22 @@
         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
           Category
         </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+        </div>
       </div>
-      <hr style="margin: 5px 2%">
-      <div ng-repeat="product_attribute in product_attributes  | filter: { name: searchText } as filteredResults" class="row" style="margin:0px; background-color: white;text-align: left;padding: 1% 0%;">
-        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="margin-top: 2%">
-          <input type="checkbox">
+      <div ng-repeat="product_attribute in product_attributes  | filter: { name: searchText } as filteredResults" class="row" style="margin-left:0px;margin-right: 0px; background-color: white;text-align: center;padding: 1% 0%;border-bottom: solid 1.5px grey">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+          <img class="img-circle" style="border: solid 1px grey" ng-src="{{getImage(product_attribute.image.small)}}" alt="" />
         </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
-          <img ng-src="{{getImage(product_attribute.image.small)}}" alt="" />
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
           <a href="#" ng-click="edit_product_attribute($event, product_attribute.id)">{{product_attribute.name}}</a>
         </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 2%">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
           {{product_attribute.category}}
         </div>
-
-        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="margin-top: 2%">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
           <i href="#" class="fa fa-pencil-square-o" ng-click="edit_product_attribute($event, product_attribute.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-          <i class="fa fa-trash-o" ng-click="delete_product_attribute(product_attribute.id, $index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+          <i class="fa fa-trash-o" ng-click="delete_product_attribute(product_attribute, $index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
         </div>
       </div>
     </div>
@@ -89,16 +70,19 @@
 <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
   <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
 </div>
-<!-- <script type="text/ng-template" id="delete_promotion.html">
+<script type="text/ng-template" id="delete_attribute.html">
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%;line-height: 75vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
+  </div>
   <div class="modal-header row " style="border-bottom: 1px solid #e5e5e5 !important;margin-left: 0px;margin-right: 0px">
-      <h3 class="modal-title col-md-10 col-sm-10 col-xs-10 col-lg-10">Delete Discount "{{promo.code}}"?</h3>
+      <h3 class="modal-title col-md-10 col-sm-10 col-xs-10 col-lg-10">Delete attribute "{{product_attribute.name}}"?</h3>
       <span><i class="fa fa-close col-md-2 col-sm-2 col-xs-2 col-lg-2" style="cursor: pointer;text-align: right;font-size: 18px; margin-top: 2%;color: #807F7F"  ng-click="cancel()"></i></span>
   </div>
   <div class="modal-body" >
-      <p>Are you sure you want to delete the discount "{{promo.code}} "? This action cannot be reversed.</p>
+      <p>Are you sure you want to delete the attribute "{{product_attribute.name}} "? This action cannot be reversed.</p>
   </div>
   <div class="modal-footer" style="padding: 15px 20px 15px !important; margin-top: 0px !important">
       <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
       <button class="btn btn-danger" type="button" ng-click="delete()">Delete</button>
   </div>
-</script> -->
+</script>
