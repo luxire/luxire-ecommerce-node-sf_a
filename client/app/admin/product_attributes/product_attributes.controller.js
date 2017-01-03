@@ -364,6 +364,7 @@ angular.module('luxire')
   $scope.loading = true;
   ProductAttributes.show($stateParams.id).then(function(data){
     delete data.data.id;
+    $scope.editing_attribute = data.data.name;
     $('#parent_image').attr('src', ImageHandler.url(data.data.image));
     delete data.data.image;
     object_to_array($scope.data[0]['value'], $scope.data[0]['key'], data.data)

@@ -13,7 +13,7 @@
     <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;margin-bottom: 10%">
       <div class="row" style="margin:0px; background-color: white;">
         <div  class="col-lg-3 col-md-3" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
-          <span style="font-size: 16px;">Product Attributes</span>
+          <span style="font-size: 16px;">All Product Attributes</span>
         </div>
         <div  class="col-lg-9 col-md-9" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
         </div>
@@ -28,42 +28,41 @@
       </div>
       <div class="row " style="margin:0px; background-color: white; padding: 0 2%;">
         <div class="row" ng-show="filteredResults.length == 0 && !loading" style="padding-top:2%;padding-buttom:2%;">
-          <div class="" style="color:black; font-size:120%;">
+          <div class="" style="color:black; font-size:120%;padding: 2%">
             <center>No match found</center>
           </div>
         </div>
         <div ng-show="!(filteredResults.length == 0)">
-      <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
-          Image
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
-          Name
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
-          Category
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+          <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              Image
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              Name
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              Category
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+            </div>
+          </div>
+          <div ng-init="active_attribute=false" ng-mouseenter="active_attribute=true" ng-mouseleave="active_attribute=false" ng-class="{'active-attribute-row': active_attribute}" ng-repeat="product_attribute in product_attributes  | filter: { name: searchText } as filteredResults" class="row" style="margin-left:0px;margin-right: 0px; background-color: white;text-align: center;padding: 1% 0%;border-bottom: solid 1.5px grey">
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+              <img class="img-circle" style="border: solid 1px grey" ng-src="{{getImage(product_attribute.image.small)}}" alt="" />
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
+              <a href="#" ng-click="edit_product_attribute($event, product_attribute.id)">{{product_attribute.name}}</a>
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
+              {{product_attribute.category}}
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
+              <i href="#" class="fa fa-pencil-square-o" ng-click="edit_product_attribute($event, product_attribute.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+              <i class="fa fa-trash-o" ng-click="delete_product_attribute(product_attribute, $index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+            </div>
+          </div>
         </div>
       </div>
-      <div ng-init="active_attribute=false" ng-mouseenter="active_attribute=true" ng-mouseleave="active_attribute=false" ng-class="{'active-attribute-row': active_attribute}" ng-repeat="product_attribute in product_attributes  | filter: { name: searchText } as filteredResults" class="row" style="margin-left:0px;margin-right: 0px; background-color: white;text-align: center;padding: 1% 0%;border-bottom: solid 1.5px grey">
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
-          <img class="img-circle" style="border: solid 1px grey" ng-src="{{getImage(product_attribute.image.small)}}" alt="" />
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
-          <a href="#" ng-click="edit_product_attribute($event, product_attribute.id)">{{product_attribute.name}}</a>
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
-          {{product_attribute.category}}
-        </div>
-        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="padding: 1.75%">
-          <i href="#" class="fa fa-pencil-square-o" ng-click="edit_product_attribute($event, product_attribute.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-          <i class="fa fa-trash-o" ng-click="delete_product_attribute(product_attribute, $index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
     </div>
   </div>
 </div>
