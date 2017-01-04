@@ -3,7 +3,6 @@
     display: inline-block;
     width: 30%;
   }
-
   .productType-DivAlign {
     width: 50%;
     /* Set the margin-left and margin-right automatically set */
@@ -13,7 +12,6 @@
     margin-bottom: 10%;
     position: relative;
   }
-
   .productTypePlacard {
     background-color: white;
     border: 1px solid #D3DBE2;
@@ -21,19 +19,14 @@
     padding: 4% !important;
     margin-bottom: 15px;
   }
-
   .capitalize {
     text-transform: capitalize;
   }
 </style>
-
-
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types / <span style="color: black;">New Type</span></span>
-    </div>
-    <div class="col-lg-5 col-md-5">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="text-align: left;font-size: 20px;color:#928CA2;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Product Types / <span style="color: black;">New</span></span>
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
       <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
@@ -58,7 +51,7 @@
             <br>
             <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea>
             <br/>
-            <span class="required" style="font-size: 1.2em; font-weight: 900;">Length Required</span>
+            <span class="required" style="font-size: 1.2em; font-weight: 900;">Length Required(in meters)</span>
             <br>
             <input id="length" type="text" ng-model="productTypeData.length_required" class="form-control" placeholder="Length Required" autofocus>
             <br>
@@ -66,7 +59,7 @@
             <br>
             <input id="prod_input_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus>
             <br/>
-            <img id="product_type_image" src="{{getImage(productTypeData.image)}}" alt=""><br/><br/>
+            <img style="max-width: 100%" id="product_type_image" src="{{getImage(productTypeData.image)}}" alt=""><br/><br/>
             <p style="font-size: 1.2em; font-weight: 900;">Attributes</p>
             <div ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
               <h4 class="capitalize" style=" font-size: 15px;font-weight: 900; ">{{requiredAttributeName}}</h4>

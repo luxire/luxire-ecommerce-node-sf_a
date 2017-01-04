@@ -13,13 +13,11 @@
       position: relative;
   }
   .productTypePlacard{
-
       background-color: white;
       border: 1px solid #D3DBE2;
       border-radius: 4px;
       padding: 4% !important;
       margin-bottom: 15px;
-
   }
   p.capitalize {
       text-transform: capitalize;
@@ -28,14 +26,12 @@
 
 <div class="container-fluid" style="height:100%">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
-       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.productTypes">Product Types </a> <span style="font-weight:100;color:#928CA2;">/{{productTypeData.product_type}}</span>
-    </div>
-    <div class="col-lg-5 col-md-5">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="text-align: left;font-size: 20px;color:#928CA2;">
+       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<a  style="font-weight:100;color:#928CA2;" ui-sref="admin.productTypes">Product Types </a> <span style="font-weight:100;color: black;">/{{productTypeData.product_type}}</span>
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
       <button type="button" class="btn btn-default" ui-sref="admin.productTypes">Cancel</button>
-      <button type="button" class="btn btn-default" ng-click="updateProductType()">Update</button>
+      <button type="button" class="btn btn-primary" ng-click="updateProductType()">Update</button>
     </div>
   </div>
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
@@ -55,13 +51,13 @@
             <span style="font-size: 1.2em;font-weight: 900;">Description</span>
             <br>
             <textarea class="form-control" ng-model="productTypeData.description" rows="4" cols="20"></textarea><br/>
-            <span class="required" style="font-size: 1.2em; font-weight: 900;">Length Required</span>
+            <span class="required" style="font-size: 1.2em; font-weight: 900;">Length Required(in meters)</span>
             <br>
             <input id="name" type="text" ng-model="productTypeData.length_required" class="form-control" placeholder="Length Required" autofocus>
             <br>
             <span class="required" style="font-size: 1.2em;">Image</span><br/>
             <input id="prod_input_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus><br/>
-            <img id="product_type_image" src=""/></br><br/>
+            <img style="max-width: 100%" id="product_type_image" src=""/></br><br/>
             <p style="font-size: 1.2em;font-weight: 900;">Attributes</p>
             <div  ng-repeat="(key,value) in measurementTypeJson.data" ng-init="requiredAttributeName=key.split('_').join(' ')">
               <p class="capitalize" style="font-size: 15px;font-weight: 900;" >{{requiredAttributeName}}</p>
