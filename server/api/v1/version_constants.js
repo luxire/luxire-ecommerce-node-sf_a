@@ -45,6 +45,7 @@ module.exports = {
     measurement_types: '/measurement_types',
     product_types: '/luxire_product_types',
     style_masters: '/luxire_style_masters',
+    style_master_images: '/luxire_style_master_images',
     incomplete_order: '/get_order',
     luxireProperties: '/luxire_properties.json',
     alltaxons: '/api/taxons',
