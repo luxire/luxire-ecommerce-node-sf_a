@@ -131,7 +131,6 @@ exports.styleMastersDeleteById = function(req, res) {
 /*Utility to update image of style master*/
 exports.update_image = function(req, res){
   console.log("req params:",req.params);
-  // console.log('request to update image', req.params.id);
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
     // console.log("fields", fields);
@@ -166,6 +165,54 @@ exports.update_image = function(req, res){
       });
   });
 
+};
+
+exports.create_style_detail_image = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    var formDataToPost = {};
+    formDataToPost["luxire_style_master_image[category]"] = fields["category"];
+    formDataToPost["luxire_style_master_image[luxire_style_master_id]"] = fields["category"];
+    if(files && files.image){
+      formDataToPost["luxire_style_master_image[image]"] = {
+        value:  fs.createReadStream(files.image.path),
+        options: {
+          filename: files.image.name,
+          contentType: files.image.type
+        }
+      }
+    };
+    http
+    .post({
+      uri: constants.spree.host+constants.spree.style_master_images+'.json?token='+req.headers['X-Spree-Token'],
+      formData: formDataToPost
+      }, function(error, response, body){
+        if(error){
+          console.log('error', error);
+          res.status(500).send(error);
+        }
+        else{
+          console.log('body', body);
+          res.status(response.statusCode).send(body);
+        };
+      });
+  });
+};
+
+exports.delete_style_detail_image = function(req, res){
+  var form = new formidable.IncomingForm();
+  http
+  .delete({
+    uri: constants.spree.host+constants.spree.style_master_images+'/'+req.params.image_id+'.json?token='+req.headers['X-Spree-Token'],
+    formData: formDataToPost
+    }, function(error, response, body){
+      if(error){
+        res.status(500).send(error);
+      }
+      else{
+        res.status(response.statusCode).send(body);
+      };
+    });
 };
 
 /*----------*/
