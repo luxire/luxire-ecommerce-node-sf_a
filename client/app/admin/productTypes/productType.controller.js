@@ -160,10 +160,6 @@ angular.module('luxire')
     $uibModalInstance.dismiss('cancel');
   };
 })
-
-
-
-
 .controller('editProductTypeController',function($scope,productTypeService,prototypeObject,$state,$stateParams,$window, ImageHandler, $timeout){
 
   //Alerts to display the message
