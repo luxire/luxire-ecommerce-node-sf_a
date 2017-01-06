@@ -1,42 +1,57 @@
 angular.module('luxire')
-.controller('styleMasterHomeController',function($scope,styleMasterService,$state, ImageHandler){
-
-
+.controller('styleMasterHomeController',function($scope,styleMasterService,$state, ImageHandler, $uibModal){
   /*Image*/
   $scope.getImage = function(url){
-    console.log(ImageHandler.url(url));
     return ImageHandler.url(url);
   };
-  $scope.loading= true;
-  styleMasterService.getAllStyleMaster().then(function(data) {
+  function load_all_style_masters(){
     $scope.loading= true;
-    console.log("values of all style master \n\n");
-    $scope.allStyleMasterType=data.data;
-    console.log("\n\nall style master values are \n\n",data.data);
-    $scope.loading= false;
-
-  }, function(info){
-    $scope.loading= true;
-    console.log(info);
-
-  })
-  //$scope.loading = false;  // 18th march
-  $scope.deleteStyleMaster=function(id,index){
-
-      console.log("deleted style master id: \n"+index);
-      $scope.allStyleMasterType.splice(index, 1);
-      styleMasterService.deleteStyleMaster(id).then(function(data){
-          $scope.alerts.push({type: 'success', message: 'Style Master  Deleted Successfully!'});
-      }, function(info) {
-        console.log(info);
-        $scope.loading = true;
-      })
+    styleMasterService.getAllStyleMaster().then(function(data) {
+      $scope.loading= true;
+      $scope.allStyleMasterType=data.data;
+      $scope.loading= false;
+    }, function(error){
+      $scope.loading= false;
+      console.log(error);
+    })
   }
-
-  $scope.editStyleMaster=function(id){
-    console.log("style master params id in home: "+id);
-    $state.go("admin.styleMasterEdit",{id: id});
+  load_all_style_masters();
+  $scope.deleteStyleMaster=function(product_style,index){
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'delete_style.html',
+      controller: 'DeleteProductStyleController',
+      size: 'md',
+      backdrop: 'static',
+      resolve: {
+        product_style: function () {
+          return product_style;
+        }
+      }
+    });
+    modalInstance.result.then(function (product_style) {
+      load_all_style_masters();
+      $scope.alerts.push({type: 'success', message: 'Deleted Product style '+product_style.name+' successfully!'});
+    }, function () {
+      console.info('Modal dismissed at: ' + new Date());
+    });
   }
+})
+.controller('DeleteProductStyleController', function($scope, $uibModalInstance, product_style, styleMasterService){
+  $scope.product_style = product_style;
+  $scope.delete = function () {
+    $scope.loading = true;
+    styleMasterService.deleteStyleMaster(product_style.id).then(function(data){
+      $scope.loading = false;
+      $uibModalInstance.close(product_style);
+    }, function(error) {
+      console.log(error);
+      $scope.loading = false;
+      $scope.alerts.push({type: 'danger', message: 'Deletion failed!'});
+    })
+  };
 
-
-});
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+})

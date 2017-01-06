@@ -1,25 +1,3 @@
-<!--style>
-   .aligning{
-     margin-left: 50px;
-     margin-right: 50px;
-     margin-bottom: 500px;
-
-
-   }
-   div.sm {
-     display: block;
-     float: left;
-     width: 35%;
-     margin-bottom: 10px;
-   }
-div.sm:last-child:after {
- clear: both;
- content: " ";
- display: block;
- height: 10px;
- overflow: hidden;
- }
-</style-->
 <style>
 .ProductType-checkboxColumn{
    display: inline-block;
@@ -27,289 +5,106 @@ div.sm:last-child:after {
 }
 .productType-DivAlign{
    width: 50%;
-   /* Set the margin-left and margin-right automatically set */
-   /*margin-left:10%;
-   margin-right: 10%;
-   margin-top: 10%;
-   margin-bottom: 10%;*/
    position: relative;
 }
 .productTypePlacard{
-
    background-color: white;
    border: 1px solid #D3DBE2;
    border-radius: 4px;
    padding: 4% !important;
    margin-bottom: 15px;
-
 }
-
-
 </style>
 <div class="container-fluid" style="height:100%">
  <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-   <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
-     <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Style Master / <span style="color: black;">New Style Master </span></span>
+   <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="text-align: left;font-size: 20px;">
+     <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Style Master / <span style="color: black;">New </span></span>
    </div>
-   <div class="col-lg-5 col-md-5">
-   </div>
-   <div class="col-lg-3 col-md-3" style="text-align: right;">
-     <!--<button type="button" class="btn btn-default" ng-click="activeButton('products')">Cancel</button>-->
-     <button type="button" class="btn btn-default" ng-click="save()" >Save</button>
+   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: right;">
      <button type="button" class="btn btn-default" ui-sref="admin.styleMasterHome" >Cancel</button>
-
+     <button type="button" class="btn btn-primary" ng-click="save()" >Save</button>
    </div>
  </div>
  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
    <img src="lib/assets/loader.gif"/>
  </div>
-
  <div class="row" style="margin-left: 0px;height: 93vh;">
    <div class="container-fluid admin-console-content">
      <div class="row" >
-      <div class="col-lg-2 col-md-2"> </div>
-       <div class="col-lg-8 col-md-8">
-         <div class="row" style="margin-top:10%;">
-           <div class="col-lg-2 col-md-2"> </div>
-           <div class="productTypePlacard col-lg-8 col-md-8" ng-init="emptyNameMsg=false;">
-               <span class="required" style="font-size: 1.2em; font-weight: 900;">Name</span>
-               <br>
-               <input type="text" id="name" ng-model="newProductType.name" ng-blur="checkStyleMasterName(newProductType.name)" class="form-control" placeholder="style master name.." autofocus>
-               <span ng-show="emptyNameMsg" style="color:red;">Name Can Not Be Empty</span>
-               <br>
-               <!-- <span style="font-size: 13px;">Description</span>
-               <br>
-               <div class="panel panel-default">
-                 <div class="panel-heading" style="padding: 0px;">
-                 </div>
-                 <div class="panel-body">
-                   <textarea class="description"  rows="2" cols="20"></textarea>
-                 </div>
-
-               </div> -->
-               <span class="required" style="font-size: 1.2em; font-weight: 900;">Image</span>
-               <!--Image-->
-               <input id="mandatory_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus>
-               <div style="padding-top:5%;padding-bottom:5%;"><img id="style_master_img" src="{{getImage(newProductType.image)}}" alt=""></div>
-               <!-- <img ng-if="!angular.isObject(newProductType.image)" src="{{getImage(newProductType.image)}}" alt="" /> 30th march
-               <img ng-if="angular.isObject(newProductType.image)" id="style_master_img" src="" alt="" /><br> -->
-
-              <span class="required" style="font-size: 1.2em; font-weight: 900;">Product type</span>
-
-               <div class="">
-                 <select id="mandatory_product_type" class="form-control" ng-model="luxire_product_type_id"  ng-change="showProductType()" autofocus>
-                   <!-- <option value = "0" label = "Please Select"></option> -->
-                   <option ng-repeat="type in allproductType" value={{type.id}}>
-                       {{type.product_type}}
-                   </option>
-                 </select>
+       <div class="col-lg-2 col-md-2" style="position: relative">
+         <div ng-if="style_cost['USD']" class="productTypePlacard" style="position: fixed;padding: 1% !important; top: 30%;width: 11%">
+           cost in USD: {{style_cost['USD']}}
+         </div>
+       </div>
+       <div class="productTypePlacard col-lg-8 col-md-8" ng-init="emptyNameMsg=false;">
+         <div class="" style="margin-top: 1%">
+           <span class="required" style="font-size: 1.2em; font-weight: 500;margin-top: 1%">Name</span>
+           <br>
+           <input type="text" id="name" ng-model="newProductType.name" ng-blur="checkStyleMasterName(newProductType.name)" class="form-control" placeholder="Style name" autofocus>
+           <span ng-show="emptyNameMsg" style="color: grey;">Name can't be empty</span>
+         </div>
+         <div class="" style="margin-top: 1%">
+           <span class="required" style="font-size: 1.2em; font-weight: 500;margin-top: 1%">Description</span>
+           <textarea class="form-control" ng-model="newProductType.description" placeholder="Style description in html" name="name" ></textarea>
+         </div>
+         <div class="" style="margin-top: 1%">
+           <span class="required" style="font-size: 1.2em; font-weight: 500;margin-top: 1%">Image</span>
+            <input id="mandatory_image" type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="" autofocus>
+            <img id="style_master_img" style="max-width: 100%" src="{{getImage(newProductType.image)}}" alt="">
+         </div>
+         <div class="" style="margin-top: 1%">
+           <span class="required" style="font-size: 1.2em; font-weight: 500;margin-top: 1%">Product type</span>
+           <div class="">
+             <select id="mandatory_product_type" class="form-control" ng-model="luxire_product_type_id"  ng-change="showProductType()" autofocus>
+               <option ng-repeat="type in allproductType" value={{type.id}}>
+                   {{type.product_type}}
+               </option>
+             </select>
+           </div>
+         </div>
+         <div ng-repeat="(key,value) in allMeasurementType " >
+           <div class="row" ng-if="key == 'customization_attributes' && allMeasurementType.customization_attributes.length" style="margin-top:2%;">
+             <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')" >
+               <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
+             </div>
+             <div class="" id="customization_attributes" ng-repeat="customizeObj in allMeasurementType.customization_attributes" style="margin-top: 2%; ">
+              <div class="col-md-4" style="padding-left:4%; margin-top:2%;">
+                <span>{{customizeObj.name}}</span>
+              </div>
+              <div class="col-md-8" style="padding-right:2%; padding-top:1%;">
+                <select class="form-control" ng-model="selectedCustomizeValue" ng-click="previousCustomizeValue = selectedCustomizeValue" ng-change="change_defaults(key, customizeObj.name, selectedCustomizeValue, null, previousCustomizeValue)">
+                  <option value = "" label = "Please Select"></option>
+                  <option ng-repeat=" (customizeKey,value) in customizeObj.value" ng-init="optionValue={value: customizeKey, cost: value.cost}" value="{{optionValue}}">
+                      {{customizeKey}}
+                  </option>
+                </select>
+              </div>
+             </div>
+           </div>
+           <div class="row" ng-if="key == 'personalization_attributes' && allMeasurementType.personalization_attributes.length " style="margin-top: 2%;">
+               <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
+                 <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
                </div>
-               <!-- <div class="row" ng-repeat="(key,value) in allMeasurementType " style="margin-top:5%;font-size:1em;">
-
-                    <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                      <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
-                    </div>
-                    <div class="row" ng-repeat="individualMeasurementType in value" style="padding-left:3%; margin-top:2%;">
-                      <div class="col-md-4" style="margin-top:1%;" ng-init="measurementTypeName=(individualMeasurementType.name)">
-                          <span style="font-size:90%;">{{individualMeasurementType.name}}</span>
-                      </div>
-                      <div class="col-md-8" style="padding-right:6%;">
-                        <select class="form-control" ng-model="key"  ng-change="showMeasurementType(keyToWord,measurementTypeName, key)" multiple>
-                          <option value = "0" label = "Please Select"></option>
-                          <option ng-repeat="(key,value) in individualMeasurementType.value" value="{{key}}">
-
-                              {{key}}
-                          </option>
-
-                        </select>
-                      </div>
-                    </div>
-
-               </div> -->
-               <div ng-repeat="(key,value) in allMeasurementType " >
-                 <div class="row" ng-if="key == 'customization_attributes' " style="margin-top:2%;">
-                       <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')" >
-                         <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
-                       </div>
-                       <div class="" id="customization_attributes" ng-repeat="customizeObj in allMeasurementType.customization_attributes" style="margin-top: 2%; ">
-                            <div class="col-md-4" style="padding-left:4%; margin-top:2%;">
-                              <span>{{customizeObj.name}}</span>
-                            </div>
-                            <div class="col-md-8" style="padding-right:2%; padding-top:1%;">
-                              <select class="form-control" ng-model="selectedCustomizeValue" ng-change="showMeasurementType(keyToWord,customizeObj.name, selectedCustomizeValue)">
-                                <option value = "" label = "Please Select"></option>
-                                <option ng-repeat=" (customizeKey,value) in customizeObj.value" value="{{customizeKey}}">
-                                    {{customizeKey}}
-                                </option>
-
-                              </select>
-                            </div>
-                       </div>
-                 </div>
-                 <div class="row" ng-if="key == 'personalization_attributes' " style="margin-top: 2%;">
-                     <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                       <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
-                     </div>
-                     <div class="row" id="customization_attributes" ng-repeat="customizeObj in allMeasurementType.personalization_attributes" style="margin-top: 2%;">
-                          <div class="col-md-4"  style="padding-left:6%; margin-top:2%;">
-                            <span>{{customizeObj.name}}</span>
-                          </div>
-                          <div class="col-md-8" style="padding-left:4%; padding-top:3%;">
-
-                            <div class="col-md-12" ng-if="customizeObj.name == 'Monogram'" style="padding-left:0%;">
-                              <div style="padding-left:-2%;"><input type="checkbox" ng-model="showMonogramVal" ng-click="showMonogramOption(showMonogramVal)"></div>
-                              <div class="" ng-show="showMonogram" >
-                                  <div ng-repeat="(key,val) in customizeObj.value">
-                                      <div style="padding-top:2%;">{{key}}</div>
-                                      <!-- <span ng-if"key == 'cost'">   <input type="text" class="form-control" id="usr" placeholder="key"></span>
-                                      <span ng-if"key == 'Initials'">   <input type="text" class="form-control" id="usr" placeholder="key"></span>
-                                      <span ng-if"key == 'Location'">   <input type="text" class="form-control" id="usr" placeholder="key"></span> -->
-
-
-                                      <!-- <select class="form-control" ng-model="selectedPersonalizationValues">
-                                        <option value = "" label = "Please Select"></option>
-                                        <option  ng-repeat="value in val"  value="{{ value }}">
-                                            {{ value }}
-                                        </option>
-
-                                      </select> -->
-                                      <div ng-if="key == 'cost'" style="padding-top:2%;"> <input type="text" ng-model="monogram.cost" class="form-control" id="usr" placeholder="enter cost"></div>
-                                      <div ng-if="key == 'Initials' " style="padding-top:2%;"> <input type="text" ng-model="monogram.Initials" class="form-control" id="usr" placeholder="enter initials"></div>
-                                      <div ng-if="key == 'Location' " style="padding-top:2%;">
-                                        <select class="form-control" ng-model="monogram.Location">
-                                          <option value = "" label = "Please Select"></option>
-                                          <option  ng-repeat="value in val"  value="{{ value }}">
-                                              {{ value }}
-                                          </option>
-
-                                        </select>
-                                      </div>
-                                      <div ng-if="key == 'Color' " style="padding-top:2%;">
-                                        <select class="form-control" ng-model="monogram.Color">
-                                          <option value = "" label = "Please Select"></option>
-                                          <option  ng-repeat="value in val"  value="{{ value }}">
-                                              {{ value }}
-                                          </option>
-
-                                        </select>
-                                      </div>
-                                      <div ng-if="key == 'Font' " style="padding-top:2%;">
-                                        <select class="form-control" ng-model="monogram.Font">
-                                          <option value = "" label = "Please Select"></option>
-                                          <option  ng-repeat="value in val"  value="{{ value }}">
-                                              {{ value }}
-                                          </option>
-
-                                        </select>
-                                      </div>
-                                  </div>
-                              </div>
-
-                            </div>
-                            <!-- <div class="row" ng-if="customizeObj.name == 'Contrast' " ng-repeat=" (key,value) in customizeObj.value">
-                              <input type="checkbox" ng-model="selectedStandardValue" ><span style="padding-left: 5%;">{{key}}</span>
-                              <span style="padding-left:0%;" ng-show="selectedStandardValue" ng-init="maxtag=1; mintag=1;">
-                                <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
-                                        max-tags="maxtag" min-tags="mintag" ng-blur="showMeasurementType(keyToWord,key,rule)" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
-                                          <auto-complete  source="loadItems($query)"></auto-complete>
-                                </tags-input>
-                              </span>
-                            </div> -->
-                            <div class="col-md-12"  ng-if="customizeObj.name == 'Contrast'" ng-repeat=" val in contrast" style="padding-left:0%;padding-top:2%;">
-                              <input type="checkbox" ng-model="selectedStandardValue" ><span style="padding-left: 5%;">{{val.name}}</span>
-                              <span style="padding-left:0%; padding-top:2%;" ng-show="selectedStandardValue" ng-init="maxtag=1; mintag=1;">
-                                <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true"
-                                        max-tags="maxtag" min-tags="mintag" ng-blur="showMeasurementType(keyToWord,rule,val.rule)" on-tag-added="add_product_tag($tag)" on-tag-removed="remove_product_tag($tag)">
-                                          <auto-complete  source="loadItems($query)"></auto-complete>
-                                </tags-input>
-                              </span>
-                            </div>
-
-                          </div>
-                     </div>
-                 </div>
-                 <div class="row" ng-if="key == 'standard_measurement_attributes' " style="margin-top: 2%;">
-                     <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                       <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
-                     </div>
-                     <div class="row" id="customization_attributes" ng-repeat="customizeObj in allMeasurementType.standard_measurement_attributes">
-                          <div class="col-md-4" style="padding-left:6%; margin-top:2%;">
-                            <span>{{customizeObj.name}}</span>
-                          </div>
-                          <div class="col-md-8" style="padding-right:5%; margin-top:2%;">
-                            <select class="form-control" ng-model="selectedStandardValue" ng-change="showMeasurementType(keyToWord,customizeObj.name, selectedStandardValue)">
-                              <option value = "" label = "Please Select"></option>
-                              <option ng-repeat=" val in customizeObj.value" value="{{val}}">
-                                  {{val}}
-                              </option>
-
-                            </select>
-                          </div>
-                     </div>
-                 </div>
-                 <!-- <div class="row" ng-if="key == 'body_measurement_attributes' " style="margin-top: 2%;">
-                     <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                       <span style="font-size:160%; padding-left:10%; text-transform: capitalize;">{{customizeKey}}</span>
-                     </div>
-                     <div class="row" id="customization_attributes" ng-repeat="bodyObj in allMeasurementType.body_measurement_attributes">
-                          <div class="col-md-4" style="padding-left:10%; margin-top:2%;">
-                            <span>{{bodyObj.name}}</span>
-                          </div>
-                          <div class="col-md-8" style="padding-right:6%;padding-top:3%;">-->
-                            <!-- <select class="form-control" ng-if=" bodyObj.value == !null" ng-model="selectedBodyValue" ng-change="showMeasurementType(keyToWord,bodyObj.name, selectedBodyValue)">
-                              <option value = "" label = "Please Select"></option>
-                              <option  ng-repeat=" val in bodyObj.value" value="{{val}}">
-                                  {{val}}
-                              </option>
-                              <span style="padding-top:5%;"><input ng-if=" bodyObj.value == null" type="text" ng-model="bodyObj.selected" class="form-control" placeholder="type body measurement..." ng-blur="showMeasurementType(keyToWord,bodyObj.name, bodyObj.selected)"> </span>
-
-                            </select> -->
-                            <!--<span style="padding-top:5%;"><input ng-if=" bodyObj.value == null" type="text" ng-model="bodyObj.selected" class="form-control" placeholder="type body measurement..." ng-blur="showMeasurementType(keyToWord,bodyObj.name, bodyObj.selected)"> </span>
-
-                             <div class="" ng-if=" bodyObj.value == !null" >
-                            </div>
-                          </div>
-                     </div>
-                 </div> -->
-                 <div class="row" ng-if="key == 'body_measurement_attributes' " style="margin-top: 2%;">
-                     <div class="row" ng-init="keyToWord=key.split('_')[0];customizeKey= key.split('_').join(' ')">
-                       <span style="font-size:160%; padding-left:6%; text-transform: capitalize;">{{customizeKey}}</span>
-                     </div>
-                     <div class="row" id="customization_attributes" ng-repeat="bodyObj in bodyMeasurement">
-                          <div class="col-md-4" style="padding-left:6%; margin-top:2%;">
-                            <span>{{bodyObj.name}}</span>
-                          </div>
-                          <div class="col-md-8" style="padding-right:5%;padding-top:3%;">
-                            <!-- <select class="form-control" ng-if=" bodyObj.value == !null" ng-model="selectedBodyValue" ng-change="showMeasurementType(keyToWord,bodyObj.name, selectedBodyValue)">
-                              <option value = "" label = "Please Select"></option>
-                              <option  ng-repeat=" val in bodyObj.value" value="{{val}}">
-                                  {{val}}
-                              </option>
-                              <span style="padding-top:5%;"><input ng-if=" bodyObj.value == null" type="text" ng-model="bodyObj.selected" class="form-control" placeholder="type body measurement..." ng-blur="showMeasurementType(keyToWord,bodyObj.name, bodyObj.selected)"> </span>
-
-                            </select> -->
-                            <span style="padding-top:5%;"><input type="text" ng-model="bodyObj.value" class="form-control" placeholder="type body measurement..." > </span>
-
-
-                          </div>
-                     </div>
-                 </div>
-               </div> <!-- 28th march end of outermost div -->
-
-
-               <div class="row" style="margin-top:20%;">
-                 <center><button type="button" class="btn btn-primary" ng-click="save()" >Save</button></center>
+               <div class="row" ng-repeat="personalizeObj in allMeasurementType.personalization_attributes" style="margin-top: 2%;">
+                <div class="col-md-4"  style="padding-left:6%; margin-top:2%;">
+                  <span>{{personalizeObj.name}}</span>
+                </div>
+                <div class="col-md-8" style="padding-left:4%; padding-top:3%;">
+                  <div class="" ng-if="restricted_params.indexOf(personalize_key.toLowerCase()) == -1" ng-repeat="(personalize_key, personalize_value) in personalizeObj.value">
+                    <input type="checkbox" name="name" ng-model="isChecked" ng-change="change_defaults(key, personalizeObj.name, {value: personalize_key, cost: personalize_value.cost}, isChecked)">&nbsp;&nbsp;{{personalize_key}}
+                  </div>
+                </div>
                </div>
            </div>
-           <div class="col-lg-2 col-md-2"> </div>
-
+           <!--If style selection required for standard measurement and body measurement use same template as that of customization as above -->
          </div>
-
+         <div class="row" style="margin-top:2%;">
+           <center><button type="button" class="btn btn-primary" ng-click="save()" >Save</button></center>
+         </div>
        </div>
        <div class="col-lg-2 col-md-2"> </div>
      </div>
    </div>
-
  </div>
  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
