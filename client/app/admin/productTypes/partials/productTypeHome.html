@@ -91,7 +91,7 @@
       <span><i class="fa fa-close col-md-2 col-sm-2 col-xs-2 col-lg-2" style="cursor: pointer;text-align: right;font-size: 18px; margin-top: 2%;color: #807F7F"  ng-click="cancel()"></i></span>
   </div>
   <div class="modal-body" >
-      <p>Are you sure you want to delete the product type "{{product_type.product_type}} "? This action cannot be reversed.</p>
+      <p>Are you sure you want to delete the product type {{'"'+product_type.product_type+'"'}} ? This action cannot be reversed.</p>
   </div>
   <div class="modal-footer" style="padding: 15px 20px 15px !important; margin-top: 0px !important">
       <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
