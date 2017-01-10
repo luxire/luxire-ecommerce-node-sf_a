@@ -3,7 +3,6 @@ angular.module('luxire')
   return {
       restrict: 'A',
       link: function(scope, elem, attr) {
-        console.log('attributes', attr.ifLoading);
         scope.isLoading = isLoading;
         scope.$watch(scope.isLoading, toggleElement);
         function toggleElement(loading) {
@@ -13,7 +12,6 @@ angular.module('luxire')
             }
             else if(attr.ifLoading=="hide"){
               elem.hide();
-
             }
           } else {
             if(attr.ifLoading=="show"){
@@ -38,8 +36,6 @@ angular.module('luxire')
 			raw = elem[0];
 			elem.bind("scroll", function(){
 					if(raw.scrollTop + raw.offsetHeight + 5 >= raw.scrollHeight){
-				//		scope.loading = true;
-						console.log('Firing next in dir');
 						scope.$apply(attrs.whenScrolled);
 					}
 			});
@@ -48,17 +44,13 @@ angular.module('luxire')
 })
 .directive("animateOnChange", function($timeout){
   return function(scope, element, attr){
-    console.log('attr in directive', attr.animateOnChange);
     scope.$watch(attr.animateOnChange, function(newVal, oldVal){
-      
       if(newVal!==oldVal){
         element.addClass('attr-changed');
         $timeout(function(){
           element.removeClass('attr-changed');
         }, 1000)
       }
-
     })
-
   };
 })
