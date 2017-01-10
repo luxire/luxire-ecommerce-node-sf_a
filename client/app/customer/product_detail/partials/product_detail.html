@@ -1906,26 +1906,22 @@ button.slick-arrow{
 
                             </div>
                             <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram' &&cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)"
-                              ng-repeat="(style_property,style_values) in monogram_options" style="padding-top: 4%">
-
-                              <div style="background: #F4F5F5; padding: 3% 5%" ng-repeat="(property_key, property_val) in style_values">
-                                <div ng-if="check_unpermitted_customization_params('monogram', property_key.toLowerCase())" class="row" style="margin-left: 0px; margin-right: 0px">
+                              ng-repeat="(style_property,style_values) in monogram_options" style="padding-top: 10%">
+                              <div ng-show="style_property && style_property.toLowerCase() == 'monogram'" style="background: #F4F5F5; " ng-repeat="(property_key, property_val) in style_values track by $index">
+                                <div ng-show="check_unpermitted_customization_params('monogram', property_key.toLowerCase())" class="row" style="margin-left: 0px; margin-right: 0px;padding: 1% 5%">
                                   <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="font-weight: 300; font-size: 90%; padding: 0px">
                                     {{property_key}}
                                   </div>
-                                  <div ng-if="property_val.options && !checkIsArray(property_val.options)" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 0px">
+                                  <div ng-show="!property_val" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 0px">
                                     <input type="text" class="form-control" placeholder="{{property_key}}" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][property_key]">
                                   </div>
-                                  <div ng-if="property_val.options && checkIsArray(property_val.options)" style="padding: 0px"class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                  <div ng-show="property_val && property_val.options && checkIsArray(property_val.options)" style="padding: 0px"class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <select class="form-control"  name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][property_key]">
                                       <option ng-repeat="option in property_val.options" value="{{option}}" style="width: 80%">{{option}}</option>
                                     </select>
                                   </div>
-
                                 </div>
                               </div>
-
-
                             </div>
 
                           </div>
