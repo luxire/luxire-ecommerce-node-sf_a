@@ -26,7 +26,6 @@ Products
 exports.index = function(req, res) {
   var spree_cookie = [];
   console.log('req to search', req.query);
-  console.log(constants.spree.host+constants.spree.products);
   var qstr = ''
   for(var x in req.query){
     if(typeof req.query[x]=='object'){
@@ -94,17 +93,39 @@ exports.search = function(req, res) {
 
 
 //Get product by id
+exports.show = function(req, res){
+  http
+    .get({
+      uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+    }
+    , function(error, response, body){
+      if(error){
+        res.status(500).send(error.syscall);
+      }
+      else{
+        prediction.create({
+          "event" : "view",
+          "entityType" : "user",
+          "entityId" : "1",       //need to change for guest user
+          "targetEntityType" : "item",
+          "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
+        });
+        res.status(response.statusCode).send(body);
+      };
+  });
+};
 // exports.show = function(req, res){
 //   console.log('req params', req.params);
 //   console.log('req cookies', req.cookies.guest_token);
 //   http
 //     .get({
-//       uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
-//       headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+//       uri: constants.redis.host+'/api/redis/v1/products/'+req.params.id,
 //     }
 //       , function(error, response, body){
 //         if(error){
 //           res.status(500).send(error.syscall);
+//           console.log('response from redis failed', error);
 //         }
 //         else{
 //           prediction.create({
@@ -114,43 +135,10 @@ exports.search = function(req, res) {
 //             "targetEntityType" : "item",
 //             "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
 //           });
-//           console.log('response cookies', response.headers['set-cookie']);
-//           if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
-//             for(var i=0; i<response.headers['set-cookie'].length; i++){
-//               spree_cookie = response.headers['set-cookie'][i].split(';');
-//               if(spree_cookie[0].split('=')[0]==='guest_token'){
-//                 res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
-//               }
-//             }
-//           }
 //           res.status(response.statusCode).send(body);
 //         };
 //   });
 // };
-exports.show = function(req, res){
-  console.log('req params', req.params);
-  console.log('req cookies', req.cookies.guest_token);
-  http
-    .get({
-      uri: constants.redis.host+'/api/redis/v1/products/'+req.params.id,
-    }
-      , function(error, response, body){
-        if(error){
-          res.status(500).send(error.syscall);
-          console.log('response from redis failed', error);
-        }
-        else{
-          prediction.create({
-            "event" : "view",
-            "entityType" : "user",
-            "entityId" : "1",       //need to change for guest user
-            "targetEntityType" : "item",
-            "targetEntityId" : JSON.parse(body).id //need to change as user may pass slug
-          });
-          res.status(response.statusCode).send(body);
-        };
-  });
-};
 
 //get variants of a product
 exports.productVariants = function(req, res) {
