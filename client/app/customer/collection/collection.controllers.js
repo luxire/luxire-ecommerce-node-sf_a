@@ -1,6 +1,5 @@
 angular.module('luxire')
 .controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils, $timeout){
-  console.log('state params', $stateParams);
   $scope.reverse_price = false;//predicate for sorting products by price
   $scope.allProductsData=[];
   var filter_mapping = {
@@ -170,7 +169,6 @@ angular.module('luxire')
   $scope.loading_filters = true;
   CustomerProducts.filter_properties()
   .then(function(data){
-    console.log('filters', data.data);
     angular.forEach(data.data, function(val, key){
       filter_index = required_filters.indexOf(val.name);
       if(filter_index != -1){
@@ -187,8 +185,6 @@ angular.module('luxire')
     console.error(error);
     $scope.loading_filters = false;
   });
-
-  $scope.allProductsData=[];
 
   var load_products = function(){
     if(CustomerProducts.is_active_collections($scope.selected_redis_filters.taxonomy)){
@@ -273,7 +269,6 @@ angular.module('luxire')
     $scope.allProductsData = [];
     generate_url_for_filters($scope.selected_filters);
     // load_products();
-
     $('html, body').animate({ scrollTop: 0}, 500);
   };
 
@@ -288,8 +283,6 @@ angular.module('luxire')
     $scope.selected_filters.price_start = price_start;
     $scope.selected_filters.price_end = price_end;
     /*To handle situation of changing price filter*/
-
-    console.log('filter by price load products');
     generate_url_for_filters($scope.selected_filters);
     // load_products();
   }
@@ -312,7 +305,6 @@ angular.module('luxire')
             return '#DD9FDF'
         },
         onEnd: function(sliderId, modelValue, highValue, pointerType){
-          console.log('min', modelValue, 'max', highValue);
           $scope.filter_by_price(modelValue, highValue, currency)
         }
       }
@@ -392,7 +384,6 @@ angular.module('luxire')
     return total_range.toString();
   }
   $scope.select_filter_option = function(property, option, db_field){
-    console.log('property', property, 'option', option, 'db_field', db_field);
     if(!$scope.selected_filters[property] || option === 'all'){
       $scope.selected_filters[property] = option;
       /*For redis post*/
@@ -406,12 +397,6 @@ angular.module('luxire')
       }
       else if($scope.selected_filters[property] && option === 'all'){
         delete $scope.selected_redis_filters[db_field];
-        if(property == 'price'){
-          // $scope.selected_redis_filters.page = 1;
-          // $scope.allProductsData = [];
-          // console.log('load products test - all prices');
-          // load_products();// fixing duplicates
-        }
       }
       /*For redis post*/
     }
@@ -447,20 +432,11 @@ angular.module('luxire')
     $scope.allProductsData=[];
     $scope.selected_redis_filters.page = 1;
     // console.log('selected filters', btoa(angular.toJson($scope.selected_filters)));
-    console.log('selected filters', $scope.selected_filters);
-
-    console.log('output to redis', $scope.selected_redis_filters);
-
-
     generate_url_for_filters($scope.selected_filters);
-
-    // load_products();
-
   };
   /*Filters-end*/
 
   $rootScope.$on('fetched_order_from_cookie', function(event, data){
-    console.log('event fired', data);
   });
 
   /*Filters from redis*/
@@ -686,7 +662,6 @@ angular.module('luxire')
 
   $scope.order_swatch = function(variant){
     $scope.loading_products = true;
-    console.log(variant);
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
       CustomerOrders.add_line_item($rootScope.luxire_cart, {}, variant)
       .then(function(data){
@@ -701,7 +676,6 @@ angular.module('luxire')
           $scope.loading_products = false;
           console.error(error);
         });
-        console.log(data);
       },function(error){
         console.error(error);
       });
@@ -714,7 +688,6 @@ angular.module('luxire')
         // $state.go('customer.cart');
         $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
         // $state.go('customer.pre_cart');
-        console.log(data);
       },function(error){
         $scope.loading_products = false;
         console.error(error);
@@ -727,9 +700,6 @@ angular.module('luxire')
 
     $scope.animationsEnabled = true;
     $scope.showQuickView=function(product, size){
-      console.log("quick view fun is calling...");
-      console.log("product: ",product);
-      console.log('is fabric', $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false);
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: 'quickViewContent.html',
@@ -754,7 +724,6 @@ angular.module('luxire')
 
       modalInstance.result.then(function (selectedItem) {
         $scope.selected = selectedItem;
-        console.log("modal return value is : ",selectedItem);
       }, function () {
         console.info('Modal dismissed at: ' + new Date());
       });
