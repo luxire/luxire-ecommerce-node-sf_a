@@ -331,14 +331,10 @@ angular.module('luxire')
 		}
 	})
 	.state('admin.order_sheet',{
-		url:'/orders/:order_number',
+		url:'/orders/:order_number?line_item_id',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/order/partials/sidebarOrders.html'},
 			"mainContent": { templateUrl: 'app/admin/order/partials/order_sheet.html',controller: 'OrderSheetController' }
-		},
-		params: {order: null},
-		data: {
-			require_auth: true
 		},
 		data: {
 			require_auth: true
