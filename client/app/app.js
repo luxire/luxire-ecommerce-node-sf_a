@@ -120,8 +120,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 		},
 	})
 	.state('order_sheet_print',{
-		url: '/order_sheet/:order_number',
-		params: {param	: {}},
+		url: '/order_sheet/:order_number?line_item_id',
 		templateUrl: 'app/admin/order/partials/order_sheet.html',
 		controller: 'OrderSheetController',
 		data: {
