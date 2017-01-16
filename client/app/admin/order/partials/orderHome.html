@@ -12,9 +12,7 @@
     <div class="col-lg-10 col-md-10" style="text-align: right">
       <button type="button" class="btn btn-default" style="color: #3276b1;">Export</button>
       <button type="button" class="btn btn-primary" ui-sref="admin.new_order">Create order</button>
-
     </div>
-
   </div>
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
     <img src="lib/assets/loader.gif"/>
@@ -55,7 +53,7 @@
               <li><a href="#">Separated link</a></li>
             </ul>
             </div><!-- /btn-group -->
-            <input type="text" class="form-control" ng-model="searchText" aria-label="...">
+            <input type="text" class="form-control" ng-model="searchText" ng-keyup="searchByName(searchText)" aria-label="...">
           </div>
         </div>
         <div class="row div-scroll" when-scrolled="load_more_orders()" style="margin:0px; background-color: white; padding: 0px 20px;">
@@ -86,7 +84,7 @@
               </tr>
             </thead>
             <tbody >
-              <tr ng-repeat="order in orders | filter:filter_orders | filter: searchText" ng-mouseover="show_order_details($event, order, $index)">
+              <tr ng-repeat="order in orders " ng-mouseover="show_order_details($event, order, $index)">
                 <td style="text-align: center">
                   <input type="checkbox" name="selectAll" value="">
                 </td>
@@ -128,7 +126,7 @@
                   </div>
                 </td>
                 <td style="text-align: center">
-                  {{order.currency==="USD"? '$'+order.total : order.total}}
+                  {{order.display_total}}
                 </td>
               </tr>
             </tbody>
