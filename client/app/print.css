@@ -5,17 +5,26 @@
   max-width: 30%
 }
 body {
-  padding: 5% 5%;
+  padding: 0 2%;
   color:#000000;
   word-spacing: 1.1pt;
   font-family : "Times New Roman", Times, serif;
   text-align:left;
 }
+.admin-console-content {
+	height: 100%;
+	background-color: #EBEEF0;
+	overflow-y: scroll;
+	padding: 0 !important;
+  position: relative;
+}
 #order_sheet_data{
   display: block;
-  page-break-inside:avoid;
+  border: none !important;
+  page-break-after: always !important;
 
 }
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -32,4 +41,20 @@ table, th, td {
  }
  .qrcode{
    width: 200px
+ }
+ .avoid-page-break-inside{
+   page-break-inside:avoid !important;
+   position: relative;
+ }
+ table.avoid-page-break-inside tr td, table.avoid-page-break-inside tr th {
+   page-break-inside:avoid !important;
+   position: relative;
+   page-break-after: always !important;
+
+ }
+ table tr td, table tr th {
+   page-break-inside:avoid !important;
+   position: relative;
+   page-break-after: always !important;
+
  }
