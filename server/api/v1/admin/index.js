@@ -49,12 +49,16 @@ app.use(function(req, res, next){
   }
 });
 
+/*product*/
 app.use('/products', require('./product'));
 app.use('/measurement_types', require('./measurement_type'));
 app.use('/product_types', require('./product_type'));
 app.use('/style_masters', require('./style_master'));
 app.use('/allTaxons', require('./allTaxons'));
 app.use('/standard_size', require('./standard_size'));
+/*order*/
+app.use('/orders', require('./order'));
+
 
 
 
