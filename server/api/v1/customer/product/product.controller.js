@@ -53,7 +53,6 @@ exports.index = function(req, res) {
         }
         res.status(response.statusCode).send(body);
       };
-
   });
 };
 
@@ -199,38 +198,6 @@ exports.collections = function(req, res){
         res.status(response.statusCode).send(body);
       };
   });
-  // console.log('get collection', req.query.permalink,'page', req.query.page);
-  // //todo guest token check
-  // if(req.cookies.guest_token == undefined || req.cookies.guest_token == null){
-  //   http
-  //     .get(constants.spree.host+constants.spree.collections+'?permalink='+req.query.permalink, function(error, response, body){
-  //       if(error){
-  //         res.status(500).send(error.syscall);
-  //       }
-  //       else{
-  //         for(var i=0; i<response.headers['set-cookie'].length; i++){
-  //           spree_cookie = response.headers['set-cookie'][i].split(';');
-  //           if(spree_cookie[0].split('=')[0]==='guest_token'){
-  //             res.cookie('guest_token', spree_cookie[0].split('=')[1],{expires: new Date(spree_cookie[2].split('=')[1])});
-  //           }
-  //         }
-  //         console.log('collection response code', response.statusCode);
-  //         res.status(response.statusCode).send(body);
-  //       };
-  //   });
-  // }
-  // else{
-  //   http
-  //     .get(constants.redis.host+constants.redis.collections+'?'+conv_to_query(req.body), function(error, response, body){
-  //       if(error){
-  //         res.status(500).send(error.syscall);
-  //       }
-  //       else{
-  //         console.log('collection response', body);
-  //         res.status(response.statusCode).send(body);
-  //       };
-  //   });
-  // }
 
   /*fetch collection without redis*/
   // http
@@ -387,7 +354,6 @@ exports.recommended = function(req, res){
 exports.apply_filters = function(req, res){
   console.log('req body', req.body);
   console.log('req query', req.query);
-  console.log('redis', constants.redis.host+constants.redis.products_filter);
   console.log('query str', conv_to_query(req.body));
   http.post({
     uri: constants.redis.host+constants.redis.products_filter+'?'+conv_to_query(req.body),
