@@ -7,7 +7,8 @@ angular.module('luxire')
 		measurement_types: '/api/v1/admin/measurement_types',//product attributes
 		style_masters: '/api/v1/admin/style_masters',
 		standard_size: '/api/v1/admin/standard_size',
-		allTaxons: '/api/v1/admin/allTaxons'
+		allTaxons: '/api/v1/admin/allTaxons',
+		orders: '/api/v1/admin/orders'
 	};
 })
 .service('prototypeObject',function(){
