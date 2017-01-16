@@ -4,19 +4,25 @@ angular.module('luxire')
   $scope.total_pages = 1;
   $scope.orders = [];
   $scope.loading = false;
-  var load_orders = function(page){
+  var search = {
+    page: 0
+  };
+  var load_orders = function(new_orders){
     $scope.loading = true;
-    console.log('loading orders for page', page);
-    AdminOrderService.index(page).then(function(data){
-      if($scope.orders.length){
-        $scope.orders = $scope.orders.concat(data.data.orders);
+    AdminOrderService.index(search).then(function(data){
+      if(new_orders){
+        $scope.orders = data.data.orders;
       }
       else{
-        $scope.orders = data.data.orders;
+        if($scope.orders.length){
+          $scope.orders = $scope.orders.concat(data.data.orders);
+        }
+        else {
+          $scope.orders = data.data.orders;
+        }
       }
       $scope.total_pages = data.data.pages;
       $scope.loading = false;
-      console.log('orders', data.data);
     }, function(error){
       $scope.loading = false;
       console.error(error);
@@ -24,13 +30,17 @@ angular.module('luxire')
   }
 
   $scope.load_more_orders = function(){
-    console.log('end of page reached current page', $scope.current_page,'total pages', $scope.total_pages);
-    if($scope.current_page<=$scope.total_pages){
-      console.log('load more orders for page', $scope.current_page);
-
-      load_orders($scope.current_page);
-      $scope.current_page = $scope.current_page + 1;
+    if(search.page<$scope.total_pages){
+      search.page = search.page + 1;
+      load_orders();
     }
+  };
+
+  $scope.searchByName  = function(searchText){//email_or_number_cont
+    $scope.orders = [];
+    search["email_or_number_cont"] = $scope.searchText;
+    search.page = 1;
+    load_orders(true);
   };
 
   $scope.order_tabs = [
@@ -44,35 +54,46 @@ angular.module('luxire')
     },
     {
       id: 2,
-      title: 'Unpaid'
+      title: 'Open'
     },
     {
       id: 3,
+      title: 'Unpaid'
+    },
+    {
+      id: 4,
       title: 'Unfulfilled'
     },
   ];
   $scope.active_order_tab_id = 0;
+  function set_states(order_eq, payment_eq, shipment_eq, order_not_eq, payment_not_eq, shipment_not_eq){
+    search['state_eq'] = order_eq || "";
+    search['payment_state_eq'] = payment_eq || "";
+    search['shipment_state_eq'] = shipment_eq || "";
+    search['state_not_eq'] = order_not_eq || "";
+    search['payment_state_not_eq'] = payment_not_eq || "";
+    search['shipment_state_not_eq'] = shipment_not_eq || "";
+  };
   $scope.set_active_order_tab_id = function(id){
     $scope.active_order_tab_id = id;
+    set_states();
+    if(id == 1){
+      set_states("","","",'complete');
+    }
+    else if(id == 2){
+      set_states('complete','',"",'','','');
+    }
+    else if(id == 3){
+      set_states("complete","","","","paid","");
+    }
+    else if(id == 4){
+      set_states("complete","paid","","","","shipped");
+    }
+    $scope.orders = [];
+    search.page = 1;
+    load_orders(true);
   };
 
-  $scope.filter_orders = function(order){
-    console.log('filtering orders');
-    var filtered_orders = [];
-    if($scope.active_order_tab_id === 0){
-      return order;
-    }
-    else if($scope.active_order_tab_id === 1 && order.state !== 'complete'){
-      return order;
-    }
-    else if($scope.active_order_tab_id === 2 && order.state == 'complete' && order.payment_state !== 'paid'){
-      return order;
-    }
-    else if($scope.active_order_tab_id === 3 && order.state == 'complete' && order.payment_state == 'paid' && order.shipment_state !== 'ready'){
-      return order;
-    }
-
-  }
   /*Set order details in $scope.active_order*/
   $scope.show_order_details = function(event, order, index){
     event.preventDefault();
@@ -81,14 +102,7 @@ angular.module('luxire')
 
   $scope.show_order = function(event, order){
     event.preventDefault();
-    console.log(order);
     $state.go('admin.order_sheet', {order_number: order.number});
-    // orders.get_order_by_id(order.number, order.token).then(function(data){
-    //   console.log(data);
-    //   $state.go('admin.order_sheet',{order_number: order.number,order: data.data});
-    // }, function(error){
-    //   console.error(error);
-    // });
   };
 
   $scope.order_details_popover = {
@@ -96,27 +110,6 @@ angular.module('luxire')
     templateUrl: 'order_details_popover.html',
     order_obj: $scope.active_order
   };
-  // $scope.show_order_details = function(event, order, index){
-  //   event.preventDefault();
-  //   // window.print();
-  //   var modalInstance = $uibModal.open({
-  //     animation: true,
-  //     templateUrl: 'order_details_modal.html',
-  //     controller: 'OrderDetailsModalController',
-  //     size: 'sm',
-  //     resolve: {
-  //       order: function () {
-  //         return order;
-  //       }
-  //     }
-  //   });
-  //
-  //   modalInstance.result.then(function (selectedItem) {
-  //     $scope.selected = selectedItem;
-  //   }, function () {
-  //     console.info('Modal dismissed at: ' + new Date());
-  //   });
-  // };
 })
 .controller('OrderDetailsModalController',function($scope, $uibModalInstance, order){
   $scope.order = order;
@@ -125,34 +118,44 @@ angular.module('luxire')
   };
 
   $scope.print_order_sheet = function(){
-    console.log('printing order sheet...');
     window.print();
   };
 
 })
-.controller('OrderSheetController', function($scope, $state, $stateParams, ImageHandler, AdminConstants, AdminOrderService, $rootScope){
-  console.log('state', $state);
+.controller('OrderSheetController', function($scope, $state, $stateParams, ImageHandler, AdminConstants, AdminOrderService, $rootScope, $timeout){
   $scope.current_state = $state.current.name;
+  $scope.line_item_id = isNaN($stateParams.line_item_id) ? null : parseInt($stateParams.line_item_id);
+  $scope.getFormattedDate = function(date){
+    if(moment(date).format("Z") == "+05:30"){
+      return moment(date).format("DD-MM-YYYY hh:mm A") + " IST";
+    }
+    else{
+      return moment(date).format("DD-MM-YYYY hh:mm A Z");
+    }
+  };
   $scope.isStatePrint = function(){
     if ($state.current.name === "order_sheet_print"){
       return true;
     }
     return false;
   };
-  AdminOrderService.show($stateParams.order_number).then(function(data){
-    console.log('fetched order', data.data);
-    $scope.order = data.data;
-    $scope.luxire_order = data.data;
-
-  }, function(error){
-    console.log('error', error);
-  });
-  // if($scope.luxire_order && $scope.luxire_order.luxire_order && !$scope.luxire_order.luxire_order.fulfillment_status){
-  //   $scope.luxire_order.luxire_order = {};
-  //   $scope.luxire_order.luxire_order.fulfillment_status = ''
-  // }
-
-  console.log('luxire_order', $scope.luxire_order);
+  $scope.print = function(){
+    $timeout(function(){
+      window.print();
+    },0)
+  };
+  function load_order(){
+    $scope.loading = true;
+    AdminOrderService.show($stateParams.order_number).then(function(data){
+      $scope.order = data.data;
+      $scope.loading = false;
+      $scope.luxire_order = data.data;
+    }, function(error){
+      $scope.loading = false;
+      console.log('error', error);
+    });
+  }
+  load_order();
   $scope.order_states = [
     {
       id: 0,
@@ -171,23 +174,65 @@ angular.module('luxire')
       title: 'Delivered'
     }
   ];
+
+  var fabric_states = ["Order received", "Order sheet generated", "Pattern Making", "Fabric cutting", "Tailoring", "Quality assurance", "Shipped", "Delivered"];
+  var pocket_square_states = ["Order received", "Make Printable Image", "Send for Printing", "Hand Rolling", "Quality assurance", "Shipped", "Delivered"];
+  var shoes_states = ["Order received", "Trial Pair", "Sent Trial Pair", "Analyze customer feedback", "Modify order", "Make Final Pair", "Quality assurance", "Shipped", "Delivered"];
+  var gift_card_states = ["Pending", "Scheduled for Fulfillment", "Fulfilled"];
+  var additional_services_states = ["Merged with original order", "Pending", "Fulfilled"];
+
+
+  $scope.product_type_states = {
+    "Shirts": fabric_states,
+    "Pants": fabric_states,
+    "Jackets": fabric_states,
+    "Vests": fabric_states,
+    "Ties": fabric_states,
+    "Pocket Squares": pocket_square_states,
+    "Shoes": shoes_states,
+    "Gift Cards": gift_card_states,
+    "Additional Services": additional_services_states
+  }
+
+  /*Order state change*/
   $scope.change_status = function(state){
     $scope.selected_order_state = state;
+    $scope.loading = true;
     AdminOrderService.update_status($scope.luxire_order, state)
     .then(function(data){
       $scope.luxire_order.luxire_order.fulfillment_status = state.title;
       $rootScope.alerts.push({type: 'success', message: data.data.msg});
-      console.log('data', data);
+      load_order();
     }, function(error){
+      $rootScope.alerts.push({type: 'danger', message: error.data.msg});
+      $scope.loading = false;
+      console.error('error', error);
+    });
+  }
+
+  /*Line Item state change*/
+  $scope.change_line_item_status = function(line_item_id, status,index){
+    var order_obj = {
+      order: {
+        number: $scope.luxire_order.number,
+        token: $scope.luxire_order.token
+      },
+      line_item_id: line_item_id,
+      state: status
+    }
+    $scope.loading = true;
+    AdminOrderService.update_line_item_status(order_obj)
+    .then(function(data){
+      load_order();
+      $rootScope.alerts.push({type: 'success', message: data.data.msg});
+    }, function(error){
+      $scope.loading = false;
       $rootScope.alerts.push({type: 'danger', message: error.data.msg});
       console.error('error', error);
     });
   }
-  // $scope.order_url = window.location.href+'/'+$stateParams.order_number;
-
-  $scope.preview_order_sheet = function () {
-    var new_url = window.location.origin+"/#/order_sheet/"+$scope.order.number;
-    console.log('new url', new_url);
+  $scope.preview_order_sheet = function (line_item_id) {
+    var new_url = $state.href('order_sheet_print', {order_number: $scope.order.number,line_item_id: line_item_id});
     var win = window.open(new_url, '_blank');
     win.focus();
   }
