@@ -1,11 +1,28 @@
+<style media="screen">
+  #order_sheet_outer_area{
+    margin-left: 0px;
+    height: 93vh;
+  }
+</style>
+<style >
+  table {
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid black;
+    padding: 0% 0.5%;
+  }
+
+
+</style>
 <div ng-cloak class="container-fluid" style="height:100%;overflow: hidden">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;" print-remove>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left;font-size: 20px;">
       <i class="fa fa-check-square" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Orders/ {{order.number}} </span>
     </div>
     <div ng-if="!isStatePrint()" class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
-      Status:
       <div class="" style="display: inline-block">
+        Order status:
         <div class="btn-group" uib-dropdown>
           <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
             {{luxire_order&&luxire_order.luxire_order&&luxire_order.luxire_order.fulfillment_status&&luxire_order.luxire_order.fulfillment_status!=='' ? luxire_order.luxire_order.fulfillment_status: 'Select Status'}}<span class="caret"></span>
@@ -16,37 +33,20 @@
         </div>
 
       </div>
-      <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet()">Order Sheet</button>
+      <button ng-if="!line_item_id" type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet()">Order Sheet</button>
     </div>
     <div ng-if="isStatePrint()" class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: right">
-      <button type="button" class="btn btn-default" style="color: #3276b1;" print-btn>Print Order</button>
+      <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="print()">Print</button>
     </div>
-
-
   </div>
-  <style media="screen">
-    #order_sheet_outer_area{
-      margin-left: 0px;
-      height: 93vh;
-    }
-  </style>
-  <style >
-    table {
-      border-collapse: collapse;
-    }
-
-    table, th, td {
-      border: 1px solid black;
-      padding: 0% 0.5%;
-    }
-
-  </style>
-
-  <div id="order_sheet_outer_area" class="row" style="">
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;" print-remove>
+    <img src="lib/assets/loader.gif"/>
+  </div>
+  <div id="order_sheet_outer_area" print-section class="row" style="">
     <!-- /*border: 1px solid #DBDEE0;*/ -->
     <div class="container-fluid admin-console-content" >
-      <div id="order_sheet_data" class="row" style="margin:0% 0% 0% 1.5%; background-color: white; border: 1px solid #DBDEE0;" >
-        <div class="row"  print-section style="margin: 2% 2%">
+      <div id="order_sheet_data" ng-if="!line_item_id || (line_item_id && line_item.id == line_item_id)" class="row" style="margin:0.5% 1.5%; background-color: white; border: 1px solid #DBDEE0;" ng-repeat="line_item in luxire_order.line_items">
+        <div class="row"   style="margin: 1%">
           <div class="row">
             <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
               <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
@@ -56,7 +56,7 @@
                 {{order.email}}<br>
               </p>
             </div>
-            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="text-align: center">
               <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                 Order No:
               </p>
@@ -69,7 +69,7 @@
                 Date:
               </p>
               <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-               {{order.updated_at | date: 'short'}}
+               {{getFormattedDate(order.updated_at)}}
               </p>
             </div>
           </div>
@@ -82,16 +82,23 @@
                 {{order.product_types}}
               </p>
             </div>
-            <div class="col col-md-4 col-lg-4">
-
+            <div class="col col-md-4 col-lg-4" style="text-align: center;font-size: 106">
+              Line Item Id:{{line_item.id}}
             </div>
-            <div class="col col-md-4 col-lg-4">
-
+            <div ng-if="!isStatePrint()" class="col col-md-4 col-lg-4">
+              <div class="btn-group" uib-dropdown print-remove>
+                <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                  {{line_item && line_item.luxire_line_item.fulfillment_status ? line_item.luxire_line_item.fulfillment_status: 'Select Status'}}<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                  <li role="menuitem" ng-repeat="state in product_type_states['Shirts']" ng-click="change_line_item_status(line_item.id, state)"><a href="javascript:void(0)">{{state}}</a></li>
+                </ul>
+              </div>
+              <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet(line_item.id)" print-remove>Order Sheet</button>
             </div>
           </div>
-          <div id="order-line-item" class="row" style="margin: 0px" ng-repeat="line_item in luxire_order.line_items">
+          <div id="order-line-item" class="row" style="margin: 0px" >
             <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black">
-
             <div class="row">
               <div class="col col-md-8 col-lg-8  col-sm-8 col-xs-8">
                 <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
@@ -101,7 +108,6 @@
                   {{line_item.variant.name}}
                 </p>
               </div>
-
               <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
                 <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                   Sku:
@@ -112,7 +118,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col col-md-6 col-lg-6  col-sm-6 col-xs-6">
+              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
                 <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                   Pattern:
                 </p>
@@ -120,8 +126,11 @@
 
                 </p>
               </div>
+              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
 
-              <div class="col col-md-6 col-lg-6  col-sm-6 col-xs-6">
+              </div>
+
+              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
                 <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                   Rack:
                 </p>
@@ -129,26 +138,26 @@
                   {{line_item.luxire_stock.rack}}
                 </p>
               </div>
-              Measurement unit: {{line_item.luxire_line_item.measurement_unit}}
             </div>
-            <div class="row" style="margin-top: 2%" >
-                <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-                  <img id="order_sheet_prod_img" style="max-width: 30%;margin-left: 30%;margin-top: 10%" src="{{getImage(line_item.variant.images[0].small_url)}}" alt="product_image" />
-                </div>
-                <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="margin-left: 1.2%">
-                  <qrcode version="5" error-correction-level="Q" size="125" data="{{window.location.href+'/'+order.number}}"></qrcode>
-                </div>
-                <div class="col col-md-4 col-lg-4">
-
-                </div>
+            <div class="row" style="margin-top: 1%" >
+              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                Measurement unit: {{line_item.luxire_line_item.measurement_unit}}
               </div>
-            <div ng-if="line_item.luxire_line_item.send_sample" class="row" style="text-align: left;margin: 0px">
-                Note: Customer should send sample for measurements.
             </div>
+            <div ng-if="line_item.luxire_line_item.send_sample" class="row" style="text-align: left;margin: 0px">
+              <b>  Note: Customer should send sample for measurements.</b>
+            </div>
+            <div class="row" style="margin-top: 2%;text-align: center" >
+              <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5">
+                <img id="order_sheet_prod_img" style="max-width: 30%;margin-left: 30%;margin-top: 10%" ng-src="{{getImage(line_item.variant.images[0].small_url)}}" alt="product_image" />
+              </div>
+              <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5" style="margin-left: 1.2%">
+                <qrcode version="5" error-correction-level="Q" size="125" data="{{window.location.href+'/'+order.number}}"></qrcode>
+              </div>
 
+            </div>
             <div class="row" >
               <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-
               </div>
               <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="margin-left: 4%">
                 <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px;" >
@@ -156,13 +165,10 @@
                 </p>
               </div>
               <div class="col col-md-4 col-lg-4">
-
               </div>
-
-
             </div>
             <!--Customisation data-->
-            <div class="row" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in line_item.luxire_line_item.customized_data">
+            <div class="row avoid-page-break-inside" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in line_item.luxire_line_item.customized_data">
               <div class="row" style="margin: 0px">
                 <div class="col col-md-4 col-lg-4;" style="padding: 0">
                   <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
@@ -173,21 +179,21 @@
                   </p>
                 </div>
               </div>
-              <div class="row" style="margin: 0px">
-                <div class="col col-md-4 col-lg-4" style="padding: 0">
-                  <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+              <div class="row avoid-page-break-inside" style="margin: 0px">
+                <div class="col col-md-4 col-lg-4 avoid-page-break-inside" style="padding: 0">
+                  <p class="avoid-page-break-inside" style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
                     Details:
                   </p>
-                  <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+                  <p class="avoid-page-break-inside" style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
                   </p>
                 </div>
               </div>
-              <div class="row" style="margin: 0px;">
-                <div class="" ng-if="detail_key.toLowerCase() !== 'custom_images'" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center" ng-repeat="(detail_key, detail_value) in val.options">
-                  <div class="">
+              <div class="row avoid-page-break-inside" style="margin: 0px;">
+                <div class="avoid-page-break-inside" ng-if="detail_key.toLowerCase() !== 'custom_images'" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center" ng-repeat="(detail_key, detail_value) in val.options">
+                  <div class="avoid-page-break-inside">
                     {{detail_key}}
                   </div>
-                  <div class="" style="border-top: solid 1px grey">
+                  <div class="avoid-page-break-inside" style="border-top: solid 1px grey">
                     <span ng-if="detail_value">{{detail_value}}</span>
                     <span ng-if="!detail_value">&nbsp;</span>
                   </div>
@@ -196,7 +202,7 @@
                   <div class="" style="margin-top: 2%" ng-repeat = "custom_image in val.options['custom_images']">
                     <b>Notes for image {{$index+1}}:</b> {{custom_image.notes}}
                     <div class="">
-                      <img src="{{getImage(custom_image.url)}}" alt="" />
+                      <img ng-src="{{getImage(custom_image.url)}}" alt="" />
                     </div>
                   </div>
                 </div>
@@ -205,14 +211,10 @@
                     <b>Notes {{$index+1}}:</b> {{custom_note.content}}
                   </div>
                 </div>
-
               </div>
-
             </div>
-
             <!--Personalisation data-->
             <div ng-if="!line_item.luxire_line_item.customized_data[attribute]" class="row" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in line_item.luxire_line_item.personalize_data">
-
               <div class="row" style="margin: 0px">
                 <div>
                   <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
@@ -226,7 +228,6 @@
                     {{key}}:
                   </div>
                   <div style="margin-left: 2%" ng-repeat="(k,v) in value">
-
                     <div ng-if="k.toLowerCase() !=='cost'" style="margin-left: 2%">
                       <div style="display: inline-block">
                         {{k}}:
@@ -235,7 +236,6 @@
                         {{v}}
                       </div>
                     </div>
-
                   </div>
                 </div>
                 <div ng-if="!checkIsObject(value) && key.toLowerCase() !=='cost'" style="margin-left: 2%" >
@@ -246,177 +246,136 @@
                     {{value}}
                   </div>
                 </div>
-
               </div>
+            </div>
+            <div class="row" style="padding-top: 1%">
+              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                  Measurements:
+                </p>
+                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+
+                </p>
+              </div>
+            </div>
+            <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin: 0px !important; padding-top: 1%;width: 100%">
 
             </div>
-
-          <div class="row" style="padding-top: 1%">
-            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Contrasts:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-
-              </p>
+            <div  ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin-left: 0px !important;padding-top: 1%">
+              <table >
+                <thead>
+                  <tr>
+                    <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
+                      {{body_attr}}
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  style="text-align: center">
+                    <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
+                      <p ng-if="val.value">{{val.value}}</p>
+                      <p ng-if="!val.value">&nbsp;</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="" style="margin-top: 1%;margin-right: 2%">
+                <div class="" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center;" ng-repeat="(attr_key, attr_val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
+                  <div class="">
+                    <b>{{attr_key}}</b>
+                  </div>
+                  <div class="" style="border-top: solid 1px grey">
+                    <span ng-if="attr_val.value">{{attr_val.value}}</span>
+                    <span ng-if="!attr_val.value">&nbsp;</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="row" style="padding-top: 1%">
+              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                  Contrasts:
+                </p>
+                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
 
-          <div class="row" style="margin-left: 0px !important">
-            <table >
-              <thead>
-                <tr>
-                  <td>SPI</td>
-                  <td>Contrast</td>
-                  <td>Buttons</td>
-                  <td>Hand Kaja</td>
-                  <td>Thread Collar</td>
-                  <td>Kaja Collar</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr  style="text-align: center">
-                  <td>&nbsp;&nbsp;</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- <div class="row" style="padding-top: 1%">
-            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Contrast:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-
-              </p>
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="row" style="margin-left: 0px !important">
-            <table >
-              <thead>
-                <tr>
-                  <td>Collar Back</td>
-                  <td>Collar Front</td>
-                  <td>NB Inside</td>
-                  <td>NB Outside</td>
-                  <td>Placket Btn</td>
-                  <td>Placket Kaja</td>
-                  <td>Cuff Out</td>
-                  <td>Cuff In</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr  style="text-align: center">
-                  <td>&nbsp;&nbsp;</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
+            <div class="row" style="margin-left: 0px !important">
+              <table >
+                <thead>
+                  <tr>
+                    <td>SPI</td>
+                    <td>Contrast</td>
+                    <td>Buttons</td>
+                    <td>Hand Kaja</td>
+                    <td>Thread Color</td>
+                    <td>Kaja Color</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  style="text-align: center">
+                    <td>&nbsp;&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
 
- -->
-    <div class="row" style="padding-top: 1%">
-      <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-        <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-          Measurements:
-        </p>
-        <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+            <div class="row" style="padding-top: 1%">
+              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
+                  Customer:
+                </p>
+                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
 
-        </p>
-      </div>
-    </div>
-    <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin: 0px !important; padding-top: 1%;width: 100%">
-      <div class="" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center" ng-repeat="(attr_key, attr_val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
-        <div class="">
-          {{attr_key}}
-        </div>
-        <div class="" style="border-top: solid 1px grey">
-          <span ng-if="detail_value">{{attr_val}}</span>
-          <span ng-if="!detail_value">&nbsp;</span>
-        </div>
-      </div>
-    </div>
-    <div  ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin-left: 0px !important;padding-top: 1%">
-      <table >
-        <thead>
-          <tr>
-            <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
-              {{body_attr}}
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr  style="text-align: center">
-            <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
-              <p ng-if="val.value">{{val.value}}</p>
-              <p ng-if="!val.value">&nbsp;</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                </p>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 1%">
+              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4" style="font-size: 12px; font-weight: 500">
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.full_name">{{luxire_order.bill_address.full_name}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address1">{{luxire_order.bill_address.address1}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address2">{{luxire_order.bill_address.address2}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.city">{{luxire_order.bill_address.city}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.state">{{luxire_order.bill_address.state.name}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.country">{{luxire_order.bill_address.country.name}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.zipcode">{{luxire_order.bill_address.zipcode}}</p>
+                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.phone">{{luxire_order.bill_address.phone}}</p>
+              </div>
+            </div>
 
-    <div class="row" style="padding-top: 1%">
-      <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-        <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-          Customer:
-        </p>
-        <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
+            <div class="row" style="padding-top: 1%;margin-left: 0px;text-align: center">
+              <table class="avoid-page-break-inside">
+                <thead>
+                  <tr>
+                    <td>Order Sheet</td>
+                    <td>Pattern</td>
+                    <td>Fabric</td>
+                    <td>Tailor</td>
+                    <td>QA</td>
+                    <td>Final Checking</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  style="text-align: center">
+                    <td>&nbsp;&nbsp;</td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
 
-        </p>
-      </div>
-    </div>
-    <div class="row" style="padding-top: 1%">
-      <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4" style="font-size: 12px; font-weight: 500">
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.full_name">{{luxire_order.bill_address.full_name}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address1">{{luxire_order.bill_address.address1}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address2">{{luxire_order.bill_address.address2}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.city">{{luxire_order.bill_address.city}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.state">{{luxire_order.bill_address.state.name}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.country">{{luxire_order.bill_address.country.name}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.zipcode">{{luxire_order.bill_address.zipcode}}</p>
-        <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.phone">{{luxire_order.bill_address.phone}}</p>
-      </div>
-    </div>
-
-    <div class="row" style="padding-top: 1%;margin-left: 0px;text-align: center">
-      <table >
-        <thead>
-          <tr>
-            <td>Order Sheet</td>
-            <td>Pattern</td>
-            <td>Fabric</td>
-            <td>Tailor</td>
-            <td>QA</td>
-            <td>Final Checking</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr  style="text-align: center">
-            <td>&nbsp;&nbsp;</td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
           <!-- <div ng-repeat="(key, value) in order_details">
             {{key}}: {{value}}
