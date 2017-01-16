@@ -342,15 +342,17 @@ avoid conflict with customer ctrl on admin side*/
     }
     else if($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "cm"){
       $scope.selected_measurement_unit = $scope.measurement_units[1];
+      $rootScope.$broadcast('measurement_unit_change', $scope.selected_measurement_unit);
     }
-    else{
-      $scope.selected_measurement_unit = $scope.measurement_units[0];
-    }
+    // else{
+    //   $scope.selected_measurement_unit = $scope.measurement_units[0];
+    // }
   }
   else{
     $scope.selected_measurement_unit = $scope.measurement_units[0];
   }
-  var update_order_measurement_unit = function(unit){
+  var update_order_measurement_unit = function(measurement_unit_obj, successCallBack, failureCallBack){
+    var unit = measurement_unit_obj.symbol.toLowerCase();
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.line_items.length){
       $scope.loading = true;
       var luxire_line_items = [];
@@ -373,19 +375,27 @@ avoid conflict with customer ctrl on admin side*/
       .then(function(data){
         $rootScope.luxire_cart = data.data;
         $scope.loading = false;
+        successCallBack();
       }, function(error){
         console.log('error', error.data);
         $scope.loading = false;
-
+        failureCallBack();
       });
-
+    }
+    else{
+      successCallBack();
     }
   };
 
   $scope.change_measurement_unit = function(measurement_unit){
-    $scope.selected_measurement_unit = measurement_unit;
-    update_order_measurement_unit(measurement_unit.symbol.toLowerCase());
-    $rootScope.$broadcast('measurement_unit_change', measurement_unit);
+    if($scope.selected_measurement_unit.symbol.toLowerCase() !== measurement_unit.symbol.toLowerCase()){
+      update_order_measurement_unit(measurement_unit, function(){
+        $scope.selected_measurement_unit = measurement_unit;
+        $rootScope.$broadcast('measurement_unit_change', measurement_unit);
+      }, function(){
+        console.log('failed to update measurement unit');
+      });
+    }
   };
 
   $scope.change_currency = function(currency){

@@ -30,12 +30,10 @@ angular.module('luxire')
     }
   };
   this.custom_image_upload = function(image){
-    console.log('image', image);
     var fd = new FormData();
     fd.append('source', 'customer image');
     fd.append('image', image);
     fd.append('size', '128x128');
-    console.log('fd', fd);
     return $http.post(CustomerConstants.api.products+'/custom_image_upload', fd, {
         transformRequest: angular.identity,
         headers: {'Content-Type': undefined}
@@ -51,7 +49,6 @@ angular.module('luxire')
   var product_cache = CacheFactory.get('ProductCache');
 
   this.index = function(){
-    console.log('products index', CustomerConstants.api.products);
     return $http.get(CustomerConstants.api.products);
   };
 
@@ -134,7 +131,6 @@ angular.module('luxire')
     return $http.get(CustomerConstants.api.product_types);
   };
   this.recommended = function(id){
-    console.log('fetch recommended for', id);
     return $http.post(CustomerConstants.api.products+'/recommended', angular.toJson({ref_id: id}));
   };
   this.apply_filters = function(filter_object){
@@ -161,9 +157,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.orders+'/new');
   };
 
-    this.create_order = function(cartObject, variant, sample, selected_currency){
-    // total_perosnalisation_cost_in_currencies: cartObject.personalization_cost,
-
+  this.create_order = function(cartObject, variant, sample, selected_currency, selected_measurement_unit){
     var order = {
       order: {
         currency: CustomerUtils.get_local_currency_in_app(),
@@ -175,13 +169,13 @@ angular.module('luxire')
               total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
               total_personalization_cost: cartObject && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
               send_sample: sample ? true : false,
+              measurement_unit: selected_measurement_unit,
               customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
               personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
               measurement_data: {
                 standard_measurement_attributes: cartObject && cartObject.standard_measurement_attributes ? cartObject.standard_measurement_attributes : {},
                 body_measurement_attributes: cartObject && cartObject.body_measurement_attributes ? cartObject.body_measurement_attributes : {}
               }
-
             }
           }
         ],
@@ -196,13 +190,12 @@ angular.module('luxire')
   };
 
   this.update = function(order, updated_order_object){
-    console.log('update order with', updated_order_object);
     return $http.put(CustomerConstants.api.orders+'/'+order.number+'?order_token='+order.token, angular.toJson(updated_order_object));
   };
 
   /*line_items*/
 
-  this.add_line_item = function(order, cartObject, variant, send_sample, selected_currency){
+  this.add_line_item = function(order, cartObject, variant, send_sample, selected_currency, selected_measurement_unit){
     var line_item = {
       line_item: {
         variant_id: variant.id,
@@ -211,6 +204,7 @@ angular.module('luxire')
           total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
           total_personalization_cost: cartObject && cartObject.personalization_cost && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
           send_sample: send_sample ? true : false,
+          measurement_unit: selected_measurement_unit,
           customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
           personalize_data: cartObject && cartObject.personalization_attributes ? cartObject.personalization_attributes : {},
           measurement_data: {
@@ -276,7 +270,6 @@ angular.module('luxire')
 		    }
 		  }
 		}
-    console.log(shipment);
 		return $http.post(CustomerConstants.api.checkouts+'/'+order.number+"/payment?order_token="+order.token, angular.toJson(shipment));
 	};
 	this.apply_coupon_code = function(order, coupon_code){
@@ -292,8 +285,6 @@ angular.module('luxire')
   };
 
   this.checkout_payment_pay_pal = function(payment_method_id, order){
-    console.log('payment_method_id', payment_method_id);
-    console.log('order', order);
     var payment = {
       payment_method_id: payment_method_id,
       order_id: order.id
@@ -414,7 +405,6 @@ angular.module('luxire')
 })
 .service('ProductType', function(){
   this.shirts = function(){
-    console.log('init shirt');
     return {
       cloth_measurement_attributes: {
         "Collar Size": [],
