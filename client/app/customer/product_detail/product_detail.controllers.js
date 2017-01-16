@@ -97,6 +97,7 @@ angular.module('luxire')
   /*Unit conversion*/
   $scope.selected_measurement_unit = "in";
   $scope.$on('measurement_unit_change', function(event, data){
+    console.log(data.symbol.toLowerCase(), $scope.cart_object);
     $scope.selected_measurement_unit = data.symbol.toLowerCase();
     $scope.selected_measurement_unit === "cm" ? CustomerUtils.convert_in_to_cm($scope.cart_object) : CustomerUtils.convert_cm_to_in($scope.cart_object);
   });
@@ -328,7 +329,7 @@ angular.module('luxire')
     $scope.loading_cart = true;
     if(has_valid_measurements()){
       if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
-        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency)
+        CustomerOrders.add_line_item($rootScope.luxire_cart, $scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency, $scope.selected_measurement_unit)
         .then(function(data){
           CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
             $rootScope.luxire_cart = data.data;
@@ -346,7 +347,7 @@ angular.module('luxire')
         });
       }
       else{
-        CustomerOrders.create_order($scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency)
+        CustomerOrders.create_order($scope.cart_object, variant, $scope.selected_measurement_id == 4 ? true : false, $scope.selected_currency, $scope.selected_measurement_unit)
         .then(function(data){
           $rootScope.luxire_cart = data.data;
           $scope.loading_cart = false;
@@ -378,7 +379,6 @@ angular.module('luxire')
         else{
           $scope.cart_object[attribute_type][key]['value'] = '';
         }
-
       }
     })
     return;
@@ -441,7 +441,6 @@ angular.module('luxire')
       $scope.style_extractor(selected_style);
       $scope.cart_object.selected_style = selected_style;
     }, function () {
-      console.info('Modal dismissed at: ' + new Date());
     });
     modal_instance.opened.then(function(){
       $timeout(function(){
@@ -572,7 +571,6 @@ angular.module('luxire')
       }
       $scope.display_summary = true;
     }, function () {
-      console.info('Modal dismissed at: ' + new Date());
     });
   };
 
@@ -1059,7 +1057,7 @@ angular.module('luxire')
         attribute_value = (Math.round((parseFloat(attribute_value))*100)/100).toFixed(3);
       }
       else if(selected_measurement_unit == "cm"){
-        attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
+        attribute_value = (Math.round((parseFloat(attribute_value))*10)/10).toFixed(2);//attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
       }
     }
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
@@ -1551,7 +1549,7 @@ angular.module('luxire')
           if(attribute_type == "personalization_attributes" ){
             angular.forEach(style[attribute_type][key], function(val, name){
               if($scope.cart_object[attribute_type][key][name]){
-                if($scope.product_personalization_attributes[key][name].cost){//(val.cost)Added on 5 jan to remove cost from style object
+                if($scope.product_personalization_attributes[key] && $scope.product_personalization_attributes[key][name] && $scope.product_personalization_attributes[key][name].cost){//(val.cost)Added on 5 jan to remove cost from style object
                   $scope.remove_personalization_cost($scope.product_personalization_attributes[key][name].cost);//val.cost
                 }
                 delete $scope.cart_object[attribute_type][key][name];
@@ -1580,7 +1578,7 @@ angular.module('luxire')
               // if(val.cost){
               //   $scope.add_personalization_cost(val.cost);
               // }
-              if($scope.product_personalization_attributes[key][name].cost){//(val.cost)Added on 5 jan to remove cost from style object
+              if($scope.product_personalization_attributes[key] && $scope.product_personalization_attributes[key][name] &&$scope.product_personalization_attributes[key][name].cost){//(val.cost)Added on 5 jan to remove cost from style object
                 $scope.add_personalization_cost($scope.product_personalization_attributes[key][name].cost);//val.cost
               }
             })
@@ -1590,6 +1588,15 @@ angular.module('luxire')
               $scope.cart_object[attribute_type][key] = {};
             }
             $scope.cart_object[attribute_type][key]['value'] = style[attribute_type][key];
+            if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']]){
+              var style_object = $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']];
+              angular.forEach(style_object, function(val1, key1){
+                if($scope.check_unpermitted_customization_params($scope.cart_object['customization_attributes'][key]['value'], key1)){
+                  /*Change 15 March 2015 to set default*/
+                  $scope.cart_object["customization_attributes"][key]['options'][key1] = angular.isObject(style_object[key1])? style_object[key1].default : style_object[key1];
+                }
+              });
+            }
             if($scope.cart_object['customization_attributes'][key]['value'] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']] && $scope.product_customization_attributes[key][$scope.cart_object['customization_attributes'][key]['value']].cost){
               if(!$scope.cart_object["personalization_attributes"]){
                 $scope.cart_object["personalization_attributes"] = {};
@@ -1931,53 +1938,53 @@ angular.module('luxire')
          $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] = '';
          $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = {};
          delete $scope["customization_attributes"][$scope.selected_bespoke_attribute.name];
-     }
-     else{
-       if(!style_object.cost && $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
-         var attr_to_remove = $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][$scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']];
-         if(attr_to_remove){
-           $scope.remove_personalization_cost(attr_to_remove['cost']);
-         }
-         delete $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][$scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']];
-       };
-       if(style_object.cost){
-         if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
-           $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]= {};
-         }
-         if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
-           obj_keys = Object.keys($scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]);
-           if(obj_keys.length){
-             $scope.remove_personalization_cost($scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][obj_keys[0]]['cost']);
-             delete $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][obj_keys[0]];
-             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name] = {};
-             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['cost'] = style_object.cost;
-             $scope.add_personalization_cost(style_object.cost);
-           }
-           else{
-             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name] = {};
-             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['cost'] = style_object.cost;
-             $scope.add_personalization_cost(style_object.cost);
-           }
-         }
        }
-       $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] = style_name;
-       if(!angular.isObject($scope["customization_attributes"])){
-         $scope["customization_attributes"] = {};
-       };
-       if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name])){
-         $scope["customization_attributes"][$scope.selected_bespoke_attribute.name] = {};
-       };
-       if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name]) && !angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name]["options"])){
-         $scope["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = {};
-       }
-       angular.forEach(style_object, function(val, key){
-         if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'], key)){
-           /*Change 15 March 2015 to set default*/
-           $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'][key] = angular.isObject(style_object[key])? style_object[key].default : style_object[key];
+       else{
+         if(!style_object.cost && $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
+           var attr_to_remove = $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][$scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']];
+           if(attr_to_remove){
+             $scope.remove_personalization_cost(attr_to_remove['cost']);
+           }
+           delete $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][$scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']];
+         };
+         if(style_object.cost){
+           if($scope.cart_object["personalization_attributes"] && !$scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
+             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]= {};
+           }
+           if($scope.cart_object["personalization_attributes"] && $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
+             obj_keys = Object.keys($scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]);
+             if(obj_keys.length){
+               $scope.remove_personalization_cost($scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][obj_keys[0]]['cost']);
+               delete $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][obj_keys[0]];
+               $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name] = {};
+               $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['cost'] = style_object.cost;
+               $scope.add_personalization_cost(style_object.cost);
+             }
+             else{
+               $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name] = {};
+               $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['cost'] = style_object.cost;
+               $scope.add_personalization_cost(style_object.cost);
+             }
+           }
          }
-       });
-       $scope["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = style_object;
-     }
+         $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] = style_name;
+         if(!angular.isObject($scope["customization_attributes"])){
+           $scope["customization_attributes"] = {};
+         };
+         if(angular.isObject($scope["customization_attributes"]) && !angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name])){
+           $scope["customization_attributes"][$scope.selected_bespoke_attribute.name] = {};
+         };
+         if(angular.isObject($scope["customization_attributes"]) && angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name]) && !angular.isObject($scope["customization_attributes"][$scope.selected_bespoke_attribute.name]["options"])){
+           $scope["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = {};
+         }
+         angular.forEach(style_object, function(val, key){
+           if($scope.check_unpermitted_customization_params($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'], key)){
+             /*Change 15 March 2015 to set default*/
+             $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'][key] = angular.isObject(style_object[key])? style_object[key].default : style_object[key];
+           }
+         });
+         $scope["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = style_object;
+       }
     }
     else if(attr_type == 'personalize'){
       if($scope.selected_bespoke_attribute.name.toLowerCase()=='monogram'){

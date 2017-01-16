@@ -1066,7 +1066,6 @@ button.slick-arrow{
           </div>
           <div class="row" style="margin-left: 0px; margin-right: 0px;">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
               <div class="btn-group" style="display: inline-block;width: 82%" uib-dropdown uib-keyboard-nav>
@@ -1777,8 +1776,7 @@ button.slick-arrow{
                                         <div ng-class="{'active-bespoke-attributes-slide': cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)}" class="luxireStyle" style="background-color: #FDFDFD;padding: 5%;display: block;text-align: center" >
                                           <img ng-src="{{getImage(selected_bespoke_attribute.value.image)||'assets/images/customer/grey_circle.png'}}"
                                             ng-class="{'active-bespoke': cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)}"
-
-                                            class="img-circle" style="border: solid 1.5px #E5E5E5; "
+                                            class="img-circle" style="border: solid 1.5px #E5E5E5; background: white "
                                               onError="this.onerror=null;this.src='assets/images/customer/grey_circle.png';">
                                         </div>
                                         <div style="font-size: 85%;text-align: center;padding-top:1%;">
@@ -1940,17 +1938,17 @@ button.slick-arrow{
 </script>
 <script type="text/ng-template" id="attribute_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all[cloth_measurement_attribute]['help'])}}">
+    <img  style="max-width: 270%;border: solid 1px black" ng-src="{{getOriginalImage(standard_measurement_attributes_all[cloth_measurement_attribute]['help'])}}">
   </div>
 </script>
 <script type="text/ng-template" id="collar_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Collar Size']['help'])}}"/>
+    <img  style="max-width: 270%;border: solid 1px black" ng-src="{{getOriginalImage(standard_measurement_attributes_all['Collar Size']['help'])}}"/>
   </div>
 </script>
 <script type="text/ng-template" id="sleeve_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Sleeve Length']['help'])}}"/>
+    <img  style="max-width: 270%;border: solid 1px black" ng-src="{{getOriginalImage(standard_measurement_attributes_all['Sleeve Length']['help'])}}"/>
   </div>
 </script>
 <script type="text/ng-template" id="waist_help_template.html">
@@ -1961,12 +1959,12 @@ button.slick-arrow{
 </script>
 <script type="text/ng-template" id="inseam_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(standard_measurement_attributes_all['Inseam']['help'])}}"/>
+    <img  style="max-width: 270%;border: solid 1px black" ng-src="{{getOriginalImage(standard_measurement_attributes_all['Inseam']['help'])}}"/>
   </div>
 </script>
 <script type="text/ng-template" id="body_attribute_help_template.html">
   <div>
-    <img  style="max-width: 270%;border: solid 1px black" src="{{getOriginalImage(body_measurement_attributes_all[body_measurement.name]['help'])}}">
+    <img  style="max-width: 270%;border: solid 1px black" ng-src="{{getOriginalImage(body_measurement_attributes_all[body_measurement.name]['help'])}}">
   </div>
 </script>
 <div  ng-class="{'offset-top-loading': loading_product === true}"  id="footer" class="row" style="margin-left: 0px; margin-right: 0px;background-color:#000000;color:white;padding-top:1%;padding-bottom:2%;">
