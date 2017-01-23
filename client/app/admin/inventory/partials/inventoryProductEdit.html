@@ -1,16 +1,11 @@
 
 <div class="container-fluid" style="height:100%" >
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-2 col-md-2" style="text-align: center;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Products</span>
-    </div>
-    <div class="col-lg-6 col-md-6">
-
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;margin: 0">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="text-align: left;font-size: 20px;">
+      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Inventory / {{parentSku}}</span>
     </div>
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
-        <!--<button type="button" class="btn btn-default">Export</button>-->
-        <!--<button type="button" class="btn btn-default" ng-click="importModal('md')">Import</button>-->
       </div>
       <button type="button" class="btn btn-default" ui-sref="admin.inventory">Cancel</button>
     </div>
@@ -20,7 +15,7 @@
     <img src="lib/assets/loader.gif"/>
   </div>
 
-  <div class="row" style="height: 93vh;">
+  <div class="row" style="height: 93vh;margin: 0">
     <div class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
@@ -31,7 +26,7 @@
 
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
+        <div class="row" style="margin:0px; background-color: white; padding: 20px 20px 0 20px;">
           <div class="input-group">
             <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
@@ -47,7 +42,7 @@
           </div>
         </div>
 
-        <div  class="row" style="margin:0px; background-color: white; padding: 20px;">
+        <div  class="row" style="margin:0px; background-color: white; padding: 0 20px; 0 0">
           <div class="row" ng-show="noProductMsg">
             <div class="col-md-9">
               <center><span style="font-size: 150%; color:red;">No product in this inventory </span><center>
@@ -85,7 +80,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="product in allInventoryRelatedProducts.product | filter:{name:searchText}">
+                  <tr ng-repeat="product in products | filter:{name:searchText}">
                     <td>
                       <input type="checkbox" name="selectAll" value="">
                     </td>

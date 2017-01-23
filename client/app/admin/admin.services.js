@@ -8,7 +8,8 @@ angular.module('luxire')
 		style_masters: '/api/v1/admin/style_masters',
 		standard_size: '/api/v1/admin/standard_size',
 		allTaxons: '/api/v1/admin/allTaxons',
-		orders: '/api/v1/admin/orders'
+		orders: '/api/v1/admin/orders',
+		inventory: '/api/v1/admin/inventory',
 	};
 })
 .service('prototypeObject',function(){

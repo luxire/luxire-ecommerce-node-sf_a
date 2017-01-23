@@ -117,10 +117,7 @@ angular.module('luxire')
 	})
 
 	.state('admin.inventoryProductEdit',{
-		url:'/inventory_product_edit',
-		params: {
-			obj:null
-		},
+		url:'/inventory_product_edit/:id',
 		views: {
 			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
 			"mainContent": { templateUrl: 'app/admin/inventory/partials/inventoryProductEdit.html',controller: 'inventoryProductEditController' },

@@ -1,200 +1,139 @@
+<style>
+  .div-scroll {
+    height: 40pc;
+    overflow: scroll;
+  }
+</style>
 <div class="container-fluid" style="height:100%" >
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
-    <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
+  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;margin: 0">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="color:#928CA2;font-seze:2em;">Products &nbsp;/&nbsp;Inventory</span>
-    </div>
-    <div class="col-lg-4 col-md-4">
-
     </div>
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
-      <!-- <button type="button" class="btn btn-default btn-danger" ui-sref="admin.inventory">Cancel</button> -->
-      <!-- <button type="button" class="btn btn-primary" ui-sref="admin.new_product">Create Inventory</button> -->
     </div>
   </div>
-
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
     <img src="lib/assets/loader.gif"/>
   </div>
-
-  <div class="row" style="height: 93vh;">
+  <div class="row" style="height: 93vh;margin: 0px">
     <div class="container-fluid admin-console-content">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
-          <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
-            <span style="font-size: 12px;">All Inventory</span> <!-- 17th march change the name   @rajib -->
-          </div>
-          <div  class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
-
+          <div class="row" style="margin:0px; background-color: white;">
+            <div  class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+              <span style="font-size: 16px;">All Inventory</span>
+            </div>
+            <div  class="col-lg-9 col-md-9" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+            </div>
           </div>
         </div>
-
-        <!-- 17th march changes-13  below one div commented and added one div    @rajib-->
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-          <!-- <div class="input-group col-md-12 col-xs-12">
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Variants <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#">collection</a></li>
-              <li><a href="#">collection</a></li>
-              <li><a href="#">collection</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">collection</a></li>
-            </ul>
-            </div>
-            <div class="input-group">
-                <span class="input-group-addon">
-                  <i class="fa fa-search"></i>
-                </span>
-                <input type="text" ng-model="searchText.$" class="form-control" aria-label="..." placeholder="Start typing to search for variants...">
-            </div>
-          </div> -->
-
-          <div class="left-inner-addon ">
+        <div class="row" style="margin:0px; background-color: white; padding: 0 2% 0 2%">
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">
               <i class="fa fa-search"></i>
-              <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for Inventory..." >
+            </span>
+            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for Inventory...">
           </div>
         </div>
-
-                  <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-                      <div class="row" ng-show="filteredResult.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
-                        <div class="" style="color:red; font-size:120%;">
-                            <center>Warning!</center>
-                            <center>No Results Found.</center>
-                            <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
-                        </div>
-                      </div>
-                      <div ng-show="!(filteredResult.length == 0)"> <!--  18th march changes: add this outer div   @rajib -->
-                      <table class="table table-hover admin-product-list">
-                        <thead>
-                          <tr>
-                            <th>
-                              <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input><div>
-                            </th>
-
-                            <th>
-                              Parent sku
-                            </th>
-
-                            <th>
-                              Threshold
-                            </th>
-                            <th>
-                              Rack
-                            </th>
-
-                            <th>
-                              Backorderable
-                            </th>
-
-                            <th>
-                              <span>Quantity</span><span ng-click="sortQuantity()"style="margin-left:5%;margin-top:30%;font-size:100%;"class="glyphicon glyphicon-triangle-bottom"></span>
-
-                            </th>
-
-                          </tr>
-                        </thead>
-                        <tbody ng-init="set=false;add=true;variant.setInitial;" style="">
-                          <tr ng-repeat="variant in inventoryObj | filter: { parent_sku:searchText } as filteredResult"> <!-- 17th march change the filteration in this line  @rajib-->
-                              <td >
-                                <div><input <input type="checkbox" name="selectAll" value=""> </input></div>
-                              </td>
-                              <td style="width:20%;">
-                                <a ng-click="showEditProducts(variant)">{{ variant.parent_sku }}</a>
-                              </td>
-                              <td style="width:8%;">
-                                <span style="text-align:center" ng-if="variant.threshold">{{variant.threshold}}</span>
-                                <span style="text-align:center" ng-if="variant.threshold == null">N/A</span>
-                              </td>
-                              <td style="width:8%;">
-                                <span style="text-align:center" ng-if="variant.rack">{{variant.rack}}</span>
-                                <span style="text-align:center" ng-if="variant.rack == null">N/A</span>
-                              </td>
-                              <td style="width:10%;">
-                                <span style="text-align:center" ng-if="variant.backorderable">{{variant.backorderable}}</span>
-                                <span style="text-align:center" ng-if="variant.backorderable == null">N/A</span>
-                              </td>
-                              <td style="width:20%;">
-                                <span style="text-align:center" ng-if="variant.physical_count_on_hands">{{variant.physical_count_on_hands}}</span>
-                                <span style="text-align:center" ng-if="variant.physical_count_on_hands == null">N/A</span>
-
-                                <span ng-hide="variant.set_value==0||variant.set_value==undefined">
-                                  <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                                  <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.set_value}}</span>
-                                </span>
-                                <span ng-hide="variant.setInitial==0||variant.setInitial==undefined">
-                                  <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                                  <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{variant.setInitial}}</span>
-                                </span>
-                              </td>
-                              <td style="width:40%;">
-                                  <form class="no-wrap">
-                                    <div class="btn-group" style="float:left;height:35px; ">
-                                        <div class="col-lg-2 col-md-2" style="padding:0%;">
-                                          <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#4293C2;margin-right:0%;" ng-click="add=true;set=false;">add</button>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2" style="padding-left:0%;padding-right:0%;">
-                                          <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#4293C2; margin-right:0%;" ng-click="add=false;set=true;">set</button>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2" style="margin-top:2%; padding-left:0%;margin-left:-1%;">
-                                          <span ng-if="add" style="">
-                                            <input type="number" name="input" ng-model="variant.set_value" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px;width:200%;line-height:30px;">
-                                          </span>
-                                          <span ng-if="set">
-                                            <input type="number" name="input" ng-model="variant.setInitial" ng-click="updatedQuantity($index)" step="1" min="-20" max="99" style="height:30px; width:200%;line-height:30px;">
-                                          </span>
-                                        </div>
-                                        <div class="no-wrap col-lg-2 col-md-2" style="padding-left:6%;">
-                                          <span ng-if="add">
-                                            <button type="button" ng-disabled="(variant.set_value==0||variant.set_value==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="updateQuantityValue(variant)" data-toggle="modal" data-target="#myModal"  >save</button>
-                                          </span>
-                                          <span ng-if="set">
-                                            <button type="button" ng-disabled="(variant.setInitial==0||variant.setInitial==undefined)" style="margin-left:5%;margin-top:-12%;"class="btn btn-primary btn-sm" ng-click="setQuantityValue(variant)" data-toggle="modal" data-target="#myModal" >save</button>
-                                          </span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-
-                                        </div>
-                                  </div>
-
-                                  </form>
-
-                              </td>
-                              <td ng-if="filteredResult.length == 0">
-                                  <span>No results found..</span>
-                              </td>
-
-                          </tr>
-
-                        </tbody>
-                      </table>
-                    </div>
-                    <!-- start modal section -->
-
-                    <div id="myModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-
-                          <!-- Modal content-->
-                          <div class="modal-content">
-                            <div class="modal-header" style="background-color:black;">
-                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body" style="background-color:black;">
-                              <p style="font-size:2em;color:white;">Inventory is Updated Sucessfully </p>
-                            </div>
-                            <div class="modal-footer" style="background-color:black;">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                          </div>
-
-                        </div>
-                    </div>
-                    <!-- end modal section -->
-
+        <div class="row "  style="margin:0px; background-color: white; padding: 20px;">
+            <div class="row" ng-show="filteredResult.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+              <div class="" style="color:red; font-size:120%;">
+                  <center>Warning!</center>
+                  <center>No Results Found.</center>
+              </div>
+            </div>
+            <div ng-show="!(filteredResult.length == 0)">
+              <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: left">
+                  <span>
+                    <input type="checkbox" name="selectAll" value=""><span class="caret"></span>
+                  </span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  Parent sku
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                  Threshold
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                  Rack
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  Update Quantity
+                </div>
+              </div>
+              <div class="div-scroll" when-scrolled="load_more_inventory()">
+                <div class="row" ng-repeat="fabric in inventoryObj | filter: { parent_sku:searchText } as filteredResult" ng-init="active_attribute=false" ng-mouseenter="active_attribute=true" ng-mouseleave="active_attribute=false" ng-class="{'active-attribute-row': active_attribute}" style="margin-left:0px;margin-right: 0px; background-color: white;text-align: left;padding: 1% 0%;border-bottom: solid 1.5px grey">
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    <span>
+                      <input type="checkbox" name="selectAll" value="">
+                    </span>
                   </div>
-        </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                    <a ng-click="showEditProducts(fabric)">{{ ::fabric.parent_sku }}</a>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: center">
+                    <span style="text-align:center" ng-if="fabric.threshold">{{::fabric.threshold}}</span>
+                    <span style="text-align:center" ng-if="!fabric.threshold">N/A</span>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="font-size: 90%;text-align: center">
+                    <span style="text-align:center" ng-if="::fabric.rack">{{::fabric.rack}}</span>
+                    <span style="text-align:center" ng-if="!fabric.rack">N/A</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: left;padding: 0">
+                    <span style="text-align:center" ng-if="fabric.physical_count_on_hands">{{fabric.physical_count_on_hands}}</span>
+                    <span style="text-align:center" ng-if="!fabric.physical_count_on_hands">N/A</span>
+                    <span ng-hide="!fabric.set_value">
+                      <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                      <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{fabric.physical_count_on_hands + fabric.set_value}}</span>
+                    </span>
+                    <span ng-hide="!fabric.setInitial">
+                      <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                      <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{fabric.setInitial}}</span>
+                    </span>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: left;padding: 0">
+                    <form class="no-wrap" style="display: inline-block">
+                      <div class="btn-group" style="float:left;height:35px;" ng-init="set=true">
+                        <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#0069A6;margin-right:0%;" ng-click="add=true;set=false;">add</button>
+                        <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#0069A6; margin-right:0%;" ng-click="add=false;set=true;">set</button>
+                        <input ng-if="add" type="number" name="input" ng-model="fabric.set_value"  step="1" style="height:30px;line-height:30px;width: 20%">
+                        <input ng-if="set" type="number" name="input" ng-model="fabric.setInitial" step="1" style="height:30px;line-height:30px;;width: 20%">
+                        <button ng-if="add" type="button" ng-disabled="!fabric.set_value" style=""class="btn btn-primary btn-sm" ng-click="updateQuantityValue(fabric)" data-toggle="modal" data-target="#myModal"  >save</button>
+                        <button ng-if="set" type="button" ng-disabled="!fabric.setInitial" style=""class="btn btn-primary btn-sm" ng-click="setQuantityValue(fabric)" data-toggle="modal" data-target="#myModal" >save</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
 
+          </div>
+          <!-- start modal section -->
+
+          <div id="myModal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header" style="background-color:black;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" style="background-color:black;">
+                    <p style="font-size:2em;color:white;">Inventory is Updated Sucessfully </p>
+                  </div>
+                  <div class="modal-footer" style="background-color:black;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+          </div>
+          <!-- end modal section -->
+
+        </div>
+        </div>
       </div>
     </div>
     <!-- angular alert section-->
