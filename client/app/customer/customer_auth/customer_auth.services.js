@@ -13,7 +13,6 @@ angular.module('luxire')
     var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
     var decoded = JSON.parse(atob(token.split('.')[1]));
     _identity = decoded && decoded.luxire_customer && decoded.luxire_customer.first_name? decoded.luxire_customer.first_name : '';
-    console.log('resolved identity', decoded);
   };
   this.identity = function(){
     var token = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
@@ -44,7 +43,6 @@ angular.module('luxire')
       window.sessionStorage.luxire_token = token;
     }
     $http.defaults.headers.common['x-luxire-token'] = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
-    console.log('login successful');
   };
   this.signup = function(user){
     return $http.post('/api/userManager/signup', angular.toJson(user));
@@ -58,7 +56,7 @@ angular.module('luxire')
     }
     delete $http.defaults.headers.common['x-luxire-token'];
   };
-  
+
   this.forgot_password = function(user){
     return $http.post('/api/userManager/forgot_password', angular.toJson(user))
   };

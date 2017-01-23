@@ -1,7 +1,6 @@
 angular.module('luxire')
 .controller('CustomerLoginController', function($scope, CustomerAuthentication, $state, $rootScope, CustomerOrders, CustomerConstants){
   window.scrollTo(0, 0);
-  console.log($state.params);
   if(CustomerAuthentication.isLoggedIn()){
     $state.go('customer.home');
     $rootScope.alerts.push({type: 'success', message: 'You\'re already logged in'});
@@ -20,19 +19,16 @@ angular.module('luxire')
   /*Login function*/
   $scope.login = function(){
     $scope.error = '';
-    console.log('login');
     if($scope.customer.user.email && $scope.customer.user.password){
       $scope.loading = true;
       CustomerAuthentication.authenticate($scope.customer)
       .then(function(data){
-        console.log('login data', data.data);
         CustomerAuthentication.login($scope.remember_me, data.data);
         $scope.loading = false;
         if($state.params.nav_to_state === 'customer.checkout_address'){
 
           CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
           .then(function(data){
-            console.log('fetched order', data.data);
             $rootScope.luxire_cart = data.data;
             $state.go('customer.checkout_address');
           },
@@ -45,17 +41,13 @@ angular.module('luxire')
           $state.go('customer.home');
           CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
           .then(function(data){
-            console.log('fetched order', data.data);
             $rootScope.luxire_cart = data.data;
           },
           function(error){
             console.error(error);
           });
         }
-
         $rootScope.alerts.push({type: 'success', message: 'Login successful!'});
-
-        console.log(data);
       },
       function(error){
         $scope.loading = false;
@@ -67,7 +59,6 @@ angular.module('luxire')
       $scope.error = '*Please enter your password';
     }
     else{
-      console.log('error mandatory fields');
       $scope.error = '*Please enter your email-id';
     }
 
@@ -87,10 +78,7 @@ angular.module('luxire')
   $scope.error_reg = '';
   $scope.register = function(){
     $scope.error_reg = '';
-    console.log('register');
-    console.log($scope.new_user);
     if($scope.new_user.user.email!="" && $scope.new_user.user.password!="" && $scope.new_user.user.password_confirmation!=""){
-      console.log($scope.new_user);
       $scope.loading = true;
       CustomerAuthentication.signup($scope.new_user)
       .then(function(data){
@@ -103,8 +91,6 @@ angular.module('luxire')
         }, function(error){
           $rootScope.alerts.push({type: 'success', message: 'Signup failed!'});
         })
-
-        console.log(data);
       }, function(error){
         $scope.loading = false;
         console.log(error);
@@ -112,7 +98,6 @@ angular.module('luxire')
       });
     }
     else{
-      console.log('error');
       $scope.error_reg = "*Please fill in the mandotory fields";
     }
   };
@@ -145,7 +130,6 @@ angular.module('luxire')
           };
           $state.go('customer.home');
         }
-        console.log(data);
       }, function(error){
         $scope.loading = false;
         console.error(error);
@@ -157,7 +141,6 @@ angular.module('luxire')
   };
 })
 .controller('CustomerResetPasswordController', function($scope, CustomerAuthentication, $state, $rootScope, CustomerOrders, CustomerConstants){
-  console.log('state params', $state.params);
   $scope.validating_token = true;
   $scope.customer = {
     new_password: '',
@@ -181,7 +164,6 @@ angular.module('luxire')
       $rootScope.alerts.push({type: 'danger',message: 'Invalid reset password link'});
       $state.go('customer.home');
     }
-    console.log(data);
   }, function(error){
     $rootScope.alerts.push({type: 'danger',message: 'Invalid reset password link'});
     $state.go('customer.home');
@@ -204,7 +186,6 @@ angular.module('luxire')
             message: data.data.statusText
           };
         }
-        console.log(data);
       }, function(error){
         console.error(error);
       });
