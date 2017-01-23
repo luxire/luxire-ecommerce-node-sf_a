@@ -59,6 +59,10 @@ app.use('/standard_size', require('./standard_size'));
 /*order*/
 app.use('/orders', require('./order'));
 
+/*Stock/inventory*/
+app.use('/inventory', require('./inventory'));
+
+
 
 
 
