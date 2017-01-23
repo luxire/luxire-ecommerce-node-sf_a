@@ -54,7 +54,8 @@ module.exports = {
     product_csv_import: '/luxire_product_data/imports',
     collections: '/customized_taxons/get_taxon_details.json',
     get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code=',
-    contact_us: '/api/contact_us'
+    contact_us: '/api/contact_us',
+    luxire_stock: '/luxire_stocks'
   },
   payment: {
     ebs: {
@@ -79,7 +80,7 @@ module.exports = {
     products_filter: '/api/redis/customer/products/filter',
     collections: '/api/redis/collection',//change to plural
     search: {
-      products: '/api/redis/customer/search/products'
+      products: '/api/redis/customer/search/products'//Product filter
     }
   },
   location_by_ip: {
