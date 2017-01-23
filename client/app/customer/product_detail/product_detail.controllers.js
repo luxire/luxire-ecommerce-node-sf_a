@@ -1828,8 +1828,8 @@ angular.module('luxire')
 
   /*Check whether to display in view r not*/
   $scope.check_unpermitted_customization_params = function(attribute, key){
-    var unpermitted_params_non_custom = ['image','url','help','help_url', 'help_image', 'cost'];
-    var unpermitted_params_custom = ['help','help_url', 'image'];
+    var unpermitted_params_non_custom = ['image','url','help','help_url', 'help_image', 'cost','rule'];
+    var unpermitted_params_custom = ['help','help_url', 'image', 'rule'];
     if(attribute.toLowerCase()!='custom'){
       if(unpermitted_params_non_custom.indexOf(key)!=-1){
         return false;
@@ -2022,7 +2022,25 @@ angular.module('luxire')
   /*Bespoke attributes*/
 
   /*Load products*/
-  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';;
+  // $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';
+
+  $scope.generate_url_for_seach = function (attribute) {
+    if(attribute && attribute.rule){
+      var query = "";
+      angular.forEach(attribute.rule, function(rule_value, rule_key){
+        if(rule_key == 'cost'){
+          query = query +"currency=USD&price_start="+rule_value['USD']['min']+"&price_end="+rule_value['USD']['max']+"&per_page=100&";
+        }
+        else{
+          query = query+rule_key+"="+rule_value+"&";
+        }
+      });
+      return CustomerConstants.api.products+"/searchByName?"+query+"name=";
+    }
+    else{
+      return CustomerConstants.api.products+'/searchByName?name=';
+    }
+  };
 
   $scope.select_contrast_product = function(product){
     var path = this.$parent.$$childHead.id.split('#');
