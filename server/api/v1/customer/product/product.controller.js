@@ -59,19 +59,21 @@ exports.index = function(req, res) {
 //Search from redis for products
 
 exports.search = function(req, res) {
-  var request = {};
-  console.log('search by name ', req.query);
-  request = req.body;
-  if(req.query && req.query.name_cont){
-    if(typeof request === 'object'){
-      request['name'] = req.query.name_cont;
-    }
-    else{
-      request = {
-        name: req.query.name_cont
-      }
-    }
+  console.log('search by name ', req.query, 'body',req.body);
+  var request = req.query || {};
+  for (var property in req.body){
+    request[property] = req.body[property];
   }
+  // if(req.query && req.query.name_cont){
+  //   if(typeof request === 'object'){
+  //     request['name'] = req.query.name_cont;
+  //   }
+  //   else{
+  //     request = {
+  //       name: req.query.name_cont
+  //     }
+  //   }
+  // }
   http
     .post({
       uri: constants.redis.host+constants.redis.search.products,
