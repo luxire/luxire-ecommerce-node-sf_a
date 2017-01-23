@@ -214,7 +214,7 @@ avoid conflict with customer ctrl on admin side*/
 
   /*Load products*/
   // $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';//search provided by ransack
-  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name_cont=';
+  $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name=';
 
   /*Select product from search*/
   $scope.select_product = function(data){
