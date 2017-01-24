@@ -32,9 +32,10 @@ module.exports = function(app) {
   app.set('luxire-secret', constants.spree.jwt_secret);
 
   if ('production' === env) {
-    app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
-    app.use(express.static(path.join(config.root, 'public')));
-    app.set('appPath', path.join(config.root, 'public'));
+    console.log('config root', config.root);
+    app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
+    app.use(express.static(path.join(config.root, 'client')));
+    app.set('appPath', path.join(config.root, 'client'));
     app.use(morgan('dev'));
   }
 
