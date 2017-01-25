@@ -172,7 +172,7 @@ exports.create_style_detail_image = function(req, res){
   form.parse(req, function(err, fields, files) {
     var formDataToPost = {};
     formDataToPost["luxire_style_master_image[category]"] = fields["category"];
-    formDataToPost["luxire_style_master_image[luxire_style_master_id]"] = fields["category"];
+    formDataToPost["luxire_style_master_image[luxire_style_master_id]"] = fields["luxire_style_master_id"];
     if(files && files.image){
       formDataToPost["luxire_style_master_image[image]"] = {
         value:  fs.createReadStream(files.image.path),
@@ -200,11 +200,9 @@ exports.create_style_detail_image = function(req, res){
 };
 
 exports.delete_style_detail_image = function(req, res){
-  var form = new formidable.IncomingForm();
   http
-  .delete({
+  .del({
     uri: constants.spree.host+constants.spree.style_master_images+'/'+req.params.image_id+'.json?token='+req.headers['X-Spree-Token'],
-    formData: formDataToPost
     }, function(error, response, body){
       if(error){
         res.status(500).send(error);
