@@ -10,7 +10,7 @@ var production_host = {
   redis: 'http://10.138.0.3:9090',
   prediction: 'http://137.116.155.7:8000',
 }
-var host = development_host;
+var host = process.env.NODE_ENV == 'production' ? production_host : development_host;
 module.exports = {
   /*spree api constants*/
   spree:{
