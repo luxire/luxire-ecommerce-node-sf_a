@@ -167,7 +167,7 @@ angular.module('luxire')
             quantity: 1,
             luxire_line_item:{
               total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
-              total_personalization_cost: cartObject && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
+              total_personalization_cost: cartObject && cartObject.personalization_cost && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
               send_sample: sample ? true : false,
               measurement_unit: selected_measurement_unit,
               customized_data: cartObject && cartObject.customization_attributes ? cartObject.customization_attributes : {},
