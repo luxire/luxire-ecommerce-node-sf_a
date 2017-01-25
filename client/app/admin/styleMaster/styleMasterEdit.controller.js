@@ -48,10 +48,26 @@ angular.module('luxire')
     $scope.loading = true;
     styleMasterService.upload_new_detail_image($scope.new_style_detail_image.luxire_style_master_image).then(function(data){
       $scope.loading = false;
+      delete $scope.new_style_detail_image.luxire_style_master_image.image;
+      load_style();
+      $('#style_detail_img').attr('src', '');
+      $("#newImage").val("");
       $scope.alerts.push({type: 'success', message: 'Image updated successfully !'});
     }, function(error){
       $scope.loading = false;
-      $scope.alerts.push({type: 'success', message: 'Image update failed !'});
+      $scope.alerts.push({type: 'danger', message: 'Image update failed !'});
+    });
+  };
+
+  $scope.delete_style_detail_image = function(image){
+    var id = image.split('style_master_images/')[1].split('/')[0];
+    styleMasterService.delete_detail_image($stateParams.id, id).then(function(data){
+      load_style();
+      $('#style_detail_img').attr('src', '');
+      $("#newImage").val("");
+      $scope.alerts.push({type: 'success', message: 'Deleted successfully !'});
+    }, function(error){
+      $scope.alerts.push({type: 'danger', message: 'Failed to delete !'});
     });
   };
 
@@ -66,26 +82,30 @@ angular.module('luxire')
     "customization_attributes": {},
     "personalization_attributes": {}
   };
-  $scope.loading = true;
-  styleMasterService.getStyleMasterById($stateParams.id).then(function(data){
-    $('#style_master_img').attr('src', ImageHandler.url(data.data.image.split('/small/').join('/original/')));
-    $scope.newProductType=data.data;
-    delete data.data.image;
-    $scope.style = data.data.default_values;
-    $scope.selected_customization_attributes = data.data.default_values["customization_attributes"];
-    $scope.newProductType["additional_cost"] = data.data["additional_cost"];
-    $scope.style_cost = data.data["additional_cost"] || {};
-    styleMasterService.getProductTypeById(data.data.luxire_product_type.id).then(function(data) {
-      $scope.loading= false;
-      $scope.allMeasurementType = data.data.luxire_product_attributes;
-      }, function(info){
+
+  function load_style(){
+    $scope.loading = true;
+    styleMasterService.getStyleMasterById($stateParams.id).then(function(data){
+      $('#style_master_img').attr('src', ImageHandler.url(data.data.image.split('/small/').join('/original/')));
+      $scope.newProductType=data.data;
+      delete data.data.image;
+      $scope.style = data.data.default_values;
+      $scope.selected_customization_attributes = data.data.default_values["customization_attributes"];
+      $scope.newProductType["additional_cost"] = data.data["additional_cost"];
+      $scope.style_cost = data.data["additional_cost"] || {};
+      styleMasterService.getProductTypeById(data.data.luxire_product_type.id).then(function(data) {
         $scope.loading= false;
-      console.log(info);
+        $scope.allMeasurementType = data.data.luxire_product_attributes;
+        }, function(info){
+          $scope.loading= false;
+        console.log(info);
+      });
+    },function(info){
+     console.log(info);
+     $scope.loading = false; // 29th march
     });
-  },function(info){
-   console.log(info);
-   $scope.loading = false; // 29th march
-  });
+  };
+  load_style();
 
   $scope.checkStyleMasterName = function(name){  // 29th march add this functionality
     if(name == undefined || name == '' || name == 0){

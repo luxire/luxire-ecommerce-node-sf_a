@@ -103,7 +103,7 @@
          </div>
        </div>
        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="position: relative">
-         <div class="" style="position: fixed; top: 17%;width: 25%;text-align: center;">
+         <div class="" style="width: 100%; top: 17%;text-align: center;">
            <div ng-if="style_cost['USD']" class="productTypePlacard" style="padding: 3% !important;">
              <b>Cost in USD:</b> {{style_cost['USD']}}
            </div>
@@ -120,13 +120,32 @@
              </div>
               <div class="">
                <div class="" style="display: inline-block;width: 70%">
-                 <input type="file" name="name" ng-file-select ng-file-change="upload_style_detail_image($files)" value="" >
+                 <input type="file" id="newImage" name="newImage" ng-file-select ng-file-change="upload_style_detail_image($files)" value="" >
                </div>
                <div class="" style="display: inline-block;width: 25%">
                  <button type="button" ng-disabled="!new_style_detail_image.luxire_style_master_image.image" class="btn btn-success" ng-click="submit_style_detail_image()" >Upload</button>
                </div>
              </div>
              <img id="style_detail_img" style="max-width: 100%" src="" alt="">
+           </div>
+
+           <div class="productTypePlacard" style="padding: 1.5% !important;">
+             <b>Real Images</b>
+             <div class="" ng-repeat="real_image in newProductType.real_images" style="position: relative;border: solid 1px grey;margin: 2%;padding: 2%">
+               <img ng-src="{{getImage(real_image.large)}}" alt="" />
+               <div ng-click="delete_style_detail_image(real_image.large)" class="" style="position: absolute;top: 0;right: 2%;font-size: 150%;cursor: pointer">
+                 X
+               </div>
+             </div>
+           </div>
+           <div class="productTypePlacard" style="padding: 1.5% !important;">
+             <b>Sketch Images</b>
+             <div class="" ng-repeat="sketch_image in newProductType.sketch_images" style="position: relative;border: solid 1px grey;margin: 2%;padding: 2%">
+               <img ng-src="{{getImage(sketch_image.large)}}" alt="" />
+               <div ng-click="delete_style_detail_image(sketch_image.large)" class="" style="position: absolute;top: 0;right: 2%;font-size: 150%;cursor: pointer">
+                 X
+               </div>
+             </div>
            </div>
          </div>
 

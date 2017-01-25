@@ -53,6 +53,7 @@ angular.module('luxire')
   this.delete_detail_image = function(style_id, image_id){
     return $http.delete(AdminConstants.api.style_masters+'/'+style_id+'/style_detail_images/'+image_id);
   };
+
 })
 .service('productSearch', function($http, $q){
   this.searchProducts = function(search_phrase){
