@@ -91,7 +91,7 @@
                   {{line_item && line_item.luxire_line_item.fulfillment_status ? line_item.luxire_line_item.fulfillment_status: 'Select Status'}}<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                  <li role="menuitem" ng-repeat="state in product_type_states['Shirts']" ng-click="change_line_item_status(line_item.id, state)"><a href="javascript:void(0)">{{state}}</a></li>
+                  <li role="menuitem" ng-repeat="state in product_type_states[line_item.product_type]" ng-click="change_line_item_status(line_item.id, state)"><a href="javascript:void(0)">{{state}}</a></li>
                 </ul>
               </div>
               <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet(line_item.id)" print-remove>Order Sheet</button>
