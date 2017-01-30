@@ -51,7 +51,7 @@ module.exports = {
     alltaxons: '/api/taxons',
     standard_sizes: '/standard_sizes',
     json: '.json',
-    product_csv_import: '/luxire_product_data/imports',
+    product_csv_import: '/luxire_product_data/imports.json',
     collections: '/customized_taxons/get_taxon_details.json',
     get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code=',
     contact_us: '/api/contact_us',
@@ -80,8 +80,9 @@ module.exports = {
     products_filter: '/api/redis/customer/products/filter',
     collections: '/api/redis/collection',//change to plural
     search: {
-      products: '/api/redis/customer/search/products'//Product filter
-    }
+      products: '/api/redis/customer/search/products'//Product filter[active api]used in current implementation dated 27-01-17
+    },
+    sync: '/api/redis/v1/products/sync'
   },
   location_by_ip: {
     host: 'http://freegeoip.net/json'
