@@ -25,29 +25,37 @@ app.use(function(req, res, next){
     delete req.headers['x-luxire-token'];
   }
   if (token) {
-  // verifies secret and checks exp
-  jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
-    if (err) {
-      return res.status(401).json({ error: 'Failed to authenticate token.' });
-    } else {
-      console.log('decoded spree token', decoded.spree_api_key);
-      if(decoded.spree_api_key != undefined && decoded.spree_api_key != null){
-        req.headers["X-Spree-Token"] = decoded.spree_api_key;
-        next();
-      }
-      else{
-        return res.status(401).json({ error: 'Failed to authenticate token.' });
-      }
+    if(token.indexOf('.') == -1){
+      req.headers["X-Spree-Token"] = token;
+      next();
+
+    }
+    else{//for jwt
+      // verifies secret and checks exp
+      jwt.verify(token, constants.spree.jwt_secret, function(err, decoded) {
+        if (err) {
+          return res.status(401).json({ error: 'Failed to authenticate token.' });
+        } else {
+          console.log('decoded spree token', decoded.spree_api_key);
+          if(decoded.spree_api_key != undefined && decoded.spree_api_key != null){
+            req.headers["X-Spree-Token"] = decoded.spree_api_key;
+            next();
+          }
+          else{
+            return res.status(401).json({ error: 'Failed to authenticate token.' });
+          }
+        }
+      });
+    }
+
+
+  } else {
+    // if there is no token
+    // return an error
+    return res.status(403).send({
+        "error": "No token provided."  });
     }
   });
-
-} else {
-  // if there is no token
-  // return an error
-  return res.status(403).send({
-      "error": "No token provided."  });
-  }
-});
 
 /*product*/
 app.use('/products', require('./product'));
