@@ -1,3 +1,8 @@
+<p class="text-center text-muted" ng-if="loading" style="margin-top: 10%; position: fixed; top: 20%;left: 40%; z-index: 99;  color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br />
+  Loading, please wait.....
+</p>
 <div class="row" style="margin-left: 0px; margin-right: 0px;margin-top: 10%">
   <div  style="border: solid 1px #E1E1E1; padding-left: 0px; padding-right: 0px" class="col col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <uib-tabset active="active" style="font-family: HelveticaNeue;font-size: 100%;text-align: center">
@@ -50,15 +55,15 @@
                   {{}}
                 </td>
                 <td>
-                  {{order.payment_state !== 'paid'? 'payment due' : order.luxire_order.fulfillment_status}}
+                  {{order.luxire_order.fulfillment_status}}
                 </td>
                 <td>
-                  Edit | Cancel
+                  <a style="cursor: pointer">Edit</a>&nbsp;|&nbsp;<a style="cursor: pointer">Cancel</a>
                 </td>
               </tbody>
 
             </table>
-            <uib-alert ng-hide="my_orders && my_orders.length" style="margin-top: 5%"  type="success">No orders found.</uib-alert>
+            <uib-alert ng-hide="(my_orders && my_orders.length) || loading" style="margin-top: 5%"  type="success">No orders found.</uib-alert>
 
           </div>
         </div>
@@ -69,8 +74,8 @@
         </uib-tab-heading>
         <div class="row">
           <div class="col col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1" style="margin: 5%">
-            <table ng-show="my_orders && my_orders.length" border="1" cellpadding="10">
-              <thead>
+            <table ng-if="::get_previous_orders(my_orders).length" border="1" cellpadding="10">
+              <thead >
                 <td>
                   Order Id
                 </td>
@@ -93,11 +98,10 @@
                   Edit
                 </td>
               </thead>
-              <tbody ng-if="order.shipment_state=='shipped'" ng-repeat="order in my_orders">
+              <tbody ng-repeat="order in ::get_previous_orders(my_orders)">
                 <td>
                   {{order.number}}
                   <i type="button" uib-popover-html="popover_html" popover-trigger="outsideClick" ng-mouseover="trigger_popover(line_item)" popover-placement="right" popover-append-to-body="false" style="color: #BFBFBF; cursor: pointer" class="fa fa-search"></i>
-
                 </td>
                 <td>
                   {{get_display_date(order.completed_at)}}
@@ -112,10 +116,10 @@
                   {{}}
                 </td>
                 <td>
-                  {{payment_state==null? 'payment due' : shipment_state}}
+                  {{order.luxire_order.fulfillment_status}}
                 </td>
                 <td>
-                  Edit | Cancel
+                  <a style="cursor: pointer">Edit</a>&nbsp;|&nbsp;<a style="cursor: pointer">Cancel</a>
                 </td>
               </tbody>
 

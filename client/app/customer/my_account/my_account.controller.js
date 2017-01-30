@@ -1,18 +1,17 @@
 angular.module('luxire')
 .controller('MyAccountController', function($scope, CustomerOrders, $state){
+  $scope.loading = true;
   $scope.my_orders = [];
   CustomerOrders.my_orders()
   .then(function(data){
+    $scope.loading = false;
     $scope.my_orders = data.data.orders;
-    console.log('my_orders', data);
-    console.log('my_orders array', $scope.my_orders);
   }, function(error){
+    $scope.loading = false;
     console.error(error);
   });
 
   $scope.get_display_date = function(date){
-    console.log('date', date);
-    console.log('date', date.toString());
     var d = new Date(date.toString());
     return d.getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
   };
@@ -25,6 +24,19 @@ angular.module('luxire')
 
   $scope.getImage = function(url){
     return ImageHandler.url(url);
+  };
+
+  $scope.get_previous_orders = function(orders){
+    var previous_orders = [];
+    if(orders && orders.length){
+      for(var i=0;i<orders.length;i++){
+        if(orders[i].shipment_state=='shipped'){
+          previous_orders.push(order[i])
+        }
+      }
+    }
+    return previous_orders;
+
   };
 
   function customization_template(customization_data){
@@ -43,9 +55,6 @@ angular.module('luxire')
     angular.forEach(personalization_data, function(val, key){
 
       if(Object.keys(val).length!==0){
-        console.log('personalization has value', val);
-        console.log('personalization has key', Object.keys(val).length==0);
-
         personalized_text = personalized_text +'<h5>'+key+'<h5>'
         if(key.toLowerCase()=='monogram'){
           angular.forEach(val, function(monogram_value, monogram_key ){
@@ -68,32 +77,12 @@ angular.module('luxire')
     })
     return personalized_text+'</div>';
   };
-
-  // function measurement_std_template(standard_measurements){
-  //   measurement_std_text = '<div class="row" style="background: #F0F0F0; padding-left: 5%">'
-  //                             +'<h5>Custom Measurements</h5>'
-  //                           +'</div>'
-  //                           +'<div class="row" style="padding-left: 5%">'
-  //   angular.forEach(standard_measurements, function(val, key){
-  //     console.log('key', key);
-  //     console.log('value', val);
-  //
-  //     if(val.value){
-  //       measurement_std_text = measurement_std_text+'<p style="font-size: 90%; margin-bottom: 0px">'+key+': '+val.value+'</p>'
-  //     }
-  //   });
-  //   return measurement_std_text+'</div>';
-  //
-  // };
   function measurement_std_template(standard_measurements){
     measurement_std_text = '<div class="row" style="background: #F0F0F0; padding-left: 3.5%">'
                               +'<h5>Custom Measurements</h5>'
                             +'</div>'
                             +'<div class="measurement row" style="padding-left: 5%">'
     angular.forEach(standard_measurements, function(val, key){
-      console.log('key', key);
-      console.log('value', val);
-
       if(val.value){
         measurement_std_text = measurement_std_text+'<tr><td>'+key+': </td>&nbsp;<td>'+val.value+'</td></tr><br>'
       }
@@ -118,13 +107,10 @@ angular.module('luxire')
 
 
   $scope.trigger_popover = function(line_item){
-    console.log('line_item_attr', line_item);
     personalized_text = '';
     customized_text = '';
     measurement_std_text = '';
     measurement_body_text = '';
-
-    console.log(line_item);
     html_text = '<div class="row" style="">'
                     +'<div class="row" style="margin-left: 0px; margin-right: 0px; margin: 3%">'
                       +'<div class="col col-md-4 col-sm-4 col-lg-4">'
@@ -161,7 +147,6 @@ angular.module('luxire')
 
   $scope.get_order_details = function(event, order){
     event.preventDefault();
-    console.log('order details');
     $state.go('invoices',{number: order.number, token: order.token});
     // window.location.href= "http://104.215.252.45/#/invoice/"+order.number+"?token="+order.token;
   };
