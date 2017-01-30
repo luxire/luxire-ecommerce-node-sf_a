@@ -32,13 +32,18 @@ angular.module('luxire')
 
     }
   }
+  $scope.get_buggy_record_count = function(buggy_records){
+    return Object.keys(buggy_records).length;
+  };
   $scope.upload = function () {
     if($scope.product_csv && $scope.product_csv.type==='text/csv'){
       $scope.loading = true;
       CSV.upload($scope.product_csv)
       .then(function(data){
+        console.log('response', data.data);
+        $scope.response = data.data;
         $scope.loading = false;
-        $scope.getUploadStatus = $sce.trustAsHtml(data.data);
+        // $scope.getUploadStatus = $sce.trustAsHtml(data.data);
         console.log('uploaded',data);
       }, function(error){
         $scope.loading = false;

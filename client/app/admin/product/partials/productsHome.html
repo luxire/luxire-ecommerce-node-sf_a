@@ -4,35 +4,7 @@
     overflow: scroll;
   }
 </style>
-<script type="text/ng-template" id="importCsvModal.html">
-<div class="modal-header">
-    <center><h3 class="modal-title">Import products by CSV file </h3></center>
-</div>
-<div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
-  <img src="lib/assets/loader.gif"/>
-</div>
-<div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4" >
-        Select a file to upload
-        <input type="file" accept=".csv" name="name" ng-file-select ng-file-change="upload_file($files)" value=""><br/>
-  </div>
-<div class="col-md-2"></div>
-</div>
-<div class="row" style="margin-left: 5%; margin-right: 5%">
-  <div ng-bind-html="getUploadStatus"></div>
-</div>
-<div class="modal-footer">
-    <div class="container-fluid">
-        <div class="row">
-            <center>
-              <button class="btn btn-primary" type="button" ng-click="upload()" style="margin-left:4%;">Upload</button>
-              <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%;">Close</button>
-            </center>
-        </div>
-    </div>
-</div>
-</script>
+
 
 <style>
 
@@ -47,6 +19,15 @@
   padding: 10px 12px;
   pointer-events: none;
 }
+.csv-import td, .csv-import th{
+    border: 1px solid black;
+    text-align: left;
+    padding: 2px;
+}
+
+.csv-import tr:nth-child(even){
+    background-color: #dddddd;
+}
 </style>
 
 <div class="container-fluid" style="height:100%" >
@@ -60,7 +41,7 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
         <!--<button type="button" class="btn btn-default">Export</button>-->
-        <button type="button" class="btn btn-default" ng-click="importModal('md')">Import</button>
+        <button type="button" class="btn btn-default" ng-click="importModal('lg')">Import</button>
       </div>
       <button type="button" class="btn btn-default" ui-sref="admin.new_product">Add a product</button>
     </div>
@@ -81,7 +62,7 @@
 
           </div>
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px; padding-left:2%;">
+        <div class="row" style="margin:0px; background-color: white; padding: 2% 2% 0 2%">
           <!--  17th march change-2   commented  (style tag is added in this page to make the change) -->
           <div class="left-inner-addon ">
               <i class="fa fa-search"></i>
@@ -103,7 +84,7 @@
             <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-change="searchProductByQuery(searchText)">
           </div> -->
         </div>
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;" >
+        <div class="row" style="margin:0px; background-color: white; padding: 0 2%" >
           <!-- 18th march chnages: add this div  @rajib-->
           <!-- <div class="row" ng-show="noProductMsg" style="padding-top:5%;padding-buttom:5%;">
             <div class="alert alert-danger" ng-if="masterSearchJson.length == 0 " >
@@ -121,56 +102,56 @@
             <!-- 18th march  -->
           <div class="row div-scroll"  when-scrolled="scrollLoad()"> <!-- 18th march  -->
             <div class="row" style="margin:0px; background-color: white; padding: 0% 2%;">
-          <table class="table table-hover admin-product-list w3-striped">
-            <thead>
-              <tr>
-                <th>
-                  <input type="checkbox" name="selectAll" value="">
-                </th>
-                <th>
-                  Product
-                </th>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Type
-                </th>
-                <th>
-                  Vendor
-                </th>
-                <th>
+            <table class="table table-hover admin-product-list w3-striped">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" name="selectAll" value="">
+                  </th>
+                  <th>
+                    Product
+                  </th>
+                  <th>
+                    Name
+                  </th>
+                  <th>
+                    Type
+                  </th>
+                  <th>
+                    Vendor
+                  </th>
+                  <th>
 
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="product in masterSearchJson  | filter: { name: searchText } as filteredResults">
-                <td>
-                  <input type="checkbox" name="selectAll" value="">
-                </td>
-                <td style="width: 15%;">
-                  <span ng-if="product.master.images[0].mini_url != null"><img src="http://104.215.254.150:3000{{product.master.images[0].mini_url}}" style="width: 50px; height: 50px"></span>
-                  <span ng-if="product.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="product in masterSearchJson  | filter: { name: searchText } as filteredResults">
+                  <td>
+                    <input type="checkbox" name="selectAll" value="">
+                  </td>
+                  <td style="width: 15%;">
+                    <span ng-if="product.master.images[0].mini_url != null"><img ng-src="{{getImage(product.master.images[0].mini_url)}}" style="width: 50px; height: 50px"></span>
+                    <span ng-if="product.master.images[0].mini_url == null"><img src="lib/assets/no-image-available.jpg" style="width: 50px; height: 50px"></span>
 
-                <td style="width: 40%;">
-                  <a   style="cursor:pointer;" ng-click="showEditProducts(product.id)">{{product.name}}</a>
-                </td>
-                <td style="width: 15%;"> <!-- 17th march change-1:  update product type (rajib) -->
-                  <span ng-if="product.product_type.product_type">{{product.product_type.product_type}}</span>
-                 <span ng-if="product.product_type.product_type == null">N/A</span>
-               </td> <!-- 17th march change-1:  update product type (rajib) -->
-                <td style="width:15%;">
-                  <span>{{luxireVendor[0].name}}</span>
-                </td>
-                <td >
-                  <i class="fa fa-pencil-square-o" ng-click="showEditProducts(product.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <i class="fa fa-trash" ng-click="deleteProducts(product.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <td style="width: 40%;">
+                    <a   style="cursor:pointer;font-size: 80%" ui-sref="admin.edit_product({id: product.id})">{{product.name}}</a>
+                  </td>
+                  <td style="width: 15%;"> <!-- 17th march change-1:  update product type (rajib) -->
+                    <span ng-if="product.product_type.product_type">{{product.product_type.product_type}}</span>
+                   <span ng-if="product.product_type.product_type == null">N/A</span>
+                 </td> <!-- 17th march change-1:  update product type (rajib) -->
+                  <td style="width:15%;">
+                    <span>{{luxireVendor[0].name}}</span>
+                  </td>
+                  <td >
+                    <i class="fa fa-pencil-square-o" ng-click="showEditProducts(product.id)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-trash" ng-click="deleteProducts(product.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         </div> <!-- 18th march -->
         </div>
@@ -182,3 +163,52 @@
     </div>
   </div>
 </div>
+<script type="text/ng-template" id="importCsvModal.html">
+  <div style="padding: 2%;border: solid 5px grey">
+    <div style="width: 100%;text-align: right;">
+      <b ng-click="cancel()" style="cursor: pointer">Close</b>
+    </div>
+    <div class="modal-header">
+        <center><h3 class="modal-title">Import products by CSV file </h3></center>
+    </div>
+    <div class="row" ng-show="loading" style="height: 93vh; width: 100%; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+      <img src="lib/assets/loader.gif"/>
+    </div>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-6" style="padding-left: 0" >
+        <div style="display: inline-block;width: 70%">
+          Select a file to upload
+          <input type="file" accept=".csv" name="name" ng-file-select ng-file-change="upload_file($files)" value="">
+        </div>
+        <div style="display: inline-block;width: 20%">
+          <button class="btn btn-primary" type="button" ng-click="upload()" style="margin-left:4%;">Upload</button>
+        </div>
+      </div>
+    <div class="col-md-2"></div>
+    </div>
+
+    <div ng-if="response" class="row" style="margin: 2% 5% 0 3%">
+      <div>
+        <p ng-if="response.additional_columns">Unused(newly added) columns : {{response.additional_columns}}</p>
+        <p ng-if="response.removed_columns">Columns not found : {{response.removed_columns}}</p>
+        <p ng-if="response.count">Total products in csv: {{response.count}}</p>
+        <p ng-if="response.count">Total count of products uploaded successfully: {{response.count - get_buggy_record_count(response.buggy_record)}}</p>
+      </div>
+      <b ng-if="response.count">Products not uploaded</b>
+      <table ng-if="response.count" class="csv-import" style="font-family: arial, sans-serif;border-collapse: collapse;width: 100%;">
+        <tr style="width: 100%; text-align: center">
+          <th style="width: 50%">Product</th>
+          <th style="width: 50%">Error</th>
+        </tr>
+        <tr style="width: 100%" ng-repeat="(record, error) in response.buggy_record">
+          <td style="width: 50%">{{record}}</td>
+          <td style="width: 50%">{{error}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="row" style="margin-left: 5%; margin-right: 5%">
+      <div ng-bind-html="getUploadStatus"></div>
+    </div>
+  </div>
+</script>
