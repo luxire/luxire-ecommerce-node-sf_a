@@ -1,9 +1,6 @@
 angular.module('luxire')
 
-.controller('productsHomeController',function($scope, products, allTaxons, luxireProperties, luxireVendor, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
-
-  $scope.productData  = new prototypeObject.product();
-
+.controller('productsHomeController',function($scope, products, allTaxons, luxireProperties, luxireVendor, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload, ImageHandler){
   $scope.loading = true;
   //Edited on 20/05/16 scroll implementation
   $scope.jsonresponse = [];
@@ -14,41 +11,32 @@ angular.module('luxire')
     // console.log($scope.jsonresponse);
     if ($scope.current_page < $scope.pages) {
       $scope.current_page = parseInt($scope.current_page) + 1;
-      console.log("current page value before sending",$scope.current_page);
       $scope.prefetchProducts =[];
       products.getProducts('?page=' + $scope.current_page).then(function(data) {
-        // console.log($scope.jsonresponse);
         $scope.prefetchProducts =  data.data.products;
-        console.log('prefetched data',$scope.prefetchProducts);
-        console.log("length of prefetched", $scope.prefetchProducts.length)
-
-        // $scope.jsonresponse1
-
-        // console.log($scope.jsonresponse1);
       })
     } else {
       $scope.loading = false;
-
     }
   }
 
-  $scope.scrollLoad = function() {
-    console.log("scrollLoad invoked");
-    console.log(" current page",$scope.current_page)
-    if ($scope.current_page <= $scope.pages) {
-    console.log("Scroll load function");
-    angular.forEach($scope.prefetchProducts, function(val, key){
-      $scope.jsonresponse.push(val);
-    });
-    console.log("jsonresponse length",$scope.jsonresponse.length);
-    $scope.prefetchProducts =[];
-    // $scope.jsonresponse.concat($scope.prefetchProducts);
-    $scope.prefetch();
-    // $scope.jsonresponse.push.apply($scope.jsonresponse ? $scope.jsonresponse : [], $scope.prefetchProducts);
-}else {
-  $scope.loading = false;
+  $scope.getImage = function(url){
+    return ImageHandler.url(url);
+  };
 
-}
+  $scope.scrollLoad = function() {
+    if ($scope.current_page <= $scope.pages) {
+      angular.forEach($scope.prefetchProducts, function(val, key){
+        $scope.jsonresponse.push(val);
+      });
+      $scope.prefetchProducts =[];
+      // $scope.jsonresponse.concat($scope.prefetchProducts);
+      $scope.prefetch();
+        // $scope.jsonresponse.push.apply($scope.jsonresponse ? $scope.jsonresponse : [], $scope.prefetchProducts);
+    }else {
+      $scope.loading = false;
+
+    }
   }
 //*************scroll implementation**************
 
@@ -350,11 +338,9 @@ angular.module('luxire')
       animation: $scope.animationsEnabled,
       templateUrl: 'importCsvModal.html',
       controller: 'importCsvModalController',
-      size: 'lg'
+      size: size
     });
     importCsvModalInstance.result.then(function (res) {
-
-
   }, function () {
     $log.info('Modal dismissed at: ' + new Date());
   });
@@ -652,13 +638,5 @@ angular.module('luxire')
 }
 
   // --------------     END OF CREATING THE PRODUCT STRUCTURE TO POST    ---------------
-
-
-	$scope.showEditProducts=function(id){    // function redirect to product edit page
-	  console.log("selected inventory id:  "+id);
-	  $state.go("admin.edit_product",{id :id});
-	}
-
-
 
 });
