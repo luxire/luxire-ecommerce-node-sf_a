@@ -14,5 +14,6 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 router.get('/:id/variants', controller.productVariants);
+router.post('/sync_spree_redis', controller.sync_spree_redis);
 
 module.exports = router;
