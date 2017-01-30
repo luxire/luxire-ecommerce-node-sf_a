@@ -76,24 +76,24 @@ exports.create = function(req, res){
       res.status(500).send(error.syscall);
     }
     else{
-      res.status(response.statusCode).send(body);
-      http.post({
-        uri: constants.redis.host+constants.redis.products+'/'+body.id,
-        headers:{
-          'content-type': 'application/json',
-        },
-        body:JSON.stringify(body)
-      },function(error,response,body){
+      http
+        .post({
+          uri: constants.redis.host+constants.redis.sync,
+          headers:{
+            'content-type': 'application/json',
+            'X-Spree-Token': req.headers['X-Spree-Token']
+          },
+          body:JSON.stringify({ids: [body.id]})
+        }, function(error, response, body){
         if(error){
           console.log('error', error);
-          // res.status(500).send(error.syscall);
         }
         else{
           console.log('success', body);
-
-          // res.status(response.statusCode).send(body);
         };
-      })
+      });
+      res.status(response.statusCode).send(body);
+
     };
   })
 };
@@ -116,24 +116,24 @@ exports.update = function(req, res){
       res.status(500).send(error.syscall);
     }
     else{
-      res.status(response.statusCode).send(body);
-      http.put({
-        uri: constants.redis.host+constants.redis.products+'/'+body.id,
-        headers:{
-          'content-type': 'application/json',
-        },
-        body:JSON.stringify(body)
-      },function(error,response,body){
+      http
+        .post({
+          uri: constants.redis.host+constants.redis.sync,
+          headers:{
+            'content-type': 'application/json',
+            'X-Spree-Token': req.headers['X-Spree-Token']
+          },
+          body:JSON.stringify({ids: [body.id]})
+        }, function(error, response, body){
         if(error){
           console.log('error', error);
-          // res.status(500).send(error.syscall);
         }
         else{
           console.log('success', body);
-
-          // res.status(response.statusCode).send(body);
         };
-      })
+      });
+      res.status(response.statusCode).send(body);
+
 
     };
   })
@@ -245,12 +245,9 @@ exports.createVariants = function(req, res){
 };
 
 exports.csv_import = function(req,res){
-  console.log('file uploading to node...');
+  console.log('header', req.headers['X-Spree-Token']);
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-    console.log("file object in node is: ",files.file);
-    console.log("file path in node is: ",files.file.path);
-    console.log("file name in node is: ",files.file.name);
     var formDataToPost = {
       file: {
         value:  fs.createReadStream(files.file.path),
@@ -262,10 +259,13 @@ exports.csv_import = function(req,res){
     };
     http.post({
       uri: constants.spree.host+constants.spree.product_csv_import,
-      timeout: 6000000,
+      headers: {'X-Spree-Token': req.headers['X-Spree-Token']},
+      timeout: 6*60*60*1000,
       formData: formDataToPost},
        function (err, response, body) {
+         console.log('response', response);
          if(err){
+           console.log(err);
            res.status(500).send(err.syscall);
          }
          else{
@@ -290,5 +290,24 @@ exports.searchProduct = function(req, res){
       else{
         res.status(response.statusCode).send(body);
       };
+  });
+};
+
+exports.sync_spree_redis = function(req, res){
+  http
+    .post({
+      uri: constants.redis.host+constants.redis.sync,
+      headers:{
+        'content-type': 'application/json',
+        'X-Spree-Token': req.headers['X-Spree-Token']
+      },
+      body:JSON.stringify(req.body)
+    }, function(error, response, body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(JSON.stringify(body));
+    };
   });
 };
