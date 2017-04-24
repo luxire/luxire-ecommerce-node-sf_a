@@ -212,10 +212,11 @@ angular.module('luxire')
   $scope.noProductMsg = false; // 18th march
   $scope.searchProductByQuery = function(query,event){
 
-    $scope.loading = true;
+//    $scope.loading = true;
     if(event.keyCode == 13){
+      $scope.loading = true;
       products.searchProducts(query).then(function(data){
-         $scope.searchProductsByQueryJson = data;
+         $scope.searchProductsByQueryJson = data.products;
          $scope.masterSearchJson = $scope.searchProductsByQueryJson;
          $scope.loading = false;
          if($scope.masterSearchJson.length == 0){  // 18th march
