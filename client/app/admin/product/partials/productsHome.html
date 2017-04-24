@@ -92,13 +92,13 @@
             </div>
           </div>
           <div ng-show="!noProductMsg">  -->
-            <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
+            <div class="row" ng-show="masterSearchJson.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
                <div class="" style="color:black; font-size:120%;">
                    <center>Data not Found</center>
                    <!-- <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">info !</strong>No Results Found..</span></center> -->
                  </div>
               </div>
-          <div ng-show="!(filteredResults.length == 0)">
+          <div ng-show="!(masterSearchJson.length == 0)">
             <!-- 18th march  -->
           <div class="row div-scroll"  when-scrolled="scrollLoad()"> <!-- 18th march  -->
             <div class="row" style="margin:0px; background-color: white; padding: 0% 2%;">
@@ -126,7 +126,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="product in masterSearchJson  | filter: { name: searchText } as filteredResults">
+                  <tr ng-repeat="product in masterSearchJson">
                   <td>
                     <input type="checkbox" name="selectAll" value="">
                   </td>
