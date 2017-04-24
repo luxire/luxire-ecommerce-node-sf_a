@@ -277,10 +277,10 @@ exports.csv_import = function(req,res){
 exports.searchProduct = function(req, res){
     var query = req.query.q.name_cont;
     console.log("query string  : ",query);
-    console.log("product search url is: ",constants.spree.host+constants.spree.products+'?q[name_cont]='+query);
+    console.log(`product search url is: ${constants.spree.host}${constants.spree.products}?q[name_cont]=${query}&q[m]=or&q[luxire_stock_parent_sku_eq]=${query}`);
   http
     .get({
-      uri: constants.spree.host+constants.spree.products+'?q[name_cont]='+query,
+      uri: `${constants.spree.host}${constants.spree.products}?q[name_cont]=${query}&q[m]=or&q[luxire_stock_parent_sku_eq]=${query}`,
       headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
     }
       , function(error, response, body){
