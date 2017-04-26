@@ -12,8 +12,8 @@ angular.module('luxire')
       'db_column_name': 'display_price'
     },
     'weave-type': {
-      'display_name': 'WEAVE TYPE',
-      'db_column_name': 'weave_type'
+      'display_name': 'TYPE',
+      'db_column_name': 'type'
     },
     'pattern': {
       'display_name': 'PATTERN',
@@ -124,8 +124,8 @@ angular.module('luxire')
   var filter_index = '';
     //weight, brand & material removed, thickness needs to be added in properties
   var required_filters = ['color', 'price', 'weave-type',  'pattern', 'wrinkle-resistant', 'thickness', 'construction', 'Number-of-Colors'];//filter name in properties
-  var filter_display_names = ['COLOR', 'PRICE', 'WEAVE TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors']; //filter display name in ui
-  var filter_db_column_names = ['color', 'display_price', 'weave_type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color']; //filter name as db column
+  var filter_display_names = ['COLOR', 'PRICE', 'TYPE', 'PATTERN', 'WRINKLE RESISTANCE', 'THICKNESS', 'CONSTRUCTION','No of Colors']; //filter display name in ui
+  var filter_db_column_names = ['color', 'display_price', 'type', 'pattern', 'wrinkle_resistance', 'thickness','construction', 'no_of_color']; //filter name as db column
 
   $scope.color_variants = {
     white: {
