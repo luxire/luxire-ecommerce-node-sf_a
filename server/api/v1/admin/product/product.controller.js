@@ -311,3 +311,16 @@ exports.sync_spree_redis = function(req, res){
     };
   });
 };
+
+exports.getProductsFromRedis = function(req,res){
+  let ids = req.query.ids
+  let queryString = {ids: ids}
+  http.get({url: `${constants.redis.host}${constants.redis.getProductsShortDesc}`, qs: queryString},  function(error, response, body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.json(JSON.parse(body));
+    }
+  });
+}
