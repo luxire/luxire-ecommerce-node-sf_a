@@ -22,8 +22,10 @@ exports.updateStock = function (req, res){
 };
 
 exports.luxireStocks_index = function(req, res) {
+  let per_page = req.query.per_page || 25
+  let page_count = req.query.page_count || 1
   http
-    .get(constants.spree.host+constants.spree.luxire_stock+"?token="+req.headers['X-Spree-Token'], function(error, response, body){
+    .get(constants.spree.host+constants.spree.luxire_stock+"?token="+req.headers['X-Spree-Token']+'&per_page='+per_page+'&page_count='+page_count, function(error, response, body){
       if(error){
         res.status(500).send(error);
       }
@@ -76,3 +78,20 @@ exports.luxireStocks_setQuantity = function(req, res){
         }
     });
   };
+
+ exports.createInventory = function(req,res){
+   http.post({
+     uri: `${constants.spree.host}${constants.spree.luxire_stock}`,
+     headers:{'content-type': 'application/json', 'X-Spree-Token': req.headers['X-Spree-Token']},
+     body:JSON.stringify(req.body)
+   }, function(error, response, body){
+      if(error){
+          res.status(response.statusCode).send(error);
+        }
+        else{
+          res.status(response.statusCode).send(body);
+        }
+   })
+ }
+
+        
