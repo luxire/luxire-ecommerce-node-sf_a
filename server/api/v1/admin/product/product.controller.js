@@ -104,7 +104,7 @@ exports.create = function(req, res){
 exports.update = function(req, res){
   console.log(req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.adminProducts+'/'+req.params.id,
+    uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
