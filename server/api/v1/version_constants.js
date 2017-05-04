@@ -55,7 +55,13 @@ module.exports = {
     collections: '/customized_taxons/get_taxon_details.json',
     get_currency_by_country_code: '/api/get_currency_based_on_country_code?country_code=',
     contact_us: '/api/contact_us',
-    luxire_stock: '/luxire_stocks'
+    luxire_stock: '/luxire_stocks',
+    addVariantimage: '/api/add_variant_image',
+    addVariantImageFromUrl: '/api/add_variant_image_from_url',
+    deleteImage: '/api/delete_variant_image',
+    taxonomies: '/api/taxonomies',
+    taxons: '/taxons', 
+    dynamicCollectionCreation: '/api/create_dynamic_taxon'
   },
   payment: {
     ebs: {
@@ -78,6 +84,7 @@ module.exports = {
     host: host.redis,
     products: '/api/redis/products',
     products_filter: '/api/redis/customer/products/filter',
+    getProductsShortDesc: '/api/redis/v1/products/getProducts',
     collections: '/api/redis/collection',//change to plural
     search: {
       products: '/api/redis/customer/search/products'//Product filter[active api]used in current implementation dated 27-01-17
