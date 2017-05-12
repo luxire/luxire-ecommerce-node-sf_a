@@ -10,6 +10,9 @@ angular.module('luxire')
 		allTaxons: '/api/v1/admin/allTaxons',
 		orders: '/api/v1/admin/orders',
 		inventory: '/api/v1/admin/inventory',
+		addVariantImageFromUrl: '/api/v1/admin/image/addImageFromUrl',//adding the variant image using url
+		addVariantImage: '/api/v1/admin/image/addImage',//adding the variant image using the image
+		deleteVariantImage: '/api/v1/admin/image/deleteImage'//deleting the variant image 
 	};
 })
 .service('prototypeObject',function(){
