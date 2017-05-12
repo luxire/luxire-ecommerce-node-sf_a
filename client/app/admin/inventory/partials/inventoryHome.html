@@ -1,34 +1,130 @@
 <style>
   .div-scroll {
-    height: 40pc;
+    height: inherit;
     overflow: scroll;
   }
 </style>
-<div class="container-fluid" style="height:100%" >
+<script type="text/ng-template" id="createProductInventoryModal.html">
+  <div class="modal-header">
+    <center>
+      <h3 class="modal-title">ADD A INVENTORY</h3>
+    </center>
+  </div>
+  <hr>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+          <div class="row" style="margin-top:2%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span> SKU </span>
+              <br>
+              <input type="text" ng-model="luxireStock.parent_sku_obj" class="form-control">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Quantity </span>
+              <input type="number" ng-model="luxireStock.quantity" class="form-control" id="quantity">
+            </div>
+            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-show="addSetView" style="; padding-left:0%;">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                              <span>Enter quantity </span>
+                              <input type="text" class="form-control" ng-model="quantity" id="quantity">
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                              <button class="btn btn-primary" type="button" ng-click="addQuantity(quantity)" style="margin-left:4%; width:90%;">add</button>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                              <button class="btn btn-primary" type="button"  ng-click="setQuantity(quantity)" style="margin-left:4%; width:90%;">set</button>
+                            </div>
+                        </div>-->
+          </div>
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Rack </span>
+              <input type="number" ng-model="luxireStock.rack" class="form-control" id="rack">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Threshold </span>
+              <input type="number" ng-model="luxireStock.threshold" class="form-control" id="thresold">
+            </div>
+          </div>
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Measuring unit</span>
+              <div ng-repeat="type in luxireProperties">
+                <select ng-if="type.name == 'Inventory-measuring-unit'" class="form-control" ng-model="luxireStock.measuring_unit">
+                              <option value = "0" label = "Please Select"></option>
+                              <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                                  {{val}}
+                              </option>
+                            </select>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Fabric width </span>
+              <input type="number" ng-model="luxireStock.fabricWidth" class="form-control" tooltip-placement="top" uib-tooltip="Enter the value in as per the Measuring unit">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
+              <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
+              <span style="padding-left:4%; padding-right: 2%;"><input type="checkbox" ng-model="luxireStock.in_house" name="inhouse"></span><span>Inhouse</span>
+            </div>
+          </div>
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <center>
+          <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
+          <button class="btn btn-primary" type="button" ng-click="cancel()" style="margin-left:4%;">Cancel</button>
+        </center>
+      </div>
+    </div>
+  </div>
+</script>
+<div class="container-fluid" style="height:100%">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;margin: 0">
     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="color:#928CA2;font-seze:2em;">Products &nbsp;/&nbsp;Inventory</span>
     </div>
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary" ng-click="openModal()">Add Inventory</button>
       </div>
     </div>
   </div>
-  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
-    <img src="lib/assets/loader.gif"/>
+  <div class="row" ng-show="loading" style="height: auto; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif" />
   </div>
   <div class="row" style="height: 93vh;margin: 0px">
-    <div class="container-fluid admin-console-content">
+    <div class="container-fluid admin-console-content div-scroll" when-scrolled="load_more()">
       <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
         <div class="row" style="margin:0px; background-color: white;">
           <div class="row" style="margin:0px; background-color: white;">
-            <div  class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
               <span style="font-size: 16px;">All Inventory</span>
             </div>
-            <div  class="col-lg-9 col-md-9" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
+            <div class="col-lg-9 col-md-9" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
             </div>
           </div>
         </div>
+        <br>
         <div class="row" style="margin:0px; background-color: white; padding: 0 2% 0 2%">
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">
@@ -37,41 +133,44 @@
             <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for Inventory...">
           </div>
         </div>
-        <div class="row "  style="margin:0px; background-color: white; padding: 20px;">
-            <div class="row" ng-show="filteredResult.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;"> <!-- 18th march chnages: add this div  @rajib-->
-              <div class="" style="color:red; font-size:120%;">
-                  <center>Warning!</center>
-                  <center>No Results Found.</center>
+        <div class="row " style="margin:0px; background-color: white; padding: 20px;">
+          <div class="row" ng-show="filteredResult.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;">
+            <!-- 18th march chnages: add this div  @rajib-->
+            <div class="" style="color:red; font-size:120%;">
+              <center>Warning!</center>
+              <center>No Results Found.</center>
+            </div>
+          </div>
+          <div ng-show="!(filteredResult.length == 0)">
+            <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: left">
+                <span>
+                    <input type="checkbox" name="selectAll" value=""><span class="caret"></span>
+                </span>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                Parent sku
+              </div>
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                Threshold
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                Rack
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                Update Quantity
               </div>
             </div>
-            <div ng-show="!(filteredResult.length == 0)">
-              <div class="row" style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600">
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: left">
-                  <span>
-                    <input type="checkbox" name="selectAll" value=""><span class="caret"></span>
-                  </span>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                  Parent sku
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                  Threshold
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                  Rack
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                  Update Quantity
-                </div>
-              </div>
-              <div class="div-scroll" when-scrolled="load_more_inventory()">
-                <div class="row" ng-repeat="fabric in inventoryObj | filter: { parent_sku:searchText } as filteredResult" ng-init="active_attribute=false" ng-mouseenter="active_attribute=true" ng-mouseleave="active_attribute=false" ng-class="{'active-attribute-row': active_attribute}" style="margin-left:0px;margin-right: 0px; background-color: white;text-align: left;padding: 1% 0%;border-bottom: solid 1.5px grey">
+            <div>
+                <div class="row "   ng-repeat="fabric in inventoryObj | filter: { parent_sku:searchText } as filteredResult" ng-init="active_attribute=false"
+                  ng-mouseenter="active_attribute=true" ng-mouseleave="active_attribute=false" ng-class="{'active-attribute-row': active_attribute}"
+                  style="margin-left:0px;margin-right: 0px; background-color: white;text-align: left;padding: 1% 0%;border-bottom: solid 1.5px grey">
                   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                     <span>
-                      <input type="checkbox" name="selectAll" value="">
-                    </span>
+                        <input type="checkbox" name="selectAll" value="">
+                      </span>
                   </div>
-                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     <a ng-click="showEditProducts(fabric)">{{ ::fabric.parent_sku }}</a>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align: center">
@@ -86,12 +185,12 @@
                     <span style="text-align:center" ng-if="fabric.physical_count_on_hands">{{fabric.physical_count_on_hands}}</span>
                     <span style="text-align:center" ng-if="!fabric.physical_count_on_hands">N/A</span>
                     <span ng-hide="!fabric.set_value">
-                      <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                      <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{fabric.physical_count_on_hands + fabric.set_value}}</span>
+                        <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                    <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;">{{fabric.physical_count_on_hands + fabric.set_value}}</span>
                     </span>
                     <span ng-hide="!fabric.setInitial">
-                      <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
-                      <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;" >{{fabric.setInitial}}</span>
+                        <span style="margin-left:5%;"><i class="fa fa-long-arrow-right" style="color:#C3CFD8;"></i></span>
+                    <span style="margin-left:5%;background-color:yellow;height:12px;width:12px;">{{fabric.setInitial}}</span>
                     </span>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: left;padding: 0">
@@ -99,47 +198,52 @@
                       <div class="btn-group" style="float:left;height:35px;" ng-init="set=true">
                         <button type="button" ng-disabled="add" class="btn btn-default btn-sm" style="color:#0069A6;margin-right:0%;" ng-click="add=true;set=false;">add</button>
                         <button type="button" ng-disabled="set" class="btn btn-default btn-sm" style="color:#0069A6; margin-right:0%;" ng-click="add=false;set=true;">set</button>
-                        <input ng-if="add" type="number" name="input" ng-model="fabric.set_value"  step="1" style="height:30px;line-height:30px;width: 20%">
+                        <input ng-if="add" type="number" name="input" ng-model="fabric.set_value" step="1" style="height:30px;line-height:30px;width: 20%">
                         <input ng-if="set" type="number" name="input" ng-model="fabric.setInitial" step="1" style="height:30px;line-height:30px;;width: 20%">
-                        <button ng-if="add" type="button" ng-disabled="!fabric.set_value" style=""class="btn btn-primary btn-sm" ng-click="updateQuantityValue(fabric)" data-toggle="modal" data-target="#myModal"  >save</button>
-                        <button ng-if="set" type="button" ng-disabled="!fabric.setInitial" style=""class="btn btn-primary btn-sm" ng-click="setQuantityValue(fabric)" data-toggle="modal" data-target="#myModal" >save</button>
+                        <button ng-if="add" type="button" ng-disabled="!fabric.set_value" style="" class="btn btn-primary btn-sm" ng-click="updateQuantityValue(fabric)"
+                          data-toggle="modal" data-target="#myModal">save</button>
+                        <button ng-if="set" type="button" ng-disabled="!fabric.setInitial" style="" class="btn btn-primary btn-sm" ng-click="setQuantityValue(fabric)"
+                          data-toggle="modal" data-target="#myModal">save</button>
                       </div>
                     </form>
                   </div>
                 </div>
-              </div>
+             
+
+            </div>
 
           </div>
           <!-- start modal section -->
 
           <div id="myModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
+            <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header" style="background-color:black;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  </div>
-                  <div class="modal-body" style="background-color:black;">
-                    <p style="font-size:2em;color:white;">Inventory is Updated Sucessfully </p>
-                  </div>
-                  <div class="modal-footer" style="background-color:black;">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header" style="background-color:black;">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-
+                <div class="modal-body" style="background-color:black;">
+                  <p style="font-size:2em;color:white;">Inventory is Updated Sucessfully </p>
+                </div>
+                <div class="modal-footer" style="background-color:black;">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
               </div>
+
+            </div>
           </div>
           <!-- end modal section -->
 
         </div>
-        </div>
       </div>
     </div>
-    <!-- angular alert section-->
-    <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
-      <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
-    </div>
   </div>
+  <!-- angular alert section-->
+  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important" ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)"
+      dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+  </div>
+</div>
 </div>
 <!-- end -->

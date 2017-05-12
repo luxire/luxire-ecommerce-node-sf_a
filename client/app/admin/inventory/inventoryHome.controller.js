@@ -1,13 +1,7 @@
-angular.module('luxire')
-.controller('inventoryHomeController',function($scope, products, fileReader, prototypeObject, $state, luxireStocks){
-  $scope.hideAdd=true;
-  $scope.reverse=false;
+var luxire = angular.module('luxire');
+luxire.controller('inventoryHomeController',function($scope, products, fileReader,$uibModal, prototypeObject, $state, luxireStocks, $timeout,$window){
   $scope.loading = true;
-  var count=0;
-  $scope.example={
-    "value": 0
-  };
-  $scope.alerts = [];
+  $scope.alerts = [];//contains the alert messages
   var alert = function(){
     this.type = '';
     this.message = '';
@@ -17,33 +11,38 @@ angular.module('luxire')
     $scope.alerts.splice(index, 1);
   };
 
-  $scope.predicate="physical_count_on_hands";
   //*******  start inventory update part ***********
   $scope.inventoryObj = [];
   $scope.noInventoryMsg = false;
-  luxireStocks.luxireStocksIndex().then(function(data) {
-    $scope.inventoryObj=data.data;
+  //This is used to maintain the page count on scrolling
+  $scope.pageCount = 1;
+  //This function will ensure the next set of data is ready to bind to the inventoryObj
+  $scope.load_more = function(){
+    ++$scope.pageCount;
+    luxireStocks.luxireStocksIndex($scope.pageCount).then(function(data){
+      //console.log('the data.data',data.data); 
+      $timeout(function () {
+        var concatData = angular.copy($scope.inventoryObj);
+        concatData = concatData.concat(data.data);
+        $scope.inventoryObj = concatData;
+      }, 0);
+    })
+  }
+ 
+  luxireStocks.luxireStocksIndex().then(function(data) {  
+      $scope.inventoryObj=data.data;
     if(data.data.length == 0){  // 18th march
       $scope.noInventoryMsg = true;
     }else{
       $scope.noInventoryMsg = false;
     }
     $scope.loading= false;
+    flag = false;       
+   
   }, function(err){
    console.log(err);
    $scope.loading= true;
  })
-
-  $scope.sortQuantity=function(){
-    $scope.predicate="quantity";
-    count++;
-    if(count % 2==0){
-      $scope.reverse=true;
-    }
-    else {
-      $scope.reverse=false;
-    }
-  }
 
   $scope.updateQuantityValue=function(variant){
       variant.physical_count_on_hands=variant.physical_count_on_hands+variant.set_value;
@@ -80,11 +79,61 @@ angular.module('luxire')
     }
   }
 
-  $scope.load_more_inventory = function(){
-    console.log('scroll');
+  $scope.parentSkuStatus = false;
+  $scope.parentSkuFalseCount = 0;
+  $scope.openModal = function(){
+    var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'createProductInventoryModal.html',
+        controller: 'createInventoryModalController',
+        size: 'lg',
+        resolve: {
+          luxireStock: function () {
+            return {  sku_status:$scope.parentSkuStatus, falseCount: $scope.parentSkuFalseCount };
+          }
+        }
+      });
+      modalInstance.result.then(function (luxireStock) {
+      $scope.luxireStock = luxireStock;
+      console.log("modal return value is : ",$scope.luxireStock);
+			$scope.parentSkuFalseCount++;
+      products.createInventory(luxireStock).then(function(data){
+        console.log(data);
+        $scope.alerts.push({type: 'success',message: 'Inventory created Successfully'});
+      },function(error){
+        console.log(error);
+      })
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
   }
-
 
   //*******  end inventory update part ***********
 
 });
+luxire.controller('createInventoryModalController',function($scope, luxireProperties, $uibModalInstance, luxireStock, createProductModalService ,products){
+$scope.stock_location_id = 1;
+$scope.modalData = luxireStock;
+  luxireProperties.luxirePropertiesIndex().then(function(data) {
+          $scope.luxireProperties = data.data;
+          console.log($scope.luxireProperties);
+        }, function(info){
+          console.log(info);
+        })
+      $scope.luxireStock=$scope.luxireStockValue;			
+			if($scope.modalData.sku_status===true){
+						$scope.luxireStock = $scope.modalData.parent_sku_obj;
+			}else{
+				if($scope.modalData.falseCount==0){
+					$scope.luxireStock=$scope.modalData.parent_sku_obj;
+				}else{
+					$scope.luxireStock=$scope.modalData.data;
+				}
+			}
+    $scope.ok = function () {
+      $uibModalInstance.close({luxireStock: $scope.luxireStock,sku: $scope.luxireStock.parent_sku_obj,stockLocationId: $scope.stock_location_id});
+    };
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+})

@@ -21,9 +21,9 @@ angular.module('luxire')
 
     modalInstance.result.then(function (selectedItem) {
       $scope.selected = selectedItem;
-      console.log("modal return value is : ",selectedItem);
+      //console.log("modal return value is : ",selectedItem);
     }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
+      //$log.info('Modal dismissed at: ' + new Date());
     });
   };
 

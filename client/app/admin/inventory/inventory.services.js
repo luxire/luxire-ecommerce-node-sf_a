@@ -1,7 +1,13 @@
 angular.module('luxire')
 .service('luxireStocks', function($http, $q, AdminConstants){
-  this.luxireStocksIndex = function(){
-    return $http.get(AdminConstants.api.inventory);
+  this.luxireStocksIndex = function(data){
+    if(data == undefined || data == null){
+      var getData = 1;
+    }
+    else{
+      var getData = data;
+    }
+    return $http.get(AdminConstants.api.inventory+'?page_count='+getData);
   }
   this.luxireStocksById = function(id){
     return $http.get(AdminConstants.api.inventory+"/"+id);
