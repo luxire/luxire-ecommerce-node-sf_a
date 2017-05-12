@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('TaxonomyController', function($scope, TaxonomyService, $state,$rootScope,$timeout) {
+.controller('TaxonomyController', function($scope, TaxonomyService, $state,$rootScope,$timeout,$uibModal) {
   $scope.taxonomyData = [];
   /*Alerts to display messages*/
   $rootScope.alerts = [];
@@ -22,6 +22,7 @@ angular.module('luxire')
 
   //Hyperlinks in home which will invoke editpage
     $scope.showEditTaxonomies = function(id) {
+    ///  console.log('id is:',id);
       $state.go("admin.editTaxonomy", {id: id});
     }
 
@@ -49,6 +50,16 @@ angular.module('luxire')
 
     //Delete function
     $scope.deleteTaxonomy = function(id, index) {
+        var modalInstance = $uibModal.open({
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy : 'modal-body',
+      templateUrl : 'deleteModal.html',
+      controller: 'showDeleteModalInstanceCtrl',
+      size: 'lg',
+      resolve:{
+      }
+    });
+    modalInstance.result.then(function(){
       TaxonomyService.deleteTaxonomy(id).then(function(data) {
         $scope.taxonomyData.splice(index, 1);
         $rootScope.alerts.push({type: 'success', message: 'Taxonomy deleted successfully!'});
@@ -56,11 +67,13 @@ angular.module('luxire')
         console.log(error);
         $rootScope.alerts.push({type: 'danger', message: 'Taxonomy Deletion Failed!'});
       })
-    }
+    })
+  }
+      
   })
 
 .controller('editTaxonomyController', function($scope, TaxonomyService, $stateParams, $state, $rootScope,$timeout) {
-  console.log("state params id : ", $stateParams.id);
+ // console.log("state params id : ", $stateParams.id);
   $scope.taxons = [];
 
   $rootScope.alerts = [];
@@ -75,7 +88,7 @@ angular.module('luxire')
 
 
   $scope.showEditCollections = function(id) {
-    console.log("Id of Taxon: " + id);
+   // console.log("Id of Taxon: " + id);
     $state.go("admin.editCollections", {taxonomie_id:$stateParams.id, taxons_id: id});
   }
   $scope.loading = true ;
@@ -93,7 +106,7 @@ angular.module('luxire')
       "name": $scope.taxonomyData
     }
 
-    console.log("Taxons",$scope.taxons.length);
+   // console.log("Taxons",$scope.taxons.length);
     if($scope.taxons.length == 0){
       $rootScope.alerts.push({type: 'danger', message: 'Create at least one taxon!'});
     }
@@ -108,5 +121,14 @@ angular.module('luxire')
         $rootScope.alerts.push({type: 'danger', message: 'Taxonomy updation Failed!'});
       })
     }
+  }
+})
+
+.controller('showDeleteModalInstanceCtrl',function($scope,$uibModalInstance){
+  $scope.ok = function(){
+    $uibModalInstance.close();
+  }
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
   }
 })
