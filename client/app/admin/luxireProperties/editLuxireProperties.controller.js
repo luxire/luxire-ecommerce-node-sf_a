@@ -2,31 +2,27 @@ angular.module('luxire')
 .controller('editLuxirePropertiesController',function($scope,$timeout, $stateParams, $state,luxireProperties){
   $scope.loading = true;
   // --------------------------   START ANGULAR ALERT FUNCTIONALITY    -------------------------
-  $scope.alerts = [];
+  $scope.alerts = [];//contains the alert messages
   var alert = function(){
     this.type = '';
     this.message = '';
   };
   $scope.close_alert = function(index){
-    console.log(index);
+    //console.log(index);
     $scope.alerts.splice(index, 1);
   };
 
   // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
-
-
-  console.log("property id is: "+$stateParams.id);
+//used to get the product property details
   luxireProperties.luxirePropertiesById($stateParams.id).then(function(data) {
     $scope.loading = true;
-    //$scope.alerts.push({type: 'success', message: 'Added quantity successfully!'});
     $scope.propertyValue = data.data;
-    console.log("propertie value : ",$scope.propertyValue);
     $scope.loading = false;
   }, function(err){
    console.log(err);
    $scope.loading = true;
-
   })
+   //ensuring the mandatory fields (here product property name) is entered or not
   $scope.checkStyleMasterName = function(name){  // 29th march add this function
     if(name == undefined || name == '' || name == 0){
       $scope.emptyValueMsg = true;
@@ -35,6 +31,7 @@ angular.module('luxire')
         $scope.emptyValueMsg = false;
     }
   }
+   //ensuring the mandatory fields (here product property value) is entered or not
   $scope.checkStyleMasterValue = function(value){  // 29th march add this function
     if(value == undefined || value == '' || value == 0){
       $scope.emptyValueMsg = true;
@@ -43,20 +40,18 @@ angular.module('luxire')
       $scope.emptyValueMsg = false;
     }
   }
+  //used to update the product property details
   $scope.saveProperty = function(){
-    console.log("save property is calling..");
     var updated_property={
       "name": $scope.propertyValue.name,
       "value":$scope.propertyValue.value
     }
+    //service used to update the product property details
     luxireProperties.luxireProperties_update($stateParams.id,updated_property).then(function(data) {
       $scope.alerts.push({type: 'success', message: 'Product Property Updated Successfully!'});
       $timeout(function() {
-        console.log("timeout functionality...");
         $state.go("admin.luxirePropertiesHome");
       }, 3000);
-
-      //alert("property updated sucessfully...");
       console.log(data);
     }, function(err){
      console.log(err);
