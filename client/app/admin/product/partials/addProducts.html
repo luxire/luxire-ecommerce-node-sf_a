@@ -5,38 +5,27 @@
         <hr>
         <div class="modal-body">
             <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-
-                </div>
-                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+               <div class="row">
+                  <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
                     <div class="row" style="margin-top:2%;">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-                            <span>Quantity </span>
-                            <input type="text" ng-model="luxireStock.physical_count_on_hands" class="form-control" id="quantity">
+                            <span> SKU </span>
+                            <br>
+                            <input type="text" ng-model="modalData.parent_sku_obj" class="form-control">
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-show="addSetView" style="; padding-left:0%;">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                              <span>Enter quantity </span>
-                              <input type="text" class="form-control" ng-model="quantity" id="quantity">
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
-                              <button class="btn btn-primary" type="button" ng-click="addQuantity(quantity)" style="margin-left:4%; width:90%;">add</button>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
-                              <button class="btn btn-primary" type="button"  ng-click="setQuantity(quantity)" style="margin-left:4%; width:90%;">set</button>
-                            </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                            <span>Quantity </span>
+                            <input type="number" ng-model="luxireStock.quantity" class="form-control" id="quantity">
                         </div>
                     </div>
-
                     <div class="row" style="margin-top:3%;">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                           <span>Rack </span>
-                          <input type="text" ng-model="luxireStock.rack" class="form-control" id="rack">
+                          <input type="number" ng-model="luxireStock.rack" class="form-control" id="rack">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-                          <span>Thresold </span>
-                          <input type="text" ng-model="luxireStock.threshold" class="form-control" id="thresold">
+                          <span>Threshold </span>
+                          <input type="number" ng-model="luxireStock.threshold" class="form-control" id="thresold">
                         </div>
                     </div>
                     <div class="row" style="margin-top:3%;">
@@ -50,6 +39,10 @@
                               </option>
                             </select>
                           </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                          <span>Fabric width </span>
+                          <input type="number" ng-model="luxireStock.fabricWidth" class="form-control" tooltip-placement="top" uib-tooltip="Enter the value in as per the Measuring unit">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
                           <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
@@ -79,10 +72,30 @@
                 <div class="row">
                     <center>
                       <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
+                      <button class="btn btn-primary" type="button" ng-click="cancel()" style="margin-left:4%;">Cancel</button>
                     </center>
                 </div>
             </div>
         </div>
+</script>
+
+<!--This modal is used as datepicker-->
+<script type="text/ng-template" id="datePickerModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Choose the date</h3>
+  </div>
+  <hr />
+  <div class="modal-body" id="modal-body">
+    <div style="display:inline-block;">
+      Selected date is: <input type="text" ng-model="date1" style="width=31px;" />
+      <hr />
+      <div uib-datepicker ng-model="date1" class="well well-sm"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+  </div>
 </script>
 
 <div class="container-fluid" style="height:100%">
@@ -316,7 +329,7 @@
             <h4 style="font-size: 20px;">Images</h4>
             Add New Image
             <input type="file" name="name" ng-file-select ng-file-change="upload_image($files)" value="">
-            <div style="padding-top:5%;padding-bottom:5%;"><img id="product_img" src="{{getImage(product.image)}}" alt=""></div>
+            <div style="padding-top:5%;padding-bottom:5%;"><img id="product_img" src="{{getImage(product.image)}}" alt="" style="width:40%;height:40%"></div>
             <!-- <input type="file" name="name" ng-file-select ng-file-change="upload_product_image($files)" value=""> -->
             <!-- <button class="btn btn-primary" style="margin-top: 2%" ng-click="post_image()" name="button">Update</button> -->
             <img id="product_image" src="" alt="" />
@@ -376,10 +389,17 @@
                 <i class="fa fa-calendar-o" style="color: #479CCF; float: right;cursor: pointer;" tooltip="Set a publish date" ng-click="calFlag = !calFlag; showDate()"></i>
               </div>
             </div>
-            <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
+            <div class="row" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px">
               <div class="col-lg-12 col-md-12">
                 <span style="font-size: 13px;">Publish This Product On:</span>
-                <datetimepicker data-ng-model="luxireProduct.product_publish_date"></datetimepicker>
+                <!--<datetimepicker data-ng-model="luxireProduct.product_publish_date"></datetimepicker>-->
+                <p class="input-group">
+                  <input type="text" ng-model="date" style="height:31px" /> <button style="margin-left: 5px;" type="button"
+                    class="btn btn-default" ng-click="openDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+                  <span class="input-group-btn">
+                   
+                   </span>
+                </p>
               </div>
             </div>
           </div>
@@ -421,6 +441,17 @@
               </div>
             </div>
             <hr>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <span class="required" style="font-size:13px;" class="requried" >Length Required </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <input type="number" id="lengthRequired" ng-model="luxireProduct.length_required" class="form-control" placeholder="requried length ..">
+              </div>
+            </div>
+            <br>
             <div class="row">
               <div class="col-lg-12 col-md-12">
                 <span class="required" style="font-size: 13px;" class="required">SKU</span>
@@ -707,7 +738,7 @@
                     <option ng-repeat="val in type.value.split(',')" value="{{val}}">
                         {{val}}
                     </option>
-                  </select>{{luxireProduct.product_weave_type}}
+                  </select>
                 </div>
               </div>
             </div>

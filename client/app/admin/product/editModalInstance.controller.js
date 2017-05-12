@@ -2,15 +2,10 @@ angular.module('luxire')
 
 .controller('editModalInstanceCtrl',function($scope,luxireProperties, $uibModalInstance, luxireStock, createProductModalService){
   $scope.modalData = luxireStock;
-  console.log("count from main controller : ",$scope.modalData.count);
-  console.log("data from main controller : ",$scope.modalData.data);
 
   // start: inventory measuring unit
   luxireProperties.luxirePropertiesIndex().then(function(data) {
-    console.log('in inventory modal measuring units are...');
-    //console.log(data);
     $scope.luxireProperties = data.data;
-    //$scope.loading = false;
     console.log($scope.luxireProperties);
   }, function(info){
     console.log(info);
@@ -18,17 +13,7 @@ angular.module('luxire')
 
   // end: inventory measuring unit
 
-
-    if($scope.modalData.count>1){
-
-      $scope.luxireStock=$scope.modalData.data; // binding of inventory data to the inventory modal
-			console.log("modaldata count >1:   ",$scope.luxireStock);
-
-    }else{
-			$scope.luxireStock=$scope.modalData.data; // binding of luxire stock data to the inventory modal
-			console.log("modaldata count o:   ",$scope.luxireStock);
-
-    }
+ $scope.luxireStock=$scope.modalData.data; // binding of inventory data to the inventory modal
 
     $scope.ok = function () { // ok button to pass values from inventory controller to main controller
       $uibModalInstance.close($scope.luxireStock);
@@ -38,12 +23,10 @@ angular.module('luxire')
       $uibModalInstance.dismiss('cancel');
     };
 		$scope.addQuantity=function(quantity){  // function to add quantity in inventory modal
-			console.log("add quantity is calling...");
 			$scope.luxireStock.physical_count_on_hands=parseInt($scope.luxireStock.physical_count_on_hands)+parseInt(quantity);
       $scope.quantity='';
     }
 		$scope.setQuantity=function(quantity){  // function to set quantity in inventory modal
-			console.log("add quantity is calling...");
 			$scope.luxireStock.physical_count_on_hands=parseInt(quantity);
       $scope.quantity='';
 
