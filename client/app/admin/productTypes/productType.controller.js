@@ -44,7 +44,7 @@ angular.module('luxire')
     $state.go("admin.editProductType",{id: id});
   }
 
-  //Deleting
+  //Deleting the product type
   $scope.deleteProductTypes = function(product_type, index) {
     var modalInstance = $uibModal.open({
       animation: true,
@@ -83,7 +83,7 @@ angular.module('luxire')
   }, function(info){
     console.log(info);
   })
-
+//used to redirect to the product_type create page
   $scope.add_new_product_type = function(){
     $state.go('admin.new_productTypes');
   };
@@ -115,11 +115,15 @@ angular.module('luxire')
             $scope.selectedAttributes.push(attribute.id);
           }
         })
-        $scope.productTypeData.measurement_type_ids = $scope.measurement_type_ids;
+       
         $scope.loading = true;
+        //service used to create the product type
         productTypeService.createProductType($scope.productTypeData).then(function(data){
             if($scope.product_type_image){
-              //update image  function
+              $scope.productTypeData.measurement_type_ids = $scope.measurement_type_ids;
+               //service used to update the details of the product type
+              productTypeService.updateProductType(data.data.id,$scope.productTypeData).then(function(data){
+                //service used to update the image for the product type
                 productTypeService.update_image($scope.product_type_image,data.data.id).then(function(data){
                   $scope.alerts.push({type: 'success', message: 'Product Type added successfully!'});
                   $scope.loading = false;
@@ -127,7 +131,10 @@ angular.module('luxire')
                   loadProductTypes();
                 }, function(error) {
                 console.log(error);
-                });
+              });
+              },function(error){
+                console.log('error is',error);
+              });
             }
         }, function(error){
           console.error(error);
@@ -193,7 +200,6 @@ angular.module('luxire')
 
   $scope.loading = true;
   //binding the data to edit view
-
   productTypeService.getProductTypeById($stateParams.id).then(function(res){
      $scope.productTypeData.product_type = res.data.product_type;
      $scope.productTypeData.description = res.data.description;
@@ -224,10 +230,9 @@ angular.module('luxire')
 
 //update function to updtae the product type
   $scope.updateProductType = function(id) {
-    console.log("name:",$scope.productTypeData.product_type);
+    //console.log("name:",$scope.productTypeData.product_type);
     if( $scope.productTypeData.product_type == ''){
         document.getElementById("name").focus();
-
         $scope.alerts.push({type: 'danger', message: 'name cannot be empty!'});
       }
       else if($scope.product_type_image == ''){
@@ -247,8 +252,8 @@ angular.module('luxire')
       $scope.productTypeData.measurement_type_ids = $scope.selectedAttributes;
       productTypeService.updateProductType($stateParams.id,$scope.productTypeData).then(function(data){
         if($scope.product_type_img){
-            //function to update image
-            productTypeService.update_image($scope.product_type_img,data.data.id).then(function(data){
+            //service to update product_type image
+              productTypeService.update_image($scope.product_type_img,data.data.id).then(function(data){
               $scope.loading = false;
               $scope.alerts.push({type: 'success', message: 'Product Type updated successfully!'});
               $state.go('admin.productTypes');
