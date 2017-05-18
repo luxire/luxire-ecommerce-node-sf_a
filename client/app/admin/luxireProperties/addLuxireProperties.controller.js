@@ -16,16 +16,18 @@ angular.module('luxire')
   //ensuring the mandatory fields (here product property name) is entered or not
   $scope.checkStyleMasterName = function(name){  // 29th march add this function
     if(name == undefined || name == '' || name == 0){
-      $scope.emptyValueMsg = true;
+      $scope.emptyNameMsg = true;
+      $scope.alerts.push({type: 'danger', message: 'Name Field Can Not Be Empty !'});
       document.getElementById("name").focus();
     }else{
-        $scope.emptyValueMsg = false;
+        $scope.emptyNameMsg = false;
     }
   }
    //ensuring the mandatory fields (here product property value) is entered or not
   $scope.checkStyleMasterValue = function(value){  // 29th march add this function
     if(value == undefined || value == '' || value == 0){
       $scope.emptyValueMsg = true;
+       $scope.alerts.push({type: 'danger', message: 'Value Field Can Not Be Empty !'});
       document.getElementById("value").focus();
     }else{
       $scope.emptyValueMsg = false;
@@ -34,12 +36,15 @@ angular.module('luxire')
   //create the product property
   $scope.saveProperty = function(){
     console.log("save property is calling..");
-    if(($scope.property.name == undefined || $scope.property.name == '' || $scope.property.name == 0) // 29th march add this if-else condition
-        ||  ($scope.property.value == undefined || $scope.property.value == '' || $scope.property.value == 0)
-    ){
+    if($scope.property.name == undefined || $scope.property.name == '' || $scope.property.name == 0) // 29th march add this if-else condition
+    {
         $scope.alerts.push({type: 'danger', message: 'Name Field Can Not Be Empty !'});
         document.getElementById("name").focus();
-    }else{
+    }
+    else if ($scope.property.value == undefined || $scope.property.value == '' || $scope.property.value == 0){
+       $scope.alerts.push({type: 'danger', message: 'Value Field Can Not Be Empty !'});
+       document.getElementById("value").focus();
+      }else{
       var create_property={
         "name": $scope.property.name,
         "value":$scope.property.value
