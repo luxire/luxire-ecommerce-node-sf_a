@@ -78,12 +78,12 @@ exports.create = function(req, res){
     else{
       http
         .post({
-          uri: constants.redis.host+constants.redis.sync,
+          uri: constants.redis.host + constants.redis.update,
           headers:{
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({ids: [body.id]})
+          body:JSON.stringify({ids: body})
         }, function(error, response, body){
         if(error){
           console.log('error', error);
@@ -118,12 +118,12 @@ exports.update = function(req, res){
     else{
       http
         .post({
-          uri: constants.redis.host+constants.redis.sync,
+          uri: constants.redis.host + constants.redis.update,
           headers:{
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({ids: [body.id]})
+          body:JSON.stringify({product: body})
         }, function(error, response, body){
         if(error){
           console.log('error', error);

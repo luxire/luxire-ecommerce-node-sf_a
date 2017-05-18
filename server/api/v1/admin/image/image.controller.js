@@ -1,3 +1,4 @@
+'use strict';
 var http = require('request');
 var querystring = require('querystring');
 var path = require('path');
@@ -19,6 +20,7 @@ exports.addVariantImage = function (req, res) {
             },
             variantId: fields.variantId
         };
+        let productId = fields.productId;
         http.post({
             uri: constants.spree.host + constants.spree.addVariantimage,
             headers: {
@@ -31,22 +33,22 @@ exports.addVariantImage = function (req, res) {
                 res.status(500).send(error.syscall);
             }
             else {
-                //   http
-                //     .post({
-                //       uri: constants.redis.host+constants.redis.sync,
-                //       headers:{
-                //         'content-type': 'application/json',
-                //         'X-Spree-Token': req.headers['X-Spree-Token']
-                //       },
-                //       body:JSON.stringify({ids: [body.id]})
-                //     }, function(error, response, body){
-                //     if(error){
-                //       console.log('error', error);
-                //     }
-                //     else{
-                //       console.log('success', body);
-                //     };
-                //   });
+                  http
+                    .post({
+                      uri: constants.redis.host+constants.redis.sync,
+                      headers:{
+                        'content-type': 'application/json',
+                        'X-Spree-Token': req.headers['X-Spree-Token']
+                      },
+                      body:JSON.stringify({ids: [productId]})
+                    }, function(error, response, body){
+                    if(error){
+                      console.log('Error adding variant Image in Redis', error);
+                    }
+                    else{
+                      console.log('success', body);
+                    };
+                  });
                 res.status(response.statusCode).send(body);
 
             };
@@ -68,22 +70,22 @@ exports.addVariantImageFromUrl = function (req, res) {
             res.status(500).send(error.syscall);
         }
         else {
-            //   http
-            //     .post({
-            //       uri: constants.redis.host+constants.redis.sync,
-            //       headers:{
-            //         'content-type': 'application/json',
-            //         'X-Spree-Token': req.headers['X-Spree-Token']
-            //       },
-            //       body:JSON.stringify({ids: [body.id]})
-            //     }, function(error, response, body){
-            //     if(error){
-            //       console.log('error', error);
-            //     }
-            //     else{
-            //       console.log('success', body);
-            //     };
-            //   });
+              http
+                .post({
+                  uri: constants.redis.host+constants.redis.sync,
+                  headers:{
+                    'content-type': 'application/json',
+                    'X-Spree-Token': req.headers['X-Spree-Token']
+                  },
+                  body:JSON.stringify({ids: [req.body.productId]})
+                }, function(error, response, body){
+                if(error){
+                  console.log('Error adding variant Image from URL in Redis ', error);
+                }
+                else{
+                  console.log('success', body);
+                };
+              });
             res.status(response.statusCode).send(body);
 
         };
@@ -103,22 +105,22 @@ exports.deleteVariantImage = function (req, res) {
             res.status(500).send(error.syscall);
         }
         else {
-            //   http
-            //     .post({
-            //       uri: constants.redis.host+constants.redis.sync,
-            //       headers:{
-            //         'content-type': 'application/json',
-            //         'X-Spree-Token': req.headers['X-Spree-Token']
-            //       },
-            //       body:JSON.stringify({ids: [body.id]})
-            //     }, function(error, response, body){
-            //     if(error){
-            //       console.log('error', error);
-            //     }
-            //     else{
-            //       console.log('success', body);
-            //     };
-            //   });
+              http
+                .post({
+                  uri: constants.redis.host+constants.redis.sync,
+                  headers:{
+                    'content-type': 'application/json',
+                    'X-Spree-Token': req.headers['X-Spree-Token']
+                  },
+                  body:JSON.stringify({ids: [req.query.productId]})
+                }, function(error, response, body){
+                if(error){
+                  console.log('Error deleting ProductImage from Redis ', error);
+                }
+                else{
+                  console.log('success', body);
+                };
+              });
             res.status(response.statusCode).send(body);
 
         };
