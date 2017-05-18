@@ -89,7 +89,8 @@ module.exports = {
     search: {
       products: '/api/redis/customer/search/products'//Product filter[active api]used in current implementation dated 27-01-17
     },
-    sync: '/api/redis/v1/products/sync'
+    sync: '/api/redis/v1/products/sync',
+    update: '/api/redis/v1/products/update'
   },
   location_by_ip: {
     host: 'http://freegeoip.net/json'
