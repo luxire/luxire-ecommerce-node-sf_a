@@ -130,6 +130,9 @@ angular.module('luxire')
       if (taxonObj.icon) {
         fd.append("icon", taxonObj.icon);
       }
+
+      // for (var i = 0; i < taxonObj.product_ids.length; i++) { fd.append('product_ids', taxonObj.product_ids[i]); }
+      fd.append("product_ids",JSON.stringify(taxonObj.product_ids));
       $http.post("/api/v1/admin/taxonomies/" + id + "/taxons?token=" + luxireToken + "", fd, {
         transformRequest: angular.identity,
         headers: { 'Content-Type': undefined }

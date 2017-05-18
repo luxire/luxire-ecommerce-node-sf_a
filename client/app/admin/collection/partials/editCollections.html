@@ -3,14 +3,12 @@
     display: inline-block;
   }
 </style>
-
 <div class="container-fluid" style="height:100%; overflow:scroll;">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-9 col-md-9" style="text-align: left;font-size: 20px;">
       <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Edit Collections / <span style="color: black;"></span>
-      <span
-        style="margin-left:1%;font-weight: normal">{{showTaxonName}}</span>
-        </span>
+      <span style="margin-left:1%;font-weight: normal">{{showTaxonName}}</span>
+      </span>
     </div>
     <div class="col-lg-3 col-md-3" style="text-align: right;">
       <button type="button" class="btn btn-default" ui-sref="admin.collectionHome">Cancel</button>
@@ -34,20 +32,32 @@
               </div>
             </div>
           </div>
-          <div class="placard">
+          <div class="placard" style="height: 600px; width: 450px">
             <div style="margin-left:1.2%;">
               <span style="font-size: 20px;">Products</span>
+            </div><br>
+            <div class="form-group">
+              <label for="sel1">Sort</label>
+              <select class="form-control" id="sel1" style="width: 100%" ng-options="options for options in sortOptions" ng-model="sortList" ng-change="listChanged(sortList)"></select>
             </div>
-            <div class="placard" style="height: 200px; width: 100%; overflow-y: scroll">
-
+            <hr style="margin: 3px">
+            <div class="placard" style="height: 70%; width: 100%; overflow-y: scroll; border: none">
               <div class="row" style="margin-top: 2%;">
                 <div class="col-lg-12 col-md-12" style="margin-left: 1%;">
                   <div class="row">
-                    <div class="wrapper">
+                    <!--<div class="wrapper" ui-sortable ng-model="tagsArray">
                       <div ng-repeat="tag in tagsArray track by $index" style="display: inline-block; border-style:solid; border-width: 1px; margin: 5px; cursor:pointer; width: 47%; height: 40%"
                         ui-sref="admin.edit_product({id: tag.id})">
                         <img height="100px" width="100px" ng-src="{{ tag.url }}" style="vertical-align:middle" />
                         <span style="word-wrap:break-word; height: 100px; width: 20%; font-size: 11px">{{ tag.name }}</span>
+                      </div>&nbsp;&nbsp;
+                    </div>-->
+                    <div id="sortable" class="wrapper dndPlaceholder" ng-model="tagsArray">
+                      <div ng-repeat="tag in tagsArray track by $index" style="display: inline-block; border-style:solid; border-width: 0px; margin: 5px; cursor:pointer; width: 90%; height: 40%"
+                        ui-sref="admin.edit_product({id: tag.id})">
+                          <img height="40px" width="40px" ng-src="{{ tag.url }}" style="vertical-align:middle" />
+                          <span style="word-wrap:break-word; height: 40px; width: 20%; font-size: 11px">{{ tag.name }}</span>
+                          <hr style="margin-bottom: 1px; ">
                       </div>&nbsp;&nbsp;
                     </div>
                   </div>
@@ -98,8 +108,8 @@
                 <div class="row" ng-hide="calFlag" style="-webkit-transition: all linear 0.5s; transition: all linear 0.5s; margin-top: 10px ">
                   <div class="col-lg-12 col-md-12">
                     <span style="font-size: 13px;">Publish this collection on</span>
-                    <div>
-                      <datepicker data-ng-model="publishDate" min-date="minDate"></datepicker>
+                    <div style="width: 90%">
+                      <uib-datepicker data-ng-model="publishDate" min-date="minDate"></uib-datepicker>
                     </div>
                   </div>
                 </div>

@@ -1,8 +1,7 @@
 angular.module('luxire')
-  .controller('editCollectionController', function ($scope, $timeout, taxonImageUpload, ImageHandler, collections, fileReader, products, $http, $interval, $state, $stateParams, $window) {
+  .controller('editCollectionController', function ($scope, $timeout, taxonImageUpload, ImageHandler, collections, fileReader, products, $http, $interval, $state, $stateParams, $window, $filter) {
     $scope.imgshow = true;
     $scope.loading = true;
-
     $scope.datepicker = '';
     $scope.rule = [];
     var tagIdsObj = [];
@@ -11,11 +10,12 @@ angular.module('luxire')
     $scope.taxonDesc = '';
     $scope.save_collection_button = false;
     $scope.flag = true;
+    $scope.sortList='';
     $scope.showTaxonName = '';
     var id = $stateParams.id;
     var tid = $stateParams.taxonomy_id;
     collections.getTaxonsById($stateParams.id, $stateParams.taxonomy_id).then(function (data) {
-      $scope.loading = true;
+      // $scope.loading = true;
       $scope.showTaxonName = data.data.name;
       $scope.taxon = data.data;
       $scope.taxonTitle = data.data.name;
@@ -24,6 +24,8 @@ angular.module('luxire')
       $scope.image = data.data.icon;
       $scope.tagsArray = [];
 
+      $scope.sortOptions = ["Manually", "Alphabetically A-Z", "Alphabetically Z-A", "By price - highest to lowest", "By price - lowest to highest", "By date - Newest to oldest", "By date - Oldest to newest"]
+
       collections.getAllProductNames(data.data.product_ids).then(function (data) {
         $scope.tagsArray = data.data;
       })
@@ -31,7 +33,7 @@ angular.module('luxire')
       $scope.loading = false;
     }, function (info) {
       console.log(info);
-      $scope.loading = true;
+      $scope.loading = false;
     })
 
     // Upload image
@@ -129,4 +131,30 @@ angular.module('luxire')
         console.log(info);
       })
     }
+
+    $( "#sortable" ).sortable({
+    start: function(event, ui) {
+        ui.item.startPos = ui.item.index();
+    },
+    stop: function(event, ui) {
+       $scope.alerts.push({ type: 'success', message: ' Position changed from '+ui.item.startPos+ ' to ' +ui.item.index()});
+       $scope.$apply();
+        // console.log("Start position: " + ui.item.startPos);
+        // console.log("New position: " + ui.item.index());
+    }
+});
+
+$scope.listChanged = function(option){
+  if(option === 'Manually'){
+    console.log("Manual");
+  }
+  else if(option === 'Alphabetically A-Z'){
+    console.log("A to Z");
+    $scope.tagsArray = $filter('orderBy')($scope.tagsArray,'name');
+  }
+  else if(option === 'Alphabetically Z-A'){
+    console.log("Z to A");
+    $scope.tagsArray = $filter('orderBy')($scope.tagsArray,'-name');
+  }
+}
   });

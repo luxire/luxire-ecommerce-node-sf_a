@@ -1,7 +1,24 @@
 angular.module('luxire')
   .controller('addCollectionController', function ($scope, $state, $timeout, taxonImageUpload, ImageHandler, collections, fileReader, products, $http, $interval) {
     $scope.criteria = [];
+    var productIdForSelection = [];
+    $scope.selectedObj = function (data) {
+      data = data.originalObject;
+      if (productIdForSelection.indexOf(data.id) === -1) {
+        productIdForSelection.push(data.id);
+        $scope.tagsInput.push(data);
+      }
+    }
+
+    $scope.beforeRemovingTagFunc = function (data) {
+     var test =  productIdForSelection.splice(productIdForSelection.indexOf(data.id), 1);
+    }
+
     $scope.numberOfConditions = "all";
+    $scope.tagsInput = [];
+    $scope.selectedProduct = '';
+    var luxireToken = window.localStorage.luxire_token || window.sessionStorage.luxire_token;
+    $scope.url = 'api/v1/products/searchByName?token=' + luxireToken + '&name=';
     // default condition
     $scope.conditionselect = "AutomaticSelection";
     $scope.loading = true;
@@ -18,7 +35,7 @@ angular.module('luxire')
     };
     // Array for integer and string
     ArrayInteger = ["is equal to", "is not equal to", "is greater than", "is less than", "greater than equals to", "lesser than equals to"];
-    ArrayString = ["starts with", "ends with", "contains", "does not contain"];
+    ArrayString = ["starts with", "ends with", "contains", "does not contain", "is equal to", "is not equal to"];
     var productAttributeSelect = {
       "Product title": ArrayString, "Product type": ArrayString, "Product vendor": ArrayString, "Product price": ArrayInteger, "Product tag": ArrayString, "Compare at price": ArrayInteger, "Weight": ArrayInteger,
       "Inventory stock": ArrayInteger, "Variant's title": ArrayString, "Mill": ArrayString, "Material": ArrayString, "Technical description": ArrayString, "Suitable climate": ArrayString, "GSM": ArrayInteger,
@@ -48,7 +65,6 @@ angular.module('luxire')
     $scope.ArrayAdd = function () {
       var collectionObj = { property: "", criteria: "", value: "" }
       $scope.ArrayList.push(collectionObj);
-      console.log("$scope.ArrayList--", $scope.ArrayList);
     }
 
     $scope.DeleteArrayIndex = function (index) {
@@ -128,7 +144,7 @@ angular.module('luxire')
       }
     }
 
-// create taxons functionality
+    // create taxons functionality
     $scope.createTaxons = function () {
       $scope.loading = true;
       // radio button for automatic selection
@@ -183,15 +199,17 @@ angular.module('luxire')
         angular.forEach($scope.rule, function (product, key) {
           product_ids.push(product.id);
         })
+
         $scope.taxonObj = {
           "taxon": {
             "name": $scope.tagtitle,
             "pretty_name": $scope.tagtitle,
             "description": $scope.tagdesc,
-            "product_ids": product_ids,
+            "product_ids": productIdForSelection,
             "taxonomy_id": $scope.selectedTaxonomieId
           }
         }
+        
         if ($scope.image && ($scope.image instanceof Array) && $scope.image.length > 0) {
           $scope.taxonObj.taxon.icon = $scope.image[0];
         }
@@ -230,4 +248,13 @@ angular.module('luxire')
         document.getElementById("taxons").focus();
       }
     }
+
+    //   $scope.loadProducts = function($query) {
+    //   return $http.get('countries.json', { cache: true}).then(function(response) {
+    //     var countries = response.data;
+    //     return countries.filter(function(country) {
+    //       return country.name.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    //     });
+    //   });
+    // };
   });

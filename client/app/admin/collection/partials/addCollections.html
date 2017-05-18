@@ -84,13 +84,49 @@
                 <hr>
               </form>
             </div>
-            <tr>
-              <input type="radio" class="btn btn-default" name="conditionselect" ng-model="conditionselect" value="ManualSelection" ng-click="isCollapsed = true;">&nbsp
+            <tr style="margin: 2%">
+              <input type="radio" class="btn btn-default" name="conditionselect" ng-model="conditionselect" value="ManualSelection" ng-click="isCollapsed = true;" >&nbsp
               Manually select products</input>
             </tr>
-            <tags-input ng-model="rule" display-property="name" key-property="id" add-from-autocomplete-only="true" on-tag-added="add_product_tag($tag)"
-              on-tag-removed="remove_product_tag($tag)" auto-complete source="loadItems($query)">
+            <div
+              angucomplete-alt 
+              id="products"
+              key-property="id"
+              placeholder="Search products"
+              pause="200"
+              selected-object="selectedObj"
+              remote-url="{{ url }}"
+              remote-url-data-field="products"
+              clear-selected="true" 
+              title-field="name"
+              input-class="form-control form-control-small"
+              field-required="name"
+              template-url="search_template_product.html"
+              match-class="highlight"
+              >
+            </div>
+             <tags-input ng-model="tagsInput" display-property="name" key-property="id" add-from-autocomplete-only="true" on-tag-added="add_product_tag($tag)"
+              on-tag-removing="beforeRemovingTagFunc($tag)" auto-complete style="margin: 1px; height: 5%">
             </tags-input>
+            <!--<tags-input ng-model="selectedObj.title" display-property="title" key-property="id" add-from-autocomplete-only="true" on-tag-added="add_product_tag($tag)"
+              on-tag-removed="remove_product_tag($tag)" auto-complete source="loadItems($query)" style="margin: 1px; height: 5%">
+            </tags-input>-->
+             <!--<tags-input ng-model="tagsInput" style="margin: 1px">
+            </tags-input>-->
+
+           <!--<tags-input ng-model="tags" 
+                display-property="name" 
+                placeholder="Add a product" 
+                replace-spaces-with-dashes="false"
+                template="search_template_product.html">
+      <auto-complete source="loadCountries($query)"
+                     min-length="0"
+                     load-on-focus="true"
+                     load-on-empty="true"
+                     max-results-to-show="32"
+                     template="autocomplete-template"></auto-complete>
+    </tags-input>-->
+
           </div>
           <div class="placard" style="height: 30%; background-color: white;">
             <div>
@@ -159,3 +195,39 @@
       dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
   </div>
 </div>
+<script type="text/ng-template" id="search_template_product.html">
+    <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+      <div class="input-group search-product" ng-class="{'input-focused': focused}">
+        <input ng-model="searchStr"
+        type="text"
+        placeholder="Search for your product"
+        ng-init="focused=false"
+        ng-focus="onFocusHandler();focused=true"
+        class="search-product"
+        ng-focus="resetHideResults()"
+        ng-blur="hideResults($event);focused=false"
+        ng-change="inputChangeHandler(searchStr)" style="margin: 3%"/>
+        <span class="input-group-addon search-product">
+          <i class="fa fa-search text-primary"></i>
+        </span>
+      </div>
+      <div class="angucomplete-dropdown" ng-show="showDropdown" style="border: solid 1px grey;border-top: none;">
+        <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
+        <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
+        <div class="angucomplete-row" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: left;font-weight: 500;cursor: pointer" ng-repeat="result in results track by $index | limitTo: 10"
+          ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" >
+          <div style="width: 10%;display: inline-block">
+            <img id="fabric-image" style="max-width: 100%" ng-src="{{result.originalObject.master.images[0].small_url.indexOf('http')>-1?result.originalObject.master.images[0].small_url: 'http://luxire-store.cloudhop.in'+result.originalObject.master.images[0].small_url}}"/>
+          </div>
+          <div style="width: 85%;display: inline-block;vertical-align: top">
+            <div style="display: inline-block" class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
+             <!--//span style="color: grey" ng-if="matchClass"> in </span-->
+            <!--//span ng-if="matchClass">{{result.originalObject.product_type.product_type}}</span-->
+            <div class="angucomplete-title" ng-if="!matchClass">{{result.title}}</div>
+          </div>
+        </div>
+        <div ng-if="results.length>10" ui-sref="customer.search({name_cont: searchStr,taxonomy: '',page: 1})" style="border-bottom: solid 1px grey;display: block;padding: 1%;text-align: center;font-weight: 500;cursor: pointer">Load more..</div>
+      </div>
+
+    </div>
+</script>
