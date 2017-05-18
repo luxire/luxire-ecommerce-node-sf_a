@@ -71,3 +71,53 @@ exports.update_line_item_status = function(req, res){
     }
   })
 };
+
+
+exports.cancel = function(req, res){
+  http.put({
+    uri: constants.spree.host+'/api/orders/' + req.params.id + '/cancel' + '?token='+req.headers['X-Spree-Token'],
+    headers:{'content-type': 'application/json'}, 
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    }
+  })
+};
+
+exports.ship = function(req, res){
+  http.put({
+    uri: constants.spree.host+'/api/shipments/' + req.params.id + '/ship.json' + '?token='+req.headers['X-Spree-Token'],
+    headers:{'content-type': 'application/json'}
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    }
+  })
+};
+
+
+exports.refund = function(req, res){
+  http.put({
+    uri: constants.spree.host+'/api/custom_refund/refund/?token='+req.headers['X-Spree-Token'],
+    headers:{'content-type': 'application/json'},
+    body: JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    }
+  })
+};
+
+
+
+
