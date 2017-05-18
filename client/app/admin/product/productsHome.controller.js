@@ -132,8 +132,8 @@ angular.module('luxire')
     $scope.loading=true;
     products.deleteProduct(id).then(function(data){
       $scope.loading=false;
-      $scope.alerts.push({type: 'success', message: 'Product deleted successfully!'});
       $state.go('admin.product');
+      $scope.alerts.push({type: 'success', message: 'Product deleted successfully!'});    
     }, function(info) {
       console.log(info);
     })
