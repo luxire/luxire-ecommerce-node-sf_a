@@ -176,11 +176,12 @@ angular.module('luxire')
   		return deferred.promise;
 	}
 	//This service is used for uploading the variant image by image using variant id
-	this.upload_image_variant = function(variant_id,image){
+	this.upload_image_variant = function(productId,variant_id,image){
 		var deferred = $q.defer();
 		var formData =  new FormData();
 		formData.append('image',image);
 		formData.append('variantId',variant_id);
+		formData.append('productId',productId)
 		$http.post(AdminConstants.api.addVariantImage, formData, {
 	      transformRequest: angular.identity,
 	      headers: {'Content-Type': undefined}}).success(function(data) {
@@ -193,9 +194,10 @@ angular.module('luxire')
   		 return deferred.promise;
 	}
 	//This service is used for uploading the variant image by image url using variant id
-	this.upload_image_url_variant = function(variant_id,image_url){
+	this.upload_image_url_variant = function(productId,variant_id,image_url){
 		var deferred = $q.defer();
 		var  imageUploadUrlObject={
+			productId: productId,
 			variantId: variant_id,
 			imageUrl: image_url
 		}
@@ -210,9 +212,9 @@ angular.module('luxire')
   		return deferred.promise;
 	}
 	//This service is used for deleteing the variant image by image url using variant id
-	this.delete_variant_image = function(id){
+	this.delete_variant_image = function(productId,id){
 		var deferred = $q.defer();
-		$http.delete(AdminConstants.api.deleteVariantImage+'/'+id ).success(function(data) {
+		$http.delete(AdminConstants.api.deleteVariantImage+'/'+id+'?productId='+productId ).success(function(data) {
 			console.log(data);
 			deferred.resolve(data);
   		})
