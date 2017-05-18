@@ -1,6 +1,8 @@
+<!--This is for adding a inventory-->
 <script type="text/ng-template" id="createProductInventoryModal.html">
         <div class="modal-header">
             <center><h3 class="modal-title">ADD A INVENTORY</h3></center>
+            <p style="color:red">Enter valid data for creating the inventory </p>
         </div>
         <hr>
         <div class="modal-body">
@@ -21,7 +23,7 @@
                     <div class="row" style="margin-top:3%;">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                           <span>Rack </span>
-                          <input type="number" ng-model="luxireStock.rack" class="form-control" id="rack">
+                          <input type="text" ng-model="luxireStock.rack" class="form-control" id="rack">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
                           <span>Threshold </span>
@@ -78,7 +80,96 @@
             </div>
         </div>
 </script>
+<!--This is used for editing the inventory-->
+<script type="text/ng-template" id="editModalContent.html">
+  <div class="modal-header">
+    <center>
+      <h3 class="modal-title">EDIT A INVENTORY</h3>
+    </center>
+  </div>
+  <hr>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
 
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+          <div class="row" style="margin-top:2%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Quantity </span>
+              <input type="text" ng-model="luxireStock.physical_count_on_hands" class="form-control" id="quantity">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="; padding-left:0%;">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <span>Enter quantity </span>
+                <input type="text" class="form-control" ng-model="quantity" id="quantity">
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                <button class="btn btn-primary" type="button" ng-click="addQuantity(quantity)" style="margin-left:4%; width:90%;">add</button>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top:5%;">
+                <button class="btn btn-primary" type="button" ng-click="setQuantity(quantity)" style="margin-left:4%; width:90%;">set</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Rack </span>
+              <input type="text" ng-model="luxireStock.rack" class="form-control" id="rack">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Thresold </span>
+              <input type="text" ng-model="luxireStock.threshold" class="form-control" id="thresold">
+            </div>
+          </div>
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span>Measuring unit</span>
+              <div ng-repeat="type in luxireProperties">
+                <select ng-if="type.name == 'Inventory-measuring-unit'" class="form-control" ng-model="luxireStock.measuring_unit">
+                      <option value = "0" label = "Please Select"></option>
+                      <option ng-repeat="val in type.value.split(',')" value="{{val}}">
+                          {{val}}
+                      </option>
+                    </select>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:4%;">
+              <input type="checkbox" value="" ng-model="luxireStock.backorderable"><span style="padding-left:2%;">Backorderable</span>
+              <span style="padding-left:4%; padding-right: 2%;"><input type="checkbox" ng-model="luxireStock.in_house" name="inhouse"></span><span>Inhouse</span>
+            </div>
+          </div>
+          <div class="row" style="margin-top:3%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <center>
+          <button class="btn btn-primary" type="button" ng-click="ok()" style="margin-left:4%;">OK</button>
+          <button class="btn btn-warning" type="button" ng-click="cancel()" style="margin-left:2%">Cancel</button>
+        </center>
+      </div>
+    </div>
+  </div>
+</script>
 <!--This modal is used as datepicker-->
 <script type="text/ng-template" id="datePickerModal.html">
   <div class="modal-header">
@@ -97,7 +188,19 @@
     <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
   </div>
 </script>
-
+ <!--This modal is just for confirmation-->
+<script type="text/ng-template" id="confirmation.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Warning</h3>
+  </div>
+  <hr />
+  <div class="modal-body">
+    <h4 class="modal-body"> Are you sure, you want to exit from creating a product? </h4>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+  </div>
+</script>
 <div class="container-fluid" style="height:100%">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-4 col-md-4" style="text-align: left;font-size: 20px;">
@@ -216,7 +319,7 @@
             <input type="checkbox" ng-model="luxireProduct.product_charge_taxes_flag" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">Charge taxes on this product</span>
             <hr>
             <span style="font-size: 20px;">Inventory</span>
-            <div style="float:right;"><button type="button" class="btn btn-default" ng-click="openModal('lg')">Add Inventory</button></div>
+            <div style="float:right;"><button type="button" class="btn btn-default" ng-disabled="!showEditInventory" ng-click="openEditInventoryModal('lg')">Edit Inventory</button></div>
 
             <br>
             <br>
@@ -245,6 +348,8 @@
               </div>
 
             </div>
+            <hr>
+          
             <!--<div class="row">
               <div class="col-lg-6 col-md-6">
                 <span style="font-size: 13px;">SKU <span style="color:#95A7B7;">(Stock keeping unit)</span></span>
@@ -282,7 +387,6 @@
 
               </div>
             </div>-->
-            <hr>
             <span style="font-size: 20px;">Shipping</span>
             <br>
             <div class="row">
@@ -322,7 +426,6 @@
             <div> <!-- 22st march changes: add this div -->
               <input type="checkbox" ng-model="luxireProduct.product_requires_shipping" value="true"> &nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">This product requires shipping</span>
             </div>
-            <hr>
 
           </div>
           <div class="placard">

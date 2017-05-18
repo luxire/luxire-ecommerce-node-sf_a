@@ -1,5 +1,5 @@
 var luxire = angular.module('luxire')
-luxire.controller('editProductController', function ($scope, $window, products, allTaxons, luxireProperties, luxireVendor, fileReader, prototypeObject, $state, $stateParams, $uibModal, $log, editModalService) {
+luxire.controller('editProductController', function ($scope, $window, $timeout,products, allTaxons, luxireProperties, luxireVendor, fileReader, prototypeObject, $state, $stateParams, $uibModal, $log, editModalService) {
   $scope.luxire_stock = '';//store the luxire stock details
   $scope.luxire_product = {};//store the luxire product details
   $scope.swatchPrice = 1;
@@ -41,6 +41,16 @@ luxire.controller('editProductController', function ($scope, $window, products, 
         return dateObj;
     }
 };
+    products.allProductType().then(function (data) {
+    $scope.allproductType = data.data;
+    let index = getIndex($scope.products.product_type.product_type, $scope.allproductType);
+    $scope.loading = false;
+    let temp = $scope.allproductType.splice(index, 1);
+    $scope.allproductType.push(temp[0]);
+  }, function (info) {
+    console.log(info);
+  });
+  
     $scope.date = convertDate(data.available_on).dateFormat1;
     p =  $scope.products;
     //image_url contains the image URL of the selected product 
@@ -267,14 +277,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
   $scope.parentSkuStatus = '';
   $scope.parentSkuFalseCount = 0;
   var productTypeId = '';
-  products.allProductType().then(function (data) {
-    $scope.allproductType = data.data;
-    let index = getIndex($scope.products.product_type.product_type, $scope.allproductType);
-    let temp = $scope.allproductType.splice(index, 1);
-    $scope.allproductType.push(temp[0]);
-  }, function (info) {
-    console.log(info);
-  })
+  
   $scope.checkShippingCatgoryId = function (shippingId) { // 23rd march changes: add this function
     $scope.shipping_emp_msg = false;
     if (shippingId == '' || shippingId == undefined) {
@@ -411,7 +414,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
     $scope.product["luxire_product_attributes"] = {};
     $scope.product["luxire_product_attributes"] = $scope.luxire_product;
     $scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxire_stock.id;
-    $scope.product["taxon_ids"] = taxon_ids;
+    //$scope.product["taxon_ids"] = taxon_ids;
 
     $scope.postProductData["product"] = $scope.product;
     $scope.postProductData["available_on"] = $scope.date;
@@ -450,7 +453,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
       //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
       $scope.loading = true;
       var url = data.items;
-      var uploadPromise = products.upload_image_url_variant($scope.master_id, data.items)
+      var uploadPromise = products.upload_image_url_variant($scope.products.id,$scope.master_id, data.items)
       uploadPromise.then(function (data) {
         $scope.variant_image.push(url);
          $window.location.reload();
@@ -480,7 +483,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
       $scope.loading = true;
       $scope.modalImage = data.items;
       //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
-      var uploadPromise = products.upload_image_variant($scope.master_id, data.key)
+      var uploadPromise = products.upload_image_variant($scope.products.id,$scope.master_id, data.key)
       uploadPromise.then(function (data) {
         $scope.variant_image.push(data.items);
         $scope.loading = false;
@@ -528,7 +531,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
     });
     modalInstance.result.then(function (data) {
       $scope.loading = true;
-      products.delete_variant_image(a).then(function (data) {
+      products.delete_variant_image($scope.products.id,a).then(function (data) {
         $window.location.reload();
         $scope.loading = false;
         $scope.alerts.push({type: 'success', message: 'Variant Image Deleted successfully!'});
@@ -567,6 +570,7 @@ luxire.controller('editProductController', function ($scope, $window, products, 
     })
   }
 function getIndex(name, product_types){
+  $scope.loading = true;
   let index = 0;
   for(let product_type of product_types){
     if(product_type.product_type === name){

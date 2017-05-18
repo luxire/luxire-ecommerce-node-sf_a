@@ -1,5 +1,5 @@
-angular.module('luxire')
-.controller('createProductInventoryModalController',function($scope, luxireProperties, $uibModalInstance, luxireStock, createProductModalService ,products){
+var luxire= angular.module('luxire');
+luxire.controller('createProductInventoryModalController',function($scope,$uibModal,luxireProperties, $uibModalInstance, luxireStock, createProductModalService ,products){
   $scope.modalData = luxireStock;
 	$scope.stock_location_id = 1;
   luxireProperties.luxirePropertiesIndex().then(function(data) {
@@ -20,6 +20,25 @@ angular.module('luxire')
     };
 
     $scope.cancel = function () {
+      $scope.openModal();
       $uibModalInstance.dismiss('cancel');
     };
+    $scope.openModal = function(){
+       var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        animation: true,
+        templateUrl: 'confirmation.html',
+        controller: 'editConfirmationModalInstanceCtrl',
+        size: 'lg',
+        resolve: {
+        }
+      });
+    }
+});
+luxire.controller('editConfirmationModalInstanceCtrl',function($scope,$state,$uibModalInstance){
+  $scope.ok = function(){
+    $uibModalInstance.close();
+    $state.go('admin.product');
+  }
 });

@@ -35,6 +35,7 @@ angular.module('luxire')
   $scope.selectedSalesPitchArr = [];//Temporary variable which contains the selected sales pitch details
   $scope.tagTagsArr = [];//store the tag details
   $scope.selectedTagsArr = [];//Temporary variable which contains the selected tags details
+  $scope.showEditInventory = false; // Inventory editing div
   // start 5th april  of reconfigure the add product controller default loading properties
 //get the taxon details
       allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
@@ -277,6 +278,8 @@ angular.module('luxire')
          $scope.luxireStock=res;
 				 $scope.parentSkuFalseCount=0;
 				 parentSkuObj = $scope.luxireStock;
+         $scope.stockInventoryData = res;
+         $scope.showEditInventory = true;
           $scope.alerts.push({type: 'success', message: 'Inventory Exists.'});
 
        }
@@ -355,10 +358,12 @@ angular.module('luxire')
 
 
     modalInstance.result.then(function (luxireStock) {
-      $scope.luxireStock = luxireStock;
+      // $scope.luxireStock = luxireStock;
 			$scope.parentSkuFalseCount++;
       products.createInventory(luxireStock).then(function (data) {
+        $scope.luxireStock = data;
         $scope.alerts.push({ type: 'success', message: 'Inventory created Successfully' });
+        $scope.showEditInventory = true;
       }, function (error) {
         console.log(error);
       });
@@ -419,6 +424,7 @@ angular.module('luxire')
       }
     }
   	$scope.createProduct = function() {
+      $scope.loading = true;
         // start: 18th march change: put validation for mandatory fields
         var empty_state_flag = 0;
       if(!empty_state_flag){
@@ -469,7 +475,7 @@ angular.module('luxire')
       }
           empty_state_flag = 1;
     }
-        if(empty_state_flag){ // 21st march
+      if(empty_state_flag){ // 21st march
         // end: 18th march change: put validation for mandatory fields
         var tagarr=[];
         if( $scope.selectedTagsArr == undefined || $scope.selectedTagsArr.length == 0 ){
@@ -531,9 +537,7 @@ angular.module('luxire')
         $scope.luxireProduct["usage"]=usageArr.toString(); // storing the seasons tags input values entered
         $scope.luxireProduct["wash_care"]=washCareArr.toString(); // storing the seasons tags input values entered
         $scope.luxireProduct["sales_pitch"]=salesPitchArr.toString(); // storing the seasons tags input values entered
-
-
-  		if($scope.parentSkuStatus==true){   // creating product for existing parent_sku
+  // creating product for existing parent_sku
   				$scope.postProductData={};
         $scope.postProductData["product"] = {};
         $scope.postProductData["product"]["name"] = $scope.product.name;
@@ -546,50 +550,42 @@ angular.module('luxire')
         $scope.postProductData["product"]["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
         $scope.postProductData["product"]["available_on"] = $scope.date;
           // first create product functionality is invoked
+          
         	products.createProduct($scope.postProductData).then(function(data){
-            products.update_image_variant(data.master.id,$scope.style_image).then(function(data){
-            },function(error) {
-               console.log(error);
-
-             });
-           
-            $scope.alerts.push({type: 'success', message: 'Product Created Successfully!'});
+            console.log('data:',data);
+            products.upload_image_variant(data.id,data.master.id,$scope.style_image).then(function(data){
+              $scope.loading = false;
+              $scope.alerts.push({type: 'success', message: 'Product Created Successfully!'});
              $state.go('admin.product');
+            },function(error) {
+              $scope.alerts.push({type: 'warning', message: error.data.msg});
+               console.log(error);
+             }); 
   		    }, function(info) {
   		      console.log("creating product error:\n\n",info);
   		    })
-         
-  		}else{ // creating product for non existing parent_sku
-      $scope.luxireStock["parent_sku"]=$scope.luxireProduct.parent_sku;
-      if (JSON.stringify($scope.luxireStock).length === 2) {
-              $scope.alerts.push({type: 'success', message: 'Create the inventory first..!'});
-              //alert("luxire stock is empty...");
-      }else{
-  		$scope.postProductData={};
-  		// merge all the three product structure
-  		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
-  		$scope.product["luxire_product_attributes"] = {};
-      $scope.product["taxon_ids"] = $scope.taxon_ids;
-  		$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
-  		$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = $scope.luxireStock;
 
-  		$scope.postProductData["product"]=$scope.product;
-
-  		$scope.modalCount=0;
-      products.createProduct($scope.postProductData).then(function(data){
-
-          $scope.alerts.push({type: 'success', message: 'Product created successfully!'});
-          // $scope.activeButton('products');
-        }, function(info) {
-          console.log(info);
-        })
-
-      }
-    }
   }// 21st march
 }
 
+$scope.openEditInventoryModal = function(size){
 
+   var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'editModalContent.html',
+        controller: 'editModalInstanceCtrl',
+        size: size,
+        resolve: {
+          luxireStock: function () {
+            return { data: $scope.luxireStock || $scope.stockInventoryData};
+          }
+        }
+      });
+
+modalInstance.result.then(function (luxireStock) {
+      console.log('the data from modal:',luxireStock);
+});
+}
 });
 
 //This is the datePickerModal.html controller
