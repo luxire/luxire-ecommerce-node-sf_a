@@ -124,6 +124,10 @@ angular.module('luxire')
       $scope.alerts.push({type: 'danger', message: 'Image field can\'t be empty!'});
       document.getElementById("mandatory_image").focus();
     }
+    else if($scope.luxire_product_type_id == '' || $scope.luxire_product_type_id == undefined){
+      $scope.alerts.push({type: 'danger', message: 'product type can\'t be empty!'});
+      document.getElementById("mandatory_product_type").focus();
+    }
     else{
       $scope.loading= true;
       $scope.newProductType["default_values"] = $scope.style;
