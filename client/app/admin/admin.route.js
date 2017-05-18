@@ -422,16 +422,20 @@ angular.module('luxire')
 			require_auth: true
 		}
 	})
-	.state('admin.editCollections',{
-		url:'/collection/:id/edit',
-		views: {
-			"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html'},
-			"mainContent": { templateUrl: 'app/admin/collection/partials/editCollections.html', controller: 'editCollectionController'}
-		},
-		data: {
-			require_auth: true
-		}
-	})
+	.state('admin.editCollections', {
+               url: '/collection/:id/:taxonomy_id/edit',
+               views: {
+                        "sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html' },
+                         "mainContent": { templateUrl: 'app/admin/collection/partials/editCollections.html', controller: 'editCollectionController' }
+                },
+               params: {
+                          id: null,
+                          taxonomy_id: null
+                       },
+               data: {
+                     require_auth: true
+                     }
+         })
 	.state('admin.manualSaveCollections',{
 		url:'/collections/save',
 		views: {
