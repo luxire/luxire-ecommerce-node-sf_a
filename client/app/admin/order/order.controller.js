@@ -260,7 +260,7 @@ luxire.controller('OrderSheetController', function ($scope,$window, $http,$state
       });
   }
   $scope.preview_order_sheet = function (line_item_id) {
-    var new_url = "http://localhost:9000/#/admin/order_sheet/" + $scope.order.number + "/print?line_item_id=" + line_item_id;
+    var new_url = window.location.origin + "/#/admin/order_sheet/" + $scope.order.number + "/print?line_item_id=" + line_item_id;
     var win = window.open(new_url, '_blank');
     win.focus();
   }
@@ -410,8 +410,9 @@ $scope.manualRefund = function(value){
   for(var i=0;i<$scope.luxireOrder.line_items.length;i++){
     $scope.line_item_id.push($scope.luxireOrder.line_items[i].id);
   }
-
+//This contatins the refund reasons
 $scope.reasons = ['Return Processing','Technical Problem'];
+//This function is used to set the id for the selected reason 
 $scope.selectReason = function(){
 if($scope.refundReason == 'Return Processing'){
   $scope.refundReasonId = 1;
