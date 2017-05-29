@@ -40,7 +40,7 @@ angular.module('luxire')
 
 	this.updateStock = function(id,inventoryObj) {
 		var deferred = $q.defer();
-		$http.put("/api/luxire_stocks/"+id, angular.toJson(inventoryObj)).success(function(data) {
+		$http.put("/api/v1/admin/inventory/"+id, angular.toJson(inventoryObj)).success(function(data) {
 			deferred.resolve(data);
 			})
 			.error(function(errData, errStatus, errHeaders, errConfig) {
