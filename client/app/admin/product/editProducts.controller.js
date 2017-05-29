@@ -66,9 +66,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
     $scope.luxire_product = data.luxire_product;
 
     //  ***** start:- 28th march changes:  this portion responsiblr for converting attribute value into tags input
-
-       if ($scope.products.luxire_product.product_tags == undefined) {
-    } else {
+      if ($scope.products.luxire_product && $scope.products.luxire_product.product_tags) {
       var arr = $scope.products.luxire_product.product_tags.split(','); // converting the tags array of string into tags input object
       var tagsObj = {};
       for (i = 0; i < arr.length; i++) {
@@ -78,9 +76,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
         $scope.tagsArr.push(tagsObj);
       }
     }
-    if ($scope.products.luxire_product.product_color == undefined) {
-
-    } else {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.product_color) {
       var colorArr = $scope.products.luxire_product.product_color.split(','); // converting the array of color string into tags input object
       var colorObj = {};
       for (i = 0; i < colorArr.length; i++) {
@@ -90,8 +86,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
         $scope.colorTagsArr.push(colorObj);
       }
     }
-    if ($scope.products.luxire_product.suitable_climates == undefined) {
-    } else {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.suitable_climates) {
       var seasonArr = $scope.products.luxire_product.suitable_climates.split(','); // converting the array of seasons string into tags input object
       var seasonObj = {};
       for (i = 0; i < seasonArr.length; i++) {
@@ -102,8 +97,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
       }
     }
     // start : 24th march add the following if else condition
-    if ($scope.products.luxire_product.usage == undefined) {
-    } else {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.usage) {
       var usageArr = $scope.products.luxire_product.usage.split(','); // converting the array of seasons string into tags input object
       var usageObj = {};
       for (i = 0; i < usageArr.length; i++) {
@@ -115,8 +109,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
     }
     //  end : 24th march add the following if else condition
     // start : 24th march add the following if else condition
-    if ($scope.products.luxire_product.wash_care == null) {
-    } else {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.wash_care) {
       var washCareArr = $scope.products.luxire_product.wash_care.split(','); // converting the array of seasons string into tags input object
       var washCareObj = {};
       for (i = 0; i < washCareArr.length; i++) {
@@ -126,8 +119,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
         $scope.washCareTagsArr.push(washCareObj);
       }
     }
-    if ($scope.products.luxire_product.sales_pitch == null) {
-    } else {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.sales_pitch) {
       var salesPitchArr = $scope.products.luxire_product.sales_pitch.split(','); // converting the array of seasons string into tags input object
       var salesPitchObj = {};
       for (i = 0; i < salesPitchArr.length; i++) {
@@ -313,7 +305,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
         size: size,
         resolve: {
           luxireStock: function () {
-            return { count: $scope.modalCount, data: $scope.products.luxire_stock };
+            return { count: $scope.modalCount, data: $scope.products.luxire_stock, product : $scope.products.luxire_product.luxire_stock_id };
           }
         }
       });
@@ -487,8 +479,8 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
       uploadPromise.then(function (data) {
         $scope.variant_image.push(data.items);
         $scope.loading = false;
-        $window.location.reload();
         $scope.alerts.push({type: 'success', message: 'Variant Image Uploaded successfully!'});
+        $window.location.reload();
 
       }, function (data) {
         $scope.loading = false;
