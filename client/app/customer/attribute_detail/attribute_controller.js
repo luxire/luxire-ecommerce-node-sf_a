@@ -246,7 +246,7 @@ angular.module('luxire')
               }
             },
             {
-              "title": "Except/ other than Button Down",
+              "title": "Except oxford shirts button down",
               "header": [
                 "Interlining",
                 "Fused/Unfused",
@@ -310,8 +310,7 @@ angular.module('luxire')
           }
         },
         "NOBD-2": {
-          "title": "NOBD-2",
-          "alias": "Milano Button Down",
+          "title": "MILANO (NOBD II)",
           "images": [
             {
               "ref": "Milano_Button_Down_1.png",
