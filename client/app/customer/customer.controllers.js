@@ -6,6 +6,7 @@ avoid conflict with customer ctrl on admin side*/
   $scope.show_header = true;
   $scope.checkout_state = false;
   $scope.is_customer_home_state = false;
+  $scope.searchStr = '';
   $scope.available_collections = ['shirts', 'pants'];
   /*Bread crumbs for checkout */
   $scope.checkout_steps = {
@@ -215,7 +216,6 @@ avoid conflict with customer ctrl on admin side*/
   /*Load products*/
   // $scope.search_products_url = CustomerConstants.api.products+'?q[name_cont]=';//search provided by ransack
   $scope.search_products_url = CustomerConstants.api.products+'/searchByName?name=';
-
   /*Select product from search*/
   $scope.select_product = function(data){
     $scope.show_search_panel = false;
@@ -436,8 +436,16 @@ avoid conflict with customer ctrl on admin side*/
         $rootScope.alerts.push({type: 'danger', message: 'Please send again!!'});
       });
     }
-
   };
+
+$scope.searchEvent = function(str){
+    $scope.searchStr = str;
+  }
+  $scope.keyDownEvent = function(event){
+   if(event.keyCode == 13 ){
+      $state.go("customer.search",{name_cont: $scope.searchStr,taxonomy: '',page: 1});
+    }
+  }
 })
 .controller('CustomerSideMenuController', function($scope, $state, taxonomies,$rootScope, $uibModalInstance, CustomerAuthentication, $location, CustomerOrders){
   $scope.taxonomies = taxonomies;
