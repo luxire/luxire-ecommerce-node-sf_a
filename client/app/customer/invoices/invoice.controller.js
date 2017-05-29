@@ -2,6 +2,9 @@
 angular.module('luxire')
 .controller('invoiceController', function($scope,$rootScope,invoiceService,$stateParams, $location, CustomerOrders, ImageHandler) {
 
+$scope.setReload = function(){
+  $rootScope.reloadPage = true;
+}
 $scope.getImage = function(url){
   return ImageHandler.url(url);
 };
