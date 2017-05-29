@@ -61,7 +61,9 @@ module.exports = {
     deleteImage: '/api/delete_variant_image',
     taxonomies: '/api/taxonomies',
     taxons: '/taxons', 
-    dynamicCollectionCreation: '/api/create_dynamic_taxon'
+    dynamicCollectionCreation: '/api/create_dynamic_taxon',
+    changePosition: '/api/classifications',
+    changePositionBasedOnCondition: '/api/changedPositionBasedOnCondition'
   },
   payment: {
     ebs: {
