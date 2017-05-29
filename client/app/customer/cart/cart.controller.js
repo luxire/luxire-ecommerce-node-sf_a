@@ -52,7 +52,7 @@ angular.module('luxire')
   console.log('cart', $rootScope.luxire_cart);
 
   $scope.go_to_product_listing = function(){
-    $state.go('customer.home');
+    $state.go('customer.collection',{collection_name : 'Shirts'});
   };
 
   var html_text = '';
