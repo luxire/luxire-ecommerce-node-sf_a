@@ -11,7 +11,7 @@
           Luxury Bespoke Menswear
         </div>
 
-        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="text-align: right; margin-top: 0.5%">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="text-align: right; margin-top: 0.5%" ng-keydown="keyDownEvent($event)">
           <angucomplete-alt style="height: 25px; position: absolute; top:0; left:0; z-index: 100;width: 100%"
             placeholder="Search products"
             pause="400"
@@ -23,7 +23,8 @@
             match-class="highlight"
             input-class="form-control form-control-small"
             minlength="1"
-            clear-selected="true"/>
+            clear-selected="true"
+            input-changed = "searchEvent"/>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align: right; margin-top: 0.5%">
           <span ng-if="!isLoggedIn" style="font-size: 92%;font-weight: 300;margin-top: 1.4%">
@@ -95,7 +96,7 @@
     <!-- ng-mouseleave="is_open=false;"  -->
 
     <span id="dropdown-mega-menu" class="taxonomy-dropdown dropdown yamm-fw" ng-init="is_open=false" is-open="is_open" ng-mouseenter="change_arrow_pos($event)" ng-mouseover="is_open=true;" ng-mouseleave="is_open=false;" uib-dropdown ng-repeat="taxonomy in taxonomies" >
-      <a href="#/collections/{{taxonomy.name}}">
+      <a href="#/collections/{{taxonomy.name}}" >
         <div class="taxonomy-menu dropdown-toggle"  ng-class="{'taxonomy-menu-hover': is_open===true}" style="display: inline-block;padding: 0.25% 0.5%;border-radius: 2px;margin-left: 0.5%;cursor: pointer;text-align: center;font-size: 95%" >
           {{taxonomy.name}}&nbsp;&nbsp;<i style="font-size: 80%;margin-top: -3%" ng-if="taxonomy.root.taxons.length" class="fa fa-chevron-down" aria-hidden="true"></i>
         </div>
@@ -274,7 +275,8 @@
         class="search-product"
         ng-focus="resetHideResults()"
         ng-blur="hideResults($event);focused=false"
-        ng-change="inputChangeHandler(searchStr)"/>
+        ng-change="inputChangeHandler(searchStr)"
+        />
         <span class="input-group-addon search-product">
           <i class="fa fa-search"></i>
         </span>
