@@ -279,7 +279,7 @@ angular.module('luxire')
 				 $scope.parentSkuFalseCount=0;
 				 parentSkuObj = $scope.luxireStock;
          $scope.stockInventoryData = res;
-         $scope.showEditInventory = true;
+         $scope.showEditInventory = false;
           $scope.alerts.push({type: 'success', message: 'Inventory Exists.'});
 
        }
