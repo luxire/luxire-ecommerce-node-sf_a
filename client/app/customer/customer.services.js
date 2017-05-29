@@ -62,7 +62,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.products+"/search", angular.toJson(query_object));
   };
 
-  var active_collections = ["shirts", "pants", "accessories", "ties", "pocket squares"];
+  var active_collections = ["shirts", "pants", "accessories", "ties", "pocket squares","giftcards"];
   this.is_active_collections = function(collection){
     var collection = collection.toLowerCase();
     var is_active_collection = false;
@@ -216,6 +216,16 @@ angular.module('luxire')
     };
     return $http.post(CustomerConstants.api.orders+'/'+order.number+'/line_items?order_token='+order.token, angular.toJson(line_item));
   };
+
+   this.add_giftCard_line_item = function(order, cartObject, variant, send_sample, selected_currency, selected_measurement_unit){
+    var line_item = {
+      line_item: {
+        variant_id: variant.id,
+        quantity: 1
+      }
+    }
+      return $http.post(CustomerConstants.api.orders+'/'+order.number+'/line_items?order_token='+order.token, angular.toJson(line_item));
+    }
 
   this.delete_line_item = function(order, line_item_id){
     return $http.delete(CustomerConstants.api.orders+'/'+order.number+'/line_items/'+line_item_id+'?order_token='+order.token);
