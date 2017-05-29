@@ -1066,14 +1066,14 @@ angular.module('luxire')
   };
 
   $scope.change_attribute_value = function(attribute_type, attribute_key, attribute_value){
-    if(!isNaN(attribute_value)){
-      if(selected_measurement_unit == "in"){
-        attribute_value = (Math.round((parseFloat(attribute_value))*100)/100).toFixed(3);
-      }
-      else if(selected_measurement_unit == "cm"){
-        attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
-      }
-    }
+ //   if(!isNaN(attribute_value)){
+ //     if(selected_measurement_unit == "in"){
+ //       attribute_value = (Math.round((parseFloat(attribute_value))*100)/100).toFixed(3);
+ //     }
+ //     else if(selected_measurement_unit == "cm"){
+ //       attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
+  //    }
+  //  }
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
     $scope.change_dependents(attribute_type, attribute_key, attribute_value);
   };
