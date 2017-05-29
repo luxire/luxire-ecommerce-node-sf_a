@@ -1,6 +1,10 @@
 angular.module('luxire')
 .controller('CustomerHomeController', function($scope, $state,CustomerConstants, $window, CustomerProducts, ImageHandler, $rootScope, $location, CustomerOrders, $timeout, $sce){
   $scope.sce = $sce;
+  if($rootScope.reloadPage === true){
+    $rootScope.reloadPage = false;
+    $window.location.reload();
+  }
   $scope.loading = true;
   var default_collection = {
     taxonomy_name: CustomerConstants.default.taxonomy_name,
