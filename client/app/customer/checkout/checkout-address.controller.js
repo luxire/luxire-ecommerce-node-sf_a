@@ -109,6 +109,10 @@ angular.module('luxire')
     if($scope.same){
       $scope.billing = $scope.shipping;
     }
+    else
+    {
+      $scope.billing = {};
+    }
   };
 
   $scope.getImage = function(url){
