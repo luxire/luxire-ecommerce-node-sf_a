@@ -118,6 +118,17 @@ exports.refund = function(req, res){
   })
 };
 
-
+exports.getRecentlyCompletedOrder = function(req,res){
+  http.get({
+   uri: constants.spree.host+'/api/recent_completed_orders?token='+req.headers['X-Spree-Token']
+  }, function(error, response, body){
+    if(error){
+      res.status(500).send(error);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    }
+  })
+}
 
 
