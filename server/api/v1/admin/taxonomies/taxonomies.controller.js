@@ -112,3 +112,66 @@ exports.createDynamicCollection = function (req, res) {
             })
     });
 }
+
+
+exports.changePosition = function(req, res){
+     http.put(
+            {
+                uri: `${constants.spree.host}${constants.spree.changePosition}`,
+                headers: {
+                    'content-type': 'application/json',
+                    'X-Spree-Token': req.headers['X-Spree-Token']
+                },
+                body: JSON.stringify(req.body)
+            }, function (error, response, body) {
+                if (error) {
+                    res.status(500).send("Internal Error");
+                } else {
+                    res.status(response.statusCode).send(JSON.parse(body));
+                }
+            });
+}
+
+exports.sortCollection = function(req,res){
+    let orderBy = req.body.orderBy;
+    let requestObject = {}
+    let condition = null;
+    let taxonId = null;
+    if(checkReqData(req,res)){
+        requestObject.orderBy = orderBy === 'ascending' ? 'asc' : 'desc'
+        requestObject.condition = req.body.condition;
+        requestObject.taxonId = req.body.taxonId;
+    }else{
+        return;
+    }
+    http.put(
+            {
+                 uri: `${constants.spree.host}${constants.spree.changePositionBasedOnCondition}`,
+                headers: {
+                    'content-type': 'application/json',
+                    'X-Spree-Token': req.headers['X-Spree-Token']
+                },
+                body: JSON.stringify(requestObject)
+            }, function (error, response, body) {
+                if (error) {
+                    res.status(500).send("Internal Error");
+                } else {
+                    res.status(response.statusCode).send(JSON.parse(body));
+                }
+            });
+}
+
+function checkReqData(req,res){
+    let inputData = {}
+    inputData.condition = req.body.condition;
+    inputData.taxonId = req.body.taxonId;
+    inputData.orderBy = req.body.orderBy;
+    for(let key in inputData){
+        if(inputData[key] === null || inputData[key] === undefined || inputData[key] === ""){
+            res.status(422).send(`${key} can not be empty. Please specify ${key}`)
+            res.end()
+            return false;
+        }
+    }
+    return true;
+}
