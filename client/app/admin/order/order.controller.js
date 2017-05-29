@@ -1,6 +1,7 @@
 var luxire = angular.module('luxire');
-luxire.controller('OrderController', function ($scope, AdminOrderService, $uibModal, $state, orders) {
+luxire.controller('OrderController', function ($scope, AdminOrderService, AdminConstants,$uibModal, $state,$http, orders) {
   $scope.total_pages = 1;
+  var flag = true;
   $scope.orders = [];
   $scope.loading = false;
   var search = {
@@ -65,6 +66,10 @@ luxire.controller('OrderController', function ($scope, AdminOrderService, $uibMo
       id: 4,
       title: 'Unfulfilled'
     },
+    {
+      id : 5,
+      title: 'Recently Completed Orders'
+    }
   ];
   $scope.active_order_tab_id = 0;
   function set_states(order_eq, payment_eq, shipment_eq, order_not_eq, payment_not_eq, shipment_not_eq) {
@@ -90,10 +95,38 @@ luxire.controller('OrderController', function ($scope, AdminOrderService, $uibMo
     else if (id == 4) {
       set_states("complete", "paid", "", "", "", "shipped");
     }
+    else if (id == 5) {
+      load_recent_orders(true);
+      flag = false;
+    }
     $scope.orders = [];
     search.page = 1;
-    load_orders(true);
+    if(flag === true){
+      load_orders(true);
+    }
   };
+
+  var load_recent_orders = function(new_orders){
+     $scope.loading = true;
+     $http.get(AdminConstants.api.orders+'/getRecentlyCompletedOrder').then(function(data){
+      if (new_orders) {
+        $scope.orders = data.data.orders;
+      }
+      else {
+        if ($scope.orders.length) {
+          $scope.orders = $scope.orders.concat(data.data.orders);
+        }
+        else {
+          $scope.orders = data.data.orders;
+        }
+      }
+      $scope.total_pages = data.data.pages;
+      $scope.loading = false;
+     },function(error){
+      $scope.loading = false;
+      console.error(error);
+     })
+  }
 
   /*Set order details in $scope.active_order*/
   $scope.show_order_details = function (event, order, index) {
