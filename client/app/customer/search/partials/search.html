@@ -1,3 +1,25 @@
+<style>
+  @media screen and (max-height : 768px) and (max-width : 1366px){
+    .productTypeicon{
+      left:79.7%;
+    }
+  }
+   @media screen and (max-height : 1080px) and (max-width : 1920px){
+    .productTypeicon{
+      left:85.7%;
+    }
+  }
+  @media screen and (max-height : 900px) and (max-width : 1440px){
+    .productTypeicon{
+      left:79.7%;
+    }
+  }
+  @media screen and (max-height : 800px) and (max-width : 1280px){
+    .productTypeicon{
+      left:79.7%;
+    }
+  }
+</style>
 <p class="text-center text-muted" ng-if="loading_products||loading_filters" style="margin-top: 10%; position: fixed; top: 20%;left: 45%; z-index: 99;color: #7F0E6E">
   <span class="fa fa-spinner fa-spin fa-4x"></span>
   <br /><br />
@@ -132,7 +154,7 @@
         <div class="new-product-image" ng-class="{'zoomable-taxonomy': get_taxonomy_details(product.taxons[0].permalink).is_gift_card==false}" style="height: 45vh;overflow: hidden;position:relative;">
           <a href="/#/products/{{product.slug}}">
             <img ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;position:absolute;">
-            <img ng-init = "product.product_type.product_type === 'Shirts'?icon = '/lib/assets/shirt-icon.png' : icon = '/lib/assets/pant-icon.png'" ng-src="{{icon}}" style="position:absolute;bottom:0%;left:93%;">
+            <img ng-init = "product.product_type.product_type === 'Shirts'?icon = '/lib/assets/shirt icon_logo.jpeg' : icon = '/lib/assets/Pants icon_logo.jpg'" ng-src="{{icon}}" style="position:absolute;bottom:0%" class="productTypeicon">
             <!-- <img ng-click="go_to_product_detail(product.slug)" ng-src="{{getImage(product.master.images[0].large_url)}}" style="cursor: pointer;"></img> -->
           </a>
         </div>
