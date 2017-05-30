@@ -649,16 +649,19 @@ angular.module('luxire')
   var thickness = 0;
   /*Get Thickness icon*/
   $scope.thickness_index = function(variant_thickness){
-    if(variant_thickness != undefined){
-      thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-      if(thickness/10 >5){
-        return 6;
-      }
-      else {
-        return Math.ceil(thickness/10);
-      }
-    }
-
+    if (typeof variant_thickness !== "undefined") {
+       thicknessInMm = variant_thickness.split('.')[1];
+       if (typeof thicknessInMm !== "undefined") {
+         thickness = parseInt(thicknessInMm.split('mm')[0]);
+         if (thickness / 10 > 5) {
+           return 6;
+         }
+         else {
+           return Math.ceil(thickness / 10);
+         }
+       }
+     }
+     
   };
   /*Get stiffness icon*/
   $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
