@@ -427,12 +427,23 @@
                           {{key}}:
                         </div>
                         <div style="margin-left: 2%" ng-repeat="(k,v) in value">
-                          <div ng-if="k.toLowerCase() !=='cost'" style="margin-left: 2%">
+                          <div ng-if="k.toLowerCase() !=='cost'&&k !== 'custom_images'&&k !== 'custom_notes'" style="margin-left: 2%">
                             <div style="display: inline-block">
                               {{k}}:
                             </div>
                             <div style="display: inline-block">
                               {{v}}
+                            </div>
+                          </div>
+                          <div style="margin-left: 2%" ng-if="k === 'custom_images'" ng-repeat="value in v track by $index">
+                            <div style="margin-left: 2%">
+                              Notes for image {{$index+1}}: {{value.notes}}<br>
+                              <img ng-src="{{value.url}}">
+                            </div>
+                          </div>
+                          <div style="margin-left: 2%" ng-if="k === 'custom_notes'" ng-repeat="value in v">
+                            <div style="margin-left: 2%">
+                               Notes {{$index+1}}: {{value.content}}
                             </div>
                           </div>
                         </div>
