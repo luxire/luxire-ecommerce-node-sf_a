@@ -1057,7 +1057,7 @@ angular.module('luxire')
 
           }
         },
-        "Plain": {
+        "No": {
           "title": "Plain",
           "alias": "No Pleat",
           "images": [
