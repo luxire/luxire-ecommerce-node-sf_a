@@ -166,7 +166,7 @@ exports.checkout_apply_gift_card = function (req, res){
   console.log('apply gift_card', req.body);
   console.log('apply gift card params', req.params);
   http
-    .get({
+    .put({
       uri: constants.spree.host+constants.spree.checkouts+'/apply_gift_code?'+'order[gift_code]='+req.body.gift_card_code+'&order[number]='+req.params.number+'&order[token]='+req.body.order_token,
       headers:{
         'content-type': 'application/x-www-form-urlencoded',
