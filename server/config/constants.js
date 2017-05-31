@@ -7,7 +7,8 @@ var development_host = {
 }
 var production_host = {
   spree: 'https://luxire-store.cloudhop.in',
-  redis: 'http://10.138.0.3:9090',
+  redis: 'http://104.196.227.220:9090',
+//  redis: 'http://10.138.0.3:9090',
   prediction: 'http://137.116.155.7:8000',
 }
 var host = process.env.NODE_ENV == 'production' ? production_host : development_host;
