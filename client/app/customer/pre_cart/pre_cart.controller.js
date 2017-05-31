@@ -101,6 +101,8 @@ angular.module('luxire')
     $state.go('customer.product_detail',{product_name: product_name});
   };
 
-
+  $scope.redirect = function(){
+    $state.go('customer.collection',{collection_name : 'Shirts'});
+  }
 
 }])

@@ -3,12 +3,12 @@ angular.module('luxire')
 .controller('addProductController',function($scope, products, ImageHandler, allTaxons, luxireProperties, luxireVendor, fileReader, fileUpload, prototypeObject, $uibModal, $log, createProductModalService, $state, csvFileUpload){
 
   $scope.productData  = new prototypeObject.product();
-  $scope.product = {};
-  $scope.luxireProduct = {};
+  $scope.product = {};//store the details of the new product
+  $scope.luxireProduct = {};//Temporary object to store the new product details
 
 
   // --------------------------   START ANGULAR ALERT FUNCTIONALITY    -------------------------
-  $scope.alerts = [];
+  $scope.alerts = [];//contains the alert messages
   var alert = function(){
     this.type = '';
     this.message = '';
@@ -20,43 +20,37 @@ angular.module('luxire')
 
   // --------------------------   END ANGULAR ALERT FUNCTIONALITY    -------------------------
   // --------------------------  17th march change-3 START GET ALL PRODUCTS TO SHOW    -------------------------
-  $scope.masterSearchJson;
-  $scope.loading = true; // 28th march
-  var totalTaxons;
-  $scope.seasonTagsArr=[];
-  $scope.selectedSeasonArr=[];
-  $scope.colorTagsArr=[];
-  $scope.selectedColorArr=[];
-  $scope.usageTagsArr=[];
-  $scope.selectedUsageArr=[];
-  $scope.washCareTagsArr=[];
-  $scope.selectedWashCareArr=[];
-  $scope.salesPitchTagsArr=[];
-  $scope.selectedSalesPitchArr=[];
-  $scope.tagTagsArr=[];
-  $scope.selectedTagsArr=[];
+ // $scope.masterSearchJson;
+ $scope.loading = true; // 28th march
+  var totalTaxons;//Temporary variable which contains the taxons details
+  $scope.seasonTagsArr = [];//store the season details 
+  $scope.selectedSeasonArr = [];//Temporary variable which contains the selected seasons
+  $scope.colorTagsArr = [];//store the color details 
+  $scope.selectedColorArr = [];//Temporary variable which contains the selected colors
+  $scope.usageTagsArr = [];//store the fabric usage details
+  $scope.selectedUsageArr = [];//Temporary variable which contains the selected fabric usage
+  $scope.washCareTagsArr = [];//store the wash care details 
+  $scope.selectedWashCareArr = [];//Temporary variable which contains the selected washcare details
+  $scope.salesPitchTagsArr = [];//store the sales sales_pitch
+  $scope.selectedSalesPitchArr = [];//Temporary variable which contains the selected sales pitch details
+  $scope.tagTagsArr = [];//store the tag details
+  $scope.selectedTagsArr = [];//Temporary variable which contains the selected tags details
+  $scope.showEditInventory = false; // Inventory editing div
   // start 5th april  of reconfigure the add product controller default loading properties
-
+//get the taxon details
       allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
           $scope.loading = true;
         $scope.taxonsJson = data.data;
-        console.log("all taxons per page: ",$scope.taxonsJson);
-        // $scope.loading = false;
         totalTaxons = data.data.count;
-        //$scope.loading = false;
         allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
           $scope.allTaxonsJson = data.data.taxons;
-          console.log("total taxons are: ",$scope.allTaxonsJson);
         }, function(info){
           console.log(info);
         })
 
         // default luxire properties
         luxireProperties.luxirePropertiesIndex().then(function(data) {
-          console.log('admin luxire properties values are ...');
-          //console.log(data);
           $scope.luxireProperties = data.data;
-          //$scope.loading = false;
           console.log($scope.luxireProperties);
           var tempArr=[];
           var tempObj={};
@@ -105,9 +99,6 @@ angular.module('luxire')
 
             }
           }
-          console.log("type of properties: ",typeof($scope.luxireProperties[0]));
-          // var arr=$scope.luxireProperties[0].value.split(',');
-          // console.log("arr\n\n",arr);
         }, function(info){
           console.log(info);
         })
@@ -117,11 +108,9 @@ angular.module('luxire')
 
         // default vendor master
         luxireVendor.getAllLuxireVendor().then(function(data) {
-          console.log('admin luxire vendor values are ...\n\n');
-          //console.log(data);
+
           $scope.luxireVendor = data.data;
-          //$scope.loading = false;
-          console.log($scope.luxireVendor);
+
         }, function(info){
           console.log(info);
         })
@@ -130,18 +119,11 @@ angular.module('luxire')
 
         // default product TYPES
         products.allProductType().then(function(data) {
-          //$scope.loading= false;
-          console.log("values of all product type \n\n");
           $scope.allproductType=data.data;
-          console.log("\n\nall product type values are \n\n",data.data);
-
         }, function(info){
           console.log(info);
         })
-
-
         //default product types
-
         // stop the loading spring
               $scope.loading = false;
       }, function(info){
@@ -149,202 +131,57 @@ angular.module('luxire')
       })
 
 
-
-  // end  of reconfigure the add product controller default loading properties
-
-  // products.getProducts().then(function(data) {
-  //     $scope.loading = true; //28th march
-  //     $scope.jsonresponse = data.data.products;
-  //     $scope.masterSearchJson = $scope.jsonresponse;
-  //     allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
-  //       $scope.taxonsJson = data.data;
-  //       console.log("all taxons per page: ",$scope.taxonsJson);
-  //       // $scope.loading = false;
-  //       totalTaxons = data.data.count;
-  //       //$scope.loading = false;
-  //       allTaxons.getTaxonsPerPage(totalTaxons).then(function(data) {
-  //         $scope.allTaxonsJson = data.data.taxons;
-  //         console.log("total taxons are: ",$scope.allTaxonsJson);
-  //       }, function(info){
-  //         console.log(info);
-  //       })
-  //     }, function(info){
-  //       console.log(info);
-  //     })
-  //
-  //     luxireProperties.luxirePropertiesIndex().then(function(data) {
-  //       console.log('admin luxire properties values are ...');
-  //       //console.log(data);
-  //       $scope.luxireProperties = data.data;
-  //       //$scope.loading = false;
-  //       console.log($scope.luxireProperties);
-  //       var tempArr=[];
-  //       var tempObj={};
-  //       for(i=0; i<$scope.luxireProperties.length; i++){
-  //         if($scope.luxireProperties[i].name == 'season'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.seasonTagsArr.push(tempObj);
-  //              }
-  //
-  //         }else if($scope.luxireProperties[i].name == 'color'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.colorTagsArr.push(tempObj);
-  //              }
-  //
-  //         }else if($scope.luxireProperties[i].name == 'usage'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.usageTagsArr.push(tempObj);
-  //              }
-  //
-  //         }else if($scope.luxireProperties[i].name == 'wash-care'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.washCareTagsArr.push(tempObj);
-  //              }
-  //
-  //         }else if($scope.luxireProperties[i].name == 'sales_pitch'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.salesPitchTagsArr.push(tempObj);
-  //              }
-  //
-  //         }else if($scope.luxireProperties[i].name == 'tags'){
-  //           tempArr = $scope.luxireProperties[i].value.split(',');
-  //              for(var j=0;j<tempArr.length; j++){
-  //                  tempObj = {"text": tempArr[j]}
-  //                  $scope.tagTagsArr.push(tempObj);
-  //              }
-  //
-  //         }
-  //       }
-  //       console.log("type of properties: ",typeof($scope.luxireProperties[0]));
-  //       var arr=$scope.luxireProperties[0].value.split(',');
-  //       console.log("arr\n\n",arr);
-  //     }, function(info){
-  //       console.log(info);
-  //     })
-  //
-  //     luxireVendor.getAllLuxireVendor().then(function(data) {
-  //       console.log('admin luxire vendor values are ...\n\n');
-  //       //console.log(data);
-  //       $scope.luxireVendor = data.data;
-  //       //$scope.loading = false;
-  //       console.log($scope.luxireVendor);
-  //     }, function(info){
-  //       console.log(info);
-  //     })
-  //
-  //     products.allProductType().then(function(data) {
-  //   		//$scope.loading= false;
-  //   		console.log("values of all product type \n\n");
-  //   		$scope.allproductType=data.data;
-  //   		console.log("\n\nall product type values are \n\n",data.data);
-  //
-  //   	}, function(info){
-  //   		console.log(info);
-  //   	})
-  //
-  //     $scope.loading = false;
-  //
-  //
-  // }, function(info){
-  //   console.log(info);
-  // })
-
-  //--------- START OF SHOWING THE PUBLISH DATE ----------
-  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  $scope.showdate=false;
-  $scope.publishDate = new Date();
-  var dateFlag=0;
-
-  $scope.showDate=function(){
-    //if($scope.publishDate != null){
-    var dateObj=$scope.publishDate;
-    console.log("dateobj: "+dateObj);
-    $scope.hrs=dateObj.getHours();
-    $scope.mnt=dateObj.getMinutes();
-    $scope.sec=dateObj.getSeconds();
-    $scope.dt=dateObj.getDate();
-    $scope.yr=dateObj.getFullYear();
-    $scope.mon=months[dateObj.getMonth()];
-    $scope.day=days[dateObj.getDay()];
-    console.log("date : "+$scope.day+" "+$scope.dt+" "+$scope.mon+" "+$scope.yr+"\n");
-    console.log("time : "+$scope.hrs+" : "+$scope.mnt+" : "+$scope.sec);
-  //}
-    if(dateFlag==0){
-      dateFlag++;
-    }else{
-      $scope.showdate=true;
-    }
-  }
-
-
-  //--------- END OF SHOWING THE PUBLISH DATE ----------
   // --------------   START OF TAGS INPUT DECLARATION   ---------------
 
   $scope.colorTags = [];
   $scope.seasonTags = [];
-  //$scope.tagsarr = [];
   $scope.colorTagsArr = [];
   $scope.rule=[];
   $scope.taxon_ids=[];
 
   $scope.loadItems = function($query){
     var filteredArr=[];
-    //return $scope.allTaxonsJson;
     filteredArr = $scope.allTaxonsJson;
     return filteredArr.filter(function(tag){
       return tag.pretty_name.toLowerCase().indexOf($query.toLowerCase()) != -1;
     });
 
   };
-
-
+//used to populate the tag array details(color,season,usage,washcare) by returning them
   $scope.loadAutocomplete = function($query,pattern) {
-    //console.log("query is: ",$query);
+ 
     var filteredArr=[];
     if (pattern == 'color') {
-      //return $scope.colorTagsArr;
+
       filteredArr = $scope.colorTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     } else if (pattern == 'season') {
-      // return $scope.seasonTagsArr;
+
       filteredArr = $scope.seasonTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     }else if (pattern == 'usage') {
-      //return $scope.usageTagsArr;
+
       filteredArr = $scope.usageTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     }else if (pattern == 'washCare') {
-      //return $scope.washCareTagsArr;
+
       filteredArr = $scope.washCareTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     }else if (pattern == 'salesPitch') {
-      //return $scope.salesPitchTagsArr;
+
       filteredArr = $scope.salesPitchTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
       });
     }else if (pattern == 'tags') {
-      //console.log("tags arr: ",$scope.tagTagsArr);
-      //return $scope.tagTagsArr;
       filteredArr = $scope.tagTagsArr;
       return filteredArr.filter(function(tag){
         return tag.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
@@ -356,8 +193,6 @@ angular.module('luxire')
  // start: IMPLEMENTATION OF RELATED FABRIC SECTION
     $scope.rule=[];
     $scope.loadRelatedFabric = function(query){
-      //var tempproduct=products.searchProducts(query);
-        //console.log("temp producct: \n",tempproduct);
         return products.searchProducts(query);
     }
 
@@ -367,37 +202,10 @@ angular.module('luxire')
 
 
   // --------------------------   END GET ALL PRODUCTS TO SHOW    -------------------------
-
-  // $scope.upload_product_image = function(files){
-  //   console.log('product image', files[0]);
-  //   if (files && files.length) {
-  //     $scope.product_image = files[0];
-  //     var reader = new FileReader();
-  //      reader.onload = function (e) {
-  //          $('#product_image').attr('src', e.target.result);
-  //      }
-  //
-  //      reader.readAsDataURL(files[0]);
-  //     // fileUpload.upload(files[0]);
-  //         console.log('files to upload',files[0]);
-  //   }
-  // }
-  //
-  // $scope.post_image = function(){
-  //   products.add_variant_image(24, 34, $scope.product_image)
-  //   .then(function(data){
-  //     console.log(data);
-  //   }, function(error){
-  //     console.error(error);
-  //   });
-  // };
   /*Image upload*/
   $scope.upload_image = function(files){
-    console.log('typeof', typeof(files[0]));
-    console.log('product image', typeof(files[0]));
     if (files && files.length) {
       $scope.style_image = files[0];
-      console.log('files to upload',files[0]);
       var reader = new FileReader();
        reader.onload = function (e) {
            $('#product_img').attr('src', e.target.result);
@@ -408,124 +216,15 @@ angular.module('luxire')
   }
 
   $scope.getImage = function(url){
-    //console.log(url);
-    console.log("_______________image handler image url: ",ImageHandler.url(url));
-
     return ImageHandler.url(url);
   };
 
-  $scope.disabled = function(date, mode) {
-    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function() {
-    $scope.minDate = $scope.minDate ? null : new Date();
-  };
-  $scope.toggleMin();
-  $scope.maxDate = new Date(2020, 5, 22);
-
-  $scope.open = function($event) {
-    $scope.status.opened = true;
-  };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
-
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
-
-  $scope.status = {
-    opened: false
-  };
-
-  var tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  var afterTomorrow = new Date();
-  afterTomorrow.setDate(tomorrow.getDate() + 2);
-  $scope.events =
-    [
-      {
-        date: tomorrow,
-        status: 'full'
-      },
-      {
-        date: afterTomorrow,
-        status: 'partially'
-      }
-    ];
-
-  $scope.getDayClass = function(date, mode) {
-    if (mode === 'day') {
-      var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-      for (var i=0;i<$scope.events.length;i++){
-        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-        if (dayToCheck === currentDay) {
-          return $scope.events[i].status;
-        }
-      }
-    }
-
-    return '';
-  };
-
-
-  // --------------------------   START GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
-
-    // --------------------------   END GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
-    // --------------------------   START GET ALL LUXIRE VENDORS  TO SHOW    -------------------------
-
-
-  // --------------------------   END GET ALL LUXIRE PROPERTIES  TO SHOW    -------------------------
   // --------------------------   START GET ALL PRODUCT TYPES TO SHOW    -------------------------
 
 	$scope.showProductType=function(){
-		 //console.log("select product type is calling..");
-		 //console.log("selected product type is "+$scope.newProductType.type);
 		 productTypeId=$scope.luxireProduct.luxire_product_type_id;
-		 console.log("selected product type id: "+productTypeId);
-
 	}
   // --------------------------   END GET ALL PRODUCT TYPES TO SHOW    -------------------------
-
-
-  // -------------------------- 17TH MARCH  change-1 PRODUCT SEARCH FUNCTIONALITY    -------------------------
-
-  // $scope.searchProductsJson;
-  // $scope.noProductMsg = false; // 18th march
-  // $scope.searchProductByQuery = function(query){
-  //   $scope.loading = true;
-  //   if(query.length>=1){
-  //     products.searchProducts(query).then(function(data){
-  //       $scope.searchProductsByQueryJson = data;
-  //       $scope.masterSearchJson = $scope.searchProductsByQueryJson;
-  //       $scope.loading = false;
-  //       if($scope.masterSearchJson.length == 0){  // 18th march
-  //         $scope.noProductMsg = true;
-  //       }else{
-  //         $scope.noProductMsg = false;
-  //       }
-  //       console.log("====== search products json is=====: ",$scope.masterSearchJson);
-  //     }, function(info){
-  //       console.log("error: ",info);
-  //     })
-  //   }else if(query.length == 0){
-  //     console.log("query.length == 0");
-  //     //$scope.loading = true;
-  //     $scope.masterSearchJson = $scope.jsonresponse;
-  //     $scope.loading = false;
-  //
-  //   }
-  //
-  // }
-
-  // --------------------------   17TH MARCH change-1 PRODUCT SEARCH FUNCTIONALITY    -------------------------
-
-
-
 
 
 
@@ -550,23 +249,9 @@ angular.module('luxire')
     }
   }
 
-  // $scope.deleteProducts = function(id,index) {
-  //   products.deleteProduct(id).then(function(data){
-  //     $scope.alerts.push({type: 'success', message: 'Product deleted successfully!'});
-	// 		$scope.jsonresponse.data.products.splice(index,1);
-  //     //alert('Product deleted successfully');
-  //     $scope.activeButton('products')
-  //   }, function(info) {
-  //     console.log(info);
-  //   })
-  // }
-
   $scope.swatchPrice=1;
 	$scope.modalCount=0;
 	$scope.animationsEnabled = true;
-	$scope.dummyInventoryData='';
-  $scope.pid='';
-
 
   $scope.luxireStock='';
 	$scope.parentSkuStatus='';
@@ -582,27 +267,19 @@ angular.module('luxire')
       parent_sku: sku,
     }
     createProductModalService.checkParentSku(parentSku).then(function(res){
-       //console.log(" parent sku response is: ",res.msg);
        $scope.parentSkuStatus=res.msg;
        if($scope.parentSkuStatus == "false") {
-           console.log("parent sku false part");
              $scope.alerts.push({type: 'danger', message: 'Inventory Does Not Exists!\nCreate The Inventory! '});
-					 console.log("sku status: ",$scope.parentSkuStatus);
+             $scope.openModal('lg');
 					 parentSkuObj = parentSku;
 					 $scope.parentSkuFalseCount=0;
-					 console.log("perentskuObj: ",parentSkuObj);
-           //$scope.alerts.push({type: 'success', message: 'Create the inventory first..!'});
-
-
        }else{
-				 console.log("parent sku true part..");
 				 $scope.parentSkuStatus=true;
          $scope.luxireStock=res;
 				 $scope.parentSkuFalseCount=0;
-				 console.log("+++++++++++++++++false count: "+$scope.parentSkuFalseCount);
 				 parentSkuObj = $scope.luxireStock;
-				 console.log("sku status: ",$scope.parentSkuStatus);
-					console.log("luxire stock object: ",$scope.luxireStock);
+         $scope.stockInventoryData = res;
+         $scope.showEditInventory = false;
           $scope.alerts.push({type: 'success', message: 'Inventory Exists.'});
 
        }
@@ -630,19 +307,11 @@ angular.module('luxire')
 		});
 		importCsvModalInstance.result.then(function (res) {
 		$scope.importModalValue = res;
-
-		//console.log("modal return value is : \n\n",$scope.importModalValue);
 		var len=JSON.stringify($scope.importModalValue).length;
-		console.log("length: "+$scope.importModalValue.length);
-		console.log("len: "+bytesToSize(len));
 		var csvToJsonData = CSV2JSON($scope.importModalValue);
-		console.log("csv to json file is: \n\n"+typeof(csvToJsonData));
-		//console.log("file content: ",csvToJsonData);
-		console.log("csv to json file is: \n\n"+typeof(JSON.parse(csvToJsonData)));
 		var data=JSON.parse(csvToJsonData);
 
 		csvFileUpload.uploadCsvFile(res).then(function(data) {
-	    console.log("in import modal controller response is: ",data);
 
 	  }, function(info){
 	    console.log(info);
@@ -660,10 +329,7 @@ angular.module('luxire')
 
   $scope.openModal = function (size) {
     $scope.modalCount++;
-    console.log("modal count: "+$scope.modalCount);
-    if($scope.modalCount>1){
-			console.log("parent sku object: ",parentSkuObj);
-      console.log("dummy data is : ",$scope.dummyInventoryData);
+    if($scope.modalCount>=1){
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: 'createProductInventoryModal.html',
@@ -671,7 +337,7 @@ angular.module('luxire')
         size: size,
         resolve: {
           luxireStock: function () {
-            return { count:$scope.modalCount,data:$scope.dummyInventoryData, parent_sku_obj: parentSkuObj, sku_status:$scope.parentSkuStatus, falseCount: $scope.parentSkuFalseCount, };
+            return { count:$scope.modalCount, parent_sku_obj: $scope.luxireProduct.parent_sku, sku_status:$scope.parentSkuStatus };
           }
         }
       });
@@ -692,13 +358,17 @@ angular.module('luxire')
 
 
     modalInstance.result.then(function (luxireStock) {
-      $scope.luxireStock = luxireStock;
-      console.log("modal return value is : ",$scope.luxireStock);
+      // $scope.luxireStock = luxireStock;
 			$scope.parentSkuFalseCount++;
-      $scope.dummyInventoryData=$scope.luxireStock;
-			console.log("dummy result: ",$scope.dummyInventoryData);
+      products.createInventory(luxireStock).then(function (data) {
+        $scope.luxireStock = data;
+        $scope.alerts.push({ type: 'success', message: 'Inventory created Successfully' });
+        $scope.showEditInventory = true;
+      }, function (error) {
+        console.log(error);
+      });
     }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
+
     });
   };
   // --------------   END OF OPEN MODAL FUNCTIONALITY TO SHOW THE INVENTORY    ---------------
@@ -709,14 +379,44 @@ angular.module('luxire')
 
 
  // end of bind the all taxons value
+ // ---------------- START OF THE OPEN MODAL FUNCTIONALITY TO SHOW THE DATE PICKER ----------------
 
+  //This is datapicker 
+  $scope.datePicker = new Date();
+  //This function is to display the date in custom format as dd/mm/yyyy
+  $scope.dateFunction = function (date) {
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;//January is 0 that's y month value is incremented
+    var year = date.getFullYear();
+    $scope.date = dt + '/' + month + '/' + year;
+  }($scope.datePicker);
+  //This is the function which invokes the datePickerModal.html modal
+  $scope.openDatePicker = function () {
+    var modalInstance = $uibModal.open({
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'datePickerModal.html',
+      controller: 'showDateModalInstanceCtrl',
+      size: 'lg',
+      resolve: {
+        dateModal: function () {
+          return $scope.date;
+        }
+      }
+    });
+    modalInstance.result.then(function (data) {
+      var dt = data.date.getDate();
+      var month = data.date.getMonth() + 1;
+      var year = data.date.getFullYear();
+      $scope.date = dt + '/' + month + '/' + year;
+    })
+  }
+  //------------------------- END OF THE DATE PICKER MODAL FUNCTIONALITY ------------------
 
  // --------------   START OF CREATING THE PRODUCT STRUCTURE TO POST    ---------------
 
     $scope.checkShippingCatgoryId = function(shippingId){ // 23rd march changes: add this function
-      console.log("checkShippingCatgoryId is calling...");
       $scope.shipping_emp_msg = false;
-      console.log("checkShippingCatgoryId: ",shippingId);
       if(shippingId == '' || shippingId == undefined){
         $scope.shipping_emp_msg = true;
       }else{
@@ -724,27 +424,10 @@ angular.module('luxire')
       }
     }
   	$scope.createProduct = function() {
+      $scope.loading = true;
         // start: 18th march change: put validation for mandatory fields
         var empty_state_flag = 0;
-        //console.log("product name: "+$scope.product.name);
-      //   if(($scope.product.name == '' || $scope.product.name == undefined )
-      //   || ($scope.luxireProduct.parent_sku == '' || $scope.luxireProduct.parent_sku == undefined)
-      //   || ($scope.product.shipping_category_id == '' || $scope.product.shipping_category_id == undefined)
-      //   || ($scope.product.price == '' || $scope.product.price == undefined)
-      //   || ($scope.luxireProduct.luxire_product_type_id == undefined || $scope.luxireProduct.luxire_product_type_id == '')
-      //   || ($scope.luxireProduct.luxire_vendor_master_id == undefined || $scope.luxireProduct.luxire_vendor_master_id == '')
-      // ){
-      //       console.log("need to fill the mandatory fields...");
-      //        $scope.alerts.push({type: 'danger', message: 'Mandatory fields are empty..!'});
-      //       return;
-      //   }
       if(!empty_state_flag){
-    //($scope.product.name == '' || $scope.product.name == undefined )
-    //   || ($scope.luxireProduct.parent_sku == '' || $scope.luxireProduct.parent_sku == undefined)
-    //   || ($scope.product.shipping_category_id == '' || $scope.product.shipping_category_id == undefined)
-    //   || ($scope.product.price == '' || $scope.product.price == undefined)
-    //   || ($scope.luxireProduct.luxire_product_type_id == undefined || $scope.luxireProduct.luxire_product_type_id == '')
-    //   || ($scope.luxireProduct.luxire_vendor_master_id == undefined || $scope.luxireProduct.luxire_vendor_master_id == '')
           if( $scope.product.name == '' || $scope.product.name == undefined){
             $scope.alerts.push({type: 'danger', message: 'Product Name Can Not Be Empty !'});
             document.getElementById("title").focus();
@@ -785,21 +468,15 @@ angular.module('luxire')
             document.getElementById('productSku').focus();
             return;
           }
-          //  if($scope.product.is_gift_card == undefined || $scope.product.is_gift_card== ''){
-          //   $scope.alerts.push({type: 'danger', message: 'Gift Card Can Not Be Empty !'});
-          //   document.getElementById('giftcard').focus();
-          //   return;
-          // }
+           if ($scope.luxireProduct.length_required == undefined || $scope.luxireProduct.length_required == '') {
+        $scope.alerts.push({ type: 'danger', message: 'Product length_requried canot be Empty !' });
+        document.getElementById('lengthRequired').focus();
+        return;
+      }
           empty_state_flag = 1;
-
-
-
     }
-        if(empty_state_flag){ // 21st march
+      if(empty_state_flag){ // 21st march
         // end: 18th march change: put validation for mandatory fields
-
-
-        console.log("inventory obj length: "+(JSON.stringify($scope.luxireStock).length));
         var tagarr=[];
         if( $scope.selectedTagsArr == undefined || $scope.selectedTagsArr.length == 0 ){
 
@@ -807,7 +484,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedTagsArr.length;i++){
             tagarr[i]=$scope.selectedTagsArr[i].text;
           }
-          console.log("color tags arr values are: \n",tagarr.toString());
         }
 
         var colorArr=[];
@@ -817,7 +493,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedColorArr.length;i++){
             colorArr[i]=$scope.selectedColorArr[i].text;
           }
-          console.log("color tags arr values are: \n",colorArr.toString());
         }
 
         var seasonArr=[];
@@ -827,7 +502,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedSeasonArr.length;i++){
             seasonArr[i]=$scope.selectedSeasonArr[i].text;
           }
-          console.log("color tags arr values are: \n",seasonArr.toString());
         }
         var usageArr=[];
         if( $scope.selectedUsageArr == undefined || $scope.selectedUsageArr.length == 0){
@@ -836,7 +510,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedUsageArr.length;i++){
             usageArr[i]=$scope.selectedUsageArr[i].text;
           }
-          console.log("color tags arr values are: \n",usageArr.toString());
         }
         var washCareArr=[];
         if( $scope.selectedWashCareArr == undefined || $scope.selectedWashCareArr.length == 0){
@@ -845,7 +518,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedWashCareArr.length;i++){
             usageArr[i]=$scope.selectedWashCareArr[i].text;
           }
-          console.log("color tags arr values are: \n",washCareArr.toString());
         }
         var salesPitchArr=[];
         if( $scope.selectedSalesPitchArr == undefined || $scope.selectedSalesPitchArr.length == 0){
@@ -854,7 +526,6 @@ angular.module('luxire')
           for(i=0;i<$scope.selectedSalesPitchArr.length;i++){
             salesPitchArr[i]=$scope.selectedSalesPitchArr[i].text;
           }
-          console.log("color tags arr values are: \n",salesPitchArr.toString());
         }
         for(var i=0;i<$scope.rule.length;i++){
           $scope.taxon_ids[i]=$scope.rule[i].id;
@@ -866,161 +537,66 @@ angular.module('luxire')
         $scope.luxireProduct["usage"]=usageArr.toString(); // storing the seasons tags input values entered
         $scope.luxireProduct["wash_care"]=washCareArr.toString(); // storing the seasons tags input values entered
         $scope.luxireProduct["sales_pitch"]=salesPitchArr.toString(); // storing the seasons tags input values entered
-
-
-  		if($scope.parentSkuStatus==true){   // creating product for existing parent_sku
-  				console.log("create product true part...");
-          // merge all the three product structure
+  // creating product for existing parent_sku
   				$scope.postProductData={};
-  				$scope.product["luxire_product_attributes"] = {};
-          $scope.product["taxon_ids"] = $scope.taxon_ids;
-  				$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
-  				$scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
-  				//$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
-  				$scope.postProductData["product"]=$scope.product;
-  				console.log("inventory id: "+$scope.luxireStock.id);
-  				console.log(" create product true part\n before posting the product data is: ",JSON.stringify($scope.postProductData));
+        $scope.postProductData["product"] = {};
+        $scope.postProductData["product"]["name"] = $scope.product.name;
+        $scope.postProductData["product"]["price"] = $scope.product.price.toString();
+        $scope.postProductData["product"]["shipping_category_id"] = $scope.product.shipping_category_id;
+        $scope.postProductData["product"]["luxire_product_type_id"] = $scope.luxireProduct.luxire_product_type_id;
+        $scope.postProductData["product"]["luxire_vendor_master_id"] = $scope.luxireProduct.luxire_vendor_master_id;
+        $scope.postProductData["product"]["sku"] = $scope.product.sku;
+        $scope.postProductData["product"]["luxire_product_attributes"] = $scope.luxireProduct;
+        $scope.postProductData["product"]["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxireStock.id;
+        $scope.postProductData["product"]["available_on"] = $scope.date;
           // first create product functionality is invoked
+          
         	products.createProduct($scope.postProductData).then(function(data){
-
-            console.log("\n\ncreated product  id is: \n\n",data.master.id);
-            products.update_image($scope.style_image,data.master.id).then(function(data){
-                  console.log("in products.update image image data:",$scope.style_image);
-                  console.log("update image upload"); // 30th march
+            console.log('data:',data);
+            products.upload_image_variant(data.id,data.master.id,$scope.style_image).then(function(data){
+              $scope.loading = false;
+              $scope.alerts.push({type: 'success', message: 'Product Created Successfully!'});
+             $state.go('admin.product');
             },function(error) {
+              $scope.alerts.push({type: 'warning', message: error.data.msg});
                console.log(error);
-
-             });
-            // creating structure of adding the variants
-            $scope.pid=data.id;
-            var variants = {
-                "variant":{
-                "sku": "swt_"+$scope.product.sku,
-                "price": $scope.swatchPrice
-              }
-            };
-
-            console.log("variant object is: ",variants);
-            console.log("pid: ",$scope.pid);
-            // creating the varints
-            products.createVariants(data.master.id,variants).then(function(data){
-              // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
-
-              //alert('variant is  successfully added');
-              $scope.activeButton('products')
-            }, function(info) {
-              console.log(info);
-            });
-
-            var UpdatedVariantObj = {
-              "variant": {
-                "track_inventory": true
-              }
-            }
-            console.log("product id: ",data.id);
-            console.log("master id: ",data.master.id);
-            products.updateVariants(data.id, data.master.id,UpdatedVariantObj).then(function(data){
-              // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
-
-              //alert('variant is  successfully updated');
-              // $scope.activeButton('products');
-
-            }, function(info) {
-              console.log(info);
-            });
-
-            $scope.alerts.push({type: 'success', message: 'Product Created Successfully!'});
-            $timeout(function(){
-              console.timeEnd('timeout');
-              $state.go('admin.product');
-
-            }, 3000)
-
-  		      // $scope.activeButton('products')
+             }); 
   		    }, function(info) {
   		      console.log("creating product error:\n\n",info);
   		    })
-          // updating the inventory
-  				products.updateStock($scope.luxireStock.id,$scope.luxireStock).then(function(data){
-            // $scope.alerts.push({type: 'success', message: 'Stock updated successfully!'});
 
-  		      //alert('inventory successfully updated');
-
-  		      $scope.activeButton('products')
-  		    }, function(info) {
-  		      console.log(info);
-  		    })
-
-
-
-
-  		}else{ // creating product for non existing parent_sku
-      console.log("product creation false part is calling...");
-      console.log("parent sku: ",$scope.luxireProduct.parent_sku);
-      console.log("luxire stock obj: ",$scope.luxireStock);
-      $scope.luxireStock["parent_sku"]=$scope.luxireProduct.parent_sku;
-      console.log("luxire stock length: ",JSON.stringify($scope.luxireStock).length);
-      if (JSON.stringify($scope.luxireStock).length === 2) {
-              console.log("luxire stock is empty...");
-              $scope.alerts.push({type: 'success', message: 'Create the inventory first..!'});
-              //alert("luxire stock is empty...");
-      }else{
-  		$scope.postProductData={};
-  		// merge all the three product structure
-  		$scope.luxireStock["virtual_count_on_hands"]=$scope.luxireStock.physical_count_on_hands;
-  		$scope.product["luxire_product_attributes"] = {};
-      $scope.product["taxon_ids"] = $scope.taxon_ids;
-  		$scope.product["luxire_product_attributes"]=$scope.luxireProduct;
-  		$scope.product["luxire_product_attributes"]["luxire_stock_attributes"] = $scope.luxireStock;
-  		//$scope.product["luxire_product_attributes"]["luxire_product_type_id"] = productTypeId;
-
-  		$scope.postProductData["product"]=$scope.product;
-
-  		$scope.modalCount=0;
-      var data=angular.toJson($scope.postProductData);
-      console.log(" create product false part \nbefore posting the product data is: ",data);
-      products.createProduct($scope.postProductData).then(function(data){
-        console.log("after creation the product is ",data);
-        // create the variant aftercreating the product
-
-        console.log("\n\ncreated product  is: \n\n",data);
-        console.log("\n\ncreated product  id is: \n\n",data.id);
-        $scope.pid=data.id;
-        var variants = {
-            "variant":{
-            "sku": "swt_"+$scope.product.sku,
-            "price": $scope.swatchPrice
-          }
-        };
-        console.log("variant object is: ",variants);
-        console.log("pid: ",$scope.pid);
-        products.createVariants(data.id,variants).then(function(data){
-          // $scope.alerts.push({type: 'success', message: 'Variant created successfully!'});
-
-          //alert('variant is  successfully added');
-          $scope.activeButton('products')
-        }, function(info) {
-          console.log(info);
-        })
-          $scope.alerts.push({type: 'success', message: 'Product created successfully!'});
-          $scope.activeButton('products');
-        }, function(info) {
-          console.log(info);
-        })
-
-      }
-    }
   }// 21st march
 }
 
-  // --------------     END OF CREATING THE PRODUCT STRUCTURE TO POST    ---------------
+$scope.openEditInventoryModal = function(size){
 
+   var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'editModalContent.html',
+        controller: 'editModalInstanceCtrl',
+        size: size,
+        resolve: {
+          luxireStock: function () {
+            return { data: $scope.luxireStock || $scope.stockInventoryData};
+          }
+        }
+      });
 
-	// $scope.showEditProducts=function(id){    // function redirect to product edit page
-	//   console.log("selected inventory id:  "+id);
-	//   $state.go("admin.edit_product",{id :id});
-	// }
-  //
-
-
+modalInstance.result.then(function (luxireStock) {
+      console.log('the data from modal:',luxireStock);
 });
+}
+});
+
+//This is the datePickerModal.html controller
+luxire.controller('showDateModalInstanceCtrl', function ($scope, $uibModalInstance, dateModal) {
+  $scope.$watch('date1', function (n, o) {
+    $scope.date1 = n;
+  })
+  $scope.ok = function () {
+    $uibModalInstance.close({ date: $scope.date1 });
+  }
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  }
+})

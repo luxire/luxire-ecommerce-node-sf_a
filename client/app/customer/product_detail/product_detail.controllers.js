@@ -602,13 +602,17 @@ angular.module('luxire')
         },
         cart_object_changed: function(){
           return $scope.cart_object_changed;
+        },
+        selectedAtrributeListObj : function(){
+          return $scope.selectedAtrributeListObj;
         }
-
       }
     });
     modal_instance.result.then(function (response_object) {
+      console.log('the response object:',response_object);
       $scope.active_style = response_object.active_style;
       $scope.cart_object = response_object.cart_object;
+      $scope.selectedAtrributeListObj = response_object.selectedAtrributeListObj;
       $scope.cart_object_changed = response_object.cart_object_changed;
       if($scope.cart_object_changed && $scope.active_style.name){
         $scope.style_display_name = "Modified "+$scope.active_style.name;
@@ -1066,14 +1070,14 @@ angular.module('luxire')
   };
 
   $scope.change_attribute_value = function(attribute_type, attribute_key, attribute_value){
-    if(!isNaN(attribute_value)){
-      if(selected_measurement_unit == "in"){
-        attribute_value = (Math.round((parseFloat(attribute_value))*100)/100).toFixed(3);
-      }
-      else if(selected_measurement_unit == "cm"){
-        attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
-      }
-    }
+    // if(!isNaN(attribute_value)){
+    //   if(selected_measurement_unit == "in"){
+    //     attribute_value = (Math.round((parseFloat(attribute_value))*100)/100).toFixed(3);
+    //   }
+    //   else if(selected_measurement_unit == "cm"){
+    //     attribute_value = (Math.round((parseFloat(attribute_value)*2.54)*10)/10).toFixed(2);
+    //   }
+    // }
     $scope.cart_object[attribute_type][attribute_key]['value'] = attribute_value;
     $scope.change_dependents(attribute_type, attribute_key, attribute_value);
   };
@@ -1433,9 +1437,39 @@ angular.module('luxire')
     }
   });
 }])
-.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object', 'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', 'selected_currency', 'CustomerUtils', 'cart_object_changed',function($scope, $uibModalInstance, ImageHandler, product, cart_object, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce, selected_currency,CustomerUtils, cart_object_changed){
+.controller('SelectStyleController', ['$scope', '$uibModalInstance', 'ImageHandler', 'product', 'cart_object','selectedAtrributeListObj' ,'luxire_styles','active_style','parent_scope','$state', 'CustomerConstants', '$filter', '$timeout', '$uibPosition', '$sce', 'selected_currency', 'CustomerUtils', 'cart_object_changed',function($scope, $uibModalInstance, ImageHandler,product, cart_object, selectedAtrributeListObj, luxire_styles,active_style,parent_scope,$state, CustomerConstants, $filter, $timeout, $uibPosition, $sce, selected_currency,CustomerUtils, cart_object_changed){
   /*Bespoke Style Functionality */
+  var changeCollarValue = 0;//This is temp to store the back neck band height of each collar options
+  var changeCollarBackHeight = 0;//This is temp to store the colar back height of each collar options
+  $scope.showGreenTick = [false,false,false,false,false,false,false,false,false,false,false,false,false];
+  //$scope.showGreenTickIndex = 0;
+  var Back_neck_band_height_Object = function(valueName){
+    if(product.customization_attributes[0].value.hasOwnProperty(valueName)){
+      changeCollarValue = product.customization_attributes[0].value[valueName]['Back neck band height'];
+      changeCollarBackHeight = product.customization_attributes[0].value[valueName]['Collar Back Height'];
+      
+    }
+    else{
+      changeCollarValue = 0;
+    }
+  }
+
   $scope.product = product;
+  if(cart_object_changed){
+    $scope.showImageAccordian = true;
+    $scope.showNoteAccordian = true;
+    $scope.cart_object = angular.copy(cart_object);
+    $scope.showCustomNotesEdit = true;
+    $scope.showCustomNotes = false;
+    $scope.selectedAtrributeListObj = angular.copy(selectedAtrributeListObj);
+  }
+  else{
+    $scope.showImageAccordian = false;
+   $scope.showNoteAccordian = false;
+    $scope.showCustomNotes = false;
+    $scope.showCustomNotesEdit = false;
+  }
+   
   $scope.cart_object = cart_object;
   $scope.product['bespoke_attributes'] = product['customization_attributes'].concat(product['personalization_attributes']);
 
@@ -1720,6 +1754,19 @@ angular.module('luxire')
     }
   };
 
+
+  //This is to add the .5 value to collar back height property while changing Back neck band height of collar
+  $scope.changeCollarBackHeight = function(property,object){
+    if(property === 'Back neck band height'){
+      if(Number.isNaN(parseFloat($scope.cart_object['customization_attributes']['Collar']['options']['Back neck band height']))){
+         $scope.cart_object['customization_attributes']['Collar']['options']['Collar Back Height'] = changeCollarBackHeight.toString();
+      }else{
+        $scope.cart_object['customization_attributes']['Collar']['options']['Collar Back Height'] =(parseFloat($scope.cart_object['customization_attributes']['Collar']['options']['Back neck band height'])+0.5).toString();
+      }
+       
+      }
+  }
+
   $scope.selectSlider=function(index, selected_style){
     $scope.selectSliderIndex=index;
     $scope.selected_style = selected_style;
@@ -1742,7 +1789,6 @@ angular.module('luxire')
     /*log reset style changed flags*/
     $scope.un_modified_cart_object = angular.copy($scope.cart_object);
     $scope.cart_object_changed = false;
-
   };
   $scope.cancel = function(){
     $uibModalInstance.dismiss('cancel');
@@ -1825,7 +1871,59 @@ angular.module('luxire')
   $scope.delete_custom_note = function(index){
     $scope.cart_object['customization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'].splice(index, 1);
   };
+  /*This is for adding custom image personalization attributes*/
+    $scope.add_personalization_custom_image = function(){
+      $scope.showImageAccordian = true;
+      if(!$scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']) {
+        $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options'] = {};     
+      }
+      if(!$scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images']
+     || ($scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images']
+     && !angular.isArray($scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images']))){
+       $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images'] = [];
+     }
+     $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images'].push({
+       url: '',
+       notes: ''
+     });
+  };
 
+  $scope.delete_personalization_custom_image = function(index){
+    $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images'].splice(index, 1);
+  };
+
+  $scope.add_personalization_custom_note = function(){
+    $scope.showNoteAccordian = true;
+    if(!$scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']) {
+        $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options'] = {};     
+      }
+    if(!$scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']
+     || ($scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']
+     && !angular.isArray($scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes']))){
+       $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'] = [];
+     }
+     $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'].push({
+       content: ''
+     });
+
+  };
+
+    $scope.delete_personalization_custom_note = function(index){
+    $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_notes'].splice(index, 1);
+  };
+
+      $scope.upload_personalization_custom_image = function(files, index){
+        $scope.loading=true;
+    if (files && files.length) {
+      ImageHandler.custom_image_upload(files[0])
+      .then(function(data){
+        $scope.loading=false;
+        $scope.cart_object['personalization_attributes'][$scope.selected_bespoke_attribute.name]['options']['custom_images'][index].url = data.data.image;
+      }, function(error){
+        console.error(error);
+      });
+    }
+  }
   /*Check whether to display in view r not*/
   $scope.check_unpermitted_customization_params = function(attribute, key){
     var unpermitted_params_non_custom = ['image','url','help','help_url', 'help_image', 'cost','rule'];
@@ -1856,7 +1954,8 @@ angular.module('luxire')
     $uibModalInstance.close({
       cart_object: $scope.cart_object,
       active_style: $scope.selected_style,
-      cart_object_changed: $scope.cart_object_changed
+      cart_object_changed: $scope.cart_object_changed,
+      selectedAtrributeListObj: $scope.selectedAtrributeListObj
     });
   };
 
@@ -1922,14 +2021,19 @@ angular.module('luxire')
     $scope.selected_bespoke_attribute_index = index;
     $scope.show_attribute_sync_slide = false;
     $scope.show_attribute_sync_slide_at_bottom = false;
+    if($scope.showCustomNotesEdit && $scope.selected_bespoke_attribute.name.toLowerCase() === 'additional options') {
+      $scope.showCustomNotes = true;
+    }
   };
   $scope.activate_bespoke_attribute($scope.product['bespoke_attributes'][0]);
 
   var obj_keys = [];
   $scope.personalization_options = {};
   //activate and deactivate a bespoke style
-  $scope.activate_bespoke_style = function(attr_type, style_object, index, style_name){
+  $scope.activate_bespoke_style = function(attr_type, style_object, index, style_name,attr_name){
+    Back_neck_band_height_Object(style_name);
     if(attr_type == 'customize'){
+      $scope.showCustomNotes = false;
       if($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value']==style_name){
         if(style_object.cost){
           $scope.remove_personalization_cost(style_object.cost);
@@ -1987,6 +2091,7 @@ angular.module('luxire')
        }
     }
     else if(attr_type == 'personalize'){
+       $scope.showCustomNotes = false;
       if($scope.selected_bespoke_attribute.name.toLowerCase()=='monogram'){
         if(!$scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]){
           $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name] = {};
@@ -2017,7 +2122,28 @@ angular.module('luxire')
       }
     }
     $scope.are_cart_objects_equal()//invoke object check for styles
-  };
+  //This is to enable the custom notes
+  if(style_name.toLowerCase() == 'custom notes'){
+    $scope.showCustomNotes = true;
+  }
+  // This is enable appropirate green tick on the attribute name
+  if(!$scope.selectedAtrributeListObj) {
+    $scope.selectedAtrributeListObj = {};
+  }
+  if($scope.selectedAtrributeListObj.hasOwnProperty(attr_name)){
+    //if($scope.selected_style.default_values.customization_attributes.hasOwnProperty(attr_name) && style_name === $scope.selected_style.default_values.customization_attributes[attr_name]) {
+     if($scope.selectedAtrributeListObj[attr_name].value === style_name) {
+      delete $scope.selectedAtrributeListObj[attr_name];
+    } else {
+      $scope.selectedAtrributeListObj[attr_name].value = style_name;
+    }
+  } else {
+    $scope.selectedAtrributeListObj[attr_name] = {
+      name: attr_name,
+      value: style_name
+    }
+  }
+};
 
   /*Bespoke attributes*/
 

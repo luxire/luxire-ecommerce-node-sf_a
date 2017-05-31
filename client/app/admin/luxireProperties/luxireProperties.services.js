@@ -37,7 +37,7 @@ angular.module('luxire')
   this.luxireProperties_create = function(parameters) {
     var deferred = $q.defer();
 
-    $http.post("/api/luxire_Properties", angular.toJson(parameters)).success(function(data) {
+    $http.post("/api/luxire_properties.json", angular.toJson(parameters)).success(function(data) {
       deferred.resolve(data);
       })
       .error(function(errData, errStatus, errHeaders, errConfig) {

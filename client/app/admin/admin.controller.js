@@ -76,18 +76,18 @@
      console.log("error: fetching value from redis server");
    })*/
 
-   $http.get('/api/search')
-   .success(function(data){
-     console.log("searchAllData:\n",data);
-     $scope.productDesc=data.spree_products;
-     $scope.orderDesc=data.spree_orders;
-     $scope.customerDesc=data.spree_users;
-     $scope.showCollection=data.spree_taxons;
-     $scope.searchAllObject=data;
-   })
-   .error(function(err){
-     console.log("error: fetching value from redis server");
-   })
+  //  $http.get('/api/search')
+  //  .success(function(data){
+  //    console.log("searchAllData:\n",data);
+  //    $scope.productDesc=data.spree_products;
+  //    $scope.orderDesc=data.spree_orders;
+  //    $scope.customerDesc=data.spree_users;
+  //    $scope.showCollection=data.spree_taxons;
+  //    $scope.searchAllObject=data;
+  //  })
+  //  .error(function(err){
+  //    console.log("error: fetching value from redis server");
+  //  })
 
    $scope.showSearch=function(){
      $scope.globalSearch=false;

@@ -111,17 +111,17 @@
                   <a href="#" ng-click="$event.preventDefault()">{{order.email}}</a>
                 </td>
                 <td style="text-align: center">
-                  <div style="color: white;background: {{order.state==='complete'?'#7DB942':'#F8D053'}};line-height: 200%;margin: 20% 12%;border-radius: 15px">
+                  <div style="color: white;background: {{order.state==='complete'?'#7DB942':'#F8D053'}};line-height: 200%;margin: 18% 12%;border-radius: 15px">
                     {{order.state}}
                   </div>
                 </td>
                 <td style="text-align: center">
-                  <div style="color: white;background: {{order.payment_state == 'paid'? '#7DB942': '#F8D053'}};line-height: 200%;margin: 12% 12%;border-radius: 15px">
+                  <div style="color: white;background: {{order.payment_state == 'paid'? '#7DB942': '#F8D053'}};line-height: 200%;margin: 9% 12%;border-radius: 15px">
                     {{order.payment_state == null? 'balance due': order.payment_state}}
                   </div>
                 </td>
                 <td style="text-align: center">
-                  <div style="color: white;background: {{order.shipment_state == 'ready'? '#7DB942': '#F8D053'}};line-height: 200%;margin: 11% 12%;border-radius: 15px">
+                  <div style="color: white;background: {{order.shipment_state == 'ready'? '#7DB942': '#F8D053'}};line-height: 200%;margin: 8% 12%;border-radius: 15px">
                     {{order.shipment_state == null? 'pending': order.shipment_state}}
                   </div>
                 </td>

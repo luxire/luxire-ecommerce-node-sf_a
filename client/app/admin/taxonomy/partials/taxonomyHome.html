@@ -3,7 +3,18 @@
   width: 32%;
 }
 </style>
-
+<script type="text/ng-template" id="deleteModal.html">
+  <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Warning!!</h3>
+    </div><hr />
+    <div class="modal-body" id="modal-body">
+      You are going to delete the taxonomy!!
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
 
 <div class="container-fluid" style="height:100%" >
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
@@ -43,7 +54,7 @@
           </div>
         </div>
         <div class="row " style="margin:0px; background-color: white; padding: 20px;">
-          <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-buttom:2%;">
+          <div class="row" ng-show="filteredResults.length == 0 && loading == false" style="padding-top:2%;padding-bottom:2%;">
              <div class="" style="color:black; font-size:120%;">
                <center>Data not Found</center>
               </div>

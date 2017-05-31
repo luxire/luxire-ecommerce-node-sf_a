@@ -1,21 +1,114 @@
 <style media="screen">
-  #order_sheet_outer_area{
+  #order_sheet_outer_area {
     margin-left: 0px;
     height: 93vh;
   }
 </style>
-<style >
+<style>
   table {
     border-collapse: collapse;
   }
-  table, th, td {
+  
+  table,
+  th,
+  td {
     border: 1px solid black;
     padding: 0% 0.5%;
   }
+  /*this is the css part for designing the order description page*/
+  
+  .ui-layout__sections {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    justify-content: center;
+    margin-top: -2rem;
+    margin-left: -2rem;
+    padding-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .ui-layout__item {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 100%;
+    padding-top: 0rem;
+    padding-left: 2.5%;
+  }
+  
+  .ui-card {
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ui-layout__sections-primary {
+    flex: 2 1 48rem;
+    margin-top: 4rem;
+  }
+  
+  .ui-layout__sections-secondary {
+    flex: 1 0 24rem;
+    margin-top: 4rem;
+  }
 
-
+  #tabName.selected{
+    background-color:grey;
+  }
 </style>
-<div ng-cloak class="container-fluid" style="height:100%;overflow: hidden">
+<!--Modal script for add image url on 09/03/2017-->
+<script type="text/ng-template" id="refundModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Refund Payments</h3>
+  </div>
+  <hr />
+  <div class="modal-body" id="modal-body">
+    <p style="font-weight: bold">Line Items: </p>
+    <br>
+      <div ng-repeat="item in luxireOrder.line_items track by $index" ng-init="index = $index">
+        <div class="col-lg-4 col-md-4 col-sm-4"style="display:inline-block;margin-left:2%">
+          {{item.variant.name}}
+        </div>
+        <div  class="col-lg-2 col-md-2 col-sm-2" style="display:inline-block;margin-left:10%;text-align:right">
+          {{item.display_total}}  x
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1"style="display:inline-block;margin-left:5%">
+          <input type="number" ng-model="quantity" ng-change="setQuantity(item,quantity,index)" min="0" max="{{item.quantity}}">
+        </div>
+        <div  class="col-lg-1 col-md-1 col-sm-1" style="display:inline-block;margin-left:2%">
+          {{price[index+1] ? price[index+1] : 0}}
+        </div>
+        <!--<div  class="col-lg-1 col-md-1 col-sm-1" style="display:inline-block;margin-left:2%;text-align:right" ng-if="price[index+1] == undefined ? 0 : price[index+1]">
+          {{price[index+1]}}
+        </div>-->
+        <br>
+        <br>
+      </div>
+      <hr/>
+      <div style="margin-left:68%">
+        <div> Subtotal <b style="margin-left:14%;text-align:right">{{subTotal}}</b> </div>
+      </div>
+      <div style="margin-left:57%">
+       <div> Total available to refund <b style="margin-left:10%">{{luxireOrder.total}}</b> </div>
+      </div>
+      <hr>
+      <div style="margin-left:58%">
+        <div> Refund with : Manual<input type="text" ng-model="refundTotal" class="form-control" ng-change="manualRefund(refundTotal)" style="margin-left:48%;margin-top:-8%;text-align:right;max-width:28%" max="{{luxireTotal}}" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" /> </div>
+      </div>
+      <hr>
+      <div>
+        <div style="margin-left:55%"> Reason for refund (optional) 
+        <select style="margin-left:6%" ng-change="selectReason()" ng-model="refundReason" ng-options="x for x in reasons">
+        </select>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!refund" ng-click="ok()">Refund</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
+<div ng-cloak class="container-fluid" style="height:100%;overflow-y: scroll">
   <div class="row" style="margin-left: 0px;height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;" print-remove>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align: left;font-size: 20px;">
       <i class="fa fa-check-square" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;">Orders/ {{order.number}} </span>
@@ -39,386 +132,465 @@
       <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="print()">Print</button>
     </div>
   </div>
-  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;" print-remove>
-    <img src="lib/assets/loader.gif"/>
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;"
+    print-remove>
+    <img src="lib/assets/loader.gif" />
   </div>
   <div id="order_sheet_outer_area" print-section class="row" style="">
     <!-- /*border: 1px solid #DBDEE0;*/ -->
-    <div class="container-fluid admin-console-content" >
-      <div id="order_sheet_data" ng-if="!line_item_id || (line_item_id && line_item.id == line_item_id)" class="row" style="margin:0.5% 1.5%; background-color: white; border: 1px solid #DBDEE0;" ng-repeat="line_item in luxire_order.line_items">
-        <div class="row"   style="margin: 1%">
-          <div class="row">
-            <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Customer:<br>
-              </p>
-              <p style="display: inline-block;font-size: 14px;" >
-                {{order.email}}<br>
-              </p>
-            </div>
-            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="text-align: center">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Order No:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order.number}}
-              </p>
-            </div>
-            <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Date:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-               {{getFormattedDate(order.updated_at)}}
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-md-4 col-lg-4">
-              <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                Items:
-              </p>
-              <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                {{order.product_types}}
-              </p>
-            </div>
-            <div class="col col-md-4 col-lg-4" style="text-align: center;font-size: 106">
-              Line Item Id:{{line_item.id}}
-            </div>
-            <div ng-if="!isStatePrint()" class="col col-md-4 col-lg-4">
-              <div class="btn-group" uib-dropdown print-remove>
-                <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
-                  {{line_item && line_item.luxire_line_item.fulfillment_status ? line_item.luxire_line_item.fulfillment_status: 'Select Status'}}<span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                  <li role="menuitem" ng-repeat="state in product_type_states[line_item.product_type]" ng-click="change_line_item_status(line_item.id, state)"><a href="javascript:void(0)">{{state}}</a></li>
-                </ul>
-              </div>
-              <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet(line_item.id)" print-remove>Order Sheet</button>
-            </div>
-          </div>
-          <div id="order-line-item" class="row" style="margin: 0px" >
-            <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black">
-            <div class="row">
-              <div class="col col-md-8 col-lg-8  col-sm-8 col-xs-8">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Fabric/Product:
-                </p>
-                <p style="display: inline-block;font-size: 14px;" >
-                  {{line_item.variant.name}}
-                </p>
-              </div>
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Sku:
-                </p>
-                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                  {{line_item.variant.sku}}
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Pattern:
-                </p>
-                <p style="display: inline-block;font-size: 14px;" >
-
-                </p>
-              </div>
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-
-              </div>
-
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Rack:
-                </p>
-                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                  {{line_item.luxire_stock.rack}}
-                </p>
-              </div>
-            </div>
-            <div class="row" style="margin-top: 1%" >
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-                Measurement unit: {{line_item.luxire_line_item.measurement_unit}}
-              </div>
-            </div>
-            <div ng-if="line_item.luxire_line_item.send_sample" class="row" style="text-align: left;margin: 0px">
-              <b>  Note: Customer should send sample for measurements.</b>
-            </div>
-            <div class="row" style="margin-top: 2%;text-align: center" >
-              <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5">
-                <img id="order_sheet_prod_img" style="max-width: 30%;margin-left: 30%;margin-top: 10%" ng-src="{{getImage(line_item.variant.images[0].small_url)}}" alt="product_image" />
-              </div>
-              <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5" style="margin-left: 1.2%">
-                <qrcode version="5" error-correction-level="Q" size="125" data="{{window.location.href+'/'+order.number}}"></qrcode>
-              </div>
-
-            </div>
+    <div class="well">
+      <ul class="nav nav-tabs" ng-init="showTab = 0">
+        <li role="presentation" class="active" ng-repeat="i in tabTitle track by $index">
+          <a data-toggle=i ng-click=trackTitle($index) id="tabName">{{i}}</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade in active" ng-repeat="i in tabTitle track by $index" ng-attr-id={{i}} ng-show="showTab == $index">
+          <div ng-if="$first" style="overflow:scroll;">
             <div class="row" >
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
-              </div>
-              <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="margin-left: 4%">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px;" >
-                  STYLING
-                </p>
-              </div>
-              <div class="col col-md-4 col-lg-4">
-              </div>
-            </div>
-            <!--Customisation data-->
-            <div class="row avoid-page-break-inside" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in line_item.luxire_line_item.customized_data">
-              <div class="row" style="margin: 0px">
-                <div class="col col-md-4 col-lg-4;" style="padding: 0">
-                  <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                    {{attribute}} style:
-                  </p>
-                  <p style="display: inline-block;font-size: 14px; margin-bottom: 5px;padding: 0" >
-                    {{val.value}}
-                  </p>
-                </div>
-              </div>
-              <div class="row avoid-page-break-inside" style="margin: 0px">
-                <div class="col col-md-4 col-lg-4 avoid-page-break-inside" style="padding: 0">
-                  <p class="avoid-page-break-inside" style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                    Details:
-                  </p>
-                  <p class="avoid-page-break-inside" style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-                  </p>
-                </div>
-              </div>
-              <div class="row avoid-page-break-inside" style="margin: 0px;">
-                <div class="avoid-page-break-inside" ng-if="detail_key.toLowerCase() !== 'custom_images'" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center" ng-repeat="(detail_key, detail_value) in val.options">
-                  <div class="avoid-page-break-inside">
-                    {{detail_key}}
+              <div class="ui-layout__sections" style="overflow-y:scroll;">
+                <div class="ui-layout__sections-primary">
+                  <div class="ui-layout__item">
+                    <section class="ui-card">
+                      <p style="font-size: 16px; font-weight: 500;margin-left: 2%;padding-top: 2%"> Order Details:
+                      <button class="btn btn-default" style="float:right" ng-disabled="!cancel_order" ng-click="cancelOrder()">Cancel Order</button>
+                      </p>
+                      <hr />
+                      <div style="display:block;margin-left:10%;margin-top:2%;height: auto">
+                        Line Item
+                        <div style="display:inline-block;margin-left: 14%">
+                          Product Image
+                        </div>
+                        <div style="display:inline-block; margin-left: 25%">
+                          Product Name
+                        </div>
+                        <div style="display:inline-block;margin-left:20%">
+                          Price
+                        </div>
+                        <div style="display:block;margin-left:2%;margin-top:2%" ng-repeat="line in luxire_order.line_items track by $index" ng-init="index = $index">
+                          <p>{{$index+1}}</p>
+                          <img ng-src="{{line.variant.images[0].small_url}}" style="margin-left:25%;margin-top:-8%; width:40px;height:40px">
+                          <p style="margin-left:41%;margin-top:-6%;"><a ng-click="addTab($index+1)">{{line.variant.name}}</a></p>
+                          <p style="margin-left:90%;margin-top:-4%;">{{line.display_total}}</p>
+                        </div>
+                      </div>
+                      <hr />
+                      <p style="font-size: 16px; font-weight: 500;margin-left: 2%;margin-top:-2%"> Payement Details:
+                      </p>
+                      <div style="margin-left:10%; margin-top:2%">
+                        {{paymentState}}
+                        <button type="button" class="btn btn-default" style="margin-top:2%;margin-left:25%" ng-disabled="!refund" ng-click="openModal()" >REFUND</button>
+                        <br>
+                        <br>
+                      </div>
+                    </section>
                   </div>
-                  <div class="avoid-page-break-inside" style="border-top: solid 1px grey">
-                    <span ng-if="detail_value">{{detail_value}}</span>
-                    <span ng-if="!detail_value">&nbsp;</span>
-                  </div>
-                </div>
-                <div ng-if="val.options['custom_images']" class="">
-                  <div class="" style="margin-top: 2%" ng-repeat = "custom_image in val.options['custom_images']">
-                    <b>Notes for image {{$index+1}}:</b> {{custom_image.notes}}
-                    <div class="">
-                      <img ng-src="{{getImage(custom_image.url)}}" alt="" />
+                  <hr />
+                  <div class="ui-layout__item" style="background-color: #ffffff; border-radius: 3px; margin-left:2%;height:inherit">
+                    <p style="font-size: 16px; font-weight: 500;margin-left: 2%;padding-top: 2%;"> Fulfillment Details: </p>
+                    <hr />
+                    <div style="background-color:transparent; width:inherit">
+                      <p style="font-size: 16px; font-weight: 500;margin-left: 2%;padding-top: 2%">Order Number : {{order.number}} <span style="border-radius: 3px; font-weight: 400;color: #67696a; background-color: #ebeef0;margin-left: 8%;"> Marked as {{fulfillmentStatus}} </span>
+                        <br>
+                        <p style="font-size: 16px; font-weight: 500;margin-left: 2%;padding-top: 2%">Items</p>
+                        <ul style="list-style-type: none;font-size: 16px; font-weight: 500;margin-left: 2%;padding-top: 2%;background-color: inherit"
+                          ng-repeat="line_item in luxire_order.line_items">
+                          <li> {{line_item.quantity}} x {{line_item.variant.name}} </li>
+                        </ul>
+                        <br>
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div ng-if="val.options['custom_notes']" class="">
-                  <div class="" style="margin-top: 2%" ng-repeat = "custom_note in val.options['custom_notes']">
-                    <b>Notes {{$index+1}}:</b> {{custom_note.content}}
+                <div class="ui-layout__sections-secondary">
+                  <div class="ui-layout__item">
+                    <section class="ui-card">
+                      <p style="font-size: 16px; font-weight: 500; margin-left: 2%;padding-top: 2%"> Customer Details: </p>
+                      <hr style="color:transparent">
+                      <img src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/user-male-circle-blue-512.png" style="border-radius: 50%;width: 60px;height: 60px;margin-left: 4%">
+                      <br>
+                      <p style="padding-top: 2%">
+                        <label style="margin-left: 2%">Name:<a style="margin-left: 0%">{{luxire_order.ship_address.full_name}}</a></label><br>
+                        <label style="margin-left: 2%">Email id:<a style="margin-left:0%">{{luxire_order.email}}</a></label>
+                      </p>
+                      <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black" />
+                      <p style="font-size: 16px; font-weight: 500; margin-left: 2%;padding-top: 2%"> Shipping Address:
+                       <button class="btn btn-default" ng-disabled="!notifyCustomer" style="float:right" ng-click="notify()">Ship</button>
+                      </p>
+                      <hr style="color:transparent">
+                      <p style="margin-left: 2%;padding-top: 2%">
+                        {{luxire_order.ship_address.full_name}}<br> {{luxire_order.ship_address.address1}}
+                        <br> {{luxire_order.ship_address.city}} ({{luxire_order.ship_address.state_name}} {{luxire_order.ship_address.state_text}})
+                        <br> {{luxire_order.ship_address.country.name}} - {{luxire_order.ship_address.zipcode}}
+                        <br> {{luxire_order.ship_address.phone}}
+                      </p>
+                      <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black" />
+                      <p style="font-size: 16px; font-weight: 500; margin-left: 2%;padding-top: 2%"> Billing Address:
+                      </p>
+                      <hr style="color:transparent">
+                      <p style="margin-left: 2%;padding-top: 2%">
+                        {{luxire_order.bill_address.full_name}}
+                        <br>{{luxire_order.bill_address.address1}} {{luxire_order.bill_address.address2}}
+                        <br>{{luxire_order.bill_address.city}} ({{luxire_order.bill_address.state_name}} {{luxire_order.bill_address.state_text}})
+                        <br>{{luxire_order.bill_address.country.name}} - {{luxire_order.bill_address.zipcode}}
+                        <br> {{luxire_order.bill_address.phone}}
+                      </p>
+                    </section>
                   </div>
                 </div>
               </div>
             </div>
-            <!--Personalisation data-->
-            <div ng-if="!line_item.luxire_line_item.customized_data[attribute]" class="row" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in line_item.luxire_line_item.personalize_data">
-              <div class="row" style="margin: 0px">
-                <div>
-                  <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                    {{attribute}}:
-                  </p>
-                </div>
-              </div>
-              <div style="margin-left: 2%" ng-repeat="(key,value) in val" class="">
-                <div style="margin-left: 2%" ng-if="checkIsObject(value)">
-                  <div style="display: inline-block">
-                    {{key}}:
+          </div>
+          <div ng-if="!$first">
+            <div id="order_sheet_data" ng-if="!luxire_order.line_item_id || (luxire_order.line_item_id && luxire_order.line_item.id == luxire_order.line_item_id)"
+              class="row" style="margin:0.5% 0%; background-color: white; border: 1px solid #DBDEE0; overflow-y: scroll; height:87vh">
+              <div class="row" style="margin: 1%">
+                <div class="row">
+                  <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                      Customer:<br>
+                    </p>
+                    <p style="display: inline-block;font-size: 14px;">
+                      {{order.email}}<br>
+                    </p>
                   </div>
-                  <div style="margin-left: 2%" ng-repeat="(k,v) in value">
-                    <div ng-if="k.toLowerCase() !=='cost'" style="margin-left: 2%">
-                      <div style="display: inline-block">
-                        {{k}}:
+                  <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="text-align: center">
+                    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                      Order No:
+                    </p>
+                    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                      {{order.number}}
+                    </p>
+                  </div>
+                  <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                      Date:
+                    </p>
+                    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                      {{getFormattedDate(order.updated_at)}}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-md-4 col-lg-4">
+                    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                      Items:
+                    </p>
+                    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                      {{order.product_types}}
+                    </p>
+                  </div>
+                  <div class="col col-md-4 col-lg-4" style="text-align: center;font-size: 106">
+                    Line Item Id:{{luxire_order.line_items[indexValue].id}}
+                  </div>
+                  <div ng-if="!isStatePrint()" class="col col-md-4 col-lg-4">
+                    <div class="btn-group" uib-dropdown print-remove>
+                      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                        {{luxire_order.line_items[indexValue] && luxire_order.line_items[indexValue].luxire_line_item.fulfillment_status ? luxire_order.line_items[indexValue].luxire_line_item.fulfillment_status: 'Select Status'}}<span class="caret"></span>
+                        </button>
+                      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem" ng-repeat="state in product_type_states[luxire_order.line_items[indexValue].product_type]" ng-click="change_line_item_status(luxire_order.line_items[indexValue].id, state)"><a href="javascript:void(0)">{{state}}</a></li>
+                      </ul>
+                    </div>
+                    <button type="button" class="btn btn-default" style="color: #3276b1;" ng-click="preview_order_sheet(luxire_order.line_items[indexValue].id)"
+                      print-remove>Order Sheet</button>
+                  </div>
+                </div>
+                <div id="order-line-item" class="row" style="margin: 0px">
+                  <hr style="width: 100%;margin-top: 5px;margin-bottom: 5px; border-top: solid 1px black">
+                  <div class="row">
+                    <div class="col col-md-8 col-lg-8  col-sm-8 col-xs-8">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Fabric/Product:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px;">
+                        {{luxire_order.line_items[indexValue].variant.name}}
+                      </p>
+                    </div>
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Sku:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                        {{luxire_order.line_items[indexValue].variant.sku}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Pattern:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px;">
+
+                      </p>
+                    </div>
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                    </div>
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Rack:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                        {{luxire_order.line_items[indexValue].luxire_stock.rack}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top: 1%; margin-left:5%">
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                      Measurement unit: {{luxire_order.line_items[indexValue].luxire_line_item.measurement_unit}}
+                    </div>
+                  </div>
+                  <div ng-if="line_item.luxire_line_item.send_sample" class="row" style="text-align: left;margin: 0px">
+                    <b>  Note: Customer should send sample for measurements.</b>
+                  </div>
+                  <div class="row" style="margin-top: 2%;">
+                    <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5">
+                      <img id="order_sheet_prod_img" style="max-width: 30%;margin-left: 30%;margin-top: 10%" ng-src="{{getImage(luxire_order.line_items[indexValue].variant.images[0].small_url)}}"
+                        alt="product_image" />
+                    </div>
+                    <div class="col col-md-5 col-lg-5  col-sm-5 col-xs-5" style="margin-left: 1.2%">
+                      <qrcode version="5" error-correction-level="Q" size="125" data="{{window.location.href+'/'+order.number}}"></qrcode>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4">
+                    </div>
+                    <div class="col col-md-4 col-lg-4  col-sm-4 col-xs-4" style="margin-left: 4%">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px;">
+                        STYLING
+                      </p>
+                    </div>
+                    <div class="col col-md-4 col-lg-4">
+                    </div>
+                  </div>
+                  <!--Customisation data-->
+                  <div class="row avoid-page-break-inside" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in luxire_order.line_items[indexValue].luxire_line_item.customized_data">
+                    <div class="row" style="margin: 0px">
+                      <div class="col col-md-4 col-lg-4;" style="padding: 0">
+                        <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                          {{attribute}} style:
+                        </p>
+                        <p style="display: inline-block;font-size: 14px; margin-bottom: 5px;padding: 0">
+                          {{val.value}}
+                        </p>
                       </div>
-                      <div style="display: inline-block">
-                        {{v}}
+                    </div>
+                    <div class="row avoid-page-break-inside" style="margin: 0px">
+                      <div class="col col-md-4 col-lg-4 avoid-page-break-inside" style="padding: 0">
+                        <p class="avoid-page-break-inside" style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                          Details:
+                        </p>
+                        <p class="avoid-page-break-inside" style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+                        </p>
+                      </div>
+                    </div>
+                    <div class="row avoid-page-break-inside" style="margin: 0px;">
+                      <div class="avoid-page-break-inside" ng-if="detail_key.toLowerCase() !== 'custom_images'" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center"
+                        ng-repeat="(detail_key, detail_value) in val.options">
+                        <div class="avoid-page-break-inside">
+                          {{detail_key}}
+                        </div>
+                        <div class="avoid-page-break-inside" style="border-top: solid 1px grey">
+                          <span ng-if="detail_value">{{detail_value}}</span>
+                          <span ng-if="!detail_value">&nbsp;</span>
+                        </div>
+                      </div>
+                      <div ng-if="val.options['custom_images']" class="">
+                        <div class="" style="margin-top: 2%" ng-repeat="custom_image in val.options['custom_images']">
+                          <b>Notes for image {{$index+1}}:</b> {{custom_image.notes}}
+                          <div class="">
+                            <img ng-src="{{getImage(custom_image.url)}}" alt="" />
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="val.options['custom_notes']" class="">
+                        <div class="" style="margin-top: 2%" ng-repeat="custom_note in val.options['custom_notes']">
+                          <b>Notes {{$index+1}}:</b> {{custom_note.content}}
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <!--Personalisation data-->
+                  <div ng-if="!line_item.luxire_line_item.customized_data[attribute]" class="row" style="margin:0;margin-top: 2%" ng-repeat="(attribute,val) in luxire_order.line_items[indexValue].luxire_line_item.personalize_data">
+                    <div class="row" style="margin: 0px">
+                      <div>
+                        <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                          {{attribute}}:
+                        </p>
+                      </div>
+                    </div>
+                    <div style="margin-left: 2%" ng-repeat="(key,value) in val" class="">
+                      <div style="margin-left: 2%" ng-if="checkIsObject(value)">
+                        <div style="display: inline-block">
+                          {{key}}:
+                        </div>
+                        <div style="margin-left: 2%" ng-repeat="(k,v) in value">
+                          <div ng-if="k.toLowerCase() !=='cost'&&k !== 'custom_images'&&k !== 'custom_notes'" style="margin-left: 2%">
+                            <div style="display: inline-block">
+                              {{k}}:
+                            </div>
+                            <div style="display: inline-block">
+                              {{v}}
+                            </div>
+                          </div>
+                          <div style="margin-left: 2%" ng-if="k === 'custom_images'" ng-repeat="value in v track by $index">
+                            <div style="margin-left: 2%">
+                              Notes for image {{$index+1}}: {{value.notes}}<br>
+                              <img ng-src="{{value.url}}">
+                            </div>
+                          </div>
+                          <div style="margin-left: 2%" ng-if="k === 'custom_notes'" ng-repeat="value in v">
+                            <div style="margin-left: 2%">
+                               Notes {{$index+1}}: {{value.content}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="!checkIsObject(value) && key.toLowerCase() !=='cost'" style="margin-left: 2%">
+                        <div style="display: inline-block">
+                          {{key}}:
+                        </div>
+                        <div style="display: inline-block">
+                          {{value}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 1%">
+                    <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Measurements:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+
+                      </p>
+                    </div>
+                  </div>
+                  <div ng-if="luxire_order.line_items[indexValue].luxire_line_item && luxire_order.line_items[indexValue].luxire_line_item.measurement_data"
+                    class="row" style="margin: 0px !important; padding-top: 1%;width: 100%">
+
+                  </div>
+                  <div ng-if="luxire_order.line_items[indexValue].luxire_line_item && luxire_order.line_items[indexValue].luxire_line_item.measurement_data"
+                    class="row" style="margin-left: 0px !important;padding-top: 1%">
+                    <table>
+                      <thead>
+                        <tr>
+                          <td ng-repeat="(body_attr,val) in luxire_order.line_items[indexValue].luxire_line_item.measurement_data.body_measurement_attributes">
+                            {{body_attr}}
+                          </td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="text-align: center">
+                          <td ng-repeat="(body_attr,val) in luxire_order.line_items[indexValue].luxire_line_item.measurement_data.body_measurement_attributes">
+                            <p ng-if="val.value">{{val.value}}</p>
+                            <p ng-if="!val.value">&nbsp;</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="" style="margin-top: 1%;margin-right: 2%">
+                      <div class="" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center;" ng-repeat="(attr_key, attr_val) in luxire_order.line_items[indexValue].luxire_line_item.measurement_data.standard_measurement_attributes">
+                        <div class="">
+                          <b>{{attr_key}}</b>
+                        </div>
+                        <div class="" style="border-top: solid 1px grey">
+                          <span ng-if="attr_val.value">{{attr_val.value}}</span>
+                          <span ng-if="!attr_val.value">&nbsp;</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 1%">
+                    <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Contrasts:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-left: 0px !important">
+                    <table>
+                      <thead>
+                        <tr>
+                          <td>SPI</td>
+                          <td>Contrast</td>
+                          <td>Buttons</td>
+                          <td>Hand Kaja</td>
+                          <td>Thread Color</td>
+                          <td>Kaja Color</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="text-align: center">
+                          <td>&nbsp;&nbsp;</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row" style="padding-top: 1%">
+                    <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                      <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px">
+                        Customer:
+                      </p>
+                      <p style="display: inline-block;font-size: 14px; margin-bottom: 5px">
+
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 1%">
+                    <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4" style="font-size: 12px; font-weight: 500">
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.full_name">{{luxire_order.bill_address.full_name}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address1">{{luxire_order.bill_address.address1}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address2">{{luxire_order.bill_address.address2}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.city">{{luxire_order.bill_address.city}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.state">{{luxire_order.bill_address.state.name}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.country">{{luxire_order.bill_address.country.name}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.zipcode">{{luxire_order.bill_address.zipcode}}</p>
+                      <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.phone">{{luxire_order.bill_address.phone}}</p>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-top: 1%;margin-left: 0px;text-align: center">
+                    <table class="avoid-page-break-inside">
+                      <thead>
+                        <tr>
+                          <td>Order Sheet</td>
+                          <td>Pattern</td>
+                          <td>Fabric</td>
+                          <td>Tailor</td>
+                          <td>QA</td>
+                          <td>Final Checking</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="text-align: center">
+                          <td>&nbsp;&nbsp;</td>
+                          <td> </td>
+                          <td> </td>
+                          <td> </td>
+                          <td> </td>
+                          <td> </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
                 </div>
-                <div ng-if="!checkIsObject(value) && key.toLowerCase() !=='cost'" style="margin-left: 2%" >
-                  <div style="display: inline-block">
-                    {{key}}:
-                  </div>
-                  <div style="display: inline-block">
-                    {{value}}
-                  </div>
-                </div>
               </div>
             </div>
-            <div class="row" style="padding-top: 1%">
-              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Measurements:
-                </p>
-                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-
-                </p>
-              </div>
-            </div>
-            <div ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin: 0px !important; padding-top: 1%;width: 100%">
-
-            </div>
-            <div  ng-if="line_item.luxire_line_item && line_item.luxire_line_item.measurement_data" class="row" style="margin-left: 0px !important;padding-top: 1%">
-              <table >
-                <thead>
-                  <tr>
-                    <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
-                      {{body_attr}}
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr  style="text-align: center">
-                    <td ng-repeat="(body_attr,val) in line_item.luxire_line_item.measurement_data.body_measurement_attributes">
-                      <p ng-if="val.value">{{val.value}}</p>
-                      <p ng-if="!val.value">&nbsp;</p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="" style="margin-top: 1%;margin-right: 2%">
-                <div class="" style="display: inline-block;width: 25%;border: solid 1px grey;text-align: center;" ng-repeat="(attr_key, attr_val) in line_item.luxire_line_item.measurement_data.standard_measurement_attributes">
-                  <div class="">
-                    <b>{{attr_key}}</b>
-                  </div>
-                  <div class="" style="border-top: solid 1px grey">
-                    <span ng-if="attr_val.value">{{attr_val.value}}</span>
-                    <span ng-if="!attr_val.value">&nbsp;</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding-top: 1%">
-              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Contrasts:
-                </p>
-                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-
-                </p>
-              </div>
-            </div>
-
-            <div class="row" style="margin-left: 0px !important">
-              <table >
-                <thead>
-                  <tr>
-                    <td>SPI</td>
-                    <td>Contrast</td>
-                    <td>Buttons</td>
-                    <td>Hand Kaja</td>
-                    <td>Thread Color</td>
-                    <td>Kaja Color</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr  style="text-align: center">
-                    <td>&nbsp;&nbsp;</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-
-            <div class="row" style="padding-top: 1%">
-              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-                  Customer:
-                </p>
-                <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-
-                </p>
-              </div>
-            </div>
-            <div class="row" style="padding-top: 1%">
-              <div class="col col-md-4 col-lg-4 col-sm-4 col-xs-4" style="font-size: 12px; font-weight: 500">
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.full_name">{{luxire_order.bill_address.full_name}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address1">{{luxire_order.bill_address.address1}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.address2">{{luxire_order.bill_address.address2}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.city">{{luxire_order.bill_address.city}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.state">{{luxire_order.bill_address.state.name}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.country">{{luxire_order.bill_address.country.name}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.zipcode">{{luxire_order.bill_address.zipcode}}</p>
-                <p style="margin-bottom: 0px" ng-if="luxire_order.bill_address && luxire_order.bill_address.phone">{{luxire_order.bill_address.phone}}</p>
-              </div>
-            </div>
-
-            <div class="row" style="padding-top: 1%;margin-left: 0px;text-align: center">
-              <table class="avoid-page-break-inside">
-                <thead>
-                  <tr>
-                    <td>Order Sheet</td>
-                    <td>Pattern</td>
-                    <td>Fabric</td>
-                    <td>Tailor</td>
-                    <td>QA</td>
-                    <td>Final Checking</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr  style="text-align: center">
-                    <td>&nbsp;&nbsp;</td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          <!-- <div ng-repeat="(key, value) in order_details">
-            {{key}}: {{value}}
-          </div> -->
+          </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
-<!-- <div class="row" style="padding-top: 1%">
-  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-      Initials:
-    </p>
-    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Initials"]:""}}
-    </p>
-  </div>
-  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-      Font:
-    </p>
-    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Font"]:""}}
-    </p>
-  </div>
-  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-      Location:
-    </p>
-    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Location"]:""}}
-
-    </p>
-  </div>
-  <div class="col col-md-3 col-lg-3 col-sm-3 col-xs-3">
-    <p style="display: inline-block;font-size: 16px; font-weight: 500;margin-bottom: 5px" >
-      Color:
-    </p>
-    <p style="display: inline-block;font-size: 14px; margin-bottom: 5px" >
-      {{order_details.luxire_order.personalize_data["Monogram"] !== undefined ?order_details.luxire_order.personalize_data["Monogram"]["Color"]:""}}
-
-    </p>
-  </div>
-</div> -->

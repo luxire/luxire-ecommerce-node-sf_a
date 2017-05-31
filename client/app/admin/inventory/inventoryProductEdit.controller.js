@@ -19,7 +19,7 @@ angular.module('luxire')
         $scope.alerts.push({type: 'success', message: 'Product Deleted successfully!'});
   			$scope.allInventoryRelatedProducts.product.splice(index,1);
         $timeout(function() {
-          console.log("timeout functionality...");
+          //console.log("timeout functionality...");
           $state.go("admin.inventoryProductEdit");
 
         }, 3000);

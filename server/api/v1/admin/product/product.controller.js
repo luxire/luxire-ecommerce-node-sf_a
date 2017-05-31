@@ -78,12 +78,12 @@ exports.create = function(req, res){
     else{
       http
         .post({
-          uri: constants.redis.host+constants.redis.sync,
+          uri: constants.redis.host + constants.redis.update,
           headers:{
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({ids: [body.id]})
+          body:JSON.stringify({ids: body})
         }, function(error, response, body){
         if(error){
           console.log('error', error);
@@ -104,7 +104,7 @@ exports.create = function(req, res){
 exports.update = function(req, res){
   console.log(req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.adminProducts+'/'+req.params.id,
+    uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
     headers:{
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
@@ -118,12 +118,12 @@ exports.update = function(req, res){
     else{
       http
         .post({
-          uri: constants.redis.host+constants.redis.sync,
+          uri: constants.redis.host + constants.redis.update,
           headers:{
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({ids: [body.id]})
+          body:JSON.stringify({product: body})
         }, function(error, response, body){
         if(error){
           console.log('error', error);
@@ -311,3 +311,16 @@ exports.sync_spree_redis = function(req, res){
     };
   });
 };
+
+exports.getProductsFromRedis = function(req,res){
+  let ids = req.query.ids
+  let queryString = {ids: ids}
+  http.get({url: `${constants.redis.host}${constants.redis.getProductsShortDesc}`, qs: queryString},  function(error, response, body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      res.json(JSON.parse(body));
+    }
+  });
+}

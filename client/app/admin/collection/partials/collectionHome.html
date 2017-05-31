@@ -1,22 +1,26 @@
 <style>
-
-.left-inner-addon {
-  position: relative;
-}
-.left-inner-addon input {
-  padding-left: 30px;
-}
-.left-inner-addon i {
-  position: absolute;
-  padding: 10px 12px;
-  pointer-events: none;
-}
+  .left-inner-addon {
+    position: relative;
+  }
+  
+  .left-inner-addon input {
+    padding-left: 30px;
+  }
+  
+  .left-inner-addon i {
+    position: absolute;
+    padding: 10px 12px;
+    pointer-events: none;
+  }
+  
+  #overflowId {
+    overflow: auto;
+  }
 </style>
-
-<div class="container-fluid" style="height:100%" >
-  <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
+<div class="container-fluid" style="height:50%">
+  <div class="row" style="height: 3.3em; margin-left: 0px; line-height: 3.3em; border-bottom: 0px solid #DBDEE0;">
     <div class="col-lg-2 col-md-2" style="text-align: left;font-size: 20px;">
-      <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Collections</span>
+      &nbsp;&nbsp; <i class="fa fa-tag" style="font-size: 20px;"></i>&nbsp;&nbsp;&nbsp;<span style="font-weight:100;color:#928CA2;">Collections</span>
     </div>
     <div class="col-lg-6 col-md-6">
 
@@ -24,100 +28,96 @@
     <div class="col-lg-4 col-md-4" style="text-align: right;">
       <div class="btn-group" role="group" aria-label="...">
       </div>
-      <button type="button" class="btn btn-default" ui-sref="admin.addCollections">Add Collections</button>
+      <button type="button" class="btn btn-primary" ui-sref="admin.addCollections">Add Collections</button>
     </div>
   </div>
-
   <div class="row" ng-show="loading" style="height: 93vh; width: 100%; background-color:white; opacity: 0.6; line-height: 93vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
-    <img src="lib/assets/loader.gif"/>
+    <img src="lib/assets/loader.gif" />
   </div>
 
   <div class="row" style="height: 93vh;">
     <div class="container-fluid admin-console-content">
-      <div class="row" style="margin:0px; background-color: white; border: 1px solid #DBDEE0;">
-        <div class="row" style="margin:0px; background-color: white;">
-          <div  class="col-lg-1 col-md-1" style="padding:0px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
+      <div class="row" style="margin:15px; background-color: white; border: 1px solid #DBDEE0; ">
+        <div class="row" style="margin:0px; background-color: white; ">
+          <div class="col-lg-1 col-md-1" style="padding-right:20px; height:6vh; line-height: 6vh; text-align: center; border-right: 1px solid #DBDEE0;">
             <span style="font-size: 12px;">All Collections</span>
           </div>
-          <div  class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
-
+          <div class="col-lg-11 col-md-11" style="height:6vh;background-color:#F5F6F7; border-bottom: 1px solid #DBDEE0;">
           </div>
         </div>
-
-        <!-- 17th march change-4 commented the dropdown button  :rajib-->
-        <div class="row" style="margin:0px; background-color: white; padding: 20px;padding-left:2%;">
-            <!-- <div class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="font-size:"> Filter Conditions <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#">collection</a></li>
-              <li><a href="#">collection</a></li>
-              <li><a href="#">collection</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">collection</a></li>
-            </ul>
-            </div> -->
-            <div class="left-inner-addon ">
-                <i class="fa fa-search"></i>
-                <!-- <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-keypress="$event.keyCode == 13 ? searchTaxonsByQuery(searchText) : null"> -->
-                <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..." ng-keyup="searchTaxonsByQuery(searchText,$event)">
-
-            </div>
+        <div class="row" id="overflowId" style="margin:0px; background-color: white; padding-top: 20px;padding-left:2%;">
+          <div class="left-inner-addon" style="padding-right: 2%; margin-top:0.25%;">
+            <i class="fa fa-search"></i>
+            <input type="text" ng-model="searchText" class="form-control" aria-label="..." placeholder="Start typing to search for products..."
+              ng-keyup="searchTaxonsByQuery(searchText,$event)">
+          </div>
         </div>
-        <!--     17th march change-4    -->
-                  <div class="row" style="margin:0px; background-color: white; padding: 20px;">
-                    <div class="row" ng-show="true" style="padding-top:2%;padding-buttom:2%;"><!-- 18th march chnages: add this div  @rajib-->
-                      <div class="alert alert-danger" ng-if="masterTaxonsJson.length == 0" >
-                          <center><span style="font-size:120%; color:red;"><strong style="padding-right:2%;">Info!</strong>No Results Found..</span></center>
-                      </div>
+        <div class="row" style="margin:0px; background-color: white; padding: 0 2%; ">
+          <div class="row" ng-show="true" style="padding-top:0%;padding-buttom:0%; ">
+            <div class="alert alert-danger" ng-if="masterTaxonsJson.length == 0">
+              <center><span style="font-size:120%; color:red; padding: 0%"><strong style="padding-right:2%;">Info!</strong>No Results Found..</span></center>
+            </div>
+          </div>
+          <div ng-show="!noCollectionMsg">
+            {{taxons.taxonomy_id}} {{taxons.id}}
+            <table class="table table-hover admin-product-list">
+              <thead>
+                <tr style="margin:0px; background-color: white;text-align: center;border-bottom: solid 1.5px grey;padding: 1% 0;font-weight: 600;">
+                  <th>
+                    <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input>
                     </div>
-                    <div ng-show="!noCollectionMsg" > <!-- 18th march changes this extra div  @rajib-->
-                      {{taxons.taxonomy_id}} {{taxons.id}}
-                    <table class="table table-hover admin-product-list">
-                      <thead>
-                        <tr>
-                          <th>
-                             <div><input <input type="checkbox" name="selectAll" value=""> <span class="caret"></span></input></div>
-
-                          </th>
-                          <th>
-                            Title
-                          </th>
-                          <th>
-                            Pretty Name
-                          </th>
-
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr ng-repeat="taxons in masterTaxonsJson ">
-                            <td style="width:20%;">
-                              <div><input <input type="checkbox" name="selectAll" value=""> </input>
-                              <img src={{getImage(taxons.icon)}} style="padding-left:5%;"></img></div>
-
-                            </td>
-                            <td style="width:20%;">
-                              <a ui-sref="admin.editCollections" ng-click="showEditTaxons(taxons)">{{ taxons.name }}</a> <!-- 18th march changes in this line  @rajib-->
-                            </td>
-                            <td>
-                              <span>{{taxons.pretty_name}}</span>
-                            </td>
-                            <td style="width:10%;"></td>
-                            <td>
-                              <i class="fa fa-pencil-square-o" ng-click="showEditTaxons(taxons)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-                              <i class="fa fa-trash" ng-click="deleteTaxons(taxons,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i><!-- 22nd march change : pass taxon object as argument in delete function -->
-                            </td>
-                        </tr>
-
-                      </tbody>
-                    </table>
-                  </div>
-
-
+                  </th>
+                  <th>
+                    Title
+                  </th>
+                  <th>
+                    Pretty Name
+                  </th>
+                </tr>
+              </thead>
+              <tbody style="height: 600px;  overflow-y: scroll;">
+                <tr ng-repeat="taxons in masterTaxonsJson ">
+                  <td style="width:20%;">
+                    <div><input <input type="checkbox" name="selectAll" value=""> </input>
+                      <img src={{getImage(taxons.icon)}} style="padding-left:5%;"></img>
+                    </div>
+                  </td>
+                  <td style="width:20%;">
+                    <a ui-sref="admin.editCollections({id: taxons.id, taxonomy_id: taxons.taxonomy_id})" style="cursor: pointer" ng-click="showEditTaxons(taxons)">{{ taxons.name }}</a>
+                  </td>
+                  <td>
+                    <span>{{taxons.pretty_name}}</span>
+                  </td>
+                  <td style="width:10%;"></td>
+                  <td>
+                    <i class="fa fa-pencil-square-o" ng-click="showEditTaxons(taxons)" style="font-size: 24px;color: #3276B1;cursor: pointer"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-trash" ng-click="deleteTaxons(taxons,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
+    <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+      <uib-alert style="margin-bottom: 0px !important" ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)"
+        dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+    </div>
   </div>
-  <div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
-    <uib-alert style="margin-bottom: 0px !important"  ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)" dismiss-on-timeout="3000">{{alert.message}}</uib-alert>
+  <script type="text/ng-template" id="delete_collection.html">
+  <div class="row" ng-show="loading" style="height: 93vh; width: 100%;line-height: 75vh; text-align: center;z-index: 9999; padding: 0; margin: 0; position: absolute;">
+    <img src="lib/assets/loader.gif"/>
   </div>
-</div>
-<!-- end -->
+  <div class="modal-header row " style="border-bottom: 1px solid #e5e5e5 !important;margin-left: 0px;margin-right: 0px">
+      <h3 class="modal-title col-md-10 col-sm-10 col-xs-10 col-lg-10">Delete collection "{{taxon.name}}"?</h3>
+      <span><i class="fa fa-close col-md-2 col-sm-2 col-xs-2 col-lg-2" style="cursor: pointer;text-align: right;font-size: 18px; margin-top: 2%;color: #807F7F"  ng-click="cancel()"></i></span>
+  </div>
+  <div class="modal-body" >
+      <p>Are you sure you want to delete the collection {{'"'+taxon.name+'"'}} ? This action cannot be reversed.</p>
+  </div>
+  <div class="modal-footer" style="padding: 15px 20px 15px !important; margin-top: 0px !important">
+      <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+      <button class="btn btn-danger" type="button" ng-click="delete()">Delete</button>
+  </div>
+</script>

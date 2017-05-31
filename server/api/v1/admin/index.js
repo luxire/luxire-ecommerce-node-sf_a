@@ -69,7 +69,8 @@ app.use('/orders', require('./order'));
 
 /*Stock/inventory*/
 app.use('/inventory', require('./inventory'));
-
+app.use('/taxonomies', require('./taxonomies'));
+app.use('/image', require('./image'));
 
 
 

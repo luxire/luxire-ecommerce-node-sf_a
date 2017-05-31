@@ -1,7 +1,6 @@
 angular.module('luxire')
 .controller('ProductAttributesController', function($scope, $rootScope, ProductAttributes, $state, ImageHandler, $timeout, $uibModal){
-  $scope.product_attributes = [];
-
+  $scope.product_attributes = [];//contains the product attribute details
   //Alerts to display the message
   $scope.alerts = [];
   var alert = function(){
@@ -31,7 +30,7 @@ angular.module('luxire')
     });
   };
   $scope.fetch_attributes();
-
+//deleting the product attribute
   $scope.delete_product_attribute = function(product_attribute, index){
     var modalInstance = $uibModal.open({
       animation: true,
@@ -44,17 +43,14 @@ angular.module('luxire')
           return product_attribute;
         }
       }
-
     });
     modalInstance.result.then(function (product_attribute) {
       $scope.searchText = "";
       $scope.fetch_attributes();
       $scope.alerts.push({type: 'success', message: 'Deleted attribute '+product_attribute.name+' successfully!'});
-    }, function () {
-      console.info('Modal dismissed at: ' + new Date());
     });
   };
-
+//used to redirect to the product attribute edit page
   $scope.edit_product_attribute = function(event, product_attribute_id){
     event.preventDefault();
     $state.go('admin.product_attributes_edit',{id: product_attribute_id});

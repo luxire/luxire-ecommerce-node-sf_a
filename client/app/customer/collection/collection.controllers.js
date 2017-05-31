@@ -1,6 +1,7 @@
 angular.module('luxire')
 .controller('CollectionController', function($scope, CustomerProducts, CustomerConstants, CustomerOrders, $uibModal, $rootScope, ImageHandler, $state, products, $stateParams, $location, $cacheFactory, CustomerUtils, $timeout){
   $scope.reverse_price = false;//predicate for sorting products by price
+  $scope.giftCardEnable = false; //Enabling the gift card layout
   $scope.allProductsData=[];
   var filter_mapping = {
     'color': {
@@ -92,7 +93,14 @@ angular.module('luxire')
       $timeout(function(){}, 0);
   });
 
-  $scope.active_permalink = $location.url().split('/collections/')[1].split('?')[0];
+  if($location.url().split('/collections/')[1].split('?')[0].split('%20')[0]+' '+$location.url().split('/collections/')[1].split('?')[0].split('%20')[1] === 'Gift-Cards'){
+    $scope.active_permalink = $location.url().split('/collections/')[1].split('?')[0].split('%20')[0]+' '+$location.url().split('/collections/')[1].split('?')[0].split('%20')[1];
+  }
+  else
+  {
+    $scope.active_permalink = $location.url().split('/collections/')[1].split('?')[0];
+  }
+
   $scope.active_taxonomy = $scope.active_permalink.indexOf('/') > -1? $scope.active_permalink.split('/')[0] : $scope.active_permalink;
   $scope.non_fabric_taxonomies = ["accessories", "bags", "shoes", "gift-cards"];
   $scope.is_fabric_taxonomy = $scope.non_fabric_taxonomies.indexOf($scope.active_taxonomy)===-1 ? true : false;
@@ -197,8 +205,17 @@ angular.module('luxire')
         $scope.loading_products = false;
         $scope.total_collection_pages = data.data.pages;
         $scope.taxonomy_counts = data.data.taxonomies;
-        $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
-        if(!$scope.allProductsData.length && $rootScope.alerts.length !== 1){
+        console.log('data.data.products:',data.data.products);
+        if(data.data.products.length === 1){
+           $scope.giftCardEnable = true;
+           $scope.allGiftProductsData = data.data.products;
+           console.log('the giftproduct data :',$scope.allGiftProductsData);
+        }
+        else{
+          $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
+        }
+        var length = $scope.allProductsData.length || $scope.allGiftProductsData.length;
+        if(!length && $rootScope.alerts.length !== 1){
           $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
         }
       }, function(error){
@@ -221,7 +238,11 @@ angular.module('luxire')
   };
 
 /**/
-
+//This is used to select the variant of the gift card
+  $scope.selectedGiftCardAmount = function(amount){
+   $scope.selectedGiftCardVariant = JSON.parse(amount);
+   console.log('the selected Gift card variant is:',$scope.selectedGiftCardVariant);
+  }
   /*Multi currency support*/
   $scope.currency_symbols = function(val ,currency){
     if(currency == "INR"){
@@ -628,16 +649,19 @@ angular.module('luxire')
   var thickness = 0;
   /*Get Thickness icon*/
   $scope.thickness_index = function(variant_thickness){
-    if(variant_thickness != undefined){
-      thickness = parseInt(variant_thickness.split('.')[1].split('mm')[0]);
-      if(thickness/10 >5){
-        return 6;
-      }
-      else {
-        return Math.ceil(thickness/10);
-      }
-    }
-
+    if (typeof variant_thickness !== "undefined") {
+       thicknessInMm = variant_thickness.split('.')[1];
+       if (typeof thicknessInMm !== "undefined") {
+         thickness = parseInt(thicknessInMm.split('mm')[0]);
+         if (thickness / 10 > 5) {
+           return 6;
+         }
+         else {
+           return Math.ceil(thickness / 10);
+         }
+       }
+     }
+     
   };
   /*Get stiffness icon*/
   $scope.stiffness_index = function(variant_stiffness, stiffness_unit){
@@ -661,6 +685,7 @@ angular.module('luxire')
   };
 
   $scope.order_swatch = function(variant){
+    $scope.loading = true;
     $scope.loading_products = true;
     if($rootScope.luxire_cart && $rootScope.luxire_cart.line_items){
       CustomerOrders.add_line_item($rootScope.luxire_cart, {}, variant)
@@ -673,6 +698,7 @@ angular.module('luxire')
           $rootScope.alerts.push({type: 'success', message: 'Item added to cart'});
           // $state.go('customer.pre_cart');
         }, function(error){
+          $scope.loading = false;
           $scope.loading_products = false;
           console.error(error);
         });

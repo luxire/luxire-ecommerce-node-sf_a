@@ -10,7 +10,7 @@ angular.module('luxire')
   }
 
   this.createProductType = function(productType) {
-    console.log(productType);
+   // console.log(productType);
 		return $http.post(AdminConstants.api.product_types, angular.toJson(productType));
 	}
 
