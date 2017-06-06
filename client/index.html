@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <base href="/"> 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -68,12 +69,19 @@
     <!-- Google Analytics -->
     <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
     <script src="lib/js/ng-ga.min.js"></script>
-    <!-- <script src="bower_components/angulartics-google-analytics/dist/angulartics-ga.min.js"></script> -->
 
     <!-- SPA routing configuration -->
     <script src="app/app.js"></script>
 
     <script src="app/services.js"></script>
+    <script type="text/javascript">
+      window.smartlook||(function(d) {
+      var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+      var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+      c.charset='utf-8';c.src='https://rec.smartlook.com/recorder.js';h.appendChild(c);
+      })(document);
+     smartlook('init', '17d5edc4d81d68749bf9e208b429665e21894750');
+   </script>
     <style media="screen">
       body {
         width: 100%;
@@ -91,6 +99,24 @@
     <link rel="stylesheet" href="app/auth/auth.css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" src="app/auth/auth.controllers.js"></script>
     <script type="text/javascript" src="app/auth/auth.services.js"></script>
+    <!-- Tracking  -->
+    <script>
+        window['_fs_debug'] = false;
+        window['_fs_host'] = 'fullstory.com';
+        window['_fs_org'] = '4XJ7E';
+        window['_fs_namespace'] = 'FS';
+        (function(m,n,e,t,l,o,g,y){
+            if (e in m && m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'); return;}
+            g=m[e]=function(a,b){g.q?g.q.push([a,b]):g._api(a,b);};g.q=[];
+            o=n.createElement(t);o.async=1;o.src='https://'+_fs_host+'/s/fs.js';
+            y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+            g.identify=function(i,v){g(l,{uid:i});if(v)g(l,v)};g.setUserVars=function(v){g(l,v)};
+            g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+            g.clearUserCookie=function(c,d,i){if(!c || document.cookie.match('fs_uid=[`;`]*`[`;`]*`[`;`]*`')){
+            d=n.domain;while(1){n.cookie='fs_uid=;domain='+d+
+            ';path=/;expires='+new Date(0).toUTCString();i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}}};
+        })(window,document,window['_fs_namespace'],'script','user');
+    </script>
   </head>
   <body ng-cloak>
     <div class="" id="luxire-beta-ribbon">
@@ -289,14 +315,13 @@
     </script>
 
     <!-- Google Analytics -->
-    <!--<script type="text/javascript" src="lib/js/angulartics-ga.min.js"></script>-->
     <script>
     	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    	ga('create', 'UA-88253387-1', 'auto');
-    	//ga('send', 'pageview'); //Commented Out - Angulartics Google Analytics does an automatic pageview hit
+  	ga('create', 'UA-100380652-1', 'auto');
+    	//ga('send', 'pageview'); //Angulartics Google Analytics does an automatic pageview hit
       </script>
   </body>
 </html>
