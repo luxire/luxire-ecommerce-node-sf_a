@@ -1,7 +1,7 @@
 <div ng-show="(show_header && is_window_scrolled) || (!is_customer_home_state && show_header)"  class="customer-main-nav-header container" style="position: fixed;top: 0px;left: 0px;z-index: 99;width: 100%;font-family: Roboto;">
   <div class="row" id="customer-main-nav-sub-header1" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%;">
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
-      <a href="#/">
+      <a href="/">
         <img ng-src="assets/images/customer/luxire_logo.png" style="max-width: 100%;cursor: pointer">
       </a>
     </div>
@@ -96,18 +96,17 @@
     <!-- ng-mouseleave="is_open=false;"  -->
 
     <span id="dropdown-mega-menu" class="taxonomy-dropdown dropdown yamm-fw" ng-init="is_open=false" is-open="is_open" ng-mouseenter="change_arrow_pos($event)" ng-mouseover="is_open=true;" ng-mouseleave="is_open=false;" uib-dropdown ng-repeat="taxonomy in taxonomies" >
-      <a href="#/collections/{{taxonomy.name}}" >
+      <a href="collections/{{taxonomy.name}}" >
         <div class="taxonomy-menu dropdown-toggle"  ng-class="{'taxonomy-menu-hover': is_open===true}" style="display: inline-block;padding: 0.25% 0.5%;border-radius: 2px;margin-left: 0.5%;cursor: pointer;text-align: center;font-size: 95%" >
           {{taxonomy.name}}&nbsp;&nbsp;<i style="font-size: 80%;margin-top: -3%" ng-if="taxonomy.root.taxons.length" class="fa fa-chevron-down" aria-hidden="true"></i>
         </div>
       </a>
-
       <div ng-mouseover="is_open=true;" ng-if="taxonomy.root.taxons.length" uib-dropdown-menu aria-labelledby="simple-dropdown" style="padding: 0px;margin-top: -0.7%;border: none;border-radius: 0px;border-top: solid 1px #8A247C;width: 100%;;background: whitesmoke">
         <div style="margin-left: {{arrow_margin_left+'px'}}" ng-if="taxonomy.root.taxons.length && is_open" class="arrow-up"></div>
         <div class="row-eq-height" style="width: 100%;">
           <div class="" style="margin: auto;padding: 1%;width: 100%;text-align: center">
             <div class="taxon-name" ng-repeat="taxon in taxonomy.root.taxons" >
-              <a style="text-decoration: none; color: inherit" href="#/collections/{{taxon.permalink}}">
+              <a style="text-decoration: none; color: inherit" href="collections/{{taxon.permalink}}">
                 <div class="taxon-naming" style="width: 100%;text-align: left;padding-left: 3%;">
                   <span>{{taxon.name}}</span>
                 </div>
@@ -115,7 +114,7 @@
               <div style="width: 100%;border-bottom: solid 1px #8A247C;margin-top: 3%">
               </div>
                 <div class="taxon-naming" style="width: 100%;font-size: 90%;text-align: left; padding: 3%" ng-repeat="taxon in taxon.taxons">
-                  <a style="text-decoration: none; color: inherit" href="#/collections/{{taxon.permalink}}">
+                  <a style="text-decoration: none; color: inherit" href="collections/{{taxon.permalink}}">
                     <span >{{taxon.name}}</span>
                     <!-- ng-click="go_to_collection($event, taxon.permalink)"  -->
                   </a>
@@ -177,13 +176,14 @@
         </div>
       </div>
     </span>
+      <a style="float:right;color:rgb(138, 36, 124);font-size: 120%;" href="https://custom.luxire.com" target="_blank">Luxire.com Classic</a>
   </div>
 </div>
 
 <div ng-show="show_header && !is_window_scrolled && is_customer_home_state"  class="container" style="position: fixed;top: 0px;left: 0px;z-index: 99;background-color: transparent;width: 100%;font-family: Roboto;">
   <div class="row" id="customer-main-nav-sub-header1" style="margin-left: 0.2%; margin-right: 1%;margin-top: 1.5%;margin-bottom: 1.25%;">
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"  style="">
-      <a href="#/">
+      <a href="/">
         <img ng-src="assets/images/customer/luxire_logo.png" style="max-width: 100%;cursor: pointer">
       </a>
     </div>
