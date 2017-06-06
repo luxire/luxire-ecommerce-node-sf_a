@@ -102,6 +102,7 @@ angular.module('luxire', ['ui.router','ngRoute',
 	}
 })
 .config(['$routeProvider','$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($routeProvider, $stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+	$locationProvider.html5Mode(true);
 	$httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
 	/*Set Default route*/
