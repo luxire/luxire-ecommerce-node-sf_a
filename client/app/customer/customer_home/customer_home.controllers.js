@@ -55,7 +55,8 @@ angular.module('luxire')
       link: '',
     //  text: 'Bespoke Suit Jackets',
       text: '',
-      permalink: ''
+      permalink: '',
+      buttonText: ''
     }
     ,
     {
@@ -63,16 +64,17 @@ angular.module('luxire')
       image: 'assets/images/customer/luxire-banner/slide-02.jpg',
       link: '',
      // text: 'Hand-Stitched Luxury Shirts',
-      text: 'Oxfords & Chambrays (Friday Everyday)',
-      permalink: 'shirts/oxfords'
-
+      text: 'Oxfords & Chambrays',
+      permalink: 'shirts/oxfords',
+      buttonText: 'Friday Everyday'
     },
     {
       id: 3,
       image: 'assets/images/customer/luxire-banner/slide-03.jpg',
       link: '',
-      text: 'Go where Life takes you (Go)',
-      permalink: 'pants/chinos'
+      text: 'Go where Life takes you',
+      permalink: 'pants/chinos',
+      buttonText: 'Go'
     }
     ,
     {
@@ -80,17 +82,18 @@ angular.module('luxire')
       image: 'assets/images/customer/luxire-banner/slide-04.jpg',
       link: '',
     //  text: 'Hand-Stitched Luxury Shirts',
-       text: 'Street Style - Be the Trend (Create Your Own)',
-      permalink: 'shirts/casuals'
-
+       text: 'Street Style - Be the Trend',
+      permalink: 'shirts/casuals',
+      buttonText: 'Create Your Own'
     },
     {
       id: 5,
       image: 'assets/images/customer/luxire-banner/slide-05.jpg',
       link: '',
      // text: 'Bespoke Suit Jackets',
-      text: 'Jeans worth Living in (Breathe )',
-      permalink: 'pants'
+      text: 'Jeans worth Living in',
+      permalink: 'pants',
+      buttonText: 'Breathe'
     }
     ,
     {
@@ -98,9 +101,9 @@ angular.module('luxire')
       image: 'assets/images/customer/luxire-banner/slide-06.jpg',
       link: '',
     //  text: 'Hand-Stitched Luxury Shirts',
-       text: 'Made Just for You (Order Now)', 
-      permalink: 'shirts'
-
+       text: 'Made Just for You', 
+      permalink: 'shirts',
+      buttonText: 'Order Now'
     }
 
   ];
