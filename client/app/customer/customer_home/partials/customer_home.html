@@ -9,13 +9,13 @@
           <div class="carousel-caption">
 
           </div>
-          <div class="carousel-collection">
+          <div class="carousel-collection" ng-if = "$index!==0">
             <div class="">
               {{slide.text}}
             </div>
-            <a href="#/collections/{{slide.permalink}}" style="text-decoration: none; color: inherit">
+            <a href="/collections/{{slide.permalink}}" style="text-decoration: none; color: inherit">
               <button id="viewCollectionButton" type="button" class="btn btn-default" name="button">
-                View Collection
+                {{slide.buttonText}}
               </button>
             </a>
 
