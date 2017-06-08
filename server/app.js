@@ -48,6 +48,6 @@ server.listen(cfg.port, cfg.ip, function () {
 // Handle Uncaught Exception
 process.on('uncaughtException', (err) => {
   console.error(`Exception: ${err}`);
-}
+})
 // Expose app
 exports = module.exports = app;
