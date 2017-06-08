@@ -92,7 +92,7 @@ angular.module('luxire')
       link: '',
      // text: 'Bespoke Suit Jackets',
       text: 'Jeans worth Living in',
-      permalink: 'pants',
+      permalink: 'pants/jeans',
       buttonText: 'Breathe'
     }
     ,
