@@ -44,5 +44,10 @@ app.use(function(req, res, next) {
 server.listen(cfg.port, cfg.ip, function () {
   console.log('Express server listening on %d, in %s mode', cfg.port, app.get('env'));
 });
+
+// Handle Uncaught Exception
+process.on('uncaughtException', (err) => {
+  console.error(`Exception: ${err}`);
+}
 // Expose app
 exports = module.exports = app;
