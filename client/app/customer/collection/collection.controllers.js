@@ -214,7 +214,8 @@ angular.module('luxire')
         else{
           $scope.allProductsData = $scope.allProductsData.concat(data.data.products);
         }
-        var length = $scope.allProductsData.length || $scope.allGiftProductsData.length;
+        // var length = $scope.allProductsData.length || $scope.allGiftProductsData.length;
+        var length = $scope.allProductsData.length || ( $scope.allGiftProductsData && $scope.allGiftProductsData.length);
         if(!length && $rootScope.alerts.length !== 1){
           $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
         }
