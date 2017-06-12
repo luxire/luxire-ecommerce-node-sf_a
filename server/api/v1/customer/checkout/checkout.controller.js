@@ -46,22 +46,7 @@ exports.checkout_address = function(req, res){
 exports.checkout_delivery  = function(req, res){
   console.log(req.params);
   console.log(req.query);
-  http.put({
-    uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
-    headers:{
-      'content-type': 'application/json',
-      'Cookie': 'guest_token='+req.cookies.guest_token,
-      'X-Spree-Token': req.headers['X-Spree-Token']
-    },
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
-    if(error){
-      res.status(500).send(error.syscall);
-    }
-    else{
-      res.status(response.statusCode).send(body);
-    };
-  });
+  proceedToDelivery(req,res);
 };
 
 /*proceed to checkout payment, Shipping Methods --> Payment*/
@@ -285,3 +270,27 @@ exports.brain_tree_payment = function(req, res){
     };
   });
 };
+
+function proceedToDelivery(req,res){
+  http.put({
+    uri: constants.spree.host+constants.spree.checkouts+'/'+req.params.number+'.json?order_token='+req.query.order_token,
+    headers:{
+      'content-type': 'application/json',
+      'Cookie': 'guest_token='+req.cookies.guest_token,
+      'X-Spree-Token': req.headers['X-Spree-Token']
+    },
+    body:JSON.stringify(req.body)
+  },function(error,response,body){
+    if(error){
+      res.status(500).send(error.syscall);
+    }
+    else{
+      let responseBody = JSON.parse(body);
+      if(response.statusCode === 422 && responseBody.exception && responseBody.exception.includes("ERROR:  duplicate key value violates unique constraint \"spree_shipping_rates_join_index")){
+        proceedToDelivery(req,res);
+      }else{
+        res.status(response.statusCode).send(body);
+      }
+    };
+  });
+}
