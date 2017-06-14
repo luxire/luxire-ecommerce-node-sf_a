@@ -102,8 +102,8 @@ function printDiv(divName) {
       <td ng-if="(invoiceDetailedJson.payments.length>0)&&payment.state=='completed'" ng-repeat="payment in invoiceDetailedJson.payments">
         {{payment.payment_method.name}}
       </td>
-      <td ng-if="invoiceDetailedJson.payments.length==0">
-        Payment due
+      <td ng-if="checkGiftCardPaymentOption()">
+         Gift card
       </td>
 		</tr>
 
@@ -150,6 +150,13 @@ function printDiv(divName) {
             <td></td>
            <td>Tax:</td>
            <td>{{invoiceDetailedJson.display_tax_total}}</td>
+          </tr>
+          <tr ng-if="checkGiftCardPaymentOption()">
+             <td> </td>
+             <td></td>
+             <td></td>
+             <td>Giftcard:</td>
+            <td>{{getGiftCardTotal()}}</td>
           </tr>
           <div class="table-div">
            <tr>

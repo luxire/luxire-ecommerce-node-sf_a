@@ -15,6 +15,28 @@ CustomerOrders.get_order_by_id({number: $stateParams.number, token: $stateParams
 .then(function(data){
   $scope.invoiceDetailedJson = data.data;
   console.log(data);
+
+  $scope.checkGiftCardPaymentOption = function(){
+  var paidByGiftCard = false;
+  var adjustments = $scope.invoiceDetailedJson.adjustments;
+  for(var counter=0; counter < adjustments.length; counter++){
+    if(adjustments[counter].source_type === "Spree::GiftCard"){
+      paidByGiftCard = true;
+      break;
+    }
+   }
+  return paidByGiftCard;
+  }
+
+  $scope.getGiftCardTotal = function(){
+   var paidByGiftCard = 0;
+  $scope.invoiceDetailedJson.adjustments.forEach(function(element) {
+    if(element.source_type === "Spree::GiftCard"){
+      paidByGiftCard += Math.abs(parseFloat(element.amount));
+    }
+  })
+  return $scope.invoiceDetailedJson.display_item_total[0] + paidByGiftCard.toFixed(2);
+ }
 }, function(error){
   console.error(error);
 })
@@ -29,7 +51,6 @@ CustomerOrders.get_order_by_id({number: $stateParams.number, token: $stateParams
 // }, function(error){
 //   console.log(error);
 // });
-
 
 
 })
