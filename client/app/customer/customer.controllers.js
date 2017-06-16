@@ -192,6 +192,33 @@ avoid conflict with customer ctrl on admin side*/
     console.error(error);
   });
 
+  
+  $scope.generateCollectionUrl = function(collectionName){
+    var name = collectionName;
+    if(collectionName.includes("/")){
+      collectionName = collectionName.split("/")[0]
+    }
+    collectionName = collectionName.toLowerCase();
+    if(CustomerProducts.is_active_collections(collectionName)){
+      return'/collections/' + name;
+    }else{
+      return "";
+    }
+  }
+ 
+ $scope.displayNotificationIfCollectionIsInactive = function(collectionName){
+  var name = collectionName;
+    if(collectionName.includes("/")){
+      collectionName = collectionName.split("/")[0]
+    }
+    collectionName = collectionName.toLowerCase();
+    if(!CustomerProducts.is_active_collections(collectionName)){
+      $rootScope.alerts[0] = {type: 'warning', message: collectionName + ' Collection coming soon!'};
+    }
+ }
+
+
+
   $scope.setFocusOnSearch = function(val){
     if(val){
       $("#products_search").focus();
