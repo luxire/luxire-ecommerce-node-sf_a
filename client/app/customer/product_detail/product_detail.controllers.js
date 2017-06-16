@@ -3,6 +3,10 @@ angular.module('luxire')
   /*Use $rootScope.page.setTitle() to change title*/
   $window.scrollTo(0, 0);
   $scope.loading_product = true;
+  // $scope.measurementModal contains the loading flag for the measurement Modal. If true will display the loading spinner
+  $scope.measurementModal = {
+     loadingFlag: false
+   };
   $scope.display_summary = false;
   $scope.is_bespoke_style = false;
   $scope.cart_object_changed = $scope.cart_object_changed ? $scope.cart_object_changed : false;
@@ -522,56 +526,65 @@ angular.module('luxire')
 
   /*New Mockup July 1 changes*/
   $scope.invoke_choose_fit_and_measurement = function(){
-    var modal_instance = $uibModal.open({
-      animation: true,
-      templateUrl: 'choose_fit_and_measurement.html',
-      controller: 'ChooseFitAndMeasurementController',
-      size: 'lg',
-      windowClass: 'fit-and-measurement-window',
-      resolve: {
-        product: function () {
-          return $scope.product;
-        },
-        cart_object: function(){
-          return angular.copy($scope.cart_object);
-        },
-        standard_measurement_attributes: function(){
-           return $scope.standard_measurement_attributes;
-        },
-        body_measurement_attributes: function(){
-          return $scope.body_measurement_attributes;
-        },
-        standard_measurement_attributes_all: function(){
-           return $scope.standard_measurement_attributes_all;
-        },
-        body_measurement_attributes_all: function(){
-           return $scope.body_measurement_attributes_all;
-        },
-        selected_measurement_id: function(){
-          return $scope.selected_measurement_id;
-        },
-        selected_measurement_unit: function(){
-          return $scope.selected_measurement_unit;
-        }
-      }
-    });
-    modal_instance.result.then(function (measurements_object) {
-      $scope.selected_measurement_id = measurements_object.selected_measurement_id;
-      if($scope.selected_measurement_id===3){
-        $scope.cart_object.body_measurement_attributes = angular.copy(measurements_object.selected_measurements.body);
-        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
-      }
-      else if($scope.selected_measurement_id===4){
-        $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
-        $scope.cart_object.standard_measurement_attributes = angular.copy($scope.cart_object_prototype.standard_measurement_attributes);
-      }
-      else{
-        $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
-        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
-      }
-      $scope.display_summary = true;
-    }, function () {
-    });
+      $scope.measurementModal.loadingFlag = true;
+      $timeout(function () {
+        var modal_instance = $uibModal.open({
+          animation: true,
+          templateUrl: 'choose_fit_and_measurement.html',
+          controller: 'ChooseFitAndMeasurementController',
+          size: 'lg',
+          windowClass: 'fit-and-measurement-window',
+          resolve: {
+            product: function () {
+              return $scope.product;
+            },
+            cart_object: function () {
+              return angular.copy($scope.cart_object);
+            },
+            standard_measurement_attributes: function () {
+              return $scope.standard_measurement_attributes;
+            },
+            body_measurement_attributes: function () {
+              return $scope.body_measurement_attributes;
+            },
+            standard_measurement_attributes_all: function () {
+              return $scope.standard_measurement_attributes_all;
+            },
+            body_measurement_attributes_all: function () {
+              return $scope.body_measurement_attributes_all;
+            },
+            selected_measurement_id: function () {
+              return $scope.selected_measurement_id;
+            },
+            selected_measurement_unit: function () {
+              return $scope.selected_measurement_unit;
+            },
+            loading_measurement_modal: function(){
+              return $scope.measurementModal;
+            }
+          }
+        });
+
+        modal_instance.result.then(function (measurements_object) {
+          $scope.measurementModal.loadingFlag = false;
+          $scope.selected_measurement_id = measurements_object.selected_measurement_id;
+          if ($scope.selected_measurement_id === 3) {
+            $scope.cart_object.body_measurement_attributes = angular.copy(measurements_object.selected_measurements.body);
+            $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
+          }
+          else if ($scope.selected_measurement_id === 4) {
+            $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
+            $scope.cart_object.standard_measurement_attributes = angular.copy($scope.cart_object_prototype.standard_measurement_attributes);
+          }
+          else {
+            $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
+            $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
+          }
+          $scope.display_summary = true;
+        }, function () {
+        });
+
+      }, 0)
   };
 
   $scope.invoke_choose_a_style = function(){
@@ -632,7 +645,7 @@ angular.module('luxire')
   };
 
 })
-.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', 'ProductType', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler, ProductType){
+.controller('ChooseFitAndMeasurementController', ['$scope', '$uibModalInstance', 'product', 'cart_object', 'standard_measurement_attributes', 'body_measurement_attributes','standard_measurement_attributes_all','body_measurement_attributes_all','selected_measurement_id', 'selected_measurement_unit', 'ImageHandler', 'ProductType', 'loading_measurement_modal', function($scope, $uibModalInstance, product, cart_object, standard_measurement_attributes, body_measurement_attributes, standard_measurement_attributes_all, body_measurement_attributes_all, selected_measurement_id, selected_measurement_unit, ImageHandler, ProductType, loading_measurement_modal){
   $scope.standard_measurement_attributes = standard_measurement_attributes;
   $scope.standard_measurement_attributes_all = standard_measurement_attributes_all;
   $scope.body_measurement_attributes_all = body_measurement_attributes_all;
@@ -1120,6 +1133,7 @@ angular.module('luxire')
   $scope.cart_object = cart_object;
 
   $scope.cancel = function(){
+    loading_measurement_modal.loadingFlag = false;
     $uibModalInstance.dismiss('cancel');
   };
   $scope.print_cart = function(){

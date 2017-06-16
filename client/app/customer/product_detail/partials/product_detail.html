@@ -2403,3 +2403,8 @@ style carousel
     <img style="max-width: 100%" src="{{getImage(product.master.images[0].original_url)}}">
   </div>
 </script>
+
+<p class="text-center text-muted" ng-if="measurementModal.loadingFlag" style="margin-top: 10%; position: absolute; top: 20%;left: 50%; z-index: 99;color: #7F0E6E">
+  <span class="fa fa-spinner fa-spin fa-4x"></span>
+  <br /><br /> Loading, please wait...
+</p>
