@@ -219,6 +219,7 @@ angular.module('luxire')
         if(!length && $rootScope.alerts.length !== 1){
           $rootScope.alerts.push({type: 'warning', message: 'No products found!'});
         }
+        $scope.busy = false;
       }, function(error){
         $scope.loading_products = false;
         console.error(error);
@@ -231,9 +232,11 @@ angular.module('luxire')
     }
   };
 
+  $scope.busy = false;
   /*Redis caching mechanism*/
   $scope.load_more = function(){
-    if($scope.selected_redis_filters.page<=$scope.total_collection_pages){
+    if(!$scope.busy && $scope.selected_redis_filters.page<=$scope.total_collection_pages){
+      $scope.busy = true;
       load_products();
     }
   };

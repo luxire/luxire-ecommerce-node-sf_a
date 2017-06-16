@@ -16,8 +16,12 @@ luxire.controller('inventoryHomeController',function($scope, products, fileReade
   $scope.noInventoryMsg = false;
   //This is used to maintain the page count on scrolling
   $scope.pageCount = 1;
+  
+  $scope.busy = false;
   //This function will ensure the next set of data is ready to bind to the inventoryObj
   $scope.load_more = function(){
+    if($scope.busy) return;
+    $scope.busy = true;
     ++$scope.pageCount;
     luxireStocks.luxireStocksIndex($scope.pageCount).then(function(data){
       //console.log('the data.data',data.data); 
@@ -26,6 +30,7 @@ luxire.controller('inventoryHomeController',function($scope, products, fileReade
         concatData = concatData.concat(data.data);
         $scope.inventoryObj = concatData;
       }, 0);
+     $scope.busy = false;
     })
   }
  

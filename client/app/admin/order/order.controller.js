@@ -24,15 +24,18 @@ luxire.controller('OrderController', function ($scope, AdminOrderService, AdminC
       }
       $scope.total_pages = data.data.pages;
       $scope.loading = false;
+      $scope.busy = false;
     }, function (error) {
       $scope.loading = false;
       console.error(error);
     });
   }
 
+  $scope.busy = false;
 //This is the scroll loading function to get the next set of order details while scrolling
   $scope.load_more_orders = function () {
-    if (search.page < $scope.total_pages) {
+    if (!$scope.busy && search.page < $scope.total_pages) {
+      $scope.busy = true;
       search.page = search.page + 1;
       load_orders();
     }
