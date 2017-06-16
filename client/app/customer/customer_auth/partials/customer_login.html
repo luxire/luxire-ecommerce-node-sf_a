@@ -17,7 +17,7 @@
           </div>
           <div class="input-group input-group-md">
             <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-envelope"></i></span>
-            <input type="email" placeholder="email" class="form-control" name="email" ng-model="customer.user.email"><br>
+            <input type="email" placeholder="email" class="form-control" name="email" ng-model="customer.user.email" ng-click="error=''"><br>
           </div>
 
           <div class="" style="font-family: ArialNarrow; font-weight: 400; padding-top: 5%;text-align: left;font-size: 100%">
@@ -25,7 +25,7 @@
           </div>
           <div class="input-group input-group-md" style="">
             <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-lock"></i></span>
-            <input type="password" placeholder="password" class="form-control" name="password" ng-model="customer.user.password"><br>
+            <input type="password" placeholder="password" class="form-control" name="password" ng-model="customer.user.password" ng-click="error=''"><br>
           </div>
           <uib-alert  ng-if="error" style="margin-bottom: 1% !important; margin-top: 1%" type="danger">{{error}}</uib-alert>
           <div class="row" style="text-align: left;vertical-align: middle;margin: 1% 0%;color: #AFABBC">

@@ -14,12 +14,12 @@
       <form class="" ng-submit="login()">
         <div class="input-group input-group-lg">
           <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-envelope"></i></span>
-          <input type="email" class="form-control" placeholder="Email" ng-model="back_office.user.email" aria-describedby="sizing-addon1">
+          <input type="email" class="form-control" placeholder="Email" ng-model="back_office.user.email" aria-describedby="sizing-addon1" ng-click="error=''">
         </div>
 
         <div class="input-group input-group-lg" style="padding-top: 2%">
           <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-lock"></i></span>
-          <input type="password" class="form-control"  placeholder="Password" ng-model="back_office.user.password" aria-describedby="sizing-addon1">
+          <input type="password" class="form-control"  placeholder="Password" ng-model="back_office.user.password" aria-describedby="sizing-addon1" ng-click="error=''">
           <span class="input-group-addon" style="background-color: #fff;cursor: pointer" ui-sref="forgot_password">
             <i class="glyphicon glyphicon-question-sign"
             style="font-size: small" uib-popover-template="popover_template"
