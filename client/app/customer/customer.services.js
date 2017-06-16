@@ -1,7 +1,8 @@
 angular.module('luxire')
 .service('CustomerConstants', function(){
   this.api = {
-    host: 'https://luxire-store.cloudhop.in', //spree host
+//    host: 'https://luxire-store.cloudhop.in', //spree host
+    host: 'https://store.luxire.com/',
     products: '/api/v1/products',
     product_types: '/api/v1/product_types',
     style_masters: '/api/v1/style_masters',
