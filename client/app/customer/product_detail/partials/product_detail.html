@@ -1157,7 +1157,8 @@ style carousel
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%;">
               {{cart_object['standard_measurement_attributes']['Sleeve Length']['value'] ? 'Sleeve length' : ''}}
             </div>
-
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="height:100%">
+            </div>
           </div>
           <div class="row" style="margin-left: 0px; margin-right: 0px;">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1337,6 +1338,14 @@ style carousel
             </div>
           </div>
         </div>
+        <div style="width:13%;margin-left:75%;margin-top:-5%" ng-click="addMeasurementCustomNote()">
+            <uib-accordion close-others="true">
+                  <uib-accordion-group heading="Add notes" >
+                     <textarea rows="2" cols="23" style="margin-top: 1%" ng-model="cart_object['body_measurement_attributes']['custom_notes']['value']" placeholder="notes:">
+                    </textarea>
+                  </uib-accordion-group>
+              </uib-accordion>
+          </div>
       </div>
       <div class="standard-measurement-fields">
         <div class="row" style="margin: 0 0 1% 0;text-align: center">

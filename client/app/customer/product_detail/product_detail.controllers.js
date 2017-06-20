@@ -576,6 +576,10 @@ angular.module('luxire')
             $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
             $scope.cart_object.standard_measurement_attributes = angular.copy($scope.cart_object_prototype.standard_measurement_attributes);
           }
+          else if($scope.selected_measurement_id===1){//This is to ensure the custom notes details are added to cart object['measurement']property
+        $scope.cart_object.body_measurement_attributes = angular.copy(measurements_object.selected_measurements.body);
+        $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
+      }
           else {
             $scope.cart_object.body_measurement_attributes = angular.copy($scope.cart_object_prototype.body_measurement_attributes);
             $scope.cart_object.standard_measurement_attributes = angular.copy(measurements_object.selected_measurements.standard);
@@ -1400,7 +1404,15 @@ angular.module('luxire')
       }
     }
   };
-
+  //To add the custom notes details to the cart object['measurement'] property
+  $scope.addMeasurementCustomNote = function(){
+    console.log('cart object:',$scope.cart_object);
+   if(!$scope.cart_object['body_measurement_attributes'].hasOwnProperty('custom_notes')){
+     $scope.cart_object['body_measurement_attributes']['custom_notes'] = {};
+     $scope.cart_object['body_measurement_attributes']['custom_notes']['value'] = ''; 
+   }
+   console.log('cart object:',$scope.cart_object);
+  }
   $scope.next_step = function(){
     var measurements = {
       body: {},
