@@ -265,6 +265,7 @@ luxire.controller('OrderSheetController', function ($scope,$window, $http,$state
     AdminOrderService.update_status($scope.luxire_order, state)
       .then(function (data) {
         $scope.luxire_order.luxire_order.fulfillment_status = state.title;
+        $scope.loading = false;
         $rootScope.alerts.push({ type: 'success', message: data.data.msg });
         load_order();
       }, function (error) {
@@ -318,9 +319,9 @@ luxire.controller('OrderSheetController', function ($scope,$window, $http,$state
   $scope.addTab = function (a) {
     if (($scope.count < $scope.luxire_order.line_items.length) && ($scope.tabTitle.indexOf(a) == -1)) {
       $scope.tabTitle.push("Line Item " + a);
-      $scope.indexValue = a - 1;
-      $scope.tabIndex += 1;
-      $scope.showTab = $scope.tabIndex;
+      $scope.indexValue = a - 1;//To maintain the indexValue of the line item detail to be shown in the active tab
+      $scope.tabIndex += 1;//To maintain the current tab_index value
+      $scope.showTab = $scope.tabIndex;//To activate the tab
       $scope.count += 1;
     }
     else {
