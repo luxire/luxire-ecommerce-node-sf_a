@@ -1,5 +1,5 @@
-angular.module('luxire')
-.controller('GiftCardController',function($scope){
+var luxire =  angular.module('luxire');
+luxire.controller('GiftCardController',function($scope,$uibModal){
 
   $scope.giftCardObj = [
     {
@@ -60,5 +60,62 @@ angular.module('luxire')
    return {};
  }
 
+$scope.searchText;
+//This function is used to open the modal and the modal is to set the details for the issuing new gift card
+$scope.open_new_gift_card = function(){
+ var modalInstance = $uibModal.open({
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy : 'modal-body',
+      templateUrl : 'newGiftCardModal.html',
+      controller: 'giftCardModalInstanceCtrl',
+      size: 'lg',
+    });
+modalInstance.result.then(function(data){
 
+})
+}
+});
+//This is the newGiftCardModal controller 
+luxire.controller('giftCardModalInstanceCtrl',function($scope,$uibModalInstance){
+  $scope.editCode = false;
+  $scope.initalValue = false;
+  $scope.giftCode = '762a2e9e7c4f6daf';
+  $scope.showEditCode = function(){
+    $scope.editCode = true;
+  }
+  $scope.initialzeGiftCard = function(a){
+    if(a == 'other'){
+      $scope.initalValue = true;
+    }
+    else{
+      $scope.initial_value = a;
+      console.log('the selected initial value is',$scope.initial_value);
+    }
+  }
+  $scope.calculateInitialValue = function(value){
+    $scope.initial_value = value;
+  }
+    //This is datapicker 
+  $scope.datePicker = new Date();
+  //This function is to display the date in custom format as dd/mm/yyyy
+  $scope.dateFunction = function(date){
+    var dt = date.getDate();
+  var month = date.getMonth()+1;
+  var year = date.getFullYear();
+  $scope.date = dt+'/'+month+'/'+year;
+  }($scope.datePicker);
+  $scope.selectedDate = $scope.date;
+  $scope.popup2 = {
+    opened: false
+  };
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+    $scope.selectedDate = $scope.dt;
+  };
+$scope.ok = function(){
+  $uibModalInstance.close({giftCode : $scope.giftCode , initalValue : $scope.initial_value, date : $scope.selectedDate});
+}
+$scope.cancel = function(){
+    $uibModalInstance.dismiss('cancel');
+  }
 });

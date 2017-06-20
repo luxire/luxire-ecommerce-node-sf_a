@@ -1,3 +1,57 @@
+<script type="text/ng-template" id="newGiftCardModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title"> Issue gift card</h3>
+  </div>
+  <hr />
+  <div class="modal-body" id="modal-body">
+    <div>
+      <div style="margin-left: 2%">
+        <a class="code edit-block" ng-show="!editCode" >
+          <label> Code </label><img src="https://openclipart.org/image/2400px/svg_to_png/224192/Mini-pencil-icon-white-background.png" style="width:20px;height:20px;margin-left:85%" ng-click="showEditCode()">
+          <p>{{giftCode}}</p>
+        </a>
+        <div ng-show="editCode">
+          <label> Code </label><br>
+          <input type="text" ng-model="giftCode">
+        </div>
+      </div>
+      <hr />
+      <b style="margin-left:2%">Initial value</b>
+      <br>
+      <div style="margin-left:2%" class="btn-group">
+        <label class="btn btn-default" ng-click="initialzeGiftCard('10')">Rs. 10.00 </label>
+        <label class="btn btn-default" ng-click="initialzeGiftCard('25')">Rs. 25.00 </label>
+        <label class="btn btn-default" ng-click="initialzeGiftCard('50')">Rs. 50.00 </label>
+        <label class="btn btn-default" ng-click="initialzeGiftCard('100')">Rs. 100.00 </label>
+        <label class="btn btn-default" ng-click="initialzeGiftCard('other')">Other</label>
+      </div>
+      <div ng-hide="!initalValue" style="margin-left:65%"> 
+          <div> Enter the amount: <input type="number" class="form-control" style = "max-width:35%;margin-top:-9%;margin-left:40%;text-align:right" ng-model="other_initial_value" ng-change="calculateInitialValue(other_initial_value)"> </div>
+      </div>
+      <hr />
+      <a class="code edit-block" ng-show="!editCode" >
+          <label style="margin-left:2%"> Expiry Date </label><img src="https://openclipart.org/image/2400px/svg_to_png/224192/Mini-pencil-icon-white-background.png" style="width:20px;height:20px;margin-left:85%" ng-click="showEditCode()">
+          <p style="margin-left:2%">{{date}}</p>
+        </a>
+        <div ng-show="editCode">
+          <label style="margin-left:2%"> Expires on </label><br>
+          <div class="col-md-6" >
+            <p class="input-group" style="margin-left:2%">
+              <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup2.opened" ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+          </div>
+        </div>
+    </div>
+  </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">Issue Gift Card</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
 <div class="container-fluid" style="height:100%">
   <div class="row" style="height: 3.3em; line-height: 3.3em; border-bottom: 1px solid #DBDEE0;">
     <div class="col-lg-5 col-md-5" style="text-align: left;font-size: 20px;">
@@ -9,13 +63,54 @@
     <div class="col-lg-5 col-md-5" style="text-align: right;">
       <button type="button" class="btn btn-default">Export</button>
       <button type="button" class="btn btn-default" ui-sref="admin.manage_giftcard">Manage gift card product</button>
-      <button type="button" class="btn btn-primary" ui-sref="admin.new_giftcard">Issue gift card</button>
+      <button type="button" class="btn btn-primary" ng-click="open_new_gift_card()">Issue gift card</button>
     </div>
   </div>
 
   <div class="row" style="height: 93vh;">
     <div class="container-fluid admin-console-content">
+      <uib-tabset active="activeJustified" justified="true" style="margin: 20px 20px;">
+        <uib-tab index="0" heading="All gift cards">
+          <div class="row" style="margin:0px; background-color: white; padding: 20px 20px 0px 20px;">
+            <div class="input-group">
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Status</a></li>
+                  <li><a href="#">Balance</a></li>
+                  <li><a href="#">Issued</a></li>
+                  <li><a href="#">Initial value</a></li>
+                </ul>
+              </div>
+              <!-- /btn-group -->
+              <input type="text" class="form-control" ng-model="searchText" ng-keyup="searchByName(searchText)" style="color:#cccccc" aria-label="..."
+                placeholder="Start typing to search for gift cards...">
+            </div>
+            <div style="display:block;margin-left:2%;margin-top:2%;color:black">
+              Code
+              <div style="display:inline-block;margin-left: 25%">
+                Customer
+              </div>
+              <div style="display:inline-block; margin-left: 12%">
+                Expires
+              </div>
+              <div style="display:inline-block;margin-left:12%">
+                Initial value
+              </div>
+              <div style="display:inline-block;margin-left:13%">
+                Balance
+              </div>
+              <br>
+              <hr />
 
+            </div>
+          </div>
+        </uib-tab>
+        <uib-tab index="1" heading="New">Short Labeled Justified content</uib-tab>
+        <uib-tab index="2" heading="Partially used">Long Labeled Justified content</uib-tab>
+        <uib-tab index="3" heading="Used">Long Labeled Justified content</uib-tab>
+        <uib-tab index="4" heading="Disabled">Long Labeled Justified content</uib-tab>
+      </uib-tabset>
     </div>
   </div>
 </div>
