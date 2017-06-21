@@ -588,6 +588,10 @@ angular.module('luxire')
         }, function () {
         });
 
+      modal_instance.result.catch(function(){
+        $scope.measurementModal.loadingFlag = false;
+     });
+
       }, 0)
   };
 
