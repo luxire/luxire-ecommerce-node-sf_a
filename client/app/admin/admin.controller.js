@@ -1,5 +1,5 @@
  angular.module('luxire')
- .controller('adminController',function($scope, $stateParams, $rootScope, products, fileReader, prototypeObject,$rootScope,$authentication,$state,$http){
+ .controller('adminController',function($scope, $stateParams, $rootScope, products, fileReader, prototypeObject,$authentication,$state,$http){
    $scope.navbar = "default";
    $scope.adminConsole = "default";
    $scope.isActive = false;
