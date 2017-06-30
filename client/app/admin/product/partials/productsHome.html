@@ -146,7 +146,7 @@
                   </td>
                   <td >
                     <i class="fa fa-pencil-square-o" ui-sref="admin.edit_product({id: product.id})" style="font-size: 24px;color: #3276B1;cursor: pointer"><a  style="text-decoration: none !important;"></a> </i>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <i class="fa fa-trash" ng-click="deleteProducts(product.id,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
+                    <i class="fa fa-trash" ng-click="deleteProducts(product,$index)" style="font-size: 24px;color: #F22823;cursor: pointer"></i>
                   </td>
                 </tr>
               </tbody>
@@ -228,5 +228,20 @@
     <div class="row" style="margin-left: 5%; margin-right: 5%">
       <div ng-bind-html="getUploadStatus"></div>
     </div>
+  </div>
+</script>
+
+<!--Modal for delete the product -->
+<script type="text/ng-template" id="imageDeleteModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Delete the Image?</h3>
+  </div>
+  <hr />
+  <div class="modal-body" id="modal-body">
+    Are you sure want to delete the {{product.name}} ? Action cannot be reversed!!
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="ok()">Delete</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
   </div>
 </script>
