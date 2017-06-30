@@ -1,5 +1,6 @@
 var luxire = angular.module('luxire')
-luxire.controller('editProductController', function ($scope, $window, $timeout,products, allTaxons, luxireProperties, luxireVendor, fileReader, prototypeObject, $state, $stateParams, $uibModal, $log, editModalService) {
+luxire.controller('editProductController', function ($scope, $window, $timeout, products, allTaxons, luxireProperties, luxireVendor, fileReader, prototypeObject, $state, $stateParams, $uibModal, $log, editModalService) {
+  var formName = "editProductForm";
   $scope.luxire_stock = '';//store the luxire stock details
   $scope.luxire_product = {};//store the luxire product details
   $scope.swatchPrice = 1;
@@ -21,38 +22,39 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
   $scope.loading = true;
   //This is the array which contains multiple variant images for uploading
   $scope.variant_image = [];
+  var elementName = "";
 
   // ---------------- START OF GET ALL THE PRODUCT DETAILS TO SHOW ---------------------
   products.getProductByID($stateParams.id).then(function (data) {
     $scope.loading = true;
     $scope.products = data;
+
+    setDropdownValues($scope.products.shipping_methods, $scope.products.shipping_category_id, 'shippingMethod');
+
     //This function is to parse the date to dd/mm/yyyy format
-    var convertDate = function(date){
-    var date = date.match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})/);
-    if(date == null){
-        return false;   
-    }else{
+    var convertDate = function (date) {
+      var date = date.match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})/);
+      if (date == null) {
+        return false;
+      } else {
         var dateObj = {
-            dateFormat1 : date[3] + '/' + date[2] + '/' + date[1],
-            dateFormat2 : date[1] + '-' + date[2] + '-' + date[3],
-            dateFormat3 : date[2] + '/' + date[3] + '/' + date[1],
-            time : date[4] + ':' + date[5] + ':' + date[6],
+          dateFormat1: date[3] + '/' + date[2] + '/' + date[1],
+          dateFormat2: date[1] + '-' + date[2] + '-' + date[3],
+          dateFormat3: date[2] + '/' + date[3] + '/' + date[1],
+          time: date[4] + ':' + date[5] + ':' + date[6],
         };
         return dateObj;
-    }
-};
+      }
+    };
     products.allProductType().then(function (data) {
-    $scope.allproductType = data.data;
-    let index = getIndex($scope.products.product_type.product_type, $scope.allproductType);
-    $scope.loading = false;
-    let temp = $scope.allproductType.splice(index, 1);
-    $scope.allproductType.push(temp[0]);
-  }, function (info) {
-    console.log(info);
-  });
-  
+      $scope.allproductType = data.data;
+      setDropdownValues($scope.allproductType, $scope.products.luxire_product.luxire_product_type_id, 'productType');
+    }, function (info) {
+      console.log(info);
+    });
+
     $scope.date = convertDate(data.available_on).dateFormat1;
-    p =  $scope.products;
+    p = $scope.products;
     //image_url contains the image URL of the selected product 
     $scope.image_url = [];
     //pushing the image to image_url which is available in the $scope.products objects
@@ -66,7 +68,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
     $scope.luxire_product = data.luxire_product;
 
     //  ***** start:- 28th march changes:  this portion responsiblr for converting attribute value into tags input
-      if ($scope.products.luxire_product && $scope.products.luxire_product.product_tags) {
+    if ($scope.products.luxire_product && $scope.products.luxire_product.product_tags) {
       var arr = $scope.products.luxire_product.product_tags.split(','); // converting the tags array of string into tags input object
       var tagsObj = {};
       for (i = 0; i < arr.length; i++) {
@@ -166,12 +168,12 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
         tagObj = { "text": tempWashCareData[j] }
         $scope.washCareData.push(tagObj);
       }
-      
+
       for (var j = 0; j < tempColorData.length; j++) {
         tagObj = { "text": tempColorData[j] }
         $scope.colorData.push(tagObj);
       }
-      
+
       for (var j = 0; j < tempUsageData.length; j++) {
         tagObj = { "text": tempUsageData[j] }
         $scope.usageData.push(tagObj);
@@ -194,7 +196,6 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
 
     //  ***** end :- 28th march changes:  this portion responsible for fetch luxire properties and convert them into input tags
 
-    $scope.loading = false;
 
   }, function (info) {
     console.log(info);
@@ -255,6 +256,8 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
 
   luxireVendor.getAllLuxireVendor().then(function (data) {
     $scope.luxireVendor = data.data;
+    setDropdownValues($scope.luxireVendor, $scope.luxire_product.luxire_vendor_master_id, 'vendor');
+    $scope.loading = false;
   }, function (info) {
     console.log(info);
   })
@@ -269,7 +272,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
   $scope.parentSkuStatus = '';
   $scope.parentSkuFalseCount = 0;
   var productTypeId = '';
-  
+
   $scope.checkShippingCatgoryId = function (shippingId) { // 23rd march changes: add this function
     $scope.shipping_emp_msg = false;
     if (shippingId == '' || shippingId == undefined) {
@@ -284,33 +287,17 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
   // ********************  START OF EDIT INVENTORY MODAL  ************************
 
   $scope.openModal = function (size) {
-    $scope.modalCount++;
-    if ($scope.modalCount > 1) {
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: 'editModalContent.html',
-        controller: 'editModalInstanceCtrl',
-        size: size,
-        resolve: {
-          luxireStock: function () {
-            return { count: $scope.modalCount, data: $scope.dummyInventoryData };
-          }
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'editModalContent.html',
+      controller: 'editModalInstanceCtrl',
+      size: size,
+      resolve: {
+        luxireStock: function () {
+          return { count: $scope.modalCount, data: $scope.products.luxire_stock, product: $scope.products.luxire_product.luxire_stock_id };
         }
-      });
-    } else {
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: 'editModalContent.html',
-        controller: 'editModalInstanceCtrl',
-        size: size,
-        resolve: {
-          luxireStock: function () {
-            return { count: $scope.modalCount, data: $scope.products.luxire_stock, product : $scope.products.luxire_product.luxire_stock_id };
-          }
-        }
-      });
-    }
-
+      }
+    });
 
     modalInstance.result.then(function (luxireStock) {
       $scope.luxireStock = luxireStock;
@@ -357,104 +344,116 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
   // ********************  START  OF FUNCTIONALTY TO UPDATE A PRODUCT  ************************
 
   $scope.editProduct = function () {
-    // var taxon_ids = [];
-    // for (var i = 0; i < $scope.rule.length; i++) {
-    //   taxon_ids[i] = $scope.rule[i].id;
-    // }
+    if ($scope[formName].$valid) {
+      // var taxon_ids = [];
+      // for (var i = 0; i < $scope.rule.length; i++) {
+      //   taxon_ids[i] = $scope.rule[i].id;
+      // }
+      $scope.loading = true;
       var tagsarr = []; // start: 24th march
-    for (i = 0; i < $scope.tagsArr.length; i++) {
-      tagsarr[i] = $scope.tagsArr[i].text;
-    }// end: 24th march
-        var colorarr = [];
-    for (i = 0; i < $scope.colorTagsArr.length; i++) {
-      colorarr[i] = $scope.colorTagsArr[i].text;
+      for (i = 0; i < $scope.tagsArr.length; i++) {
+        tagsarr[i] = $scope.tagsArr[i].text;
+      }// end: 24th march
+      var colorarr = [];
+      for (i = 0; i < $scope.colorTagsArr.length; i++) {
+        colorarr[i] = $scope.colorTagsArr[i].text;
+      }
+      var seasonarr = [];
+      for (i = 0; i < $scope.seasonTagsArr.length; i++) {
+        seasonarr[i] = $scope.seasonTagsArr[i].text;
+      }
+      var usagearr = []; // start: 24th march
+      for (i = 0; i < $scope.usageTagsArr.length; i++) {
+        usagearr[i] = $scope.usageTagsArr[i].text;
+      }// end: 24th march
+      var washCarearr = []; // start: 24th march
+      for (i = 0; i < $scope.washCareTagsArr.length; i++) {
+        washCarearr[i] = $scope.washCareTagsArr[i].text;
+      }// end: 24th march
+      var salesPitcharr = []; // start: 24th march
+      for (i = 0; i < $scope.salesPitchTagsArr.length; i++) {
+        salesPitcharr[i] = $scope.salesPitchTagsArr[i].text;
+      }// end: 24th march
+      $scope.luxire_product["suitable_climates"] = seasonarr.toString(); // converting the season tags input values into a array of string
+      $scope.luxire_product["product_tags"] = tagsarr.toString();   // converting the tags input values into a array of string
+      $scope.luxire_product["product_color"] = colorarr.toString();   // converting the color tags input values into a array of string
+      $scope.luxire_product["usage"] = usagearr.toString();   // 24th march changes:  add this line
+      $scope.luxire_product["wash_care"] = washCarearr.toString();   // 24th march changes:  add this line
+      $scope.luxire_product["sales_pitch"] = salesPitcharr.toString();   // 24th march changes:  add this line
+      $scope.luxire_product["product_tags"] = tagsarr.toString();
+
+      // merging the product structure
+      $scope.product = {};
+      $scope.product["name"] = $scope.products.name;
+      $scope.product["description"] = $scope.products.description;
+      $scope.product["price"] = $scope.products.price;
+      $scope.product["display_price"] = $scope.products.display_price;
+
+      $scope.luxireStock["virtual_count_on_hands"] = $scope.luxireStock.physical_count_on_hands;
+      $scope.postProductData = {};
+      $scope.product["luxire_product_attributes"] = {};
+      $scope.product["luxire_product_attributes"] = $scope.luxire_product;
+      $scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxire_stock.id;
+      //$scope.product["taxon_ids"] = taxon_ids;
+
+      $scope.postProductData["product"] = $scope.product;
+      $scope.postProductData["available_on"] = $scope.date;
+
+      // Get the shipping category id from shipping method
+      $scope.product.shipping_category_id = $scope.shippingMethod.id;
+      $scope.luxire_product.luxire_product_type_id = $scope.productType.id;
+      $scope.luxire_product.luxire_vendor_master_id = $scope.vendor.id;
+
+      // call the update product functionality
+      products.editProduct($scope.products.id, $scope.postProductData).then(function (data) {
+        $scope.loading = false;
+        $scope.alerts.push({ type: 'success', message: 'Product Updated successfully!' });
+
+        // $scope.activeButton('products')
+      }, function (error) {
+        $scope.loading = false;
+        handleError(error, $scope);
+      })
+
+
+    } else {
+      handleValidationError($scope, formName);
     }
-    var seasonarr = [];
-    for (i = 0; i < $scope.seasonTagsArr.length; i++) {
-      seasonarr[i] = $scope.seasonTagsArr[i].text;
-    }
-    var usagearr = []; // start: 24th march
-    for (i = 0; i < $scope.usageTagsArr.length; i++) {
-      usagearr[i] = $scope.usageTagsArr[i].text;
-    }// end: 24th march
-    var washCarearr = []; // start: 24th march
-    for (i = 0; i < $scope.washCareTagsArr.length; i++) {
-      washCarearr[i] = $scope.washCareTagsArr[i].text;
-    }// end: 24th march
-    var salesPitcharr = []; // start: 24th march
-    for (i = 0; i < $scope.salesPitchTagsArr.length; i++) {
-      salesPitcharr[i] = $scope.salesPitchTagsArr[i].text;
-    }// end: 24th march
-    $scope.luxire_product["suitable_climates"] = seasonarr.toString(); // converting the season tags input values into a array of string
-    $scope.luxire_product["product_tags"] = tagsarr.toString();   // converting the tags input values into a array of string
-    $scope.luxire_product["product_color"] = colorarr.toString();   // converting the color tags input values into a array of string
-    $scope.luxire_product["usage"] = usagearr.toString();   // 24th march changes:  add this line
-    $scope.luxire_product["wash_care"] = washCarearr.toString();   // 24th march changes:  add this line
-    $scope.luxire_product["sales_pitch"] = salesPitcharr.toString();   // 24th march changes:  add this line
-     $scope.luxire_product["product_tags"]=tagsarr.toString(); 
-
-    // merging the product structure
-    $scope.product = {};
-    $scope.product["name"] = $scope.products.name;
-    $scope.product["description"] = $scope.products.description;
-    $scope.product["price"] = $scope.products.price;
-    $scope.product["display_price"] = $scope.products.display_price;
-    $scope.product["shipping_category_id"] = 1;
-
-    $scope.luxireStock["virtual_count_on_hands"] = $scope.luxireStock.physical_count_on_hands;
-    $scope.postProductData = {};
-    $scope.product["luxire_product_attributes"] = {};
-    $scope.product["luxire_product_attributes"] = $scope.luxire_product;
-    $scope.product["luxire_product_attributes"]["luxire_stock_id"] = $scope.luxire_stock.id;
-    //$scope.product["taxon_ids"] = taxon_ids;
-
-    $scope.postProductData["product"] = $scope.product;
-    $scope.postProductData["available_on"] = $scope.date;
-
-    // call the update product functionality
-    products.editProduct($scope.products.id, $scope.postProductData).then(function (data) {
-      $scope.alerts.push({ type: 'success', message: 'Product Updated successfully!' });
-      $scope.activeButton('products')
-    }, function (info) {
-      console.log(info);
-    })
+    // ******************** END OF FUNCTIONALTY TO UPDATE A PRODUCT  ************************\
 
 
-  }
-  // ******************** END OF FUNCTIONALTY TO UPDATE A PRODUCT  ************************\
+    //This function is used for controlling the modal (getting the image url)
+    $scope.modalImage = '';
+    $scope.addProduct_variant_image_url = function () {
 
-
-  //This function is used for controlling the modal (getting the image url)
-  $scope.modalImage = '';
-  $scope.addProduct_variant_image_url = function () {
-
-    var modalInstance = $uibModal.open({
-      ariaLabelledBy: 'modal-title',
-      ariaDescribedBy: 'modal-body',
-      templateUrl: 'myModalContent.html',
-      controller: 'editProductVariantModalInstanceCtrl1',
-      size: 'lg',
-      resolve: {
-        items: function () {
-          return $scope.items;
+      var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'myModalContent.html',
+        controller: 'editProductVariantModalInstanceCtrl1',
+        size: 'lg',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
         }
       }
-    }
-    );
-    modalInstance.result.then(function (data) {
-      //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
-      $scope.loading = true;
-      var url = data.items;
-      var uploadPromise = products.upload_image_url_variant($scope.products.id,$scope.master_id, data.items)
-      uploadPromise.then(function (data) {
-        $scope.variant_image.push(url);
-         $window.location.reload();
-        $scope.loading = false;
-        $scope.alerts.push({type: 'success', message: 'Variant Image Uploaded successfully!'});
-      }, function (data) {
-        console.log('error', data);
+      );
+      modalInstance.result.then(function (data) {
+        //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
+        $scope.loading = true;
+        var url = data.items;
+        var uploadPromise = products.upload_image_url_variant($scope.products.id, $scope.master_id, data.items)
+        uploadPromise.then(function (data) {
+          $scope.variant_image.push(url);
+          $window.location.reload();
+          $scope.loading = false;
+          $scope.alerts.push({ type: 'success', message: 'Variant Image Uploaded successfully!' });
+        }, function (data) {
+          console.log('error', data);
+        });
       });
-    });
+    }
   }
   //This function is used for controlling the modal (getting the image)
   $scope.addProduct_variant_image = function () {
@@ -475,16 +474,16 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
       $scope.loading = true;
       $scope.modalImage = data.items;
       //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
-      var uploadPromise = products.upload_image_variant($scope.products.id,$scope.master_id, data.key)
+      var uploadPromise = products.upload_image_variant($scope.products.id, $scope.master_id, data.key)
       uploadPromise.then(function (data) {
         $scope.variant_image.push(data.items);
         $scope.loading = false;
-        $scope.alerts.push({type: 'success', message: 'Variant Image Uploaded successfully!'});
+        $scope.alerts.push({ type: 'success', message: 'Variant Image Uploaded successfully!' });
         $window.location.reload();
 
       }, function (data) {
         $scope.loading = false;
-        $scope.alerts.push({type: 'warning', message: 'Please select an image to upload'});
+        $scope.alerts.push({ type: 'warning', message: 'Please select an image to upload' });
         console.log('error', data);
       });
 
@@ -523,12 +522,13 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
     });
     modalInstance.result.then(function (data) {
       $scope.loading = true;
-      products.delete_variant_image($scope.products.id,a).then(function (data) {
+      products.delete_variant_image($scope.products.id, a).then(function (data) {
         $window.location.reload();
         $scope.loading = false;
-        $scope.alerts.push({type: 'success', message: 'Variant Image Deleted successfully!'});
-      }, function (data) {
-        console.log('error', data);
+        $scope.alerts.push({ type: 'success', message: 'Variant Image Deleted successfully!' });
+      }, function (error) {
+        $scope.loading = false;
+        handleError(error, $scope);
       });
     });
   }
@@ -537,7 +537,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
   //This function is to display the date in custom format as dd/mm/yyyy
   $scope.dateFunction = function (date) {
     var dt = date.getDate();
-    var month = date.getMonth()+1;
+    var month = date.getMonth() + 1;
     var year = date.getFullYear();
   }($scope.datePicker);
   //This is the function which invokes the datePickerModal.html modal
@@ -556,22 +556,24 @@ luxire.controller('editProductController', function ($scope, $window, $timeout,p
     });
     modalInstance.result.then(function (data) {
       var dt = data.date.getDate();
-      var month = data.date.getMonth()+1;
+      var month = data.date.getMonth() + 1;
       var year = data.date.getFullYear();
       $scope.date = dt + '/' + month + '/' + year;
     })
   }
-function getIndex(name, product_types){
-  $scope.loading = true;
-  let index = 0;
-  for(let product_type of product_types){
-    if(product_type.product_type === name){
-      break;
+
+// setDropdownValues function is used to set the drop down values of shippingMethods, product type, vendor, etc.
+  function setDropdownValues(element, selectedId, modalAttribute) {
+    element = element || [];
+
+    for (var counter = 0; counter < element.length; counter++) {
+      if (selectedId === element[counter].id) {
+        $scope[modalAttribute] = element[counter];
+        break;
+      }
     }
-    index++;
+
   }
-  return index;
-}
 });
 //This is myModalContent.html controller
 luxire.controller('editProductVariantModalInstanceCtrl1', function ($scope, items, $uibModalInstance, products) {
