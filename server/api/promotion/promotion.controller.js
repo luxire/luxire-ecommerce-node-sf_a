@@ -16,7 +16,7 @@ var env = require('../../config/constants');
 
 // Get list of all promotions
 exports.index = function(req, res) {
-  req.query.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  req.query.token = req.headers['X-Spree-Token'];
   console.log(req.query);
   var qstr = ''
   for(var x in req.query){
@@ -45,7 +45,7 @@ exports.index = function(req, res) {
 exports.create = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.spree.host+env.spree.promotions+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'?token='+req.headers['X-Spree-Token'],
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -60,10 +60,10 @@ exports.create = function(req, res){
 
 //Delete a Promotion
 exports.destroy = function(req, res){
-  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  req.params.token = req.headers['X-Spree-Token'];
   var params = querystring.stringify(req.params);
   http
-    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058', function(error, response, body){
+    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'], function(error, response, body){
       if(error == null){
         res.status(response.statusCode).send(body);
       }
@@ -77,7 +77,7 @@ exports.destroy = function(req, res){
 exports.add_rule = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules?token='+req.headers['X-Spree-Token'],
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -93,9 +93,9 @@ exports.add_rule = function(req, res){
 //Delete a rule from Promotion
 exports.delete_rule = function(req, res){
   console.log(req.params);
-  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  req.params.token = req.headers['X-Spree-Token'];
   http
-    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules/'+req.params.rule_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058', function(error, response, body){
+    .del(env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_rules/'+req.params.rule_id+'?token='+req.headers['X-Spree-Token'], function(error, response, body){
       if(error == null){
         res.status(response.statusCode).send(body);
       }
@@ -109,7 +109,7 @@ exports.delete_rule = function(req, res){
 exports.add_action = function(req, res){
   console.log(req.body)
   http.post({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions?token='+req.headers['X-Spree-Token'],
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -126,9 +126,9 @@ exports.add_action = function(req, res){
 exports.delete_action = function(req, res){
   console.log(req.params);
   console.log(req.body);
-  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  req.params.token = req.headers['X-Spree-Token'];
   http.del({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions/'+req.params.action_id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'/customized_promotion_actions/'+req.params.action_id+'?token='+req.headers['X-Spree-Token'],
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -145,7 +145,7 @@ exports.delete_action = function(req, res){
 exports.update = function(req, res){
   console.log(req.body);
   http.put({
-    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'?token=99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058',
+    uri: env.spree.host+env.spree.promotions+'/'+req.params.id+'?token='+req.headers['X-Spree-Token'],
     headers:{'content-type': 'application/json'},
     body:JSON.stringify(req.body)
   },function(error,response,body){
@@ -163,7 +163,7 @@ exports.update = function(req, res){
 
 //Get product details
 exports.show = function(req, res){
-  req.params.token = '99da15069ef6b38952aa73d4550d88dd266fc302a4c8b058';
+  req.params.token = req.headers['X-Spree-Token'];
   var params = querystring.stringify(req.params);
   http
     .get(env.spree.host+env.spree.products+'/'+req.params.id+'?'+params, function(error, response, body){
