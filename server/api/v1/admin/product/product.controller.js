@@ -18,80 +18,80 @@ var util = require('util');
 var fs = require('fs');
 
 // Get list of all products
-exports.index = function(req, res) {
+exports.index = function (req, res) {
   var qstr = ''
-  for(var x in req.query){
-    if(typeof req.query[x]=='object'){
-      for(var y in req.query[x]){
-        qstr=qstr+x+'['+y+']='+req.query[x][y]+'&'
+  for (var x in req.query) {
+    if (typeof req.query[x] == 'object') {
+      for (var y in req.query[x]) {
+        qstr = qstr + x + '[' + y + ']=' + req.query[x][y] + '&'
       }
     }
-    else{
-      qstr=qstr+x+'='+req.query[x]+'&'
+    else {
+      qstr = qstr + x + '=' + req.query[x] + '&'
     }
   }
   console.log(qstr);
   http
     .get({
-      uri: constants.spree.host+constants.spree.adminProducts+'?'+qstr,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
-    }, function(error, response, body){
-      if(error){
+      uri: constants.spree.host + constants.spree.adminProducts + '?' + qstr,
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
+    }, function (error, response, body) {
+      if (error) {
         res.status(500).send(error.syscall);
       }
-      else{
+      else {
         res.status(response.statusCode).send(body);
       };
-  });
+    });
 };
 
 //Get product by id
-exports.show = function(req, res){
+exports.show = function (req, res) {
   http
     .get({
-      uri: constants.spree.host+constants.spree.adminProducts+'/'+req.params.id,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+      uri: constants.spree.host + constants.spree.adminProducts + '/' + req.params.id,
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
     }
-      , function(error, response, body){
-      if(error){
+    , function (error, response, body) {
+      if (error) {
         res.status(500).send(error.syscall);
       }
-      else{
+      else {
         res.status(response.statusCode).send(body);
       };
-  });
+    });
 };
 
 //Add a product
-exports.create = function(req, res){
+exports.create = function (req, res) {
   http.post({
-    uri: constants.spree.host+constants.spree.products,
-    headers:{
+    uri: constants.spree.host + constants.spree.products,
+    headers: {
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
-    if(error){
+    body: JSON.stringify(req.body)
+  }, function (error, response, body) {
+    if (error) {
       res.status(500).send(error.syscall);
     }
-    else{
+    else {
       http
         .post({
           uri: constants.redis.host + constants.redis.update,
-          headers:{
+          headers: {
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({ids: body})
-        }, function(error, response, body){
-        if(error){
-          console.log('error', error);
-        }
-        else{
-          console.log('success', body);
-        };
-      });
+          body: JSON.stringify({ ids: body })
+        }, function (error, response, body) {
+          if (error) {
+            console.log('error', error);
+          }
+          else {
+            console.log('success', body);
+          };
+        });
       res.status(response.statusCode).send(body);
 
     };
@@ -101,37 +101,37 @@ exports.create = function(req, res){
 
 
 //Update product details of a product
-exports.update = function(req, res){
+exports.update = function (req, res) {
   console.log(req.body);
   http.put({
-    uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
-    headers:{
+    uri: constants.spree.host + constants.spree.products + '/' + req.params.id,
+    headers: {
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
+    body: JSON.stringify(req.body)
+  }, function (error, response, body) {
     console.log(response);
-    if(error){
+    if (error) {
       res.status(500).send(error.syscall);
     }
-    else{
+    else {
       http
         .post({
           uri: constants.redis.host + constants.redis.update,
-          headers:{
+          headers: {
             'content-type': 'application/json',
             'X-Spree-Token': req.headers['X-Spree-Token']
           },
-          body:JSON.stringify({product: body})
-        }, function(error, response, body){
-        if(error){
-          console.log('error', error);
-        }
-        else{
-          console.log('success', body);
-        };
-      });
+          body: JSON.stringify({ product: body })
+        }, function (error, response, body) {
+          if (error) {
+            console.log('error', error);
+          }
+          else {
+            console.log('success', body);
+          };
+        });
       res.status(response.statusCode).send(body);
 
 
@@ -141,58 +141,58 @@ exports.update = function(req, res){
 };
 
 //Delete a product
-exports.destroy = function(req, res){
+exports.destroy = function (req, res) {
   http
     .del({
-      uri: constants.redis.host+constants.redis.products+'/'+req.params.id,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
-    }, function(error, response, body){
-      if(error){
-        console.log('error', error);
-        // res.status(500).send(error.syscall);
-      }
-      else{
-        console.log('success', body);
-        // res.status(response.statusCode).send(body);
-      };
-  });
-  http
-    .del({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
-    }, function(error, response, body){
-      if(error){
+      uri: constants.spree.host + constants.spree.products + '/' + req.params.id,
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
+    }, function (error, response, body) {
+      if (error) {
         res.status(500).send(error.syscall);
       }
-      else{
-        res.status(response.statusCode).send(body);
-      };
-  });
-};
-
-//get variants of a product
-exports.productVariants = function(req, res) {
-  http
-    .get({
-      uri: constants.spree.host+constants.spree.products+'/'+req.params.id+'/variants',
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
-    }, function(error, response, body){
-      if(error){
-        res.status(500).send(error.syscall);
-      }
-      else{
+      else {
+        http
+          .del({
+            uri: constants.redis.host + constants.redis.products + '/' + req.params.id,
+            headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
+          }, function (error, response, body) {
+            if (error) {
+              console.log('error', error);
+              // res.status(500).send(error.syscall);
+            }
+            else {
+              console.log('success', body);
+              // res.status(response.statusCode).send(body);
+            };
+          });
         res.status(response.statusCode).send(body);
       };
     });
 };
 
-exports.add_variant_image = function(req, res){
+//get variants of a product
+exports.productVariants = function (req, res) {
+  http
+    .get({
+      uri: constants.spree.host + constants.spree.products + '/' + req.params.id + '/variants',
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
+    }, function (error, response, body) {
+      if (error) {
+        res.status(500).send(error.syscall);
+      }
+      else {
+        res.status(response.statusCode).send(body);
+      };
+    });
+};
+
+exports.add_variant_image = function (req, res) {
   console.log('params', req.params);
   var form = new formidable.IncomingForm();
   console.log('form', form);
-  form.parse(req, function(err, fields, files) {
+  form.parse(req, function (err, fields, files) {
     console.log("fields", fields);
-    console.log("file object in node is: ",files.file.Filepath);
+    console.log("file object in node is: ", files.file.Filepath);
     var formDataToPost = {};
     // formDataToPost.product_id = req.params.product_id;
     // formDataToPost["image[viewable_id]"] = req.params.variant_id;
@@ -206,16 +206,16 @@ exports.add_variant_image = function(req, res){
     //   }
     // };
     http.post({
-      uri: constants.spree.host+'/customized_images',
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']},
+      uri: constants.spree.host + '/customized_images',
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] },
       formData: formDataToPost
-    }, function(error, response, body){
-        if(error){
-          res.status(500).send(error.syscall);
-        }
-        else{
-          res.status(response.statusCode).send(body);
-        };
+    }, function (error, response, body) {
+      if (error) {
+        res.status(500).send(error.syscall);
+      }
+      else {
+        res.status(response.statusCode).send(body);
+      };
     });
 
   });
@@ -223,34 +223,34 @@ exports.add_variant_image = function(req, res){
 }
 
 //TODO needs to be tested
-exports.createVariants = function(req, res){
+exports.createVariants = function (req, res) {
   console.log("create variants fun in node is calling...");
-  console.log("variant id is: ",req.params.id);
-  console.log("variant price is: ",req.body);
+  console.log("variant id is: ", req.params.id);
+  console.log("variant price is: ", req.body);
   http.post({
-    uri: env.spree.host+env.spree.products+'/'+req.params.id+'/variants',
-    headers:{
+    uri: env.spree.host + env.spree.products + '/' + req.params.id + '/variants',
+    headers: {
       'content-type': 'application/json',
       'X-Spree-Token': req.headers['X-Spree-Token']
     },
-    body:JSON.stringify(req.body)
-  },function(error,response,body){
-    if(error){
+    body: JSON.stringify(req.body)
+  }, function (error, response, body) {
+    if (error) {
       res.status(500).send(error.syscall);
     }
-    else{
+    else {
       res.status(response.statusCode).send(body);
     };
   })
 };
 
-exports.csv_import = function(req,res){
+exports.csv_import = function (req, res) {
   console.log('header', req.headers['X-Spree-Token']);
   var form = new formidable.IncomingForm();
-  form.parse(req, function(err, fields, files) {
+  form.parse(req, function (err, fields, files) {
     var formDataToPost = {
       file: {
-        value:  fs.createReadStream(files.file.path),
+        value: fs.createReadStream(files.file.path),
         options: {
           filename: files.file.name,
           contentType: files.file.type
@@ -258,68 +258,69 @@ exports.csv_import = function(req,res){
       }
     };
     http.post({
-      uri: constants.spree.host+constants.spree.product_csv_import,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']},
-      timeout: 6*60*60*1000,
-      formData: formDataToPost},
-       function (err, response, body) {
-         console.log('response', response);
-         if(err){
-           console.log(err);
-           res.status(500).send(err.syscall);
-         }
-         else{
-           res.status(response.statusCode).send(body);
-         };
-    });
+      uri: constants.spree.host + constants.spree.product_csv_import,
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] },
+      timeout: 6 * 60 * 60 * 1000,
+      formData: formDataToPost
+    },
+      function (err, response, body) {
+        console.log('response', response);
+        if (err) {
+          console.log(err);
+          res.status(500).send(err.syscall);
+        }
+        else {
+          res.status(response.statusCode).send(body);
+        };
+      });
   });
 }
-exports.searchProduct = function(req, res){
-    var query = req.query.q.name_cont;
-    console.log("query string  : ",query);
-    console.log(`product search url is: ${constants.spree.host}${constants.spree.products}?q[name_cont]=${query}&q[m]=or&q[luxire_stock_parent_sku_eq]=${query}`);
+exports.searchProduct = function (req, res) {
+  var query = req.query.q.name_cont;
+  console.log("query string  : ", query);
+  console.log(`product search url is: ${constants.spree.host}${constants.spree.products}?q[name_cont]=${query}&q[m]=or&q[luxire_stock_parent_sku_eq]=${query}`);
   http
     .get({
       uri: `${constants.spree.host}${constants.spree.products}?q[name_cont]=${query}&q[m]=or&q[luxire_stock_parent_sku_eq]=${query}`,
-      headers: {'X-Spree-Token': req.headers['X-Spree-Token']}
+      headers: { 'X-Spree-Token': req.headers['X-Spree-Token'] }
     }
-      , function(error, response, body){
-      if(error){
+    , function (error, response, body) {
+      if (error) {
         res.status(500).send(error.syscall);
       }
-      else{
+      else {
         res.status(response.statusCode).send(body);
       };
-  });
+    });
 };
 
-exports.sync_spree_redis = function(req, res){
+exports.sync_spree_redis = function (req, res) {
   http
     .post({
-      uri: constants.redis.host+constants.redis.sync,
-      headers:{
+      uri: constants.redis.host + constants.redis.sync,
+      headers: {
         'content-type': 'application/json',
         'X-Spree-Token': req.headers['X-Spree-Token']
       },
-      body:JSON.stringify(req.body)
-    }, function(error, response, body){
-    if(error){
-      res.status(500).send(error.syscall);
-    }
-    else{
-      res.status(response.statusCode).send(JSON.stringify(body));
-    };
-  });
+      body: JSON.stringify(req.body)
+    }, function (error, response, body) {
+      if (error) {
+        res.status(500).send(error.syscall);
+      }
+      else {
+        res.status(response.statusCode).send(JSON.stringify(body));
+      };
+    });
 };
 
-exports.getProductsFromRedis = function(req,res){
+exports.getProductsFromRedis = function (req, res) {
   let ids = req.query.ids
-  let queryString = {ids: ids}
-  http.get({url: `${constants.redis.host}${constants.redis.getProductsShortDesc}`, qs: queryString},  function(error, response, body){
-    if(error){
+  let queryString = { ids: ids }
+  http.get({ url: `${constants.redis.host}${constants.redis.getProductsShortDesc}`, qs: queryString }, function (error, response, body) {
+    if (error) {
       res.status(500).send(error.syscall);
     }
-    else{
+    else {
       res.json(JSON.parse(body));
     }
   });
