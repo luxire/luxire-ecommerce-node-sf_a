@@ -94,7 +94,7 @@ exports.addVariantImageFromUrl = function (req, res) {
 
 
 exports.deleteVariantImage = function (req, res) {
-    http.delete({
+    http.del({
         uri: constants.spree.host + constants.spree.deleteImage + '/' + req.params.id,
         headers: {
             'content-type': 'application/json',
