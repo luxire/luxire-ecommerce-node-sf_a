@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CustomerCheckoutDeliveryController',function($scope, $rootScope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $window){
+.controller('CustomerCheckoutDeliveryController',function($scope, $state, orders, $rootScope, $stateParams, ImageHandler, CustomerOrders, $window){
   window.scrollTo(0, 0);
   $scope.loading = true;
   function update_state(order){
@@ -75,6 +75,12 @@ angular.module('luxire')
         $scope.loading = false;
       }
     },function(error){
+      $scope.loading = false;
+      if(error.data && error.data.msg.includes("out of stock")){
+          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
+        }else{
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        }
       console.error(error);
     });
   };

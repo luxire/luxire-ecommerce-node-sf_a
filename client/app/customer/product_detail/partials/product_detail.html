@@ -153,16 +153,16 @@
   /**/
   /* all */
 
-  ::-webkit-input-placeholder {
+   ::-webkit-input-placeholder {
     font-size: 90%;
   }
 
-  ::-moz-placeholder {
+   ::-moz-placeholder {
     font-size: 90%;
   }
   /* firefox 19+ */
 
-  :-ms-input-placeholder {
+   :-ms-input-placeholder {
     font-size: 90%;
   }
   /* ie */
@@ -573,30 +573,29 @@ style carousel
         <div ng-if="is_fabric_product" class="row" style="margin-left: 0px; margin-right: 0px">
           <!--Conditional layouting for product type-->
           <div ng-hide="loading_product" class="row" style="text-align: left">
-            <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-left: 0px">
-              <img ng-if="product&&product.luxire_product&&product.luxire_product.gsm" ng-cloak style="max-width: 13%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png"
+            <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-left: 0px" ng-if="product && product.luxire_product && product.luxire_product.gsm !== 'NA' && product.luxire_product.gsm != 0">
+              <img ng-cloak style="max-width: 13%" ng-src="assets/images/customer/luxire-weight-icons/weight-{{weight_index(product.luxire_product.gsm, product.product_type.product_type)}}.png"
                 alt="" />
               <span>&nbsp;
                   {{product.luxire_product.gsm}} gsm / {{get_ounce_weight(product.luxire_product.gsm)}} Oz
                 </span>
             </div>
-            <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3">
-              <img ng-if="product&&product.luxire_product&&product.luxire_product.thickness" ng-cloak style="max-width: 16%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png"
+            <div class="col col-xs-3 col-sm-3 col-md-3 col-lg-3" ng-if="product&&product.luxire_product && product.luxire_product.thickness !== 'NA' && product.luxire_product.thickness != 0">
+              <img ng-cloak style="max-width: 16%" ng-src="assets/images/customer/luxire-thickness-icons/{{thickness_index(product.luxire_product.thickness)}}.png"
                 alt="" />&nbsp;&nbsp;
               <span>&nbsp;
                   {{product.luxire_product.thickness.split('mm')[0]}}
                 </span>
             </div>
-            <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
-              <img ng-if="product&&product.luxire_product&&product.luxire_product.stiffness" ng-cloak style="max-width: 26%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png"
+            <div class="col col-xs-2 col-sm-2 col-md-2 col-lg-2" ng-if=" product && product.luxire_product && product.luxire_product.stiffness !== 'NA' && product.luxire_product.stiffness != 0">
+              <img ng-cloak style="max-width: 26%" ng-src="assets/images/customer/luxire-stiffness-icons/{{stiffness_index(product.luxire_product.stiffness, product.luxire_product.stiffness_unit)}}.png"
                 alt="" />
               <span>&nbsp;
                   {{product.luxire_product.stiffness}}&nbsp;
                 </span>
             </div>
-            <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: -1.5%">
-              <img ng-if="product&&product.luxire_product&& product.luxire_product.wash_care && product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 "
-                ng-cloak style="max-width: 26%;margin-left: -8%" ng-src="assets/images/customer/luxire-wash-icons/{{wash_care(product.luxire_product.wash_care)}}.png"
+            <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: -1.5%" ng-if="product&&product.luxire_product && product.luxire_product.wash_care && product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 ">
+              <img ng-cloak style="max-width: 26%;margin-left: -8%" ng-src="assets/images/customer/luxire-wash-icons/{{wash_care(product.luxire_product.wash_care)}}.png"
                 alt="" />&nbsp;&nbsp;
               <span ng-if="product.luxire_product.wash_care.toLowerCase().indexOf('machine')>-1 || product.luxire_product.wash_care.toLowerCase().indexOf('hand')>-1 "
                 style="font-size: 90%">&nbsp;
@@ -611,12 +610,15 @@ style carousel
             <div ng-hide="loading_product" id="shirt-description" style="font-size: 100%;text-align: justify">
               <p style="font-weight: 300">
                 <span>
-                        <span ng-if="product.luxire_product.mill!=='NA'">Fabric by {{product.luxire_product.mill}} <b>|</b></span>
+                  <span ng-if="product.luxire_product.mill!=='NA'">Fabric woven by {{product.luxire_product.mill}}
+                   <span ng-if="product.luxire_product.country_of_origin !== 'NA'"> , in {{product.luxire_product.country_of_origin}} </span>
+                   <b>|</b>
+                  </span>
                 <span ng-if="product.luxire_product.composition!=='NA'"> {{product.luxire_product.composition}} <b>|</b></span>
                 <span ng-if="product.luxire_product.technical_description!=='NA'"> {{product.luxire_product.technical_description}} <b>|</b></span>
                 <span ng-if="product.luxire_product.suitable_climates!=='NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span>
-                <span ng-if="product.luxire_product.gsm!='NA'"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
-                <span ng-if="product.luxire_product.thickness!='NA'&&product.luxire_product.stiffness!='NA'"> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
+                <span ng-if="product.luxire_product.gsm!='NA' $$ product.luxire_product.gsm != 0"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
+                <span ng-if="product.luxire_product.thickness!='NA' && product.luxire_product.stiffness!='NA' && product.luxire_product.stiffness != 0 "> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
                 <span ng-if="product.luxire_product.wash_care!='NA'"> {{product.luxire_product.wash_care}} </span>
                 <span ng-if="product.luxire_product.sales_pitch!='NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
                 </span>
@@ -1339,13 +1341,14 @@ style carousel
           </div>
         </div>
         <div style="width:13%;margin-left:75%;margin-top:-5%" ng-click="addMeasurementCustomNote()">
-            <uib-accordion close-others="true">
-                  <uib-accordion-group heading="Add notes" >
-                     <textarea rows="2" cols="23" style="margin-top: 1%" ng-model="cart_object['body_measurement_attributes']['custom_notes']['value']" placeholder="notes:">
+          <uib-accordion close-others="true">
+            <uib-accordion-group heading="Add notes">
+              <textarea rows="2" cols="23" style="margin-top: 1%" ng-model="cart_object['body_measurement_attributes']['custom_notes']['value']"
+                placeholder="notes:">
                     </textarea>
-                  </uib-accordion-group>
-              </uib-accordion>
-          </div>
+            </uib-accordion-group>
+          </uib-accordion>
+        </div>
       </div>
       <div class="standard-measurement-fields">
         <div class="row" style="margin: 0 0 1% 0;text-align: center">
@@ -1611,7 +1614,8 @@ style carousel
       <div style="text-align: center">
         <h4>**Mark the packet as "SAMPLE CLOTHING"**</h4>
         <h4>**Please DO NOT include a printout of your order with the sample. Only include your order number on a piece of paper.
-          **</h4>
+          **
+        </h4>
       </div>
       <div style="width: 100%;text-align: left">
         <h5>Attn: Srinivas Reddy</h5>
@@ -1720,8 +1724,7 @@ style carousel
               <div style="text-align: center;margin-top: 1%;font-size: 150%;">
                 {{active_detail_style.name}} <span ng-show="active_detail_style.additional_cost">[</span><span ng-show="active_detail_style.additional_cost"
                   ng-bind-html="currency_symbols(active_detail_style.additional_cost[selected_currency], selected_currency)"></span>
-                <span
-                  ng-show="active_detail_style.additional_cost">]</span>
+                <span ng-show="active_detail_style.additional_cost">]</span>
               </div>
               <div style="text-align: center;margin-top: 3%;">
                 <div ng-class="{'shrink-style-details': !more_details_on_style}" ng-bind-html="get_style_description_as_html(active_detail_style.description)"></div>
@@ -1777,7 +1780,8 @@ style carousel
               </div>
               <div style="width: 48%;text-align: left;display: inline-block;display: inline-block;text-decoration: underline;color: #7F0E6E;cursor: default"
                 ng-init="attribute.options=cart_object['customization_attributes'][attribute.name]['options']" uib-popover-template="attr_options_key_length(attribute.options) ? view_measurements.templateUrl : ''"
-                popover-placement="right" popover-trigger="mouseenter" popover-animation="false" popover-popup-delay="1000" animate-on-change="cart_object['customization_attributes'][attribute.name]['value']">
+                popover-placement="right" popover-trigger="mouseenter" popover-animation="false" popover-popup-delay="1000"
+                animate-on-change="cart_object['customization_attributes'][attribute.name]['value']">
                 {{cart_object["customization_attributes"][attribute.name]['value']}}
               </div>
             </div>
@@ -1927,7 +1931,9 @@ style carousel
                     <div ng-show="selected_bespoke_attribute.category=='c'&&cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != undefined && cart_object['customization_attributes'][selected_bespoke_attribute.name]['value'] != ''"
                       class="row" style="height: 100%;margin-left: 0px; margin-right: 0px">
                       <div style="border-bottom: solid 1px #E0E0E0; padding: 10% 5%">
-                        <p style="margin-bottom: 0px; text-decoration: underline;" ng-init="pleat = 'No Pleat'">{{ (cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']+' '+selected_bespoke_attribute.name) === 'No Back' ? pleat : cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']+' '+selected_bespoke_attribute.name }}</p>
+                        <p style="margin-bottom: 0px; text-decoration: underline;" ng-init="pleat = 'No Pleat'">{{ (cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']+' '+selected_bespoke_attribute.name)
+                          === 'No Back' ? pleat : cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']+'
+                          '+selected_bespoke_attribute.name }}</p>
                         <!--//p style="margin-bottom: 0px" ng-repeat="help in selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help'].split(';')">{{help}}</p -->
                         <!--// {{selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image']}}
                                 // {{getImage(selected_bespoke_attribute['value'][cart_object['customization_attributes'][selected_bespoke_attribute.name]['value']]['help_image'])}} -->
@@ -1949,7 +1955,8 @@ style carousel
                               {{style_property}}
                             </div>
                             <div ng-if="!checkIsObject(style_values)" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 0px">
-                              <input type="text" class="form-control input-sm" ng-change="changeCollarBackHeight(style_property,selected_bespoke_attribute.name)"placeholder="{{style_property}}" ng-model="cart_object['customization_attributes'][selected_bespoke_attribute.name]['options'][style_property]">
+                              <input type="text" class="form-control input-sm" ng-change="changeCollarBackHeight(style_property,selected_bespoke_attribute.name)"
+                                placeholder="{{style_property}}" ng-model="cart_object['customization_attributes'][selected_bespoke_attribute.name]['options'][style_property]">
                             </div>
                             <div style="padding: 0px" ng-if="checkIsObject(style_values)" class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
                               <select class="form-control input-sm" name="repeatSelect" id="repeatSelect" ng-model="cart_object['customization_attributes'][selected_bespoke_attribute.name]['options'][style_property]">
@@ -2034,45 +2041,45 @@ style carousel
                       </div>
 
                     </div>
-                     <!--This is for adding the custom styling for personalisation attributes-->
-                      <div ng-if="showCustomNotes" style="padding: 2%">
-                        <div style="margin-top: 5%">
-                          <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block"
-                            ng-click="add_personalization_custom_image()">Add Image</button>
-                          <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block"
-                            ng-click="add_personalization_custom_note()">Add Note</button>
-                          <uib-accordion ng-show ="showImageAccordian" close-others="true" is-open="true">
+                    <!--This is for adding the custom styling for personalisation attributes-->
+                    <div ng-if="showCustomNotes" style="padding: 2%">
+                      <div style="margin-top: 5%">
+                        <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block"
+                          ng-click="add_personalization_custom_image()">Add Image</button>
+                        <button class="btn btn-default" style="border-radius: 0px; background: #7F0E6E; color: white; margin-bottom: 3%;display: inline-block"
+                          ng-click="add_personalization_custom_note()">Add Note</button>
+                        <uib-accordion ng-show="showImageAccordian" close-others="true" is-open="true">
 
-                            <uib-accordion-group heading="custom-image- {{$index+1}}" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']"
-                              ng-repeat="custom_image in cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']">
-                              <div ng-if="custom_image.url!=''" style="width: 100%">
-                                <div style="text-align: right; margin-bottom: -5.5%;margin-right: -3%">
-                                  <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300; color: grey" ng-click="delete_personalization_custom_image($index)"></i>
-                                </div>
-                                <img style="width: 100%" class="img-responsive" ng-src="{{getImage(custom_image.url)}}" />
-
+                          <uib-accordion-group heading="custom-image- {{$index+1}}" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']"
+                            ng-repeat="custom_image in cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_images']">
+                            <div ng-if="custom_image.url!=''" style="width: 100%">
+                              <div style="text-align: right; margin-bottom: -5.5%;margin-right: -3%">
+                                <i class="fa fa-times" style="font-size: 125%;cursor: pointer;font-weight: 300; color: grey" ng-click="delete_personalization_custom_image($index)"></i>
                               </div>
-                              <span>Image
+                              <img style="width: 100%" class="img-responsive" ng-src="{{getImage(custom_image.url)}}" />
+
+                            </div>
+                            <span>Image
                                         <input type="file" name="name" ng-file-select ng-file-change="upload_personalization_custom_image($files, $index)" value=""><br>
 
                                       </span>
-                              <textarea rows="2" cols="23" class="form-control" style="margin-top: 1%" ng-model="custom_image.notes" placeholder="notes:">
+                            <textarea rows="2" cols="23" class="form-control" style="margin-top: 1%" ng-model="custom_image.notes" placeholder="notes:">
                                       </textarea>
-                            </uib-accordion-group>
-                          </uib-accordion>
-                          
-                          <uib-accordion ng-show="showNoteAccordian" close-others="true" is-open="true">
-                            <uib-accordion-group heading="custom-notes- {{$index+1}}" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']"
-                              ng-repeat="custom_note in cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']">
-                              <textarea rows="2" cols="23" class="form-control" style="margin-top: 1%" ng-model="custom_note.content" placeholder="notes:">
+                          </uib-accordion-group>
+                        </uib-accordion>
+
+                        <uib-accordion ng-show="showNoteAccordian" close-others="true" is-open="true">
+                          <uib-accordion-group heading="custom-notes- {{$index+1}}" ng-if="cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']"
+                            ng-repeat="custom_note in cart_object['personalization_attributes'][selected_bespoke_attribute.name]['options']['custom_notes']">
+                            <textarea rows="2" cols="23" class="form-control" style="margin-top: 1%" ng-model="custom_note.content" placeholder="notes:">
                                       </textarea>
 
-                              <!--//hr style="border-bottom: solid 1px #959595"-->
-                            </uib-accordion-group>
-                          </uib-accordion>
-                        </div>
-
+                            <!--//hr style="border-bottom: solid 1px #959595"-->
+                          </uib-accordion-group>
+                        </uib-accordion>
                       </div>
+
+                    </div>
                     <div ng-if="selected_bespoke_attribute.category=='p'&&selected_bespoke_attribute.name.toLowerCase()=='monogram' &&cart_object['personalization_attributes'].hasOwnProperty(selected_bespoke_attribute.name)"
                       ng-repeat="(style_property,style_values) in monogram_options" style="padding-top: 10%">
                       <div ng-show="style_property && style_property.toLowerCase() == 'monogram'" style="background: #F4F5F5; " ng-repeat="(property_key, property_val) in style_values track by $index">
@@ -2225,6 +2232,19 @@ style carousel
         {{selected_measurement_unit}}
       </div>
     </div>
+    <div ng-if="summary_type == 'measurement' && cart_object['body_measurement_attributes']['custom_notes'] && cart_object['body_measurement_attributes']['custom_notes']['value']"
+      style="font-size: 110%;font-weight: 500">
+      <div style="display: inline-block;width: 30%">
+        Notes :
+      </div>
+      <div style="display: inline-block;width: 30%;">
+        {{cart_object['body_measurement_attributes']['custom_notes']['value']}}
+      </div>
+    </div>
+
+
+
+
     <uib-accordion close-others="true">
       <uib-accordion-group ng-if="summary_type == 'style'" is-open="true">
         <uib-accordion-heading>
@@ -2417,4 +2437,3 @@ style carousel
   <span class="fa fa-spinner fa-spin fa-4x"></span>
   <br /><br /> Loading, please wait...
 </p>
-

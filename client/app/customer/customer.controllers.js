@@ -660,8 +660,11 @@ $scope.searchEvent = function(str){
         });
       },function(error){
         $scope.loading_product = false;
-
-        $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        if(error.data && error.data.msg.includes("out of stock")){
+          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
+        }else{
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        }
         console.error(error);
       });
     }
@@ -676,8 +679,11 @@ $scope.searchEvent = function(str){
         $state.go('customer.pre_cart');
       },function(error){
         $scope.loading_product = false;
-
-        $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        if(error.data && error.data.msg.includes("out of stock")){
+          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
+        }else{
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        }
         console.error(error);
       });
     }

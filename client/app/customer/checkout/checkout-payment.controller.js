@@ -191,6 +191,7 @@ angular.module('luxire')
         CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
           $rootScope.luxire_cart = data.data;
           $scope.loading = false;
+          $scope.gift_card_code = '';
           $rootScope.alerts.push({type: 'success', message: 'GIft card applied Successfuly!'});
         }, function(error){
           $scope.loading = false;
@@ -199,7 +200,12 @@ angular.module('luxire')
         });
       },
       function(error){
-        $rootScope.alerts.push({type: 'danger', message: 'error applying gift card'});
+        $scope.loading = false;
+        if(error.data && error.data.reason){
+            $rootScope.alerts.push({type: 'danger', message: error.data.reason});
+          }else{
+            $rootScope.alerts.push({type: 'danger', message: 'error applying gift card'});
+          }
       });
     }
     else{
@@ -260,6 +266,11 @@ angular.module('luxire')
         console.log('data', data);
       }, function(error){
         $scope.loading = false;
+        if(error.data && error.data.msg.includes("out of stock")){
+          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
+        }else{
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        }
         console.log('data', error);
       });
     }

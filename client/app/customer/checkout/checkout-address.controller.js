@@ -1,5 +1,5 @@
 angular.module('luxire')
-.controller('CustomerCheckoutAddressController',function($scope, $state, orders, $rootScope, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams, CustomerAuthentication, $window){
+.controller('CustomerCheckoutAddressController',function($scope, $state, orders, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams, CustomerAuthentication, $window){
   window.scrollTo(0, 0);
   console.log('CartController params', $stateParams);
   $scope.states = [];
@@ -181,6 +181,11 @@ angular.module('luxire')
         $state.go('customer.checkout_delivery');
       },function(error){
         console.log(error);
+        if(error.data && error.data.msg.includes("out of stock")){
+          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
+        }else{
+          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+        }
         process_errors(error.data);
         $scope.load_address = false;
       });
