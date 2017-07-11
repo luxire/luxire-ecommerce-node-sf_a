@@ -419,42 +419,42 @@ luxire.controller('editProductController', function ($scope, $window, $timeout, 
     } else {
       handleValidationError($scope, formName);
     }
-    // ******************** END OF FUNCTIONALTY TO UPDATE A PRODUCT  ************************\
+  }
+  // ******************** END OF FUNCTIONALTY TO UPDATE A PRODUCT  ************************\
 
 
-    //This function is used for controlling the modal (getting the image url)
-    $scope.modalImage = '';
-    $scope.addProduct_variant_image_url = function () {
-
-      var modalInstance = $uibModal.open({
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'myModalContent.html',
-        controller: 'editProductVariantModalInstanceCtrl1',
-        size: 'lg',
-        resolve: {
-          items: function () {
-            return $scope.items;
-          }
+  //This function is used for controlling the modal (getting the image url)
+  $scope.modalImage = '';
+  $scope.addProduct_variant_image_url = function () {
+    var modalInstance = $uibModal.open({
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'myModalContent.html',
+      controller: 'editProductVariantModalInstanceCtrl1',
+      size: 'lg',
+      resolve: {
+        items: function () {
+          return $scope.items;
         }
       }
-      );
-      modalInstance.result.then(function (data) {
-        //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
-        $scope.loading = true;
-        var url = data.items;
-        var uploadPromise = products.upload_image_url_variant($scope.products.id, $scope.master_id, data.items)
-        uploadPromise.then(function (data) {
-          $scope.variant_image.push(url);
-          $window.location.reload();
-          $scope.loading = false;
-          $scope.alerts.push({ type: 'success', message: 'Variant Image Uploaded successfully!' });
-        }, function (data) {
-          console.log('error', data);
-        });
-      });
     }
+    );
+    modalInstance.result.then(function (data) {
+      //this is for uploading the image, a service is available for getting this image and sending it to the server modified on 10/03/17
+      $scope.loading = true;
+      var url = data.items;
+      var uploadPromise = products.upload_image_url_variant($scope.products.id, $scope.master_id, data.items)
+      uploadPromise.then(function (data) {
+        $scope.variant_image.push(url);
+        $window.location.reload();
+        $scope.loading = false;
+        $scope.alerts.push({ type: 'success', message: 'Variant Image Uploaded successfully!' });
+      }, function (data) {
+        console.log('error', data);
+      });
+    });
   }
+
   //This function is used for controlling the modal (getting the image)
   $scope.addProduct_variant_image = function () {
     var modalInstance = $uibModal.open({
@@ -562,7 +562,7 @@ luxire.controller('editProductController', function ($scope, $window, $timeout, 
     })
   }
 
-// setDropdownValues function is used to set the drop down values of shippingMethods, product type, vendor, etc.
+  // setDropdownValues function is used to set the drop down values of shippingMethods, product type, vendor, etc.
   function setDropdownValues(element, selectedId, modalAttribute) {
     element = element || [];
 
