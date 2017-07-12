@@ -612,15 +612,15 @@ style carousel
                 <span>
                   <span ng-if="product.luxire_product.mill!=='NA'">Fabric woven by {{product.luxire_product.mill}}
                    <span ng-if="product.luxire_product.country_of_origin !== 'NA'"> , in {{product.luxire_product.country_of_origin}} </span>
-                   <b>|</b>
-                  </span>
-                <span ng-if="product.luxire_product.composition!=='NA'"> {{product.luxire_product.composition}} <b>|</b></span>
-                <span ng-if="product.luxire_product.technical_description!=='NA'"> {{product.luxire_product.technical_description}} <b>|</b></span>
-                <span ng-if="product.luxire_product.suitable_climates!=='NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span>
-                <span ng-if="product.luxire_product.gsm!='NA' $$ product.luxire_product.gsm != 0"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
-                <span ng-if="product.luxire_product.thickness!='NA' && product.luxire_product.stiffness!='NA' && product.luxire_product.stiffness != 0 "> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
-                <span ng-if="product.luxire_product.wash_care!='NA'"> {{product.luxire_product.wash_care}} </span>
-                <span ng-if="product.luxire_product.sales_pitch!='NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
+                <b>|</b>
+                </span>
+                <span ng-if="product.luxire_product.composition !== 'NA'"> {{product.luxire_product.composition}} <b>|</b></span>
+                <span ng-if="product.luxire_product.technical_description !== 'NA'"> {{product.luxire_product.technical_description}} <b>|</b></span>
+                <span ng-if="product.luxire_product.suitable_climates !== 'NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span>
+                <span ng-if="product.luxire_product.gsm != 'NA' && product.luxire_product.gsm != 0"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
+                <span ng-if="product.luxire_product.thickness != 'NA' && product.luxire_product.stiffness!='NA' && product.luxire_product.stiffness != 0 "> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
+                <span ng-if="product.luxire_product.wash_care != 'NA'"> {{product.luxire_product.wash_care}} </span>
+                <span ng-if="product.luxire_product.sales_pitch != 'NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
                 </span>
               </p>
             </div>
