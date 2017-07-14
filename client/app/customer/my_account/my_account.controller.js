@@ -13,7 +13,7 @@ angular.module('luxire')
 
   $scope.get_display_date = function(date){
     var d = new Date(date.toString());
-    return d.getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
+    return d.getDate()+'-'+ ( parseInt(d.getMonth()) + 1) +'-'+d.getFullYear();
   };
 
   var html_text = '';
