@@ -1189,6 +1189,14 @@ angular.module('luxire')
             "super slim": 0
           }
         },
+         "Shirt Length": {
+          "map": "Shirt Length",
+          "rule": {
+            "regular": 0,
+            "slim": 0,
+            "super slim": 0
+          }
+        },
         "Chest Around": {
           "map": "Chest",
           "rule": {
