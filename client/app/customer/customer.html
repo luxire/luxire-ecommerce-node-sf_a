@@ -63,15 +63,15 @@
                {{selected_currency.symbol}}
             </span>
           </span>
-          <span uib-dropdown ng-init="is_open=false" ng-mouseenter="is_open=true" ng-click="is_open=!is_open" ng-mouseleave="is_open=false" is-open="is_open" class="fa-stack" title="Change measurement unit" style="margin-right: 1%; cursor: pointer;position: relative">
-            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%" uib-dropdown-toggle></i>
-            <i class="fa fa-stack-1x" style="color: white">M</i>
+          <span uib-dropdown ng-init="is_open=false" ng-mouseenter="is_open=true" ng-click="is_open=!is_open" ng-mouseleave="is_open=false" is-open="is_open" class="fa-stack" title="Change measurement unit" style="margin-right: 1%; cursor: pointer;position: relative; width: inherit;">
+            <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 3.66vw" uib-dropdown-toggle></i>
+            <i class="fa fa-stack-1x" style="color: white">Inch/CM</i>
             <ul class="dropdown-menu measurement-unit-dropdown" uib-dropdown-menu aria-labelledby="simple-dropdown">
               <li ng-repeat="measurement_unit in measurement_units" class="measurement-unit-dropdown" ng-class="{'active-measurement-unit': measurement_unit.label===selected_measurement_unit.label}" ng-click="change_measurement_unit(measurement_unit)">
                 {{measurement_unit.label}}
               </li>
             </ul>
-            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -35%;right: -35%">
+            <span class="badge" style="color: white;background: #DD9FDF;position: absolute;top: -35%;right: -6%">
                {{selected_measurement_unit.symbol}}
             </span>
           </span>
