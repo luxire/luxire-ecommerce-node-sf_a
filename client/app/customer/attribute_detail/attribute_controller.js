@@ -709,7 +709,7 @@ angular.module('luxire')
             "Front Neck Band Shape": "Round",
             "Collar Back Height": "1 7/8\"",
             "Tie Space": "1/4\"",
-            "Spread": "6\""
+            "Spread": "5.75\""
           },
           "table-view": {
             "header": [
