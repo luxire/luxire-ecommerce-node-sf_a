@@ -269,7 +269,7 @@ angular.module('luxire')
         if(error.data && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
-          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+          $rootScope.alerts.push({type: 'danger', message: 'Something went wrong. Please contact us.'});
         }
         console.log('data', error);
       });
