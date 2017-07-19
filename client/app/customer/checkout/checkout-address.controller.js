@@ -1,6 +1,10 @@
 angular.module('luxire')
 .controller('CustomerCheckoutAddressController',function($scope, $state, orders, ImageHandler, CustomerOrders, countries, $rootScope, $stateParams, CustomerAuthentication, $window){
   window.scrollTo(0, 0);
+  $scope.stateFlag = {
+                        billing: true,
+                        shipping: true
+                      }
   console.log('CartController params', $stateParams);
   $scope.states = [];
   $scope.countries = [];
@@ -38,6 +42,13 @@ angular.module('luxire')
           }
         }
       }
+    }
+    if($rootScope.luxire_cart.ship_address && !$rootScope.luxire_cart.ship_address.state_id){
+      $scope.stateFlag.shipping = false;
+    }
+
+    if($rootScope.luxire_cart.bill_address && !$rootScope.luxire_cart.bill_address.state_id){
+      $scope.stateFlag.billing = false;
     }
   },function(error){
     $scope.load_countries = false;
@@ -108,10 +119,13 @@ angular.module('luxire')
     console.log($scope.same);
     if($scope.same){
       $scope.billing = $scope.shipping;
+      $scope.stateFlag.billing = false;
     }
     else
     {
+      $scope.stateFlag.billing = true;
       $scope.billing = {};
+      
     }
   };
 
@@ -144,7 +158,9 @@ angular.module('luxire')
       }
     });
     formatted_address['country_id'] = address.country.id;
-    formatted_address['state_id'] = address.state.id;
+    if(address.state){
+      formatted_address['state_id'] = address.state.id;
+    }
     console.log('after formatting address', formatted_address);
     return formatted_address;
   }
@@ -181,10 +197,10 @@ angular.module('luxire')
         $state.go('customer.checkout_delivery');
       },function(error){
         console.log(error);
-        if(error.data && error.data.msg.includes("out of stock")){
+        if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
-          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
+          $rootScope.alerts.push({type: 'danger', message: 'Can not calculate shipping. Please contact luxire.com'});
         }
         process_errors(error.data);
         $scope.load_address = false;
@@ -241,5 +257,18 @@ angular.module('luxire')
       $rootScope.alerts.push({type: 'danger', message: error.data.error});
     });
   };
+
+// update State function is used to update the billing state and shipping state flag, based on which we are
+//  displaying the state drop down values and also zip code.
+// It has one parameter "state": which should either have value billing or shipping
+ $scope.updateState = function(state){
+   $scope[state].state = null;
+   if($scope[state].country.states.length !== 0){
+     $scope.stateFlag[state] = true;
+   }else{
+     $scope.stateFlag[state] = false;
+   }
+ }
+
 
 })

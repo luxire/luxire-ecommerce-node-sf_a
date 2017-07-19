@@ -65,14 +65,14 @@
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <select style="margin-top: 2%" name="ship_country"
                 ng-model="shipping.country"
-                class="form-control" ng-options="country as country.name for country in countries | orderBy : 'name' track by country.id" required>
+                class="form-control" ng-options="country as country.name for country in countries | orderBy : 'name' track by country.id" ng-change="updateState('shipping')" required>
               </select>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"  ng-if="stateFlag.shipping">
               <select
                style="margin-top: 2%" name="ship_state"
                ng-model="shipping.state"
-               class="form-control" ng-options="state as state.name for state in countries[shipping.country.id -1].states   track by state.id" required >
+               class="form-control" ng-options="state as state.name for state in countries[shipping.country.id -1].states   track by state.id"  required >
              </select>
 
             </div>
@@ -123,11 +123,11 @@
               <select style="margin-top: 2%" name="bill_country"
                 ng-model="billing.country"
                 class="form-control"
-                ng-options="country as country.name for country in countries   track by country.id" required>
+                ng-options="country as country.name for country in countries   track by country.id" ng-change="updateState('billing')"  required>
               </select>
 
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" ng-if="stateFlag.billing">
               <select name="bill_state"
                style="margin-top: 2%"
                ng-model="billing.state"
