@@ -26,7 +26,7 @@
           <div if-loading="hide" id="shipping_text"  style="font-size: 85%; font-family: HelveticaNeue" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             {{shipping_address.full_name}}
             {{', '+shipping_address.address1}}{{shipping_address.address2 ? shipping_address.address2:''}}
-            {{', '+shipping_address.city}}{{', '+shipping_address.state_text}}
+            {{', '+shipping_address.city}}{{ shipping_address.state_text !== null ? ', ' +shipping_address.state_text : ""  }}
             {{', '+shipping_address.country.iso_name}}{{', '+shipping_address.zipcode}}
             {{', '+shipping_address.phone}}
           </div>
