@@ -189,7 +189,7 @@ angular.module('luxire')
       console.log(data);
     }, function(error){
       $scope.loading_cart = false;
-      if(error.data && error.data.msg.includes("out of stock")){
+      if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
           $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});

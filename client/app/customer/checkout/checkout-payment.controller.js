@@ -266,7 +266,7 @@ angular.module('luxire')
         console.log('data', data);
       }, function(error){
         $scope.loading = false;
-        if(error.data && error.data.msg.includes("out of stock")){
+        if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
           $rootScope.alerts.push({type: 'danger', message: 'Something went wrong. Please contact us.'});

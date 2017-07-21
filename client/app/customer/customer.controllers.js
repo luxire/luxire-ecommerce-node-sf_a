@@ -660,7 +660,7 @@ $scope.searchEvent = function(str){
         });
       },function(error){
         $scope.loading_product = false;
-        if(error.data && error.data.msg.includes("out of stock")){
+        if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
           $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
@@ -679,7 +679,7 @@ $scope.searchEvent = function(str){
         $state.go('customer.pre_cart');
       },function(error){
         $scope.loading_product = false;
-        if(error.data && error.data.msg.includes("out of stock")){
+        if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
           $rootScope.alerts.push({type: 'danger', message: error.data.msg });
         }else{
           $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});

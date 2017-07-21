@@ -352,7 +352,7 @@ angular.module('luxire')
               });
             }, function (error) {
               $scope.loading_cart = false;
-              if (error.data && error.data.msg.includes("out of stock")) {
+              if (error.data && error.data.msg && error.data.msg.includes("out of stock")) {
                 $rootScope.alerts.push({ type: 'danger', message: error.data.msg });
               } else {
                 $rootScope.alerts.push({ type: 'danger', message: 'Failed to add to cart' });
@@ -369,7 +369,7 @@ angular.module('luxire')
               $state.go('customer.pre_cart');
             }, function (error) {
               $scope.loading_cart = false;
-              if (error.data && error.data.msg.includes("out of stock")) {
+              if (error.data && error.data.msg && error.data.msg.includes("out of stock")) {
                 $rootScope.alerts.push({ type: 'danger', message: error.data.msg });
               } else {
                 $rootScope.alerts.push({ type: 'danger', message: 'Failed to add to cart' });
