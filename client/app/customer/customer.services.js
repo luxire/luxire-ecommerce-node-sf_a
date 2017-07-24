@@ -329,7 +329,7 @@ angular.module('luxire')
 })
 .service('CustomerUtils', function($http, CustomerConstants, $sce){
   //passed by ref
-  var exclusion_list = ['id','cost'];
+  var exclusion_list = ['id','cost', 'total_cost', 'personalization_cost', 'additional_cost'];
   var local_currency = "";
 
   this.convert_cm_to_in = function(measurement_obj){
