@@ -36,7 +36,16 @@ angular.module('luxire')
   }
 
   $scope.getImage = function(url){
-    return ImageHandler.url(url);
+    if(url === null){
+      return 'assets/images/customer/noImageUploaded.png';
+    }else{
+      var splitUrl = url.split("/");
+      if(splitUrl[splitUrl.length - 1].includes(".")){
+        return ImageHandler.url(url);
+       }else{
+        return 'assets/images/customer/noImageUploaded.png';	
+      }
+    }
   };
 
   //Link to the edit page on clicking on the product type
@@ -205,9 +214,14 @@ angular.module('luxire')
      $scope.productTypeData.description = res.data.description;
      $scope.productTypeData.length_required = res.data.length_required;
      $scope.measurement_type_ids = [];
-     /* upload image code*/
-     $('#product_type_image').attr('src', ImageHandler.url(res.data.image));
-    //  delete res.data.image;
+
+      if(res.data.image){
+        /* upload image code*/
+        $('#product_type_image').attr('src', ImageHandler.url(res.data.image));
+        //  delete res.data.image;
+       }else{
+	 $('#product_type_image').attr('src', 'assets/images/customer/noImageUploaded.png')
+     }
      $scope.measurement_type_ids = res.data.luxire_product_attributes_ids;
      productTypeService.getMeasurementTypes().then(function(data) {
      $scope.measurementTypeJson = data;
