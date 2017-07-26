@@ -431,7 +431,7 @@ angular.module('luxire')
             return $scope.product;
           },
           cart_object: function () {
-            return $scope.cart_object;
+            return angular.copy($scope.cart_object);
           },
           base_style: function () {
             return $scope.active_style;
@@ -2092,6 +2092,9 @@ angular.module('luxire')
       Back_neck_band_height_Object(style_name);
       if (attr_type == 'customize') {
         $scope.showCustomNotes = false;
+    // Check if the customer has deselected the option. 
+    // If yes remove the option
+    // If the style  has associated cost, remove it.
         if ($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] == style_name) {
           if (style_object.cost) {
             $scope.remove_personalization_cost(style_object.cost);
@@ -2130,6 +2133,7 @@ angular.module('luxire')
             }
           }
           $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] = style_name;
+          $scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['options'] = {};
           if (!angular.isObject($scope["customization_attributes"])) {
             $scope["customization_attributes"] = {};
           };
@@ -2153,6 +2157,7 @@ angular.module('luxire')
         if ($scope.selected_bespoke_attribute.name.toLowerCase() == 'monogram') {
           if (!$scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]) {
             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name] = {};
+            $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name]['cost'] = $scope.selected_bespoke_attribute.value['Monogram']['cost']
             $scope.monogram_options = $scope.selected_bespoke_attribute.value;
             $scope.add_personalization_cost($scope.selected_bespoke_attribute.value['Monogram']['cost']);
           }
