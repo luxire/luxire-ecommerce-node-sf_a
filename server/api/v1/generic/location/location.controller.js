@@ -88,3 +88,35 @@ exports.geo_location = function(req, res){
 
   });
 };
+
+
+
+exports.getCountryBasedOnIp = function (req, res) {
+  var req_ip = "";
+  var req_cur = "";
+  var forwarded_for = "";
+  forwarded_for = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (forwarded_for.includes(',')) {
+    forwarded_for = forwarded_for.split(',')[0];
+  }
+  console.log('req ip', req.ip, 'forwarded for ip', forwarded_for);
+
+  req_ip = forwarded_for === "127.0.0.1" ? '' : forwarded_for;
+
+  var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD"];
+  console.log('geo_location', req_ip, constants.location_by_ip.host + '/' + req_ip);
+  http
+    .get({
+      uri: constants.location_by_ip.host + '/' + req_ip
+    }, function (error, response, body) {
+      if (error) {
+        console.log('error getting location', error.syscall);
+        res.status(500).send(error.syscall);
+      }
+      else {
+        console.log('req country', body);
+        res.json(body);
+      }
+    })
+}
+

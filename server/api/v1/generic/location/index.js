@@ -6,5 +6,6 @@ var controller = require('./location.controller');
 
 /*Products*/
 router.get('/', controller.geo_location);
+router.get('/fetchCountryBasedonIp',controller.getCountryBasedOnIp);
 
 module.exports = router;
