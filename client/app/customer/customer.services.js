@@ -9,7 +9,8 @@ angular.module('luxire')
     get_incomplete_order: '/api/orders/incomplete',
     orders: '/api/v1/orders',
     checkouts: '/api/v1/checkouts',
-    get_location_by_ip: '/api/v1/generic/location'
+    get_location_by_ip: '/api/v1/generic/location/fetchCountryBasedonIp',
+    get_currency_by_ip: '/api/v1/generic/location'
   };
   this.default = {
     taxonomy_id: 3,
@@ -329,15 +330,15 @@ angular.module('luxire')
 })
 .service('CustomerUtils', function($http, CustomerConstants, $sce){
   //passed by ref
-  var exclusion_list = ['id','cost', 'total_cost', 'personalization_cost', 'additional_cost'];
+  var exclusion_list = ['id','cost', 'total_cost', 'personalization_cost', 'additional_cost', 'line_item_id'];
   var local_currency = "";
 
   this.convert_cm_to_in = function(measurement_obj){
     var cm_to_in = function(measurement_obj){
       angular.forEach(measurement_obj, function(val,key){
         if(exclusion_list.indexOf(key) === -1){
-          if(!angular.isObject(val) && !isNaN(parseFloat(val))){
-            measurement_obj[key] = (Math.round((parseFloat(val)/2.54)*10)/10).toFixed(2);
+          if(!angular.isObject(val) && !isNaN(Number(val)) && val !== ""){
+            measurement_obj[key] = (parseFloat(val)/2.54).toFixed(2);
           }
           else if(angular.isObject(val)){
             cm_to_in(val);
@@ -351,8 +352,8 @@ angular.module('luxire')
     var in_to_cm = function(measurement_obj){
       angular.forEach(measurement_obj, function(val,key){
         if(exclusion_list.indexOf(key) === -1){
-          if(!angular.isObject(val) && !isNaN(parseFloat(val))){
-            measurement_obj[key] = (Math.round(parseFloat(val)*2.54*10)/10).toFixed(2);
+          if(!angular.isObject(val) && !isNaN(Number(val)) && val !== ""){
+            measurement_obj[key] = (parseFloat(val)*2.54).toFixed(2);
           }
           else if(angular.isObject(val)){
             in_to_cm(val);
@@ -364,13 +365,17 @@ angular.module('luxire')
 
   };
   this.get_local_currency = function(){
-    return $http.get(CustomerConstants.api.get_location_by_ip);
+    return $http.get(CustomerConstants.api.get_currency_by_ip);
   };
   this.set_local_currency_in_app = function(currency){
     local_currency = currency;
   };
   this.get_local_currency_in_app = function(){
     return local_currency;
+  };
+
+  this.getCountry = function(){
+    return $http.get(CustomerConstants.api.get_location_by_ip);
   };
 
   this.contact_us = function(user){
