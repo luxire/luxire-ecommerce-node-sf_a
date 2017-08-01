@@ -337,7 +337,7 @@ angular.module('luxire')
     var cm_to_in = function(measurement_obj){
       angular.forEach(measurement_obj, function(val,key){
         if(exclusion_list.indexOf(key) === -1){
-          if(!angular.isObject(val) && !isNaN(Number(val)) && val !== ""){
+          if(val &&!angular.isObject(val) && !isNaN(Number(val)) && val !== "" ){
             measurement_obj[key] = (parseFloat(val)/2.54).toFixed(2);
           }
           else if(angular.isObject(val)){
@@ -352,7 +352,7 @@ angular.module('luxire')
     var in_to_cm = function(measurement_obj){
       angular.forEach(measurement_obj, function(val,key){
         if(exclusion_list.indexOf(key) === -1){
-          if(!angular.isObject(val) && !isNaN(Number(val)) && val !== ""){
+          if(val && !angular.isObject(val) && !isNaN(Number(val)) && val !== ""){
             measurement_obj[key] = (parseFloat(val)*2.54).toFixed(2);
           }
           else if(angular.isObject(val)){
