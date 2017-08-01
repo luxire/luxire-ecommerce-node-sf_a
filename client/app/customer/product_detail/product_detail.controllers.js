@@ -52,6 +52,14 @@ angular.module('luxire')
         json_array_to_obj("body_measurement_attributes", $scope.product.body_measurement_attributes);
         $scope.luxire_styles = data.data.luxire_style_masters;
         $scope.cart_object_prototype = angular.copy($scope.cart_object);
+
+        var measurement_unit_sym = angular.element("#measurementUnit")[0].innerText;
+        $rootScope.productLoaded = true;
+        if (measurement_unit_sym.toLowerCase() === "cm") {
+          $scope.selected_measurement_unit = "cm";
+          CustomerUtils.convert_in_to_cm($scope.cart_object);
+        }
+
         $scope.active_product_type = $scope.product.product_type.product_type;
         $scope.fabric_product_types = ["shirts", "pants", "jackets"];
         $scope.is_fabric_product = $scope.fabric_product_types.indexOf($scope.active_product_type.toLowerCase()) > -1 ? true : false;
@@ -2412,3 +2420,4 @@ angular.module('luxire')
       return ImageHandler.url(url);
     };
   }])
+
