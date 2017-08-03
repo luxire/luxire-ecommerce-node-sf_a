@@ -347,7 +347,17 @@ if (!c || document.cookie.match('fs_uid=[`;`]*`[`;`]*`[`;`]*`')) {
   <script type="text/javascript" src="app/admin/standard_sizes/standard_size.controller.js"></script>
   <script type="text/javascript" src="app/admin/standard_sizes/standard_size.services.js"></script>
 
-  <!--Making Event listeners passive-->
+
+<!-- Angular JSON editor  -->
+  <script src="bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
+  <script src="bower_components/ng-jsoneditor/ng-jsoneditor.js"></script>
+  <link rel="stylesheet" href="bower_components/jsoneditor/dist/jsoneditor.min.css">  
+
+
+  <script type="text/javascript" src="app/admin/helpPage/helpPage.controller.js"></script>
+  <script type="text/javascript" src="app/admin/helpPage/helpPage.service.js"></script>  
+
+ <!--Making Event listeners passive-->
   <script type="text/javascript">
         addEventListener(document, "touchstart", function (e) {
           e.preventDefault();   // does nothing since the listener is passive
