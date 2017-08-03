@@ -992,7 +992,7 @@ angular.module('luxire')
     $scope.change_measurement_type = function (id) {
       $scope.active_measurement_type_id = id;
     };
-    var rounded_pant_attr = ["Waist", "Hips", "Thigh", "Knee", "Bottom"]; 
+    var rounded_pant_attr = ["Waist", "Hips", "Thigh", "Knee", "Bottom"];
     var rounded_shirt_attr = ["Chest", "Waist", "Bottom", "Sleeve Width"];//, "Sleeve Width" as per 02 Dec Ashish's email, sleeve width calculated is already for half
 
 
@@ -1008,7 +1008,7 @@ angular.module('luxire')
                 $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (($scope.cart_object['standard_measurement_attributes']['Collar Size']['value'] - standard_size_chart['shirts']['Collar Size'][fit_type]['base']) * 4 * standard_size_chart['shirts'][attr][fit_type]['step']) + standard_size_chart['shirts'][attr][fit_type]['base'];
               }
               else if (selected_measurement_unit == "cm") {
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Collar Size']['value'] ) - standard_size_chart['shirts']['Collar Size'][fit_type]['base']) * 4 * standard_size_chart['shirts'][attr][fit_type]['step']) + standard_size_chart['shirts'][attr][fit_type]['base'];
+                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Collar Size']['value']) - standard_size_chart['shirts']['Collar Size'][fit_type]['base']) * 4 * standard_size_chart['shirts'][attr][fit_type]['step']) + standard_size_chart['shirts'][attr][fit_type]['base'];
               }
               if (rounded_shirt_attr.indexOf(attr) != -1) {
                 $scope.cart_object['standard_measurement_attributes'][attr]['value'] = $scope.cart_object['standard_measurement_attributes'][attr]['value'] / 2;
@@ -1093,7 +1093,7 @@ angular.module('luxire')
               $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (Math.round((parseFloat($scope.cart_object['standard_measurement_attributes'][attr]['value'])) * 100) / 100).toFixed(3);
             }
             else if (selected_measurement_unit == "cm") {
-              $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (Math.round(parseFloat($scope.cart_object['standard_measurement_attributes'][attr]['value'])* 10) / 10).toFixed(2);
+              $scope.cart_object['standard_measurement_attributes'][attr]['value'] = (Math.round(parseFloat($scope.cart_object['standard_measurement_attributes'][attr]['value']) * 10) / 10).toFixed(2);
             }
             $scope.change_dependents('standard_measurement_attributes', attr, $scope.cart_object['standard_measurement_attributes'][attr]['value']);
           }
@@ -1198,7 +1198,7 @@ angular.module('luxire')
             "super slim": 0
           }
         },
-         "Shirt Length": {
+        "Shirt Length": {
           "map": "Shirt Length",
           "rule": {
             "regular": 0,
@@ -1285,14 +1285,14 @@ angular.module('luxire')
             "slim": -1
           }
         },
-        //"Body Rise": {
-         // "map": "Front Rise",
-          //"rule": {
-           // "regular": 4,
-            //"slim": 3,
-           // "super slim": 2
-         // }
-       // },
+        "Body Rise": {
+          "map": "Front Rise",
+          "rule": {
+            "regular": 0,
+            "slim": 0,
+            "super slim": 0
+          }
+        },
         "Body Thigh": {
           "map": "Thigh",
           "rule": {
@@ -1362,20 +1362,20 @@ angular.module('luxire')
           else if (selected_measurement_unit == "cm") {
             angular.forEach(body_measurement_rule['shirts'], function (val, key) {
               if ($scope.cart_object['body_measurement_attributes'][key]['value'] && key !== 'Shoulder Slope') {
-                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + (val['rule'][fit_type] * 2.54 );
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + (val['rule'][fit_type] * 2.54);
                 if (rounded_shirt_attr.indexOf(val['map']) != -1) {
                   $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] / 2;
                 }
               }
               else if ($scope.cart_object['body_measurement_attributes'][key]['value'] && key == 'Shoulder Slope') {
                 if ($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Normal') {
-                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (2);
+                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (2 * 2.54);
                 }
                 else if ($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Flat') {
-                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (1);
+                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (1 * 2.54);
                 }
                 else if ($scope.cart_object['body_measurement_attributes'][key]['value'] === 'Sloping') {
-                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (2.5);
+                  $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = (2.5 * 2.54);
                 }
               }
               if ($scope.cart_object['standard_measurement_attributes'][val['map']] && $scope.cart_object['standard_measurement_attributes'][val['map']]['value']) {
@@ -1405,8 +1405,8 @@ angular.module('luxire')
                 $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + val['rule'][fit_type];
               }
               else if (key.toLowerCase().indexOf('rise') !== -1 && $scope.cart_object['body_measurement_attributes']['Body Rise']['value'] && $scope.cart_object['body_measurement_attributes']['Pant Length']['value'] && $scope.cart_object['body_measurement_attributes']['Body Inseam']['value']) {
-                $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Pant Length']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Inseam']['value']) - 1;
-                $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Body Rise']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']) + 2;
+                $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Pant Length']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Inseam']['value']) + 1;
+                $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Body Rise']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']);
                 $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']).toFixed(3);
                 $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Back Rise']['value']).toFixed(3);
               }
@@ -1422,11 +1422,11 @@ angular.module('luxire')
           else if (selected_measurement_unit == "cm") {
             angular.forEach(body_measurement_rule['pants'], function (val, key) {
               if ($scope.cart_object['body_measurement_attributes'][key]['value'] && key.toLowerCase().indexOf('rise') == -1) {
-                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + (val['rule'][fit_type]);
+                $scope.cart_object['standard_measurement_attributes'][val['map']]['value'] = parseFloat($scope.cart_object['body_measurement_attributes'][key]['value']) + (val['rule'][fit_type] * 2.54);
               }
               else if (key.toLowerCase().indexOf('rise') !== -1 && $scope.cart_object['body_measurement_attributes']['Body Rise']['value'] && $scope.cart_object['body_measurement_attributes']['Pant Length']['value'] && $scope.cart_object['body_measurement_attributes']['Body Inseam']['value']) {
-                $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Pant Length']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Inseam']['value']) - 2.54;
-                $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Body Rise']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']) + 5.08;
+                $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Pant Length']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Inseam']['value']) + 2.54;
+                $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['body_measurement_attributes']['Body Rise']['value']) - parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']);
                 $scope.cart_object['standard_measurement_attributes']['Front Rise']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Front Rise']['value']).toFixed(2);
                 $scope.cart_object['standard_measurement_attributes']['Back Rise']['value'] = parseFloat($scope.cart_object['standard_measurement_attributes']['Back Rise']['value']).toFixed(2);
               }
@@ -2101,9 +2101,9 @@ angular.module('luxire')
       Back_neck_band_height_Object(style_name);
       if (attr_type == 'customize') {
         $scope.showCustomNotes = false;
-    // Check if the customer has deselected the option. 
-    // If yes remove the option
-    // If the style  has associated cost, remove it.
+        // Check if the customer has deselected the option. 
+        // If yes remove the option
+        // If the style  has associated cost, remove it.
         if ($scope.cart_object["customization_attributes"][$scope.selected_bespoke_attribute.name]['value'] == style_name) {
           if (style_object.cost) {
             $scope.remove_personalization_cost(style_object.cost);
@@ -2421,4 +2421,5 @@ angular.module('luxire')
       return ImageHandler.url(url);
     };
   }])
+
 
