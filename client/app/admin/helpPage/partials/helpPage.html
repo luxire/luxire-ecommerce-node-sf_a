@@ -1,0 +1,18 @@
+<div style="margin: 5vh 5vw">
+    <div ng-jsoneditor ng-model="obj.data" options="obj.options" style="width: 90%; height: 80vh; overflow-y: scroll; z-index: -1">
+    </div>
+</div>
+
+<div style="text-align: right">
+    <button class="btn btn-default" style="width: 11vw;margin-bottom: 5vh;" ng-click="updateJson()">Save</button>
+</div>
+
+
+<div class="row" ng-show="loading" style=" position:fixed; top: 50%; left: 50%; width:30em; height:18em; margin-top: -9em; margin-left: -15em; border: 1px solid #ccc; background-color: #f3f3f3; opacity: 0.6;  z-index: 2">
+    <img src="lib/assets/loader.gif" />
+</div>
+
+<div style="position: absolute;width: 100%;bottom: 0;font-size: 30px;text-align: center; z-index: 3">
+    <uib-alert style="margin-bottom: 0px !important" ng-repeat="alert in alerts" type="{{alert.type}}" close="close_alert($index)"
+        dismiss-on-timeout="3000">{{ alert.message }}</uib-alert>
+</div>
