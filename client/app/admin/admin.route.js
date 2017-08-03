@@ -499,6 +499,16 @@ angular.module('luxire')
 					}
 				}
 			})
+			.state('admin.helpPage', {
+				url: '/helpPage',
+				views: {
+					"sideContent": { templateUrl: 'app/admin/product/partials/sidebarProducts.html' },
+					"mainContent": { templateUrl: 'app/admin/helpPage/partials/helpPage.html', controller: 'HelpPageController' },
+					data: {
+						require_auth: true
+					}
+				}
+			})
 			.state('admin.addTaxonomy', {
 				url: '/taxonomy/new',
 				views: {
