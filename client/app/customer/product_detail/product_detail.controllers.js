@@ -85,7 +85,8 @@ angular.module('luxire')
             product_prices[currency] = parseFloat(value.split(",").join("").split("\u20ac")[1]);
           }
           else if (currency == "GBP") {
-            product_prices[currency] = parseFloat(value.split(",").join("").split("\u20a3")[1]);
+          //  product_prices[currency] = parseFloat(value.split(",").join("").split("\u20a3")[1]);
+             product_prices[currency]  = Number(value.replace(/[^0-9\.]+/g,""));
           }
           else if (currency == "INR") {
             product_prices[currency] = parseFloat(value.split(",").join("").split("\u20b9")[1]);
@@ -1010,8 +1011,8 @@ angular.module('luxire')
               else if (selected_measurement_unit == "cm") {
                 $scope.cart_object['standard_measurement_attributes'][attr]['value'] = ((($scope.cart_object['standard_measurement_attributes']['Collar Size']['value']) - standard_size_chart['shirts']['Collar Size'][fit_type]['base']) * 4 * standard_size_chart['shirts'][attr][fit_type]['step']) + standard_size_chart['shirts'][attr][fit_type]['base'];
               }
-              if (rounded_shirt_attr.indexOf(attr) != -1) {
-                $scope.cart_object['standard_measurement_attributes'][attr]['value'] = $scope.cart_object['standard_measurement_attributes'][attr]['value'] / 2;
+     if (rounded_shirt_attr.indexOf(attr) != -1 && attr !== "Sleeve Width") {           
+	     $scope.cart_object['standard_measurement_attributes'][attr]['value'] = $scope.cart_object['standard_measurement_attributes'][attr]['value'] / 2;
               }
             }
             if (selected_measurement_unit == "in") {
