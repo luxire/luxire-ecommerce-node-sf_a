@@ -49,7 +49,7 @@ exports.geo_location = function(req, res){
 
   req_ip = forwarded_for === "127.0.0.1" ? '' : forwarded_for;
 
-  var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD"];
+  var supported_currencies = ["EUR", "AUD", "SGD", "NOK", "DKK", "SEK", "CHF", "INR", "USD", "GBP", "CAD"];
   console.log('geo_location', req_ip, constants.location_by_ip.host+'/'+req_ip);
   http
     .get({
