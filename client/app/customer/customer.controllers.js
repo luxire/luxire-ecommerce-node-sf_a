@@ -347,26 +347,12 @@ angular.module('luxire')
         }
       }
       else {
-        $scope.selected_measurement_unit = $scope.measurement_units[0];
+         setMeasurementUnit();
       }
 
     }, function (error) {
       $rootScope.$broadcast('fetched_order_from_cookie', error);
-      CustomerUtils.getCountry().then(function (data) {
-        var country = JSON.parse(data.data);
-        if (country.country_code === "IN" || country.country_code === "US") {
-          $scope.selected_measurement_unit = $scope.measurement_units[0];
-        } else {
-          $scope.selected_measurement_unit = $scope.measurement_units[1];
-          if (window.location.href.includes("products") && $rootScope.productLoaded) {
-            $rootScope.productLoaded = false;
-            $rootScope.$broadcast('measurement_unit_change', $scope.selected_measurement_unit);
-          }
-        }
-      }, function (error) {
-        console.log('error fetching country', error);
-      });
-
+      setMeasurementUnit();
       CustomerUtils.get_local_currency().then(function (data) {
         CustomerUtils.set_local_currency_in_app(data.data);
         if (data.data && $scope.currencies.hasOwnProperty(data.data)) {
@@ -381,6 +367,26 @@ angular.module('luxire')
         $scope.selected_currency = $scope.currencies["USD"];
       });
     });
+
+    var setMeasurementUnit = function () {
+      CustomerUtils.getCountry().then(function (data) {
+        var country = JSON.parse(data.data);
+        if (country.country_code === "IN" || country.country_code === "US") {
+          $scope.selected_measurement_unit = $scope.measurement_units[0];
+        } else {
+          $scope.selected_measurement_unit = $scope.measurement_units[1];
+          if (window.location.href.includes("products") && $rootScope.productLoaded) {
+            $rootScope.productLoaded = false;
+            $rootScope.$broadcast('measurement_unit_change', $scope.selected_measurement_unit);
+          }
+        }
+      }, function (error) {
+        console.log('error fetching country', error);
+        $scope.selected_measurement_unit = $scope.measurement_units[0];
+      });
+    }
+
+
     $rootScope.luxire_cart = angular.isUndefined($rootScope.luxire_cart) ? {} : $rootScope.luxire_cart;
     if ($rootScope.luxire_cart && $rootScope.luxire_cart.line_items && $rootScope.luxire_cart.line_items.length) {
       if ($rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit && $rootScope.luxire_cart.line_items[0].luxire_line_item.measurement_unit.toLowerCase() == "in") {
@@ -742,4 +748,5 @@ angular.module('luxire')
       $uibModalInstance.dismiss('cancel');
     };
   });
+
 
