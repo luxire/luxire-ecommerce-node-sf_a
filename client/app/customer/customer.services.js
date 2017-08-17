@@ -396,7 +396,7 @@ angular.module('luxire')
       return $sce.trustAsHtml('&#36;'+val);
     }
     else if(currency == "AUD"){
-      return $sce.trustAsHtml('a;'+val);//$
+      return $sce.trustAsHtml('&#36;'+val);//$
     }
     else if(currency == "SEK"){
       return $sce.trustAsHtml(val+' kr');
