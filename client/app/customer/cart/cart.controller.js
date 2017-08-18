@@ -1,204 +1,236 @@
 angular.module('luxire')
-.controller('CustomerCartController',function($scope, $state, $sce, ImageHandler, $rootScope, $stateParams, CustomerOrders, orders, CustomerConstants, $window, CustomerUtils){
-  window.scrollTo(0, 0);
-  function update_state(order){
-    if(order.state!="cart"){
-      CustomerOrders.update(order, {
-        state: "cart"
-      })
-      .then(function(data){
-        console.log('updated cart state to ', data.data.state);
-      }, function(error){
-        console.log('update cart failed', error);
+  .controller('CustomerCartController', function ($scope, $state, $sce, ImageHandler, $rootScope, $stateParams, CustomerOrders, orders, CustomerConstants, $window, CustomerUtils) {
+    window.scrollTo(0, 0);
+    function update_state(order) {
+      if (order.state != "cart") {
+        CustomerOrders.update(order, {
+          state: "cart"
+        })
+          .then(function (data) {
+            console.log('updated cart state to ', data.data.state);
+          }, function (error) {
+            console.log('update cart failed', error);
+          });
+      }
+    };
+    $scope.parseFloat = function (value) {
+      return parseFloat(value);
+    };
+
+    $scope.removeSimilar = function (object) {
+      var uniqueAttribute = [];
+      var uniqueAttributeWithValue = {};
+      var uniqueObject = angular.copy(object);
+      var uniqueObjectKeys = Object.keys(uniqueObject);
+      uniqueObjectKeys.sort(function (a, b) { return a.length - b.length });
+      var checkExistance = function (str, value) {
+        for (i = 0; i < uniqueAttribute.length; i++) {
+          if (str.match(uniqueAttribute[i]) && value === uniqueAttributeWithValue[uniqueAttribute[i]]) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      for (j = 0; j < uniqueObjectKeys.length; j++) {
+        key = uniqueObjectKeys[j];
+        value = uniqueObject[key];
+        if (!value || value.value === null || value.value === '' || checkExistance(key, value.value)) {
+          delete (uniqueObject[key]);
+        } else {
+          uniqueAttribute.push(key);
+          uniqueAttributeWithValue[key] = value.value;
+        }
+      }
+
+      return uniqueObject;
+    }
+
+
+
+    if ($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')) {
+      $scope.loading_cart = true;
+
+      CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+        .then(function (data) {
+          console.log('fetched order', data.data);
+          $rootScope.luxire_cart = data.data;
+          $scope.loading_cart = false;
+
+        },
+        function (error) {
+          console.error(error);
+          $scope.loading_cart = false;
+
+        });
+      update_state($rootScope.luxire_cart);
+    }
+    else {
+      $scope.$on('fetched_order_from_cookie', function (event, data) {
+        $scope.loading_cart = false;
+        console.log('successful fetch', data);
+        update_state(data.data);
       });
     }
-  };
-  $scope.parseFloat = function(value){
-    return parseFloat(value);
-  };
-  if($rootScope.luxire_cart && $rootScope.luxire_cart.hasOwnProperty('number') && $rootScope.luxire_cart.hasOwnProperty('token')){
-    $scope.loading_cart = true;
+    console.log('CartController params', $stateParams);
 
-    CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
-    .then(function(data){
-      console.log('fetched order', data.data);
-      $rootScope.luxire_cart = data.data;
-      $scope.loading_cart = false;
+    $scope.dynamicPopover = {
+      content: 'Hello, World!',
+      templateUrl: 'line_item_detail.html',
+      title: ''
+    };
 
-    },
-    function(error){
-      console.error(error);
-      $scope.loading_cart = false;
+    /*Order json*/
+    console.log('cart', $rootScope.luxire_cart);
 
-    });
-    update_state($rootScope.luxire_cart);
-  }
-  else{
-    $scope.$on('fetched_order_from_cookie', function(event, data){
-      $scope.loading_cart = false;
-      console.log('successful fetch',data);
-      update_state(data.data);
-    });
-  }
-  console.log('CartController params', $stateParams);
+    $scope.go_to_product_listing = function () {
+      $state.go('customer.collection', { collection_name: 'Shirts' });
+    };
 
-  $scope.dynamicPopover = {
-    content: 'Hello, World!',
-    templateUrl: 'line_item_detail.html',
-    title: ''
-  };
+    var html_text = '';
+    var personalized_text = '';
+    var customized_text = '';
+    var measurement_std_text = '';
+    var measurement_body_text = '';
 
-  /*Order json*/
-  console.log('cart', $rootScope.luxire_cart);
+    $scope.getImage = function (url) {
+      return ImageHandler.url(url);
+    };
 
-  $scope.go_to_product_listing = function(){
-    $state.go('customer.collection',{collection_name : 'Shirts'});
-  };
-
-  var html_text = '';
-  var personalized_text = '';
-  var customized_text = '';
-  var measurement_std_text = '';
-  var measurement_body_text = '';
-
-  $scope.getImage = function(url){
-    return ImageHandler.url(url);
-  };
-
-  $scope.object_keys_length = function(obj){
-    return Object.keys(obj).length;
-  };
+    $scope.object_keys_length = function (obj) {
+      return Object.keys(obj).length;
+    };
 
 
-/*Multi currency support*/
-  // $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
-  // $scope.$on('currency_change', function(event, data){
-  //   console.log('currency changed in cart', data)
-  //   $scope.selected_currency = data;
-  //   $scope.loading_cart = true;
+    /*Multi currency support*/
+    // $scope.selected_currency = CustomerUtils.get_local_currency_in_app();
+    // $scope.$on('currency_change', function(event, data){
+    //   console.log('currency changed in cart', data)
+    //   $scope.selected_currency = data;
+    //   $scope.loading_cart = true;
 
-  //   CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
-  //   .then(function(data){
-  //     console.log('fetched order', data.data);
-  //     $rootScope.luxire_cart = data.data;
-  //     $scope.loading_cart = false;
+    //   CustomerOrders.get_order_by_cookie($rootScope.luxire_cart)
+    //   .then(function(data){
+    //     console.log('fetched order', data.data);
+    //     $rootScope.luxire_cart = data.data;
+    //     $scope.loading_cart = false;
 
-  //   },
-  //   function(error){
-  //     console.error(error);
-  //     $scope.loading_cart = false;
+    //   },
+    //   function(error){
+    //     console.error(error);
+    //     $scope.loading_cart = false;
 
-  //   });
-  // });
+    //   });
+    // });
 
-  /*order json*/
+    /*order json*/
 
 
-  $scope.getImage = function(url){
-    return ImageHandler.url(url);
-  };
+    $scope.getImage = function (url) {
+      return ImageHandler.url(url);
+    };
 
-  function getOrder(success_msg, danger_msg){
-    CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
-      $rootScope.luxire_cart = data.data;
-      console.log('fetched order', data.data);
-      $rootScope.alerts[0] = {type: 'success', message: success_msg};
-      // $rootScope.alerts.push({type: 'success', message: success_msg});
-    }, function(error){
-      $rootScope.alerts[0] = {type: 'danger', message: danger_msg};
+    function getOrder(success_msg, danger_msg) {
+      CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function (data) {
+        $rootScope.luxire_cart = data.data;
+        console.log('fetched order', data.data);
+        $rootScope.alerts[0] = { type: 'success', message: success_msg };
+        // $rootScope.alerts.push({type: 'success', message: success_msg});
+      }, function (error) {
+        $rootScope.alerts[0] = { type: 'danger', message: danger_msg };
 
-      // $rootScope.alerts.push({type: 'danger', message: danger_msg});
-      console.error(error);
-    });
-
-  }
-
-  var updated_line_items = [];
-  $scope.update_cart = function(line_item, quantity){
-    console.log('update cart', line_item);
-    console.log('quantity', quantity);
-    if(quantity>0){
-      CustomerOrders.update_line_item($rootScope.luxire_cart, line_item.id, line_item.variant_id, quantity)
-      .then(function(data){
-        console.log(data.data);
-        getOrder('Cart updated successfully', 'Failed to update cart');
-      }, function(error){
-        if(quantity==0&&error.status==404){
-          getOrder('Line item deleted successfully', 'Failed to update cart');
-        }
+        // $rootScope.alerts.push({type: 'danger', message: danger_msg});
         console.error(error);
       });
+
     }
 
+    var updated_line_items = [];
+    $scope.update_cart = function (line_item, quantity) {
+      console.log('update cart', line_item);
+      console.log('quantity', quantity);
+      if (quantity > 0) {
+        CustomerOrders.update_line_item($rootScope.luxire_cart, line_item.id, line_item.variant_id, quantity)
+          .then(function (data) {
+            console.log(data.data);
+            getOrder('Cart updated successfully', 'Failed to update cart');
+          }, function (error) {
+            if (quantity == 0 && error.status == 404) {
+              getOrder('Line item deleted successfully', 'Failed to update cart');
+            }
+            console.error(error);
+          });
+      }
 
 
-  };
+
+    };
 
 
-  $scope.delete_line_item = function(line_item_id, index){
-    CustomerOrders.delete_line_item($rootScope.luxire_cart, line_item_id)
-    .then(function(data){
-      console.log(data);
-      $rootScope.luxire_cart.line_items.splice(index, 1);
-      getOrder('Line item deleted successfully', 'Failed to delete line item');
-    }, function(error){
-      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line item'};
-      console.error(error);
-    });
+    $scope.delete_line_item = function (line_item_id, index) {
+      CustomerOrders.delete_line_item($rootScope.luxire_cart, line_item_id)
+        .then(function (data) {
+          console.log(data);
+          $rootScope.luxire_cart.line_items.splice(index, 1);
+          getOrder('Line item deleted successfully', 'Failed to delete line item');
+        }, function (error) {
+          $rootScope.alerts[0] = { type: 'danger', message: 'Failed to delete line item' };
+          console.error(error);
+        });
 
 
-  };
+    };
 
-  $scope.empty_cart = function(){
-    CustomerOrders.empty_cart($rootScope.luxire_cart)
-    .then(function(data){
-      console.log(data);
-      $rootScope.alerts[0] = {type: 'success', message: 'Line items deleted successfully'};
-      // $rootScope.alerts.push({type: 'success', message: 'Line items deleted successfully'});
-    }, function(error){
-      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line items'};
-      // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line items'});
-    });
-    CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function(data){
-      $rootScope.luxire_cart = data.data;
-      $rootScope.alerts[0] = {type: 'success', message: 'Line item deleted successfully'};
+    $scope.empty_cart = function () {
+      CustomerOrders.empty_cart($rootScope.luxire_cart)
+        .then(function (data) {
+          console.log(data);
+          $rootScope.alerts[0] = { type: 'success', message: 'Line items deleted successfully' };
+          // $rootScope.alerts.push({type: 'success', message: 'Line items deleted successfully'});
+        }, function (error) {
+          $rootScope.alerts[0] = { type: 'danger', message: 'Failed to delete line items' };
+          // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line items'});
+        });
+      CustomerOrders.get_order_by_id($rootScope.luxire_cart).then(function (data) {
+        $rootScope.luxire_cart = data.data;
+        $rootScope.alerts[0] = { type: 'success', message: 'Line item deleted successfully' };
 
-      // $rootScope.alerts.push({type: 'success', message: 'Line item deleted successfully'});
-    }, function(error){
-      $rootScope.alerts[0] = {type: 'danger', message: 'Failed to delete line item'};
+        // $rootScope.alerts.push({type: 'success', message: 'Line item deleted successfully'});
+      }, function (error) {
+        $rootScope.alerts[0] = { type: 'danger', message: 'Failed to delete line item' };
 
-      // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line item'});
-      console.error(error);
-    });
+        // $rootScope.alerts.push({type: 'danger', message: 'Failed to delete line item'});
+        console.error(error);
+      });
 
-  };
+    };
 
-  $scope.keys_length = function(obj){
-    return Object.keys(obj).length;
-  }
+    $scope.keys_length = function (obj) {
+      return Object.keys(obj).length;
+    }
 
-  $scope.checkout = function(){
-    console.log('proceed_to_checkout');
-    console.log($rootScope.luxire_cart);
-    $scope.loading_cart = true;
-    CustomerOrders.proceed_to_checkout($rootScope.luxire_cart)
-    .then(function(data){
-      $rootScope.luxire_cart = data.data;
-      $scope.loading_cart = false;
-      $state.go('customer.checkout_address');
-      console.log(data);
-    }, function(error){
-      $scope.loading_cart = false;
-      if(error.data && error.data.msg && error.data.msg.includes("out of stock")){
-          $rootScope.alerts.push({type: 'danger', message: error.data.msg });
-        }else{
-          $rootScope.alerts.push({type: 'danger', message: 'Failed to add to cart'});
-        }
-      console.error(error);
-    })
-  };
+    $scope.checkout = function () {
+      console.log('proceed_to_checkout');
+      console.log($rootScope.luxire_cart);
+      $scope.loading_cart = true;
+      CustomerOrders.proceed_to_checkout($rootScope.luxire_cart)
+        .then(function (data) {
+          $rootScope.luxire_cart = data.data;
+          $scope.loading_cart = false;
+          $state.go('customer.checkout_address');
+          console.log(data);
+        }, function (error) {
+          $scope.loading_cart = false;
+          if (error.data && error.data.msg && error.data.msg.includes("out of stock")) {
+            $rootScope.alerts.push({ type: 'danger', message: error.data.msg });
+          } else {
+            $rootScope.alerts.push({ type: 'danger', message: 'Failed to add to cart' });
+          }
+          console.error(error);
+        })
+    };
 
-})
+  })
 
 // $scope.update_cart = function(line_items){
 //   console.log(line_items);
