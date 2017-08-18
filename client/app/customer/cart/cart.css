@@ -60,9 +60,12 @@
   margin-top: 5%
 }
 .cart-detail-popover .popover{
-  width: 100%;
-  max-width: 100% !important;
+  max-width: 25vw !important;
 }
+.popover-content {
+    width: 25vw;
+  }
+
 .measurement.row{
   width: 100%;
 }
