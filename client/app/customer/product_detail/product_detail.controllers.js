@@ -9,6 +9,7 @@ angular.module('luxire')
     };
     $scope.display_summary = false;
     $scope.is_bespoke_style = false;
+    notAllowedPersonalizationAttribute = ["image", "cost"]
     $scope.cart_object_changed = $scope.cart_object_changed ? $scope.cart_object_changed : false;
     $scope.style_display_name = "";
     $scope.getInt = function (val) {
@@ -2187,6 +2188,11 @@ angular.module('luxire')
           else {
             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name] = {};
             $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['cost'] = style_object.cost;
+            angular.forEach(style_object, function (val, key) {
+            if (!notAllowedPersonalizationAttribute.includes(key)) {
+              $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name][key] = angular.isObject(style_object[key]) ? style_object[key].default : style_object[key];
+            }
+          });
             if (style_object.hasOwnProperty('fabric')) {
               $scope.cart_object["personalization_attributes"][$scope.selected_bespoke_attribute.name][style_name]['fabric'] = '';
             }
@@ -2372,6 +2378,11 @@ angular.module('luxire')
     });
     $scope.total_customizable_attributes = [];
     angular.forEach($scope.summary_bespoke_attributes, function (val, key) {
+      if(key === 'Additional options' && val && val["Custom Notes"] && val["options"]){
+        angular.forEach(val["options"]["custom_notes"], function (notes) {
+          $scope.total_customizable_attributes.push({ name: 'Additional Options', value: 'Custom Notes', options: notes });
+        })
+      }
       if (val.value && val.options && val.value !== '') {
         $scope.total_customizable_attributes.push({ name: key, value: val.value, options: val.options });
       }
