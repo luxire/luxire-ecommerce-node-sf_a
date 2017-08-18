@@ -260,7 +260,10 @@
                 &nbsp;&nbsp;<p style="font-size: 90%; margin-bottom: 0px">{{monogram_key}}: {{monogram_value}}</p>
               </div>
             </div>
-            <p ng-if="key.toLowerCase()!='monogram'" ng-repeat="(k, v) in val" style="margin-bottom: 0px">
+            <div ng-if="key.toLowerCase() === 'additional options' && val && val['Custom Notes'] && val['options']" >
+              <p ng-repeat="notes in val['options']['custom_notes']">Custom Notes: {{notes['content']}}</p>
+            </div>
+            <p ng-if="key.toLowerCase()!='monogram' && val && !val['Custom Notes']" ng-repeat="(k, v) in val" style="margin-bottom: 0px">
               &nbsp;&nbsp;<span ng-if="v.hasOwnProperty('fabric')" style="font-size: 100%; margin-bottom: 0px">{{k}}: {{v.fabric}}</span>
               &nbsp;&nbsp;<span ng-if="!v.hasOwnProperty('fabric')" style="font-size: 100%; margin-bottom: 0px">{{k}}</span>
             </p>
