@@ -615,12 +615,12 @@ style carousel
                 <b>|</b>
                 </span>
                 <span ng-if="product.luxire_product.composition !== 'NA'"> {{product.luxire_product.composition}} <b>|</b></span>
-                <span ng-if="product.luxire_product.technical_description !== 'NA'"> {{product.luxire_product.technical_description}} <b>|</b></span>
-                <span ng-if="product.luxire_product.suitable_climates !== 'NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span>
+                <!-- <span ng-if="product.luxire_product.technical_description !== 'NA'"> {{product.luxire_product.technical_description}} <b>|</b></span> -->
+                <!-- <span ng-if="product.luxire_product.suitable_climates !== 'NA'"> Ideal for {{product.luxire_product.suitable_climates}} <b>|</b></span> -->
                 <span ng-if="product.luxire_product.gsm != 'NA' && product.luxire_product.gsm != 0"> {{product.luxire_product.gsm}} g/{{get_ounce_weight(product.luxire_product.gsm)}} Oz in weight <b>|</b></span>
                 <span ng-if="product.luxire_product.thickness != 'NA' && product.luxire_product.stiffness!='NA' && product.luxire_product.stiffness != 0 "> {{product.luxire_product.thickness.split('mm')[0]}} thickness and softness rated at {{product.luxire_product.stiffness}} <b>|</b></span>
                 <span ng-if="product.luxire_product.wash_care != 'NA'"> {{product.luxire_product.wash_care}} </span>
-                <span ng-if="product.luxire_product.sales_pitch != 'NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span>
+                <!-- <span ng-if="product.luxire_product.sales_pitch != 'NA'"><b>|</b> {{product.luxire_product.sales_pitch}}</span> -->
                 </span>
               </p>
             </div>
@@ -2030,7 +2030,7 @@ style carousel
                               </div>
                               <div ng-if="checkIsObject(val.options)">
                                 <select class="form-control input-sm" ng-init="val.splice(0,0,'-select-')" name="repeatSelect" id="repeatSelect" ng-model="cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]">
-                                          <option ng-repeat="option in val.options" value="{{cart_object['personalization_attributes'][selected_bespoke_attribute.name][personalisation_item_key][key]}}" >{{option}}</option>
+                                          <option ng-repeat="option in val.options" value="{{option}}" >{{option}}</option>
                                         </select>
                               </div>
                             </div>
