@@ -433,11 +433,10 @@ angular.module('luxire')
         "Forearm": ["Forearm(Left)", "Forearm(Right)"],
         "Cuff Around": ["Cuff Around(Left)", "Cuff Around(Right)"],
         "Shoulder Slope": ["Shoulder Slope(Left)", "Shoulder Slope(Right)"],
-        "Back Panel Slope": ["Back Panel Slope(Left)", "Back Panel Slope(Right)"],
         "Sleeve Length": ["Sleeve Length (Left)", "Sleeve Length(Right)"],
         "Shirt Length": []
       },
-      attributes_order: ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope', 'back panel slope', 'sleeve length']
+      attributes_order: ['chest', 'waist', 'bottom', 'yoke', 'sleeve width', 'armhole', 'forearm', 'cuff around', 'shoulder slope',  'sleeve length']
 
     };
   };
