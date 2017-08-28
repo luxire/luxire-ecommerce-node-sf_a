@@ -373,3 +373,14 @@ exports.apply_filters = function(req, res){
     };
   });
 }
+
+exports.getAdditionalProduct = function(req, res){
+  http.get(`${constants.spree.host}/api/get_additional_service_product`, function(error, response, body){
+    if(error){
+      response.status(500).send(error.syscall);
+    }
+    else{
+      res.status(response.statusCode).send(body);
+    };
+  })
+}

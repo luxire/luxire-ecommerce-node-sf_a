@@ -68,6 +68,19 @@ angular.module('luxire')
 			require_auth: false
 		}
 	})
+	.state('customer.additional_service',{
+		url:'/additional_service',
+		views: {
+			"customer": { templateUrl: "app/customer/additional_service/partials/additional_service.html",
+			 controller: "AdditionalServiceController"},
+			 params: {
+				 product_name: null
+			 }
+		},
+		data: {
+			require_auth: false
+		}
+	})
 	.state('customer.attribute_detail',{
 		url:'/attributes/:attribute_name?type',
 		views: {

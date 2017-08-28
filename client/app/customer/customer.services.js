@@ -10,7 +10,8 @@ angular.module('luxire')
     orders: '/api/v1/orders',
     checkouts: '/api/v1/checkouts',
     get_location_by_ip: '/api/v1/generic/location/fetchCountryBasedonIp',
-    get_currency_by_ip: '/api/v1/generic/location'
+    get_currency_by_ip: '/api/v1/generic/location',
+    additionalService: '/api/v1/products/getAddtionalService'
   };
   this.default = {
     taxonomy_id: 3,
@@ -159,7 +160,7 @@ angular.module('luxire')
     return $http.post(CustomerConstants.api.orders+'/new');
   };
 
-  this.create_order = function(cartObject, variant, sample, selected_currency, selected_measurement_unit){
+  this.create_order = function(cartObject, variant, sample, selected_currency, selected_measurement_unit, notes){
     var order = {
       order: {
         currency: CustomerUtils.get_local_currency_in_app(),
@@ -168,6 +169,7 @@ angular.module('luxire')
             variant_id: variant.id,
             quantity: 1,
             luxire_line_item:{
+              notes: notes,
               total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
               total_personalization_cost: cartObject && cartObject.personalization_cost && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
               send_sample: sample ? true : false,
@@ -197,12 +199,13 @@ angular.module('luxire')
 
   /*line_items*/
 
-  this.add_line_item = function(order, cartObject, variant, send_sample, selected_currency, selected_measurement_unit){
+  this.add_line_item = function(order, cartObject, variant, send_sample, selected_currency, selected_measurement_unit, notes){
     var line_item = {
       line_item: {
         variant_id: variant.id,
         quantity: 1,
         luxire_line_item:{
+          notes: notes,
           total_personalisation_cost_in_currencies: cartObject && cartObject.personalization_cost ? cartObject.personalization_cost : 0 ,
           total_personalization_cost: cartObject && cartObject.personalization_cost && cartObject.personalization_cost[selected_currency] ? cartObject.personalization_cost[selected_currency] : 0,
           send_sample: send_sample ? true : false,

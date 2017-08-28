@@ -178,6 +178,18 @@
         </div>
       </div>
     </span>
+    <div ng-show="showBurgerMenu" class="btn-group" uib-dropdown dropdown-append-to-body style="margin-left: 3vw; background: transparent;" is-open="status.isopen" ng-mouseover="status.isopen = true">
+      <button id="btn-append-to-body" type="button" uib-dropdown-toggle style="padding: 0;border: none;background: transparent;">
+       <span class="fa-stack" style="cursor: pointer;position: relative">
+        <i class="fa fa-circle-thin fa-stack-2x" style="background: #8A247C;color: transparent;border-radius: 50%"></i>
+        <i class="fa fa-bars fa-stack-1x" style="color: white"></i>
+      </span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+        <li role="menuitem"><a href="/additional_service">Additional Service</a></li>
+        <li role="menuitem"><a href="#">Prepay Shipping</a></li>
+      </ul>
+    </div>
       <a style="float:right;color:rgb(138, 36, 124);font-size: 120%;" href="https://custom.luxire.com" target="_blank">Luxire.com Classic</a>
   </div>
 </div>

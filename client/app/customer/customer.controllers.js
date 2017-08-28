@@ -8,6 +8,7 @@ angular.module('luxire')
     $scope.is_customer_home_state = false;
     $scope.searchStr = '';
     $scope.available_collections = ['shirts', 'pants'];
+    $scope.showBurgerMenu = false;
     /*Bread crumbs for checkout */
     $scope.checkout_steps = {
       'address': {
@@ -188,6 +189,7 @@ angular.module('luxire')
     CustomerProducts.taxonomy_index()
       .then(function (data) {
         $scope.taxonomies = data.data.taxonomies;
+        $scope.showBurgerMenu = true;
       }, function (error) {
         console.error(error);
       });
